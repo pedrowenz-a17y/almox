@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-29T17:01:15.451Z",
+  "checks": [
+    "Login real pela interface",
+    "Página produtos",
+    "Página estoque",
+    "Página localizacoes",
+    "Página movimentacoes",
+    "Página qrcodes",
+    "Página fornecedores",
+    "Página inventario",
+    "Página relatorios",
+    "Página usuarios",
+    "Página configuracoes",
+    "Página auditoria",
+    "Página operacao",
+    "Página ordens-servico",
+    "Página ordens-producao",
+    "Página compras",
+    "Câmera simulada: QR SVG real decodificado e localização correta aberta",
+    "Responsividade 390px: dashboard",
+    "Responsividade 390px: produtos",
+    "Responsividade 390px: localizacoes",
+    "Responsividade 390px: operacao",
+    "Aviso offline"
+  ],
+  "unitId": "7856f40f-e7b9-466a-b638-c95a56a18207",
+  "environment": "isolated",
+  "errors": [],
+  "limitation": "Câmera física e impressora reais exigem validação no dispositivo."
+}

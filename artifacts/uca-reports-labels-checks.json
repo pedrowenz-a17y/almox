@@ -1,0 +1,260 @@
+{
+  "startedAt": "2026-10-30T00:24:53.764Z",
+  "unitId": "7856f40f-e7b9-466a-b638-c95a56a18207",
+  "environment": "isolated",
+  "checks": [
+    {
+      "name": "Relatórios exigem sessão",
+      "passed": true
+    },
+    {
+      "name": "Relatório position: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 3,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório low: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 1,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório zero: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 1,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório entry: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 7,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório exit: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 15,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório transfer: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 4,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório adjustments: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 3,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório by-user: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 29,
+        "columns": 16
+      }
+    },
+    {
+      "name": "Relatório by-location: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 9,
+        "columns": 13
+      }
+    },
+    {
+      "name": "Relatório counts: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 4,
+        "columns": 15
+      }
+    },
+    {
+      "name": "Relatório divergences: JSON, CSV e XLSX correspondem ao banco",
+      "passed": true,
+      "detail": {
+        "rows": 3,
+        "columns": 15
+      }
+    },
+    {
+      "name": "Filtros de relatório e validação de datas",
+      "passed": true
+    },
+    {
+      "name": "Impressão 50x30: QR carregados, textos dentro da etiqueta e PDF",
+      "passed": true,
+      "detail": {
+        "labels": 6,
+        "pdfBytes": 28879,
+        "metrics": [
+          {
+            "code": "ACEITE-1793293301457-E02",
+            "width": 188.96875,
+            "height": 113.375,
+            "left": 0,
+            "right": 188.96875,
+            "top": 0,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "ACEITE-1793293301457-P03",
+            "width": 188.96875,
+            "height": 113.375,
+            "left": 0,
+            "right": 188.96875,
+            "top": 113.375,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "ACEITE-1793293301457-P04",
+            "width": 188.96875,
+            "height": 113.375,
+            "left": 0,
+            "right": 188.96875,
+            "top": 226.75,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "QA-E2E-A",
+            "width": 188.96875,
+            "height": 113.375,
+            "left": 0,
+            "right": 188.96875,
+            "top": 340.125,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "QA-E2E-P01",
+            "width": 188.96875,
+            "height": 113.375,
+            "left": 0,
+            "right": 188.96875,
+            "top": 453.5,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "QA-E2E-P02",
+            "width": 188.96875,
+            "height": 113.375,
+            "left": 0,
+            "right": 188.96875,
+            "top": 566.875,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Impressão A4: QR carregados, textos dentro da etiqueta e PDF",
+      "passed": true,
+      "detail": {
+        "labels": 6,
+        "pdfBytes": 21551,
+        "metrics": [
+          {
+            "code": "ACEITE-1793293301457-E02",
+            "width": 238.109375,
+            "height": 173.84375,
+            "left": 0,
+            "right": 238.109375,
+            "top": 0,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "ACEITE-1793293301457-P03",
+            "width": 238.109375,
+            "height": 173.84375,
+            "left": 245.65625,
+            "right": 483.765625,
+            "top": 0,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "ACEITE-1793293301457-P04",
+            "width": 238.109375,
+            "height": 173.84375,
+            "left": 491.3125,
+            "right": 729.421875,
+            "top": 0,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "QA-E2E-A",
+            "width": 238.109375,
+            "height": 173.84375,
+            "left": 0,
+            "right": 238.109375,
+            "top": 181.390625,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "QA-E2E-P01",
+            "width": 238.109375,
+            "height": 173.84375,
+            "left": 245.65625,
+            "right": 483.765625,
+            "top": 181.390625,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          },
+          {
+            "code": "QA-E2E-P02",
+            "width": 238.109375,
+            "height": 173.84375,
+            "left": 491.3125,
+            "right": 729.421875,
+            "top": 181.390625,
+            "textFits": true,
+            "withinLabel": true,
+            "qrLoaded": true
+          }
+        ]
+      }
+    }
+  ],
+  "result": "passed",
+  "limitations": [
+    "Câmera física, impressão em papel e calibração da impressora exigem homologação real."
+  ],
+  "finishedAt": "2026-10-30T00:25:01.363Z"
+}

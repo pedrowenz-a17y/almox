@@ -1,0 +1,75 @@
+{
+  "recordedAt": "2026-10-30T10:37:57.422841+00:00",
+  "scope": "Validação final local do build após correção do escopo de inventário e tradução dos eventos. Sem deploy ou banco remoto.",
+  "checks": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "counts": {
+        "tests": 79,
+        "pass": 79,
+        "fail": 0,
+        "skipped": 0
+      },
+      "evidence": "uca-release-tests.log"
+    },
+    {
+      "command": "npm run lint",
+      "status": "passed",
+      "evidence": "uca-release-lint.log"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "evidence": "uca-release-build.log",
+      "typecheckIncluded": true
+    }
+  ],
+  "lockfileSha256": "b913b6738a6542fe17a6b8643c76ddc13acad017e270e035a38a3ebdb13201a2",
+  "regressionValidated": {
+    "description": "InventoryCountItem.unitId persiste a unidade autorizada; relatórios de inventário/divergências são comparados com os itens da API.",
+    "inventoryRowsInReport": 4,
+    "unitSuitePass": 79
+  },
+  "authenticatedChecks": [
+    {
+      "script": "verify:api",
+      "passed": 26,
+      "evidence": "uca-api-checks.json"
+    },
+    {
+      "script": "verify:browser",
+      "passed": 22,
+      "evidence": "uca-browser-checks.json"
+    },
+    {
+      "script": "verify:reports",
+      "passed": 15,
+      "evidence": "uca-reports-labels-checks.json"
+    },
+    {
+      "script": "verify:operations",
+      "passed": 8,
+      "evidence": "uca-operations-checks.json"
+    },
+    {
+      "script": "verify:orders",
+      "passed": 12,
+      "evidence": "uca-orders-ui-checks.json"
+    },
+    {
+      "script": "verify:auth",
+      "passed": 13,
+      "evidence": "uca-auth-flows.json"
+    }
+  ],
+  "publicBrowserChecks": {
+    "passed": 11,
+    "evidence": "uca-public-browser.json"
+  },
+  "limitations": [
+    "Supabase Auth foi exercitado em GoTrue oficial local com PostgreSQL e fixtures isolados.",
+    "RLS/grants foram testados com roles locais anon/authenticated; Supabase hospedado não acessado.",
+    "SMTP real, Vercel, câmera/impressora físicas, instalação PWA nos aparelhos empresariais e migração remota permanecem não executados."
+  ]
+}

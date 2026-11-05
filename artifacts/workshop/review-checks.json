@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-11-05T11:40:05.427844+00:00",
+  "scope": "Source changes from uploaded v2.0.0; no publication or company database access",
+  "checks": {
+    "typecheck": {
+      "status": "passed",
+      "command": "npm run typecheck"
+    },
+    "lint": {
+      "status": "passed",
+      "command": "npm run lint"
+    },
+    "nextBuild": {
+      "status": "passed",
+      "command": "next build after official engine-free client generation",
+      "log": "build.log"
+    },
+    "domain": {
+      "status": "passed",
+      "tests": 86,
+      "failed": 0,
+      "skipped": 0,
+      "database": "isolated PostgreSQL 18.6",
+      "driver": "official Prisma 6.19.3 JavaScript client + @prisma/adapter-pg 6.19.3 selected only in external test harness",
+      "log": "domain-tests.log"
+    },
+    "browser": {
+      "scope": "Isolated component harness; API responses mocked; not a production authentication test",
+      "checks": [
+        "dashboard renders real components with explicit isolated fixtures",
+        "internal navigation does not refetch dataset or remount workspace",
+        "quick lookup finds accented names/codes and opens product QR",
+        "product QR download returns a PNG file",
+        "scanner accepts product labels in general consultation",
+        "replenishment filters and exports the suggested purchases",
+        "new product opens its QR automatically after save",
+        "browser back/forward preserves workspace and current view",
+        "desktop and mobile do not overflow; reduced motion is honored",
+        "no JavaScript runtime errors"
+      ],
+      "passed": 10,
+      "initialDatasetRequests": 1,
+      "navigationDatasetRequests": 0,
+      "errors": []
+    }
+  },
+  "limitations": [
+    "Native Prisma engine download blocked by cloud network policy for binaries.prisma.sh; domain saved to draft only.",
+    "No hosted Supabase end-to-end login or enterprise data validation.",
+    "Visual checks use real components with mocked API responses in separate fixture app.",
+    "Physical camera and printer not validated."
+  ],
+  "configurationDraft": {
+    "networkAdded": [
+      "binaries.prisma.sh"
+    ],
+    "appliedToRuntime": false,
+    "published": false
+  }
+}

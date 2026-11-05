@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-20T16:30:30.156Z",
+  "checks": [
+    "Cadastro do Rolamento 6204 pela UI",
+    "Cadastro hierárquico Setor A / Estante 02 / Prateleiras 03 e 04",
+    "Entrada de 100 pela UI",
+    "Retirada de 15 pela UI",
+    "Transferência com dois códigos no celular: 60 + 25 = 85",
+    "Três movimentações e eventos de auditoria conferidos no banco via API",
+    "Contagem física enviada para aprovação pela UI",
+    "Aprovação de inventário pela UI"
+  ],
+  "productId": "ca07dec4-38c1-4b8f-a1ec-afb63ae1181c",
+  "sourceId": "8dccff91-6801-43fb-a94f-835fad775664",
+  "destinationId": "8488654b-e27f-4590-bdae-707e57dc07ca",
+  "expected": {
+    "source": 60,
+    "destination": 25,
+    "total": 85
+  }
+}

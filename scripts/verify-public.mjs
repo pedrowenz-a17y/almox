@@ -1,0 +1,31 @@
+import 'dotenv/config';
+import {chromium} from '@playwright/test';
+import {qaConfig} from './qa-config.mjs';
+const {baseURL}=qaConfig();
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+(async()=>{
+ const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+ const results=[]; const out=path.resolve('artifacts')+path.sep;fs.mkdirSync(out,{recursive:true});
+ const check=async(name,fn)=>{try{await fn();results.push({name,passed:true});}catch(e){results.push({name,passed:false,error:e.message});}};
+ const context=await browser.newContext({viewport:{width:1440,height:1000}}); const page=await context.newPage(); const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await check('Login público abre com assets oficiais e formulário real',async()=>{
+   const r=await page.goto(baseURL+'/login');assert.equal(r.status(),200);
+   await page.locator('input[name=email]').waitFor();await page.locator('img').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode())));
+   assert.equal(await page.locator('img[src="/brand/uca-oficial.png"]').count(),1);assert.equal(await page.locator('img[src="/brand/implemento-uca.jpg"]').count(),1);
+   await page.screenshot({path:out+'uca-login-desktop.png',fullPage:true});
+ });
+ await check('Senha pode ser exibida e ocultada sem alterar valor',async()=>{const input=page.locator('input[name=password]');await input.fill('SomenteTesteLocal!');await page.getByRole('button',{name:'Mostrar senha'}).click();assert.equal(await input.getAttribute('type'),'text');await page.getByRole('button',{name:'Ocultar senha'}).click();assert.equal(await input.getAttribute('type'),'password');await input.fill('');});
+ await check('Formulário vazio é bloqueado pelo navegador',async()=>{assert.equal(await page.locator('form').evaluate(f=>f.checkValidity()),false);});
+ await check('Parallax fica estático com preferência de movimento reduzido',async()=>{await page.emulateMedia({reducedMotion:'reduce'});await page.mouse.move(500,600);assert.equal(await page.locator('.uca-photo-frame').evaluate(async e=>{await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);const t=getComputedStyle(e).transform;return t==='none'||new DOMMatrix(t).isIdentity;}),true);});
+ await check('Login sem transbordamento em 1440, 768, 390 e 320px',async()=>{for(const width of [1440,768,390,320]){await page.setViewportSize({width,height:900});const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));assert.ok(dimensions.scroll<=dimensions.width,JSON.stringify(dimensions));if(width===390)await page.screenshot({path:out+'uca-login-mobile.png',fullPage:true});}});
+ await check('Recuperação de acesso abre formulário e volta ao login',async()=>{await page.getByRole('link',{name:'Esqueci minha senha'}).click();await page.waitForURL('**/esqueci-senha');await page.locator('input[type=email]').waitFor();assert.equal(await page.locator('form').evaluate(f=>f.checkValidity()),false);await page.getByRole('link',{name:/Voltar/i}).click();await page.waitForURL('**/login');});
+ await check('Páginas privadas e API não liberam dados sem configuração/sessão',async()=>{const r=await page.request.get(baseURL+'/api/data');assert.ok([401,503].includes(r.status()));const data=await r.json();assert.ok(!data.data);await page.goto(baseURL+'/dashboard');assert.equal(await page.locator('.sidebar').count(),0);});
+ await check('Manifesto e ícones PWA válidos e acessíveis',async()=>{const r=await page.request.get(baseURL+'/manifest.webmanifest');assert.equal(r.status(),200);const m=await r.json();assert.equal(m.display,'standalone');for(const i of m.icons){assert.equal((await page.request.get(baseURL+i.src)).status(),200);}});
+ await check('Sem erros de execução JavaScript',async()=>assert.deepEqual(errors,[]));
+ await page.goto(baseURL+'/login');await page.evaluate(()=>navigator.serviceWorker.ready);await page.reload();
+ await check('Cache não contém páginas ou respostas autenticadas',async()=>{const paths=await page.evaluate(async()=>{const keys=await caches.keys();const urls=[];for(const key of keys){for(const r of await (await caches.open(key)).keys())urls.push(new URL(r.url).pathname);}return urls;});assert.ok(paths.includes('/offline.html'));assert.ok(paths.every(p=>p.startsWith('/_next/static/')||['/offline.html','/manifest.webmanifest','/icon.svg','/icon-192.png','/icon-512.png'].includes(p)));});
+ await check('Navegação offline apresenta aviso sem mostrar estoque antigo',async()=>{await context.setOffline(true);await page.goto(baseURL+'/operacao');await page.getByText(/Sem conexão/i).first().waitFor();assert.equal(await page.locator('.sidebar').count(),0);await context.setOffline(false);});
+ await browser.close();const report={kind:'public-browser-local-unauthenticated',tests:results.length,passed:results.filter(x=>x.passed).length,results,limitations:['Não valida identidade remota Supabase nem câmera ou impressora física.']};fs.writeFileSync(out+'uca-public-browser.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));if(results.some(x=>!x.passed))process.exitCode=1;
+})().catch(e=>{console.error(e.message);process.exitCode=1;});

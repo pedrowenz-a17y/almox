@@ -1,0 +1,199 @@
+{
+  "run": "864d60d5",
+  "startedAt": "2026-10-20T16:23:09.035Z",
+  "base": "http://localhost:3000",
+  "checks": [
+    {
+      "name": "Anonymous data access rejected",
+      "passed": true,
+      "durationMs": 87
+    },
+    {
+      "name": "Login without Origin rejected",
+      "passed": true,
+      "durationMs": 20
+    },
+    {
+      "name": "Administrator login creates HttpOnly SameSite session",
+      "passed": true,
+      "durationMs": 111
+    },
+    {
+      "name": "Authenticated database data and dashboard aggregates load",
+      "passed": true,
+      "durationMs": 124,
+      "detail": {
+        "products": 6,
+        "totalProducts": 6,
+        "totalItems": "1517.000"
+      }
+    },
+    {
+      "name": "Mutation without Origin rejected",
+      "passed": true,
+      "durationMs": 11
+    },
+    {
+      "name": "Prototype entity rejected as unknown catalog",
+      "passed": true,
+      "durationMs": 9
+    },
+    {
+      "name": "Unique category constraint rejects duplicate",
+      "passed": true,
+      "durationMs": 18
+    },
+    {
+      "name": "Product CRUD persists relationships and cost",
+      "passed": true,
+      "durationMs": 31
+    },
+    {
+      "name": "Duplicate internal code rejected",
+      "passed": true,
+      "durationMs": 11
+    },
+    {
+      "name": "Product rejects direct stock quantity mutation",
+      "passed": true,
+      "durationMs": 10
+    },
+    {
+      "name": "Location cycle rejected transactionally",
+      "passed": true,
+      "durationMs": 9
+    },
+    {
+      "name": "QR resolves UUID, printed code and trusted URL",
+      "passed": true,
+      "durationMs": 52
+    },
+    {
+      "name": "Operator cannot manage catalog, settings, users or costs",
+      "passed": true,
+      "durationMs": 52
+    },
+    {
+      "name": "Supervisor can create catalog but cannot write costs or archive",
+      "passed": true,
+      "durationMs": 51
+    },
+    {
+      "name": "Administrator cannot deactivate or demote own account",
+      "passed": true,
+      "durationMs": 17
+    },
+    {
+      "name": "Entry of 100 and duplicate submission are idempotent",
+      "passed": true,
+      "durationMs": 68
+    },
+    {
+      "name": "Withdrawal of 15 yields 85 and blocks negative stock",
+      "passed": true,
+      "durationMs": 90
+    },
+    {
+      "name": "Transfer of 25 preserves total 85 as 60 + 25",
+      "passed": true,
+      "durationMs": 45,
+      "detail": {
+        "source": 60,
+        "destination": 25,
+        "total": 85
+      }
+    },
+    {
+      "name": "Products with balance cannot be archived",
+      "passed": true,
+      "durationMs": 10
+    },
+    {
+      "name": "Count requires supervisor approval and generates adjustment",
+      "passed": true,
+      "durationMs": 101
+    },
+    {
+      "name": "Concurrent withdrawals cannot oversell location",
+      "passed": true,
+      "durationMs": 101
+    },
+    {
+      "name": "Stock history and audit retain confirmed operations",
+      "passed": true,
+      "durationMs": 31
+    },
+    {
+      "name": "Image upload checks content and authenticates retrieval",
+      "passed": true,
+      "durationMs": 43
+    },
+    {
+      "name": "Password reset revokes existing sessions and accepts new password",
+      "passed": true,
+      "durationMs": 119
+    },
+    {
+      "name": "Login rate limit persists and blocks sixth failed attempt",
+      "passed": true,
+      "durationMs": 223
+    },
+    {
+      "name": "Logout invalidates session",
+      "passed": true,
+      "durationMs": 12
+    }
+  ],
+  "cleanup": [
+    {
+      "operation": "zero-test-balance",
+      "ok": true
+    },
+    {
+      "operation": "zero-test-balance",
+      "ok": true
+    },
+    {
+      "operation": "archive-products",
+      "ok": true
+    },
+    {
+      "operation": "archive-products",
+      "ok": true
+    },
+    {
+      "operation": "archive-users",
+      "ok": true
+    },
+    {
+      "operation": "archive-users",
+      "ok": true
+    },
+    {
+      "operation": "archive-locations",
+      "ok": true
+    },
+    {
+      "operation": "archive-locations",
+      "ok": true
+    },
+    {
+      "operation": "archive-locations",
+      "ok": true
+    },
+    {
+      "operation": "archive-warehouses",
+      "ok": true
+    },
+    {
+      "operation": "archive-suppliers",
+      "ok": true
+    },
+    {
+      "operation": "archive-categories",
+      "ok": true
+    }
+  ],
+  "result": "passed",
+  "finishedAt": "2026-10-20T16:23:11.046Z"
+}

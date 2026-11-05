@@ -1,0 +1,93 @@
+{
+  "status": "passed",
+  "database": "almox_uca_legacy_test",
+  "checks": [
+    {
+      "name": "Base exclusiva criada, sem tocar no banco almox",
+      "passed": true
+    },
+    {
+      "name": "Fixtures legadas persistidas com saldo85, dois movimentos e auditorias",
+      "passed": true
+    },
+    {
+      "name": "Snapshots antes/depois idênticos em campos legados e saldos",
+      "passed": true
+    },
+    {
+      "name": "IDs, hash legado inerte, saldo85 e versão2 preservados",
+      "passed": true
+    },
+    {
+      "name": "Legado fica em quarentena com unitId nulo",
+      "passed": true
+    },
+    {
+      "name": "Gerador deixa todas as atribuições para revisão",
+      "passed": true
+    },
+    {
+      "name": "Plano cruzando unidades é recusado",
+      "passed": true
+    },
+    {
+      "name": "Dry-run mantém scope nulo e auditorias intactas",
+      "passed": true
+    },
+    {
+      "name": "Mapeamento classifica sem alterar saldo, versão e movimentos",
+      "passed": true
+    },
+    {
+      "name": "Mapeamento registra responsável e referência",
+      "passed": true
+    },
+    {
+      "name": "Reaplicação não duplica auditoria nem movimentos",
+      "passed": true
+    },
+    {
+      "name": "FKs compostas de mesma unidade instaladas",
+      "passed": true,
+      "count": 30
+    },
+    {
+      "name": "Checksum aplicado corresponde ao SQL entregue",
+      "passed": true,
+      "sha256": "dc1d190ac4b37eb79586c2f9b77300ad562590b3bd8a3ffa8b91acaa0bb8679e"
+    },
+    {
+      "name": "Migração 5: snapshots completos antes/depois mantêm todos os campos legados e saldos",
+      "passed": true
+    },
+    {
+      "name": "Migração 5: custos armazenados, IDs, saldos e versões permanecem iguais",
+      "passed": true,
+      "products": 1,
+      "balances": 1
+    },
+    {
+      "name": "Migração 5: custo desconhecido permite NULL e não possui valor padrão",
+      "passed": true
+    },
+    {
+      "name": "Cinco migrações aplicadas; checksum final corresponde ao SQL entregue",
+      "passed": true,
+      "migrations": 5,
+      "sha256": "6607801b8f6ef462fff15335d1c2276893171cc1f25b6ed6800170f855e0234b"
+    }
+  ],
+  "limitations": [
+    "Neon e Supabase remotos não foram acessados.",
+    "Identidade Supabase do responsável foi representada por fixture local; não houve autenticação remota.",
+    "AppSettings global legado permaneceu preservado e fora do mapeamento, conforme procedimento."
+  ],
+  "migrationCount": 5,
+  "costMigrationValidation": {
+    "status": "passed",
+    "migration": "20261029190000_optional_product_cost",
+    "checkedAt": "2026-10-29T16:58:40.042Z",
+    "snapshotComparison": "identical",
+    "database": "almox_uca_legacy_test"
+  }
+}

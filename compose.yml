@@ -1,0 +1,59 @@
+name: almox
+
+x-app-environment: &app-environment
+  DATABASE_URL: ${DATABASE_URL:?Defina DATABASE_URL no .env}
+  DIRECT_URL: ${DIRECT_URL:?Defina DIRECT_URL no .env}
+  APP_URL: ${APP_URL:-http://localhost:3000}
+  APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS:-}
+  NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+
+services:
+  db:
+    profiles: [local-db]
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-almox}
+      POSTGRES_DB: ${POSTGRES_DB:-almox}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    environment: *app-environment
+    ports:
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-3000}:3000"
+
+  migrate:
+    profiles: [tools]
+    build:
+      context: .
+      target: tooling
+    environment: *app-environment
+    command: ["npx", "prisma", "migrate", "deploy"]
+
+  seed:
+    profiles: [tools]
+    build:
+      context: .
+      target: tooling
+    environment:
+      <<: *app-environment
+      BOOTSTRAP_EXTEND_ROLE_PERMISSIONS: ${BOOTSTRAP_EXTEND_ROLE_PERMISSIONS:-false}
+    command: ["npm", "run", "db:seed"]
+
+volumes:
+  postgres-data:

@@ -1,0 +1,35 @@
+ALMOX ERP · U.C.A. — versão 2.0.0
+Revisão de novembro: navegação, novo visual, QR por produto e reposição.
+Leia docs/MELHORIAS-2026-11.md para os novos recursos e sua validação.
+
+Este pacote contém o projeto completo: código, banco de dados (modelo e
+migrações), interface, testes e documentação. Não contém dados empresariais,
+senhas nem uma cópia do banco de produção.
+
+PARA COMPARTILHAR
+Envie o arquivo ZIP pelo WhatsApp como Documento. A outra pessoa precisa
+extrair o ZIP para acessar os arquivos. O ZIP não é um instalador de celular.
+
+PARA UTILIZAR O SISTEMA
+Um responsável técnico deve seguir README.md: configurar Supabase, aplicar
+as migrações, provisionar o administrador e publicar a aplicação, por exemplo
+na Vercel. Depois disso, compartilhe a URL HTTPS para abrir no computador ou
+celular. A instalação como PWA acontece pelo navegador, quando disponível.
+
+LOGIN
+Não existe e-mail/senha padrão nesta versão. O acesso usa uma conta real
+autorizada no Supabase Auth, vinculada à unidade pelo administrador.
+As credenciais de demonstração da versão antiga não são utilizadas.
+
+SE JÁ EXISTE UM BANCO COM DADOS
+Leia docs/MIGRATION-SUPABASE.md antes de qualquer implantação. Preserve backup,
+IDs, saldos e histórico. Não apague nem reinicie o banco para atualizar o ERP.
+
+O QUE FOI ENTREGUE E TESTADO
+docs/DELIVERY.md: relatório das alterações e limitações.
+docs/VALIDATION.md: testes executados e homologações ainda necessárias.
+As imagens em artifacts/legacy são históricas; as atuais têm prefixo uca-.
+
+A aplicação foi validada localmente. Supabase hospedado, migração de dados
+empresariais, Vercel, envio de e-mail, câmera e impressão físicas precisam
+ser configurados e homologados no ambiente da empresa.

@@ -1,0 +1,44 @@
+{
+  "database": "isolated-local",
+  "seedRuns": 2,
+  "counts": {
+    "organization": 2,
+    "operationalUnit": 2,
+    "role": 3,
+    "permission": 16,
+    "rolePermission": 34,
+    "appSettings": 2,
+    "user": 0,
+    "unitMembership": 0,
+    "supplier": 0,
+    "product": 0,
+    "warehouse": 0,
+    "location": 0,
+    "inventoryBalance": 0,
+    "stockMovement": 0,
+    "workOrder": 0,
+    "purchaseOrder": 0,
+    "receipt": 0,
+    "auditLog": 0
+  },
+  "names": [
+    {
+      "name": "U.C.A. Implementos Agrícolas",
+      "units": [
+        {
+          "code": "UCA",
+          "name": "U.C.A. Implementos Agrícolas"
+        }
+      ]
+    },
+    {
+      "name": "Grupo Capacle",
+      "units": [
+        {
+          "code": "CAPACLE",
+          "name": "Grupo Capacle"
+        }
+      ]
+    }
+  ]
+}

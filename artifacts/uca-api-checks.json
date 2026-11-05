@@ -1,0 +1,193 @@
+{
+  "run": "203a79fd",
+  "startedAt": "2026-10-30T00:24:44.492Z",
+  "base": "http://localhost:3001",
+  "unitId": "7856f40f-e7b9-466a-b638-c95a56a18207",
+  "environment": "isolated",
+  "checks": [
+    {
+      "name": "Anonymous data access rejected",
+      "passed": true,
+      "durationMs": 61
+    },
+    {
+      "name": "Login without Origin rejected",
+      "passed": true,
+      "durationMs": 9
+    },
+    {
+      "name": "Administrator login creates HttpOnly SameSite session",
+      "passed": true,
+      "durationMs": 373
+    },
+    {
+      "name": "Authenticated database data and dashboard aggregates load",
+      "passed": true,
+      "durationMs": 119,
+      "detail": {
+        "products": 7,
+        "totalProducts": 3,
+        "totalItems": "172.000"
+      }
+    },
+    {
+      "name": "Mutation without Origin rejected",
+      "passed": true,
+      "durationMs": 5
+    },
+    {
+      "name": "Prototype entity rejected as unknown catalog",
+      "passed": true,
+      "durationMs": 58
+    },
+    {
+      "name": "Unique category constraint rejects duplicate",
+      "passed": true,
+      "durationMs": 58
+    },
+    {
+      "name": "Product CRUD persists relationships and cost",
+      "passed": true,
+      "durationMs": 179
+    },
+    {
+      "name": "Duplicate internal code rejected",
+      "passed": true,
+      "durationMs": 90
+    },
+    {
+      "name": "Product rejects direct stock quantity mutation",
+      "passed": true,
+      "durationMs": 58
+    },
+    {
+      "name": "Location cycle rejected transactionally",
+      "passed": true,
+      "durationMs": 110
+    },
+    {
+      "name": "QR resolves UUID, printed code and trusted URL",
+      "passed": true,
+      "durationMs": 348
+    },
+    {
+      "name": "Operator cannot manage catalog, settings, users or costs",
+      "passed": true,
+      "durationMs": 467
+    },
+    {
+      "name": "Supervisor can create catalog but cannot write costs or archive",
+      "passed": true,
+      "durationMs": 436
+    },
+    {
+      "name": "Administrator cannot deactivate or demote own account",
+      "passed": true,
+      "durationMs": 268
+    },
+    {
+      "name": "Entry of 100 and duplicate submission are idempotent",
+      "passed": true,
+      "durationMs": 349
+    },
+    {
+      "name": "Withdrawal of 15 yields 85 and blocks negative stock",
+      "passed": true,
+      "durationMs": 453
+    },
+    {
+      "name": "Transfer of 25 preserves total 85 as 60 + 25",
+      "passed": true,
+      "durationMs": 250,
+      "detail": {
+        "source": 60,
+        "destination": 25,
+        "total": 85
+      }
+    },
+    {
+      "name": "Products with balance cannot be archived",
+      "passed": true,
+      "durationMs": 161
+    },
+    {
+      "name": "Count requires supervisor approval and generates adjustment",
+      "passed": true,
+      "durationMs": 535
+    },
+    {
+      "name": "Concurrent withdrawals cannot oversell location",
+      "passed": true,
+      "durationMs": 335
+    },
+    {
+      "name": "Stock history and audit retain confirmed operations",
+      "passed": true,
+      "durationMs": 136
+    },
+    {
+      "name": "Image upload checks content and authenticates retrieval",
+      "passed": true,
+      "durationMs": 234
+    },
+    {
+      "name": "Catálogo não aceita redefinição de senha fora do Supabase Auth",
+      "passed": true,
+      "durationMs": 174
+    },
+    {
+      "name": "Login rate limit persists and blocks sixth failed attempt",
+      "passed": true,
+      "durationMs": 212
+    },
+    {
+      "name": "Logout removes session cookies and denies the next protected request",
+      "passed": true,
+      "durationMs": 110
+    }
+  ],
+  "cleanup": [
+    {
+      "operation": "zero-test-balance",
+      "ok": true
+    },
+    {
+      "operation": "zero-test-balance",
+      "ok": true
+    },
+    {
+      "operation": "archive-products",
+      "ok": true
+    },
+    {
+      "operation": "archive-products",
+      "ok": true
+    },
+    {
+      "operation": "archive-locations",
+      "ok": true
+    },
+    {
+      "operation": "archive-locations",
+      "ok": true
+    },
+    {
+      "operation": "archive-locations",
+      "ok": true
+    },
+    {
+      "operation": "archive-warehouses",
+      "ok": true
+    },
+    {
+      "operation": "archive-suppliers",
+      "ok": true
+    },
+    {
+      "operation": "archive-categories",
+      "ok": true
+    }
+  ],
+  "result": "passed",
+  "finishedAt": "2026-10-30T00:24:52.863Z"
+}

@@ -1,0 +1,108 @@
+
+> almox-erp@2.0.0 test
+> tsx --test --test-concurrency=1 tests/*.test.ts
+
+▶ configuração e redirecionamento de autenticação
+  ✔ origens explícitas e o deployment Vercel atual são permitidos, sem wildcard (1.836099ms)
+  ✔ configuração inválida não amplia a origem autorizada (0.604661ms)
+  ✔ produção sem origem configurada falha de forma explícita (0.148143ms)
+  ✔ redirecionamentos externos, barras invertidas e loops de login são recusados (0.345411ms)
+  ✔ chaves administrativas são recusadas na variável pública (0.346532ms)
+  ✔ indisponibilidade do provedor é distinta de credenciais inválidas (0.160451ms)
+✔ configuração e redirecionamento de autenticação (5.124628ms)
+✔ catálogos e IDs isolados entre unidades, incluindo atualização e exclusão lógica (598.113485ms)
+✔ referências de categoria, fornecedor, imagem, almoxarifado e pai não cruzam unidades (82.868301ms)
+✔ mesmo código é permitido entre unidades e recusado dentro da mesma unidade (52.269906ms)
+✔ unidade de medida é imutável após entrada e auditoria fica na unidade da operação (65.516601ms)
+✔ cadastros com reservas ou aplicação pendente não podem ser arquivados (47.134974ms)
+✔ escopo ausente falha fechado e operador não altera catálogo (31.303793ms)
+✔ custo não informado permanece nulo e custo zero explícito é preservado (71.425701ms)
+✔ todas as tabelas operacionais têm RLS e não possuem políticas amplas para Data API (52.321694ms)
+✔ constraints e gatilhos de unidade permanecem instalados no PostgreSQL (12.049109ms)
+✔ roles Supabase existentes não têm privilégios diretos nas tabelas operacionais (4.114264ms)
+✔ recebimento parcial e total registra documentos reais e uma entrada por item (350.287659ms)
+✔ recebimento simultâneo com mesma chave só dá uma entrada e não expõe custos ao operador (191.744473ms)
+✔ recebimento excedente ou em outra unidade é recusado sem gravar documento parcial (66.402381ms)
+✔ O.S.: reserva e aplicação não baixam saldo; faturamento baixa uma única vez (301.50679ms)
+✔ devolução após faturamento compensa a baixa original e nunca supera consumo (176.181519ms)
+✔ devolução antes do faturamento libera aplicação e cancelamento devolve reservas (163.585988ms)
+✔ reservas concorrentes não consomem duas vezes a mesma disponibilidade (143.336743ms)
+✔ aplicação duplicada é idempotente e novas chaves não ultrapassam reserva (143.810729ms)
+✔ saída avulsa e transferência não consomem estoque reservado ou aplicado (96.913368ms)
+✔ inventário compara físico sem baixar aplicações e impede ajuste que invalida reservas (181.01987ms)
+✔ alterar reserva invalida snapshot do inventário mesmo com mesmo saldo físico (105.995888ms)
+✔ ordens e compras de outra unidade são inacessíveis e identificadores forjados são rejeitados (86.84373ms)
+✔ permissões específicas impedem faturamento, recebimento e leitura não autorizados (54.419262ms)
+✔ unidades de medida incompatíveis não são convertidas silenciosamente (74.038891ms)
+✔ cancelar compra vazia é auditável e compras recebidas preservam os documentos (83.305185ms)
+✔ custos documentais rejeitam precisão inválida e exigem permissão financeira (39.20152ms)
+✔ falha em um material desfaz toda baixa e faturamento da ordem (170.28213ms)
+✔ faturamento exige todos os materiais atendidos mesmo quando não há reserva pendente (197.962582ms)
+✔ verificadores não usam APP_URL/credenciais de seed e não gravam sem autorização explícita (1.382625ms)
+✔ homologação remota exige origem exata e HTTPS, sem credenciais ou parâmetros na URL (1.214942ms)
+✔ cookie jar preserva múltiplos fragmentos Supabase e remove cookies expirados (17.439577ms)
+▶ autenticação e fronteiras de acesso
+  ✔ sem costs:read custos ficam ocultos também em relações e auditoria (1.568385ms)
+  ✔ campos de credenciais não são retornados nem para perfil autorizado a custos (0.601046ms)
+✔ autenticação e fronteiras de acesso (3.224893ms)
+▶ proteção de origem das mutações
+  ✔ origem correta pode enviar mutação (1.554263ms)
+  ✔ origem ausente, de outro domínio ou cross-site não pode enviar mutação (0.884323ms)
+✔ proteção de origem das mutações (2.841074ms)
+▶ movimentações reais no PostgreSQL
+  ✔ aceitação: entrada 100, saída 15, transferência 25 resultam em 60 + 25 = 85 com histórico e auditoria (125.291689ms)
+  ✔ saldos são exclusivos por produto/local e preservam precisão decimal (78.929321ms)
+  ✔ retirada maior que o saldo falha sem alterar saldo, histórico ou idempotência (58.759212ms)
+  ✔ zero, negativos, precisão excessiva e campos de ajuste direto são rejeitados no backend (36.44259ms)
+  ✔ transferência para destino inexistente não retira material da origem (91.977716ms)
+  ✔ transferência com saldo insuficiente mantém ambos os locais (81.986445ms)
+  ✔ falha ao gravar o destino desfaz a retirada já feita na transação (88.837912ms)
+  ✔ transferência para a própria origem é rejeitada (58.983574ms)
+  ✔ produto e localização inativos não recebem movimentações (47.220237ms)
+  ✔ perfil sem stock:move recebe 403 e não altera o banco (44.754309ms)
+  ✔ duas requisições simultâneas com a mesma chave aplicam uma única entrada (126.626452ms)
+  ✔ chave reutilizada com quantidade ou usuário diferente é rejeitada (47.364015ms)
+  ✔ duas retiradas concorrentes de 80 sobre saldo 100 permitem somente uma (120.78238ms)
+  ✔ configuração legada de negativo não permite disponível negativo no fluxo atual (37.074573ms)
+  ✔ códigos podem repetir em unidades distintas sem permitir movimentação cruzada (37.828151ms)
+  ✔ transferência entre unidades é recusada integralmente (47.012639ms)
+  ✔ idempotência inclui a unidade e não revela operação de outro escopo (39.0952ms)
+  ✔ registro legado sem unidade permanece inacessível pelo fluxo operacional (34.269255ms)
+  ✔ operação sem unidade autorizada falha antes de qualquer gravação (29.180079ms)
+✔ movimentações reais no PostgreSQL (1349.351915ms)
+▶ inventário e aprovação
+  ✔ contagem e aprovação não atravessam o escopo da unidade (57.996682ms)
+  ✔ operador registra contagem pendente sem sobrescrever o saldo (51.928462ms)
+  ✔ operador não aprova ajustes e usuário sem inventory:count não conta (47.19949ms)
+  ✔ aprovação registra ajuste -3, responsável, antes/depois e auditoria (71.786755ms)
+  ✔ aprovação repetida não aplica a divergência duas vezes (133.437468ms)
+  ✔ contagem repetida com mesma chave não duplica inventário (52.598322ms)
+  ✔ snapshot já obsoleto no envio não cria contagem (47.015278ms)
+  ✔ movimentação posterior à contagem impede aprovação e mantém histórico original (63.080282ms)
+  ✔ saldo que mudou e voltou ao valor inicial também invalida a contagem (83.557845ms)
+  ✔ falha no segundo item desfaz integralmente ajustes de um inventário com vários produtos (107.922573ms)
+✔ inventário e aprovação (718.129399ms)
+▶ administração de acesso por unidade
+  ✔ listagem e detalhes não expõem usuários exclusivos de outra unidade (62.363466ms)
+  ✔ desativação limita-se à associação atual e preserva identidade e acesso da outra unidade (40.350112ms)
+  ✔ próprio administrador não pode se desativar ou rebaixar (38.717081ms)
+  ✔ uma permissão revogada no banco impede a gravação mesmo com ator previamente autorizado (32.242278ms)
+  ✔ revogações concorrentes não deixam a unidade sem administrador (86.587193ms)
+  ✔ edição de acesso não aceita senha, identidade nem campos globais enviados pelo cliente (31.151517ms)
+✔ administração de acesso por unidade (451.722967ms)
+✔ inventário: recusa coleção muito acima do limite antes de expandir erros dos itens (3.174026ms)
+✔ pedido de compra: recusa coleção muito acima do limite antes de expandir erros dos itens (0.972086ms)
+✔ recebimento: recusa coleção muito acima do limite antes de expandir erros dos itens (0.720637ms)
+ℹ tests 79
+ℹ suites 6
+ℹ pass 79
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8857.687853
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice

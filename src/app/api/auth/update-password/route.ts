@@ -1,0 +1,23 @@
+import { z } from 'zod';
+import { api, AppError, json } from '@/lib/http';
+import { supabaseServer } from '@/lib/supabase/server';
+import { authServiceUnavailable } from '@/lib/auth-config';
+import { prisma } from '@/lib/db';
+import { UNIT_COOKIE } from '@/lib/auth';
+import { cookies } from 'next/headers';
+const inputSchema = z.object({ password: z.string().min(12, 'Use pelo menos 12 caracteres.').max(128) }).strict();
+export const POST = api(async request => {
+  const { password } = inputSchema.parse(await request.json());
+  const supabase = await supabaseServer();
+  const { data, error: identityError } = await supabase.auth.getUser();
+  if (authServiceUnavailable(identityError)) throw new AppError('O serviço de autenticação está temporariamente indisponível.', 503);
+  if (identityError || !data.user) throw new AppError('O link de recuperação expirou. Solicite outro link.', 401, 'SESSION_EXPIRED');
+  const user = await prisma.user.findUnique({ where: { authUserId: data.user.id }, include: { memberships: { where: { active: true, unit: { active: true, organization: { active: true } } } } } });
+  if (!user?.active || !user.memberships.length) throw new AppError('Esta conta não está habilitada no ERP. Procure o administrador.', 403);
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw new AppError(authServiceUnavailable(error) ? 'Não foi possível acessar o serviço de autenticação.' : 'Não foi possível atualizar a senha. Confira a política de senhas do projeto.', authServiceUnavailable(error) ? 503 : 400);
+  await prisma.auditLog.create({ data: { userId: user.id, unitId: user.memberships[0].unitId, action: 'PASSWORD_UPDATED', entity: 'User', entityId: user.id } });
+  await supabase.auth.signOut({ scope: 'global' });
+  (await cookies()).set(UNIT_COOKIE, '', { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 0 });
+  return json({ ok: true, message: 'Senha atualizada. Entre novamente.' });
+});

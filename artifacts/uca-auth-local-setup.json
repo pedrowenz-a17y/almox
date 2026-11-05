@@ -1,0 +1,39 @@
+{
+  "observedAt": "2026-10-29T16:58:28.994462+00:00",
+  "scope": "Autenticação oficial Supabase Auth executada localmente em contêiner GoTrue. Não é validação de projeto Supabase hospedado nem deployment Vercel.",
+  "provider": {
+    "image": "supabase/gotrue:v2.185.0",
+    "imageDigest": "sha256:de22ff0811f3e4f7e6d3ba226f75ed8d82310df577bbd61e16fbfd7a50a8c9ce",
+    "health": "passed"
+  },
+  "storage": {
+    "postgresImage": "postgres:16-alpine",
+    "operationalDatabase": "almox_uca_e2e_run_test",
+    "authDatabase": "almox_uca_auth_test",
+    "isolated": true,
+    "currentMigrationsApplied": 5
+  },
+  "provisioning": {
+    "confirmedAccountsCreatedViaOfficialAdminAPI": 3,
+    "trustedAdministratorScriptRuns": 2,
+    "createdMembershipsFirstRun": 2,
+    "createdMembershipsSecondRun": 0,
+    "realIdentityVerifiedByProvider": true
+  },
+  "http": {
+    "transport": "Proxy local encaminha /auth/v1 ao GoTrue sem implementar nem simular autenticação.",
+    "applicationMode": "Next.js build de produção",
+    "loginStatus": 200,
+    "httpOnlySameSiteCookies": true,
+    "verifier": "uca-api-checks.json",
+    "passed": 26,
+    "total": 26,
+    "cleanupFailures": 0
+  },
+  "limitations": [
+    "Serviço hospedado Supabase, configuração remota de RLS e Vercel não foram acessados.",
+    "Convite e recuperação de senha por SMTP real ainda não foram executados.",
+    "As contas e os materiais QA pertencem somente às bases locais isoladas; nenhum usuário de produção foi criado.",
+    "Credenciais e configurações temporárias estão fora do projeto e não integram a entrega."
+  ]
+}

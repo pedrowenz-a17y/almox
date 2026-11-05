@@ -1,0 +1,44 @@
+{
+  "executedAt": "2026-10-28T01:05:08.842071+00:00",
+  "scope": "Testes locais de origem, redação de credenciais/custos e segurança dos verificadores. Sem chamadas Supabase Auth, Vercel ou banco remoto.",
+  "checks": [
+    {
+      "command": "node --import tsx --test --test-reporter=tap tests/qa-safety.test.ts tests/security.test.ts",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "TAP version 13\n# Subtest: verificadores não usam APP_URL/credenciais de seed e não gravam sem autorização explícita\nok 1 - verificadores não usam APP_URL/credenciais de seed e não gravam sem autorização explícita\n  ---\n  duration_ms: 1.21635\n  type: 'test'\n  ...\n# Subtest: homologação remota exige origem exata e HTTPS, sem credenciais ou parâmetros na URL\nok 2 - homologação remota exige origem exata e HTTPS, sem credenciais ou parâmetros na URL\n  ---\n  duration_ms: 0.291201\n  type: 'test'\n  ...\n# Subtest: cookie jar preserva múltiplos fragmentos Supabase e remove cookies expirados\nok 3 - cookie jar preserva múltiplos fragmentos Supabase e remove cookies expirados\n  ---\n  duration_ms: 20.267181\n  type: 'test'\n  ...\n# Subtest: autenticação e fronteiras de acesso\n    # Subtest: sem costs:read custos ficam ocultos também em relações e auditoria\n    ok 1 - sem costs:read custos ficam ocultos também em relações e auditoria\n      ---\n      duration_ms: 1.949729\n      type: 'test'\n      ...\n    # Subtest: campos de credenciais não são retornados nem para perfil autorizado a custos\n    ok 2 - campos de credenciais não são retornados nem para perfil autorizado a custos\n      ---\n      duration_ms: 0.672367\n      type: 'test'\n      ...\n    1..2\nok 4 - autenticação e fronteiras de acesso\n  ---\n  duration_ms: 3.746356\n  type: 'suite'\n  ...\n# Subtest: proteção de origem das mutações\n    # Subtest: origem correta pode enviar mutação\n    ok 1 - origem correta pode enviar mutação\n      ---\n      duration_ms: 1.653591\n      type: 'test'\n      ...\n    # Subtest: origem ausente, de outro domínio ou cross-site não pode enviar mutação\n    ok 2 - origem ausente, de outro domínio ou cross-site não pode enviar mutação\n      ---\n      duration_ms: 0.74678\n      type: 'test'\n      ...\n    1..2\nok 5 - proteção de origem das mutações\n  ---\n  duration_ms: 2.870251\n  type: 'suite'\n  ...\n1..5\n# tests 7\n# suites 2\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 529.816922\n",
+      "stderr": "",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "command": "node --check scripts/verify-api.mjs",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "node --check scripts/verify-browser.mjs",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "node --check scripts/verify-operations.mjs",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "node --check scripts/verify-reports.mjs",
+      "passed": true,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

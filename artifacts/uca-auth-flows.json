@@ -1,0 +1,87 @@
+{
+  "startedAt": "2026-10-30T10:37:50.047Z",
+  "environment": "isolated-local",
+  "provider": "official Supabase Auth / GoTrue",
+  "checks": [
+    {
+      "name": "Identidade Supabase real sem perfil ERP não obtém acesso",
+      "passed": true,
+      "durationMs": 206
+    },
+    {
+      "name": "Perfil ERP sem associação a unidade não obtém acesso",
+      "passed": true,
+      "durationMs": 181
+    },
+    {
+      "name": "Associação autorizada permite login real com cookies seguros",
+      "passed": true,
+      "durationMs": 193
+    },
+    {
+      "name": "Senha incorreta é rejeitada pelo provedor real",
+      "passed": true,
+      "durationMs": 95
+    },
+    {
+      "name": "Unidade forjada no cookie não amplia acesso",
+      "passed": true,
+      "durationMs": 43
+    },
+    {
+      "name": "Associação desativada bloqueia sessão existente e novo login",
+      "passed": true,
+      "durationMs": 210
+    },
+    {
+      "name": "Reativação explícita da fixture permite novo login",
+      "passed": true,
+      "durationMs": 142
+    },
+    {
+      "name": "TokenHash real de recuperação é confirmado no callback do ERP",
+      "passed": true,
+      "durationMs": 70
+    },
+    {
+      "name": "Redefinição grava a senha no provedor e encerra a sessão atual",
+      "passed": true,
+      "durationMs": 249
+    },
+    {
+      "name": "Senha anterior deixa de autenticar e nova senha autentica",
+      "passed": true,
+      "durationMs": 243
+    },
+    {
+      "name": "Token de recuperação consumido não pode ser reutilizado",
+      "passed": true,
+      "durationMs": 15
+    },
+    {
+      "name": "Logout remove sessão autenticada do navegador de teste",
+      "passed": true,
+      "durationMs": 51
+    },
+    {
+      "name": "Identidade ERP desativada globalmente não autentica",
+      "passed": true,
+      "durationMs": 184
+    }
+  ],
+  "cleanup": [
+    {
+      "operation": "own-erp-fixture-only",
+      "passed": true
+    },
+    {
+      "operation": "own-auth-fixture-only",
+      "passed": true
+    }
+  ],
+  "result": "passed",
+  "limitations": [
+    "Tokens de recuperação gerados administrativamente; entrega de e-mail/SMTP não foi testada.",
+    "Nenhum projeto Supabase remoto nem deployment Vercel foi acessado."
+  ]
+}

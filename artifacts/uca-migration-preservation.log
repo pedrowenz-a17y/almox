@@ -1,0 +1,80 @@
+Validação em base local isolada almox_uca_legacy_test.
+
+Aplicar três migrations originais
+Prisma schema loaded from ../../tmp/almox-uca-legacy-baseline/prisma/schema.prisma
+Datasource "db": PostgreSQL database "almox_uca_legacy_test", schema "public" at "127.0.0.1:5432"
+
+3 migrations found in prisma/migrations
+
+Applying migration `20261016170617_initial`
+Applying migration `20261016171000_integrity_search`
+Applying migration `20261016171100_balance_version`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20261016170617_initial/
+    └─ migration.sql
+  └─ 20261016171000_integrity_search/
+    └─ migration.sql
+  └─ 20261016171100_balance_version/
+    └─ migration.sql
+      
+All migrations have been successfully applied.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+
+Snapshot legado antes
+Snapshot somente leitura salvo em /tmp/uca-legacy-validation/before.json. Proteja o arquivo: contém identificadores e saldos empresariais.
+
+Aplicar migration UCA aditiva
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "almox_uca_legacy_test", schema "public" at "127.0.0.1:5432"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20261026120000_uca_units_orders_supabase`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20261026120000_uca_units_orders_supabase/
+    └─ migration.sql
+      
+All migrations have been successfully applied.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+
+Snapshot legado depois
+Snapshot somente leitura salvo em /tmp/uca-legacy-validation/after.json. Proteja o arquivo: contém identificadores e saldos empresariais.
+
+Comparar preservação integral
+Comparação aprovada: registros operacionais comparados e saldos por produto/localização preservados.
+
+Seed institucional sem demonstrações
+Estruturas institucionais e permissões preparadas. Nenhum usuário, material, saldo ou ordem foi criado.
+Próximo passo: provisionar o administrador autorizado usando o procedimento documentado de Supabase Auth.
+
+Gerar plano sem classificação automática
+Plano gerado sem atribuições automáticas. Revise cada registro, preencha os UUIDs das unidades e registre a aprovação fora do sistema.
+
+Plano inválido esperado
+Um relacionamento ficaria sem unidade ou cruzaria unidades. Inclua no plano todos os registros relacionados e revise sua classificação.
+
+Validar plano somente leitura
+Plano validado em transação somente leitura: 14 registros a classificar. Nenhuma alteração aplicada.
+
+Aplicar classificação aprovada
+Mapeamento concluído: 14 registros classificados; 0 já estavam na unidade aprovada. Nenhum saldo ou identificador foi alterado.
+
+Reaplicar plano idempotente
+Mapeamento concluído: 0 registros classificados; 14 já estavam na unidade aprovada. Nenhum saldo ou identificador foi alterado.
+[migration5] PASS: Snapshot before optional cost migration
+[migration5] PASS: Deploy final migration on legacy isolated database
+[migration5] PASS: Snapshot after optional cost migration
+[migration5] PASS: All legacy fingerprints and balances unchanged
+[migration5] PASS: stored cost values and balances/versions preserved; nullable without default; five migrations applied; checksum 6607801b8f6ef462fff15335d1c2276893171cc1f25b6ed6800170f855e0234b

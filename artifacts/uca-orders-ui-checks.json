@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-30T10:37:49.808Z",
+  "environment": "isolated",
+  "unitId": "7856f40f-e7b9-466a-b638-c95a56a18207",
+  "checks": [
+    "Login real e seleção da unidade de homologação",
+    "Fixtures identificadas e isoladas; custo desconhecido preservado como null",
+    "Pedido de compra criado pela interface com material, fornecedor e custo informado",
+    "Recebimento parcial de 60 e custo real do documento, distinto do pedido",
+    "Recebimento completo 60+40, documento sem custo mantém null e histórico com dois recebimentos",
+    "O.S. com requisição 10, reserva 10 e aplicação parcial 4; faturamento bloqueado e saldos corretos",
+    "Devolução antes do faturamento reverte aplicação; liberar reserva não libera faturamento incompleto",
+    "Faturamento manual da O.S. integralmente atendida baixa exatamente 10 uma vez",
+    "Devolução pós-faturamento gera entrada de 2, com O.S. e histórico legíveis no celular",
+    "O.P. criada e atendida integralmente no celular; consumo de 5 mantém saldo final 87",
+    "Cancelamento da O.P. libera reserva sem alterar físico e mantém o histórico",
+    "Cinco movimentações finais, auditorias de ordens e movimentações, sem erros JavaScript"
+  ],
+  "expectedFinalStock": 87,
+  "productId": "4dd0ba6a-fe64-4f3d-88f6-5184f91013cb",
+  "locationId": "cf7fff17-182a-4e0b-b627-877ff738b1ea",
+  "orderIds": [
+    "cafbc4e5-87fa-4361-83c8-72861ddd7fe7",
+    "f2e5000c-42be-43ac-b2e0-f92a47796040",
+    "7631c252-fc69-4369-b37a-25af4255c33b"
+  ],
+  "purchaseId": "44198910-a404-4153-b257-e90e545a8a6a",
+  "consoleErrors": []
+}

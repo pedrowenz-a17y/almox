@@ -1,0 +1,54 @@
+{
+  "kind": "public-browser-local-unauthenticated",
+  "tests": 11,
+  "passed": 11,
+  "results": [
+    {
+      "name": "Login público abre com assets oficiais e formulário real",
+      "passed": true
+    },
+    {
+      "name": "Senha pode ser exibida e ocultada sem alterar valor",
+      "passed": true
+    },
+    {
+      "name": "Formulário vazio é bloqueado pelo navegador",
+      "passed": true
+    },
+    {
+      "name": "Parallax fica estático com preferência de movimento reduzido",
+      "passed": true
+    },
+    {
+      "name": "Login sem transbordamento em 1440, 768, 390 e 320px",
+      "passed": true
+    },
+    {
+      "name": "Recuperação de acesso abre formulário e volta ao login",
+      "passed": true
+    },
+    {
+      "name": "Páginas privadas e API não liberam dados sem configuração/sessão",
+      "passed": true
+    },
+    {
+      "name": "Manifesto e ícones PWA válidos e acessíveis",
+      "passed": true
+    },
+    {
+      "name": "Sem erros de execução JavaScript",
+      "passed": true
+    },
+    {
+      "name": "Cache não contém páginas ou respostas autenticadas",
+      "passed": true
+    },
+    {
+      "name": "Navegação offline apresenta aviso sem mostrar estoque antigo",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Não valida identidade remota Supabase nem câmera ou impressora física."
+  ]
+}
