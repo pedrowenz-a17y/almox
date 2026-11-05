@@ -1,7 +1,7 @@
 {
-  "version": "2.2.1",
-  "revision": "npm-optional-dependency-resolution",
-  "generatedAt": "2026-11-05T19:35:29.173454+00:00",
+  "version": "2.2.2",
+  "revision": "simplified-synchronized-welcome",
+  "generatedAt": "2026-11-05T20:16:38.192587+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 19420,
-      "sha256": "5c9f499a74a99fdd7518658851b4471af3a50dd93b7d67e81aa6d7afd3293160"
+      "bytes": 19593,
+      "sha256": "f5d84651a72906081d802123d135f53152cbe4d267b662bddae44c7414b25bb6"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -449,6 +449,46 @@
       "sha256": "6cb493c5a0f6c65c57d1a7f5e3989018912e513e4b082e33058e7c5b3bb41976"
     },
     {
+      "path": "artifacts/welcome-2.2.2/abertura.gif",
+      "bytes": 20124300,
+      "sha256": "411cdd354e4d30f50fbdb55adb92e9edb4543aeb193d2412e344efb0aaed02f5"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/build.log",
+      "bytes": 2202,
+      "sha256": "07b9e7d64fe39ad954a86260b86e0a5ec42501aad01e5e11c5f69ff3233db974"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/checks.json",
+      "bytes": 1095,
+      "sha256": "4f2506de9ba32727f5d563c13b698db9e33a099cc9daddb5682f886425bf7d9a"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/lint.log",
+      "bytes": 35,
+      "sha256": "e3d1dbeb6561be1cadb5b299a12a4afc8904e695401c9ef934ccd29048c23a31"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/login-desktop.png",
+      "bytes": 943812,
+      "sha256": "d3ab0d1ec18ed24829c5ed336ef4ec3033f8bd71fd9c2a70181280e2de0d38da"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/login-estatico.png",
+      "bytes": 942833,
+      "sha256": "af54f1620d90934fd894b9f36a2993d44bad9ac42ee3ddf89c996d1c96f5741d"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/login-mobile.png",
+      "bytes": 256318,
+      "sha256": "918505c4102a81f6d3fcdb15e6b38ebbbc8ca4e1c81ff9065274f30dbe7d42d1"
+    },
+    {
+      "path": "artifacts/welcome-2.2.2/typecheck.log",
+      "bytes": 44,
+      "sha256": "30847f0d08452b76737e1cc7797dd90b7afe5fbd6539435cf276aa8c36c70e18"
+    },
+    {
       "path": "artifacts/workshop/build.log",
       "bytes": 1590,
       "sha256": "845eb65cf237f85180da8fe6cfbcb246496f3d27da0375b66936cf51a6bc01b7"
@@ -504,6 +544,11 @@
       "sha256": "4ef2031b5a6d7ed43f14b577cc1709b9f31e05e96883c2f4fee908e26ca598c1"
     },
     {
+      "path": "docs/ABERTURA-2.2.2.md",
+      "bytes": 1935,
+      "sha256": "034d314af3655b700ede0427a0a40d840742a8aeb768463ff2111586fede373a"
+    },
+    {
       "path": "docs/ARCHITECTURE.md",
       "bytes": 10996,
       "sha256": "07c6b72d30b22992f651c6adf479590d0b7783cca61cc0b8add025335869f59f"
@@ -525,8 +570,8 @@
     },
     {
       "path": "docs/INTERACOES-2.2.md",
-      "bytes": 4259,
-      "sha256": "7e7b03f0fc87b6d091ce89845931271903d9bef4f71c36453ceb6363648ec880"
+      "bytes": 4420,
+      "sha256": "c3e6a66dbfe1c140063e7e246bc4478739a853682b56e2b6b4ffda6a78a1baa9"
     },
     {
       "path": "docs/MELHORIAS-2026-11.md",
@@ -576,12 +621,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "9b3d614e258d9f34a2eaad3cb051ae05685a4b8a23069bfa5954e94d5b7ecff7"
+      "sha256": "d1ae7d908e87d52b06fbae0bbe3c06bc2d5452de2a75a600be363a9f8621c203"
     },
     {
       "path": "package.json",
       "bytes": 2231,
-      "sha256": "266225e2afd4b378912ab88533e94f6401b9e78aaf88644101fbbca429cf99a3"
+      "sha256": "75a64f3b9c72060444f27202a818494038aa552dc37327631a95645ac15c7527"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -975,13 +1020,13 @@
     },
     {
       "path": "src/app/welcome-interactions.css",
-      "bytes": 11663,
-      "sha256": "0e44fdfa83d611af3f84df01812fedd2090a9df4fe938fa586ce2c1148cb7b46"
+      "bytes": 11300,
+      "sha256": "addbdeb73ee095eddbe21f4cb01aca78cf4f596f704a5bb33ccbf725db78e40c"
     },
     {
       "path": "src/app/welcome.css",
-      "bytes": 24983,
-      "sha256": "15add5436b42dc6b567df19a486ddb89431598e01337a749b41030aec8d03e7d"
+      "bytes": 20732,
+      "sha256": "d45eab2c6a31223b663f53a7ae1cc4d3c59dc194a81f874f38133b7c7df3b676"
     },
     {
       "path": "src/app/workshop.css",
@@ -990,8 +1035,8 @@
     },
     {
       "path": "src/components/auth-shell.tsx",
-      "bytes": 11600,
-      "sha256": "c6ca084ae5238ca8e868d7c8a480e56cab58df5d12f00b873f60f2bc5deba50a"
+      "bytes": 4820,
+      "sha256": "b7ef50ef8c5c0d9627308e488269718ddee6ca869c88bc885e7f006455b63b89"
     },
     {
       "path": "src/components/catalog-form.tsx",
@@ -1082,6 +1127,11 @@
       "path": "src/components/welcome-effects.tsx",
       "bytes": 9404,
       "sha256": "f10c921af98092cf4a5cc6c43a3967c3105b0fc3c9e03ebb93069b18298daf74"
+    },
+    {
+      "path": "src/components/welcome-journey.tsx",
+      "bytes": 6480,
+      "sha256": "e1e7ed71152537807688ab897fbf048235be0dd2ddbe56265cb9f0aea0afa5cd"
     },
     {
       "path": "src/components/workspace-link.tsx",

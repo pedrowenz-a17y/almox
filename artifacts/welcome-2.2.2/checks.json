@@ -1,0 +1,21 @@
+{
+  "version": "2.2.2",
+  "scope": "Production build; public login and recovery; mouse, keyboard and touch; no company credentials or data",
+  "passed": 13,
+  "checks": [
+    "foto tem apenas tres controles e uma legenda, sem cartoes repetidos",
+    "luz chega ao segundo ponto junto com a caixa vermelha e o caminho",
+    "terceira caixa fica vermelha somente quando a luz chega ao fim",
+    "novo ciclo reinicia luz, trilha e caixas de forma coordenada",
+    "hover seleciona uma etapa e mantem a luz no centro da caixa",
+    "formulario em uso pausa o percurso e preserva os campos de acesso",
+    "movimento reduzido vira composicao estatica sem luz, faixa ou deslocamento",
+    "pontos e legenda continuam funcionando por teclado no modo estatico",
+    "foto, caminho e centros dos icones alinhados de 320 a 1920 pixels",
+    "preferencia salva e padrao de movimento reduzido do dispositivo preservados",
+    "celular explora as caixas por toque e chega diretamente ao formulario",
+    "recuperacao de senha mantem a abertura simplificada",
+    "sem erros JavaScript"
+  ],
+  "errors": []
+}

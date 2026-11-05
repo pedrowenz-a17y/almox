@@ -1,5 +1,7 @@
 # Almox ERP 2.2 — uma abertura para explorar
 
+Este documento registra a abertura 2.2.0. A revisão atual, com menos sobreposições e percurso sincronizado, está em [ABERTURA-2.2.2.md](ABERTURA-2.2.2.md).
+
 A tela inicial agora reage ao movimento do mouse. A fotografia grande da U.C.A. foi mantida e ganhou uma apresentação dos recursos do almoxarifado que pode ser explorada sem entrar na conta.
 
 - A luz e um halo acompanham o cursor; as partículas próximas se afastam e criam conexões. Clicar no painel produz uma onda com pequenos fragmentos.

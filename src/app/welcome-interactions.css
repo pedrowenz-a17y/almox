@@ -90,27 +90,6 @@
 .welcome-line > span {
   white-space: nowrap;
 }
-.welcome-explore-hint {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #ffb3c4;
-  font-size: 11px;
-  font-weight: 500;
-  margin-bottom: 14px;
-}
-.welcome-explore-hint > svg {
-  color: #ff577b;
-  animation: welcome-pointer-invite 2.8s ease-in-out infinite;
-}
-.explore-touch {
-  display: none;
-}
-.explore-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, #ff547b60, transparent);
-}
 .welcome-showcase {
   perspective: 1100px;
 }
@@ -152,57 +131,6 @@
   stroke-width: 3;
   stroke-dasharray: 75 575;
   animation-duration: 2s;
-}
-.welcome-photo-scan {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 450ms;
-  background-image:
-    linear-gradient(#fff1 1px, transparent 1px),
-    linear-gradient(90deg, #fff1 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(0deg, transparent 5%, #000 45%, transparent 95%);
-}
-.welcome-photo-scan::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 25%;
-  background: linear-gradient(0deg, #ff517b45, transparent 90%);
-  border-bottom: 2px solid #ff95b0;
-  box-shadow: 0 12px 35px #ff1f543d;
-  animation: welcome-photo-scan 3.8s ease-in-out infinite alternate;
-}
-[data-scene="locate"] .welcome-photo-scan,
-[data-scene="check"] .welcome-photo-scan {
-  opacity: 0.75;
-}
-[data-scene="check"] .welcome-photo-scan::after {
-  border-color: #fff;
-  background: linear-gradient(0deg, #ffffff32, transparent 90%);
-  animation-duration: 5s;
-}
-.welcome-scene-label {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  background: #191b25cc;
-  border: 1px solid #ffffff35;
-  border-radius: 24px;
-  padding: 9px 13px;
-  font-size: 11px;
-  animation: welcome-copy-enter 400ms both;
-  pointer-events: none;
-}
-.welcome-scene-label > svg {
-  color: #ff98b0;
 }
 .welcome-photo-point {
   position: absolute;
@@ -281,14 +209,6 @@
   outline-offset: 7px;
   border-radius: 12px;
 }
-.welcome-float-tag {
-  translate: calc(var(--depth-x, 0px) * 1.6) calc(var(--depth-y, 0px) * 1.6);
-  transition: translate 500ms cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-}
-.welcome-float-copy {
-  animation: welcome-copy-enter 400ms both;
-}
 .welcome-shell [data-magnetic],
 .welcome-shell .login-submit {
   translate: var(--magnet-x, 0px) var(--magnet-y, 0px);
@@ -298,9 +218,6 @@
     background-color 200ms,
     box-shadow 250ms,
     border-color 200ms;
-}
-.welcome-story-tabs button svg {
-  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .welcome-shell .uca-auth-brand img {
   transition:
@@ -350,18 +267,6 @@
     transform: translateY(3px);
     background: #e91536;
   }
-  :root[data-motion="full"] .welcome-story-tabs button:hover {
-    transform: translateY(-5px);
-    box-shadow:
-      0 12px 25px #0003,
-      0 0 25px #ed17431c;
-    background: #ed174326;
-    border-color: #ff6488;
-    color: #fff;
-  }
-  :root[data-motion="full"] .welcome-story-tabs button:hover svg {
-    transform: rotate(-14deg) scale(1.25);
-  }
   :root[data-motion="full"] .welcome-shell .uca-auth-brand:hover img {
     transform: rotate(-7deg) scale(1.08);
     box-shadow: 0 12px 30px #ff436327;
@@ -371,25 +276,10 @@
     box-shadow: 0 15px 35px #e9153647;
   }
 }
-@media (max-width: 1100px) {
-  .welcome-scene-label {
-    top: 12px;
-    left: 12px;
-    padding: 7px 10px;
-    font-size: 10px;
-  }
-}
 @media (max-width: 800px) {
   .welcome-showcase {
     display: block;
     align-self: center;
-  }
-  .welcome-explore-hint {
-    font-size: 9px;
-    line-height: 1.4;
-  }
-  .explore-line {
-    display: none;
   }
   .welcome-photo-point {
     width: 58px;
@@ -410,23 +300,11 @@
     font-size: 8px;
     padding: 4px 6px;
   }
-  .welcome-scene-label {
-    font-size: 9px;
-    left: 8px;
-    right: 8px;
-    top: 8px;
-    width: fit-content;
-    padding: 6px 8px;
-  }
 }
 @media (hover: none), (pointer: coarse) {
   .welcome-cursor-halo,
-  .welcome-spotlight,
-  .explore-mouse {
+  .welcome-spotlight {
     display: none;
-  }
-  .explore-touch {
-    display: inline;
   }
 }
 @media (max-width: 480px) {
@@ -438,17 +316,10 @@
     height: 220px;
     aspect-ratio: auto;
   }
-  .welcome-photo-caption {
-    font-size: 8px;
-  }
-  .welcome-story {
-    margin-top: 20px;
-  }
 }
 :root:not([data-motion="full"]) .welcome-effects {
   display: none;
 }
-:root:not([data-motion="full"]) .welcome-float-tag,
 :root:not([data-motion="full"]) .welcome-shell [data-magnetic],
 :root:not([data-motion="full"]) .welcome-shell .login-submit {
   translate: none;
@@ -459,40 +330,6 @@
 @keyframes welcome-cursor-orbit {
   to {
     transform: rotate(360deg);
-  }
-}
-@keyframes welcome-pointer-invite {
-  0%,
-  65%,
-  100% {
-    transform: translate(0, 0) rotate(0);
-  }
-  30% {
-    transform: translate(5px, -3px) rotate(-12deg);
-  }
-}
-@keyframes welcome-route-run {
-  to {
-    stroke-dashoffset: -650;
-  }
-}
-@keyframes welcome-photo-scan {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(400%);
-  }
-}
-@keyframes welcome-point-pulse {
-  0% {
-    transform: scale(0.85);
-    opacity: 0.8;
-  }
-  85%,
-  100% {
-    transform: scale(1.55);
-    opacity: 0;
   }
 }
 @keyframes welcome-letter-elastic {
@@ -510,5 +347,159 @@
   }
   100% {
     transform: translateY(-5px) scale(1.08);
+  }
+}
+
+/* The photograph tells one story, with one route and one caption. */
+.welcome-journey {
+  margin: 28px 0 0;
+  min-width: 0;
+}
+.welcome-journey .welcome-photo-route {
+  opacity: 1;
+}
+.journey-measure {
+  fill: none;
+  stroke: none;
+  visibility: hidden;
+}
+.welcome-journey .photo-route-base {
+  stroke: #ffffff80;
+  stroke-width: 2;
+  stroke-dasharray: 3 7;
+}
+.welcome-journey .photo-route-flow {
+  animation: none;
+  stroke: #f62b53;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.photo-route-light {
+  fill: #fff;
+  stroke: #f62b53;
+  stroke-width: 5;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 6px #ff476e);
+}
+.welcome-journey .welcome-photo-point {
+  --point-size: 46px;
+  width: 86px;
+  min-height: 80px;
+  margin-left: 0;
+  left: calc(var(--point-x) - 43px);
+  top: calc(var(--point-y) - var(--point-size) / 2);
+}
+.welcome-journey .photo-point-locate {
+  --point-x: 15.5%;
+  --point-y: 31.666667%;
+}
+.welcome-journey .photo-point-move {
+  --point-x: 54%;
+  --point-y: 48.333333%;
+}
+.welcome-journey .photo-point-check {
+  --point-x: 84%;
+  --point-y: 35%;
+}
+.welcome-journey .photo-point-icon {
+  width: var(--point-size);
+  height: var(--point-size);
+}
+.welcome-journey .photo-point-icon::before {
+  display: none;
+}
+.welcome-journey .reached .photo-point-icon {
+  color: #fff;
+  background: #e91536;
+  border-color: #ff9db3;
+  box-shadow: 0 0 0 4px #ed204225;
+}
+.welcome-journey .active .photo-point-icon {
+  border-color: #fff;
+  box-shadow:
+    0 0 0 4px #ed20422b,
+    0 0 22px #f9295250;
+}
+.journey-caption {
+  color: #bec0cc;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 15px;
+  min-height: 42px;
+}
+.welcome-motion-link {
+  display: block;
+  width: fit-content;
+  padding: 6px 0;
+  margin-top: 15px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #777b89;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.welcome-motion-link:hover {
+  color: var(--welcome-red);
+}
+.welcome-motion-link:focus-visible {
+  outline: 2px solid var(--welcome-red);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+.welcome-cursor-halo {
+  width: 38px;
+  height: 38px;
+}
+.welcome-cursor-halo::before {
+  display: none;
+}
+.welcome-cursor-halo::after {
+  inset: 16px;
+}
+:root:not([data-motion="full"]) .welcome-journey .photo-route-flow,
+:root:not([data-motion="full"]) .photo-route-light {
+  display: none;
+}
+:root:not([data-motion="full"])
+  .welcome-journey
+  .reached:not(.active)
+  .photo-point-icon {
+  color: #fff;
+  border-color: #ffffff90;
+  background: #161923c9;
+  box-shadow: 0 4px 22px #0003;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-motion="full"]
+    .welcome-journey
+    .welcome-photo-point:hover
+    .photo-point-icon {
+    transform: rotate(-7deg) scale(1.08);
+  }
+}
+@media (max-width: 800px) {
+  .welcome-journey {
+    margin-top: 0;
+  }
+  .welcome-journey .welcome-photo-point {
+    --point-size: 36px;
+    min-height: 64px;
+  }
+  .welcome-shell .login-form-wrap {
+    padding-top: 32px;
+  }
+  .journey-caption {
+    font-size: 11px;
+    min-height: 38px;
+  }
+}
+@media (max-width: 480px) {
+  .welcome-journey {
+    margin-top: 22px;
   }
 }

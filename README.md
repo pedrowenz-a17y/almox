@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.2.1
+# Almox ERP · U.C.A. — versão 2.2.2
+
+**Versão 2.2.2:** abertura simplificada, uma legenda e caminho que acende as caixas em vermelho na passagem da luz. [Veja a revisão da abertura](docs/ABERTURA-2.2.2.md).
 
 **Correção 2.2.1:** versões dos pacotes opcionais `@emnapi/core` e `@emnapi/wasi-threads` fixadas para evitar o conflito de resolução relatado pelo `npm ci`.
 
