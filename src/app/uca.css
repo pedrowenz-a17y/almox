@@ -765,18 +765,18 @@ td small,
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  html {
+  :root:not([data-motion="full"]) {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
+  :root:not([data-motion="full"]) *,
+  :root:not([data-motion="full"]) *::before,
+  :root:not([data-motion="full"]) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .uca-photo-frame {
+  :root:not([data-motion="full"]) .uca-photo-frame {
     transform: none;
   }
 }

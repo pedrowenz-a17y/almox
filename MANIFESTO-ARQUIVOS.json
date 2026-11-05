@@ -1,7 +1,7 @@
 {
-  "version": "2.1.0",
-  "revision": "vivid-motion",
-  "generatedAt": "2026-11-05T13:00:39.786337+00:00",
+  "version": "2.1.1",
+  "revision": "larger-welcome-explicit-motion",
+  "generatedAt": "2026-11-05T18:42:58.956636+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 19039,
-      "sha256": "a75f5d7d54e1837fe83c47208c7c5e039d2ad0e4b94e9479420679359ff94642"
+      "bytes": 19163,
+      "sha256": "d2543c10cb4e400c6e12a985bf2bc37ed9bb73c71277f654f9ef8905ac2cd4b4"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -135,18 +135,18 @@
     },
     {
       "path": "artifacts/refresh/abertura-animada.gif",
-      "bytes": 2800677,
-      "sha256": "c71fc31975fdbbd82e63920821390444abd3486bc5101bfc8da7de2addbe67c5"
+      "bytes": 3714559,
+      "sha256": "da00bff7449c9311458c0500209166152f43ef8c8e07df300edb186965c95da1"
     },
     {
       "path": "artifacts/refresh/build.log",
-      "bytes": 2158,
-      "sha256": "815f0e36ebbf910425a8497a8309b7e7fa977e96bda179496995ce1d5e6979a8"
+      "bytes": 2202,
+      "sha256": "59891e85c8cfc6bb4602a9ca50c8c92c958973015db573a47614a568a10e4ee1"
     },
     {
       "path": "artifacts/refresh/checks.json",
-      "bytes": 3561,
-      "sha256": "5ff9e6af938999d791c94a10467f77bcce11d2f274b3119912b9c29f29182846"
+      "bytes": 3849,
+      "sha256": "4517170972d96366788ed2a4b39b4bb2712f371bf79d024c2e5654ddc5aa3e65"
     },
     {
       "path": "artifacts/refresh/dashboard-desktop.png",
@@ -166,22 +166,22 @@
     {
       "path": "artifacts/refresh/lint.log",
       "bytes": 36,
-      "sha256": "b81f7a1b4a5323f2b5707a6bc8941eb1430f4f7338672bb93386fbacaffd1843"
+      "sha256": "092033b488745c9bf5c19366e700a1c20274a6079a9731c2dd231bf6aa1aa04b"
     },
     {
       "path": "artifacts/refresh/login-390.png",
-      "bytes": 142925,
-      "sha256": "7074c08116a2db7ac030ff08c83780a340ccc68d559ed34e8d8863de4740c7e1"
+      "bytes": 142553,
+      "sha256": "eb8baa0ade1fc4e5a738771a2761c657a9ba8828edc69846c2803a48b753fe97"
     },
     {
       "path": "artifacts/refresh/login-768.png",
-      "bytes": 275412,
-      "sha256": "bb5431164e051800ee9dded3e03c1e9e024744fb8ab677756d3bff457c1d0299"
+      "bytes": 302554,
+      "sha256": "f8156038ffdd44d262e34f31510fee91c80c2be4e6c919ffb0c16eec7f0f2936"
     },
     {
       "path": "artifacts/refresh/login-desktop.png",
-      "bytes": 462474,
-      "sha256": "33b8307d151d14da0f8d5639801a11561723281387554411890a2bc1d0b4f1f3"
+      "bytes": 920268,
+      "sha256": "f4287f0c9b354e332b0017c978fe184b094d19b1d730d9c22c7a750d2f2d5fbb"
     },
     {
       "path": "artifacts/refresh/pedido-assistido.png",
@@ -200,8 +200,8 @@
     },
     {
       "path": "artifacts/refresh/recuperacao-mobile.png",
-      "bytes": 133469,
-      "sha256": "5da4cf2a5da6e436e800b8bf2462c420e644198b7a9f4a2676eeb4b1a5d1b04c"
+      "bytes": 133424,
+      "sha256": "42f65dff7dd25a640c699416cf6b807d55e39d2f7228f4be3424ac137d0dceff"
     },
     {
       "path": "artifacts/refresh/reposicao-desktop.png",
@@ -216,7 +216,7 @@
     {
       "path": "artifacts/refresh/typecheck.log",
       "bytes": 45,
-      "sha256": "a081f57c8a7752c32e1c1f6fff1e95f0d80d61aa81546128b6d148773d0a82f9"
+      "sha256": "cbc145c573e5ed5c5f6f97d3e8d02735aed9537aec37b40476205cb752b1ed00"
     },
     {
       "path": "artifacts/refresh/ui-checks.json",
@@ -225,8 +225,8 @@
     },
     {
       "path": "artifacts/refresh/welcome-checks.json",
-      "bytes": 830,
-      "sha256": "af390e5f16ae2169f0498ca2f1de78fe88b04483f20054ae3aabeff3dd15611d"
+      "bytes": 907,
+      "sha256": "236b8b6ddec17322a504fd034278d470dabd4c4cea67d4224aeed8642e167e01"
     },
     {
       "path": "artifacts/uca-aceite-mobile.png",
@@ -500,8 +500,8 @@
     },
     {
       "path": "docs/REVISAO-2.1.md",
-      "bytes": 8069,
-      "sha256": "44d962008f4ea1d52bccdf88c6735d245368c38dbf202d2d9ba0c36297de871e"
+      "bytes": 8707,
+      "sha256": "adb7459693f684bf5d7159b51f69e2aec167758e01fe8183155ff8d66a4e17c3"
     },
     {
       "path": "docs/VALIDATION-LEGACY.md",
@@ -531,12 +531,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "eec5437660d1067ef35f49c7c7e5b96230fa48e913c7e1a654ce13f02b6c0ee7"
+      "sha256": "983123c3e26c966496e36929927f38ec0544bdd2b345a5050e13e7be12d2cdad"
     },
     {
       "path": "package.json",
       "bytes": 2164,
-      "sha256": "0742f22f46e1c278da9f23f1e6c6bce4a47e619a06427e3b0553429a80f4b3b7"
+      "sha256": "dfabf0df930299b1a5065a2698cb9f2159946f2ce2b45d1bc9f37a6eb8f2abfa"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -925,18 +925,18 @@
     },
     {
       "path": "src/app/uca.css",
-      "bytes": 14609,
-      "sha256": "c1857d68a2a10d0183de5a1b4aafce97250f37eed07bfbc4b03bd2a0de29ca90"
+      "bytes": 14764,
+      "sha256": "c18256149fb3bc9f5295c4004a5312d4295724daed81c9c9ecfcdb9b7a9de61f"
     },
     {
       "path": "src/app/welcome.css",
-      "bytes": 24847,
-      "sha256": "18dfd4993600014dbdcee75bf87e030ed4656528eac1efdf34d13a87416b1a0c"
+      "bytes": 24983,
+      "sha256": "15add5436b42dc6b567df19a486ddb89431598e01337a749b41030aec8d03e7d"
     },
     {
       "path": "src/app/workshop.css",
-      "bytes": 15467,
-      "sha256": "12d378c7ecd1338b5ccd3c9242bdfedcc92bc8d6e24684de4373179afa1cfc25"
+      "bytes": 15590,
+      "sha256": "c8cd86108525654cc7a1969e2658ab0c7e271b04424348402161a0d4834ab384"
     },
     {
       "path": "src/components/auth-shell.tsx",
@@ -970,8 +970,8 @@
     },
     {
       "path": "src/components/motion-preferences.tsx",
-      "bytes": 3236,
-      "sha256": "1cab3ea0a3faf6c3070b75739a9b56e23288c165e74cc22ccfe398f30591e840"
+      "bytes": 3120,
+      "sha256": "9375b7f9370479385f24af08e2c51dea34a0dffccc244e9fa313b32b87225cd9"
     },
     {
       "path": "src/components/movement-form.tsx",

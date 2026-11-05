@@ -2,13 +2,17 @@
 
 Revisão de 5 de novembro de 2026. Foram comparados os dois ZIPs enviados pelo usuário: a versão anterior de referência e o `almox-main.zip`. A base funcional mais recente foi preservada. O `.env` local encontrado na versão de referência não foi copiado para o repositório ou para o pacote de distribuição.
 
+## Correção 2.1.1
+
+A fotografia ocupa toda a largura útil do painel esquerdo e chega a 520 px de altura em desktop, substituindo o limite anterior de 680 px de largura e 265 px de altura. O formulário acompanha a rolagem em telas grandes. A aproximação suave da foto foi ampliada, e o botão de animações agora aceita a escolha explícita do usuário mesmo quando o Windows prefere movimento reduzido.
+
 ## O visual desta revisão
 
 O vermelho escurecido e a fonte condensada da revisão anterior foram substituídos. A cor principal agora é `#e91536`, mais viva, com contraste de aproximadamente 4,54:1 para texto branco. Os títulos usam Manrope e o texto usa DM Sans, em arquivos WOFF2 locais; as licenças acompanham o projeto. Nenhuma fonte é buscada no Google durante o uso do ERP.
 
 A tela de entrada ganhou apresentação animada dos títulos, luz ambiente, profundidade suave na fotografia oficial U.C.A., cartão flutuante, reflexo na foto e destaques de recursos. Os botões **Encontre**, **Movimente** e **Confira** podem ser selecionados; quando o formulário não está sendo usado, eles alternam a cada 6,5 segundos. Isso apresenta os recursos sem inventar saldos, pedidos ou indicadores empresariais.
 
-O formulário permanece disponível desde a abertura, sem intro bloqueante ou tempo de espera artificial. Ao preencher o acesso, a rotação dos destaques e o movimento decorativo pausam. O controle **Pausar animações** funciona no login e no painel e preserva a preferência no navegador. A preferência de movimento reduzido do dispositivo tem prioridade. As animações também pausam quando a aba está oculta.
+O formulário permanece disponível desde a abertura, sem intro bloqueante ou tempo de espera artificial. Ao preencher o acesso, a rotação dos destaques pausa; o movimento suave da fotografia, luz e cartão continua quando as animações estão ativadas. O controle **Pausar animações** funciona no login e no painel e preserva a preferência no navegador. Sem escolha salva, a preferência de movimento reduzido do dispositivo é respeitada. O botão **Ativar animações** permite escolher explicitamente o movimento, mesmo nesse dispositivo; essa escolha fica salva no navegador. As animações também pausam quando a aba está oculta.
 
 O painel acompanha a mesma identidade: vermelho vivo, títulos sem condensação, cartões separados, resposta dos botões, entrada das telas e movimento dos gráficos. As melhorias anteriores de navegação persistente, QR por produto, consulta rápida e reposição foram mantidas.
 
@@ -81,7 +85,7 @@ As evidências desta revisão estão em `artifacts/refresh/`:
 
 - Suíte de regras e integração com PostgreSQL isolado e engine nativa oficial do Prisma: **96 testes aprovados, sem falhas nem skips**.
 - Compilação normal com `npm run build`, TypeScript e ESLint.
-- **11 verificações aprovadas** de login e recuperação públicos na aplicação real compilada: fontes locais, interações, pausa persistente, movimento reduzido, tamanhos de 320 a 1920 px e proteção das telas privadas.
+- **12 verificações aprovadas** de login e recuperação públicos na aplicação real compilada: fontes locais, interações, pausa persistente, movimento reduzido, tamanhos de 320 a 1920 px e proteção das telas privadas.
 - **12 verificações aprovadas** de fluxos do painel em laboratório separado com os componentes reais e respostas de API fictícias: navegação, QR, cadastro, reposição, preparação e confirmação explícita da compra e comportamento em celular.
 - `doctor` exercitado com PostgreSQL real isolado e um respondedor local de configuração Auth. Esse respondedor não foi incluído na aplicação.
 

@@ -1,6 +1,8 @@
-# Almox ERP · U.C.A. — versão 2.1
+# Almox ERP · U.C.A. — versão 2.1.1
 
-**Versão 2.1:** vermelho vivo, novas animações, compra assistida pela reposição e diagnóstico local. Consulte [a revisão e o roteiro de evolução](docs/REVISAO-2.1.md).
+**Versão 2.1.1:** foto de abertura maior e botão para ativar animações mesmo com movimento reduzido no dispositivo.
+
+**Revisão 2.1:** vermelho vivo, novas animações, compra assistida pela reposição e diagnóstico local. Consulte [a revisão e o roteiro de evolução](docs/REVISAO-2.1.md).
 
 A revisão anterior de navegação, QR e reposição está registrada em [MELHORIAS-2026-11.md](docs/MELHORIAS-2026-11.md).
 

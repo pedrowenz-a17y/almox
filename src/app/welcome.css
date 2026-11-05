@@ -166,9 +166,9 @@
   transition: transform 240ms ease-out;
 }
 .welcome-shell .uca-implement-photo {
-  height: clamp(185px, 24vh, 265px);
+  height: clamp(320px, 28vw, 520px);
   object-position: center 58%;
-  animation: welcome-photo-drift 24s ease-in-out infinite alternate;
+  animation: welcome-photo-drift 14s ease-in-out infinite alternate;
 }
 .welcome-skip {
   display: none;
@@ -570,10 +570,6 @@
   border-radius: 9px;
   font-size: 12px;
 }
-.auth-is-editing .welcome-ambient i,
-.auth-is-editing .uca-implement-photo,
-.auth-is-editing .uca-photo-shine,
-.auth-is-editing .welcome-float-tag,
 .auth-is-editing .story-progress::after {
   animation-play-state: paused !important;
 }
@@ -846,7 +842,7 @@
     transform: scale(1);
   }
   to {
-    transform: scale(1.055);
+    transform: scale(1.085);
   }
 }
 @keyframes welcome-shine {
@@ -943,9 +939,13 @@
   }
 }
 
-@media (min-width: 1600px) {
-  .welcome-shell .uca-visual-body {
-    max-width: 680px;
+/* Keep access in view while the larger photograph extends the visual panel. */
+@media (min-width: 801px) {
+  .welcome-shell .login-form-wrap {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    min-height: 100svh;
   }
 }
 @media (max-width: 1100px) {
@@ -1023,6 +1023,7 @@
     width: 100%;
   }
   .welcome-shell .uca-implement-photo {
+    height: auto;
     aspect-ratio: 1.12;
   }
   .welcome-skip {
@@ -1204,14 +1205,14 @@
   animation-play-state: paused !important;
 }
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  :root:not([data-motion="full"]) *,
+  :root:not([data-motion="full"]) *::before,
+  :root:not([data-motion="full"]) *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }
-  .welcome-shell .uca-photo-frame {
+  :root:not([data-motion="full"]) .welcome-shell .uca-photo-frame {
     transform: none !important;
   }
 }

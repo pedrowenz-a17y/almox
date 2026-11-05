@@ -6,7 +6,7 @@ import {
   useEffect,
   useSyncExternalStore,
 } from "react";
-import { Pause, Play, Accessibility } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 
 const KEY = "almox-motion";
 const EVENT = "almox-motion-change";
@@ -19,14 +19,16 @@ const MotionContext = createContext({
 });
 
 function snapshot(): Preference {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-    return "system";
   if (transientPreference) return transientPreference;
   try {
-    return localStorage.getItem(KEY) === "quiet" ? "quiet" : "full";
+    const saved = localStorage.getItem(KEY);
+    if (saved === "full" || saved === "quiet") return saved;
   } catch {
-    return "full";
+    // The device preference remains available when storage is blocked.
   }
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? "system"
+    : "full";
 }
 function subscribe(notify: () => void) {
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -59,7 +61,6 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("visibilitychange", visibility);
   }, []);
   function toggle() {
-    if (preference === "system") return;
     const next = enabled ? "quiet" : "full";
     try {
       localStorage.setItem(KEY, next);
@@ -83,30 +84,23 @@ export const useMotion = () => useContext(MotionContext);
 
 export function MotionToggle({ compact = false }: { compact?: boolean }) {
   const { enabled, systemReduced, toggle } = useMotion();
-  const label = systemReduced
-    ? "Movimento reduzido pelo dispositivo"
-    : enabled
-      ? "Pausar animações"
-      : "Ativar animações";
-  const Icon = systemReduced ? Accessibility : enabled ? Pause : Play;
+  const label = enabled ? "Pausar animações" : "Ativar animações";
+  const Icon = enabled ? Pause : Play;
   return (
     <button
       type="button"
       className={`motion-toggle ${compact ? "compact" : ""}`}
       aria-label={label}
-      title={label}
+      title={
+        systemReduced
+          ? "Seu dispositivo reduz o movimento. Clique para ativar as animações."
+          : label
+      }
       aria-pressed={!enabled}
-      disabled={systemReduced}
       onClick={toggle}
     >
       <Icon size={compact ? 17 : 15} />
-      <span className={compact ? "sr-only" : ""}>
-        {systemReduced
-          ? "Movimento reduzido"
-          : enabled
-            ? "Pausar animações"
-            : "Ativar animações"}
-      </span>
+      <span className={compact ? "sr-only" : ""}>{label}</span>
     </button>
   );
 }

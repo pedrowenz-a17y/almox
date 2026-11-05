@@ -1,6 +1,6 @@
 {
-  "version": "2.1.0",
-  "recordedAt": "2026-11-05T12:56:32.388645+00:00",
+  "version": "2.1.1",
+  "recordedAt": "2026-11-05T18:42:36.897561+00:00",
   "inputs": [
     "Almox-UCA-ERP-v2.0.0 (2) 1.zip",
     "almox-main.zip"
@@ -12,18 +12,20 @@
       "skipped": 0,
       "database": "isolated PostgreSQL 18.6",
       "prisma": "6.19.3 native verified engine",
-      "evidence": "tests.log"
+      "evidence": "tests.log",
+      "note": "Resultado da revisão 2.1.0; sem mudanças em regras de negócio ou banco na correção visual 2.1.1."
     },
     "welcome": {
       "scope": "Real app public login/recovery without production credentials; no authenticated company data accessed",
-      "passed": 11,
+      "passed": 12,
       "checks": [
         "fontes locais carregadas, vermelho vivo e animações presentes",
         "destaques interativos mudam sem exigir login",
         "pausar animações funciona e preserva a preferência após recarregar",
         "preencher o formulário pausa a troca automática dos destaques",
         "senha pode ser mostrada e ocultada",
-        "respeita movimento reduzido do sistema e mantém o acesso utilizável",
+        "movimento reduzido é padrão, mas ativação explícita funciona e persiste",
+        "foto grande em desktop e acesso permanece disponível ao rolar",
         "layout sem transbordamento em 320, 390, 768, 1024, 1440 e 1920 pixels",
         "atalho móvel leva ao formulário de acesso",
         "recuperação de senha usa a mesma identidade visual",
@@ -51,7 +53,8 @@
       "passed": 12,
       "initialDatasetRequests": 1,
       "navigationDatasetRequests": 0,
-      "errors": []
+      "errors": [],
+      "note": "Resultado da revisão 2.1.0; não repetido na correção visual 2.1.1."
     },
     "build": {
       "command": "npm run build",
