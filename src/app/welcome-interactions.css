@@ -1,0 +1,514 @@
+/* A hands-on welcome. The pointer controls light, depth and the operation scene. */
+.welcome-shell .uca-login-visual {
+  isolation: isolate;
+}
+.welcome-ambient {
+  z-index: 0;
+}
+.welcome-shell .uca-auth-brand,
+.welcome-shell .uca-visual-body,
+.welcome-shell .uca-auth-context {
+  position: relative;
+  z-index: 2;
+}
+.welcome-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+.welcome-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+.welcome-spotlight,
+.welcome-cursor-halo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--pointer-x, -600px), var(--pointer-y, -600px), 0)
+    translate(-50%, -50%);
+  transition: opacity 350ms;
+}
+.welcome-spotlight {
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #ff3a6b28,
+    #ed174b12 35%,
+    transparent 68%
+  );
+  mix-blend-mode: screen;
+}
+.welcome-cursor-halo {
+  width: 68px;
+  height: 68px;
+  border: 1px solid #ff90aa9c;
+  border-radius: 50%;
+  box-shadow:
+    0 0 28px #ff3c641c,
+    inset 0 0 18px #ff3c641c;
+}
+.welcome-cursor-halo::before,
+.welcome-cursor-halo::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px dashed #ff90aa55;
+  border-radius: inherit;
+  animation: welcome-cursor-orbit 12s linear infinite;
+}
+.welcome-cursor-halo::after {
+  inset: 29px;
+  border: 0;
+  background: #ff8fa9;
+  box-shadow: 0 0 14px #ff3a68;
+}
+:root[data-motion="full"] [data-pointer="active"] .welcome-spotlight,
+:root[data-motion="full"] [data-pointer="active"] .welcome-cursor-halo {
+  opacity: 1;
+}
+.welcome-headline > .welcome-line {
+  overflow: visible;
+}
+.welcome-letter {
+  display: inline-block;
+  transform-origin: 50% 85%;
+  transition:
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 200ms;
+}
+.welcome-line > span {
+  white-space: nowrap;
+}
+.welcome-explore-hint {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #ffb3c4;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.welcome-explore-hint > svg {
+  color: #ff577b;
+  animation: welcome-pointer-invite 2.8s ease-in-out infinite;
+}
+.explore-touch {
+  display: none;
+}
+.explore-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, #ff547b60, transparent);
+}
+.welcome-showcase {
+  perspective: 1100px;
+}
+.welcome-shell .uca-photo-frame {
+  display: block;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))
+    scale(var(--photo-scale, 1));
+  transition:
+    transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 450ms,
+    border-color 450ms;
+}
+.welcome-photo-route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 400ms;
+}
+.welcome-photo-route path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+.photo-route-base {
+  stroke: #ffffff65;
+  stroke-width: 1;
+  stroke-dasharray: 3 9;
+}
+.photo-route-flow {
+  stroke: #ff416c;
+  stroke-width: 2;
+  stroke-dasharray: 30 620;
+  animation: welcome-route-run 5s linear infinite;
+}
+[data-scene="move"] .photo-route-flow {
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-dasharray: 75 575;
+  animation-duration: 2s;
+}
+.welcome-photo-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 450ms;
+  background-image:
+    linear-gradient(#fff1 1px, transparent 1px),
+    linear-gradient(90deg, #fff1 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(0deg, transparent 5%, #000 45%, transparent 95%);
+}
+.welcome-photo-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 25%;
+  background: linear-gradient(0deg, #ff517b45, transparent 90%);
+  border-bottom: 2px solid #ff95b0;
+  box-shadow: 0 12px 35px #ff1f543d;
+  animation: welcome-photo-scan 3.8s ease-in-out infinite alternate;
+}
+[data-scene="locate"] .welcome-photo-scan,
+[data-scene="check"] .welcome-photo-scan {
+  opacity: 0.75;
+}
+[data-scene="check"] .welcome-photo-scan::after {
+  border-color: #fff;
+  background: linear-gradient(0deg, #ffffff32, transparent 90%);
+  animation-duration: 5s;
+}
+.welcome-scene-label {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  background: #191b25cc;
+  border: 1px solid #ffffff35;
+  border-radius: 24px;
+  padding: 9px 13px;
+  font-size: 11px;
+  animation: welcome-copy-enter 400ms both;
+  pointer-events: none;
+}
+.welcome-scene-label > svg {
+  color: #ff98b0;
+}
+.welcome-photo-point {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 0;
+  width: 86px;
+  min-height: 80px;
+  color: #fff;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.photo-point-locate {
+  left: calc(15.5% - 43px);
+  top: calc(31.7% - 23px);
+}
+.photo-point-move {
+  left: calc(54% - 43px);
+  top: calc(48.3% - 23px);
+}
+.photo-point-check {
+  left: calc(84% - 43px);
+  top: calc(35% - 23px);
+}
+.photo-point-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid #ffffff90;
+  background: #161923c9;
+  box-shadow: 0 4px 22px #0003;
+  transition:
+    transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 300ms,
+    box-shadow 300ms;
+}
+.photo-point-icon::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border: 1px solid #ffa6be90;
+  border-radius: 20px;
+  opacity: 0;
+}
+.welcome-photo-point.active .photo-point-icon {
+  color: #fff;
+  border-color: #ffafc0;
+  background: #e91536;
+  box-shadow:
+    0 0 0 5px #ed20422b,
+    0 0 35px #ff265968;
+}
+.welcome-photo-point.active .photo-point-icon::before {
+  animation: welcome-point-pulse 2.4s ease-out infinite;
+}
+.photo-point-label {
+  font-size: 10px;
+  font-weight: 700;
+  background: #1a1b24d9;
+  border: 1px solid #ffffff30;
+  padding: 5px 9px;
+  border-radius: 20px;
+  transition:
+    transform 250ms,
+    background 250ms;
+}
+.welcome-photo-point:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 7px;
+  border-radius: 12px;
+}
+.welcome-float-tag {
+  translate: calc(var(--depth-x, 0px) * 1.6) calc(var(--depth-y, 0px) * 1.6);
+  transition: translate 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.welcome-float-copy {
+  animation: welcome-copy-enter 400ms both;
+}
+.welcome-shell [data-magnetic],
+.welcome-shell .login-submit {
+  translate: var(--magnet-x, 0px) var(--magnet-y, 0px);
+  transition:
+    translate 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 250ms,
+    background-color 200ms,
+    box-shadow 250ms,
+    border-color 200ms;
+}
+.welcome-story-tabs button svg {
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.welcome-shell .uca-auth-brand img {
+  transition:
+    transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 400ms;
+}
+.welcome-shell .login-lock svg {
+  transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.welcome-shell .login-lock::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px dashed #e915364a;
+  border-radius: 22px;
+  animation: welcome-cursor-orbit 16s linear infinite;
+}
+:root[data-motion="full"] .login-form:focus-within .login-lock svg {
+  transform: translateY(-3px) rotate(-12deg) scale(1.15);
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-motion="full"] .welcome-letter:hover {
+    color: #ff8aa6;
+    animation: welcome-letter-elastic 700ms both;
+  }
+  :root[data-motion="full"] .welcome-red-word .welcome-letter:hover {
+    color: #fff;
+  }
+  :root[data-motion="full"] .welcome-letter:has(+ .welcome-letter:hover),
+  :root[data-motion="full"] .welcome-letter:hover + .welcome-letter {
+    transform: translateY(-5px) rotate(4deg);
+  }
+  :root[data-motion="full"] .welcome-showcase:hover {
+    --photo-scale: 1.025;
+  }
+  :root[data-motion="full"] .welcome-showcase:hover .uca-photo-frame {
+    border-color: #ff7299b0;
+    box-shadow:
+      0 28px 75px #0005,
+      0 0 0 5px #ff426014,
+      0 0 50px #ff265921;
+  }
+  :root[data-motion="full"] .welcome-photo-point:hover .photo-point-icon {
+    transform: translateY(-6px) rotate(-12deg) scale(1.18);
+  }
+  :root[data-motion="full"] .welcome-photo-point:hover .photo-point-label {
+    transform: translateY(3px);
+    background: #e91536;
+  }
+  :root[data-motion="full"] .welcome-story-tabs button:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 12px 25px #0003,
+      0 0 25px #ed17431c;
+    background: #ed174326;
+    border-color: #ff6488;
+    color: #fff;
+  }
+  :root[data-motion="full"] .welcome-story-tabs button:hover svg {
+    transform: rotate(-14deg) scale(1.25);
+  }
+  :root[data-motion="full"] .welcome-shell .uca-auth-brand:hover img {
+    transform: rotate(-7deg) scale(1.08);
+    box-shadow: 0 12px 30px #ff436327;
+  }
+  :root[data-motion="full"] .welcome-shell .login-submit:hover {
+    transform: translateY(-4px) scale(1.025);
+    box-shadow: 0 15px 35px #e9153647;
+  }
+}
+@media (max-width: 1100px) {
+  .welcome-scene-label {
+    top: 12px;
+    left: 12px;
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 800px) {
+  .welcome-showcase {
+    display: block;
+    align-self: center;
+  }
+  .welcome-explore-hint {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+  .explore-line {
+    display: none;
+  }
+  .welcome-photo-point {
+    width: 58px;
+    min-height: 62px;
+    margin-left: 14px;
+    gap: 7px;
+  }
+  .photo-point-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+  }
+  .photo-point-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .photo-point-label {
+    font-size: 8px;
+    padding: 4px 6px;
+  }
+  .welcome-scene-label {
+    font-size: 9px;
+    left: 8px;
+    right: 8px;
+    top: 8px;
+    width: fit-content;
+    padding: 6px 8px;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .welcome-cursor-halo,
+  .welcome-spotlight,
+  .explore-mouse {
+    display: none;
+  }
+  .explore-touch {
+    display: inline;
+  }
+}
+@media (max-width: 480px) {
+  .welcome-showcase {
+    display: block;
+    margin-top: 22px;
+  }
+  .welcome-shell .uca-implement-photo {
+    height: 220px;
+    aspect-ratio: auto;
+  }
+  .welcome-photo-caption {
+    font-size: 8px;
+  }
+  .welcome-story {
+    margin-top: 20px;
+  }
+}
+:root:not([data-motion="full"]) .welcome-effects {
+  display: none;
+}
+:root:not([data-motion="full"]) .welcome-float-tag,
+:root:not([data-motion="full"]) .welcome-shell [data-magnetic],
+:root:not([data-motion="full"]) .welcome-shell .login-submit {
+  translate: none;
+}
+:root:not([data-motion="full"]) .welcome-shell .login-submit:hover {
+  transform: none;
+}
+@keyframes welcome-cursor-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes welcome-pointer-invite {
+  0%,
+  65%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  30% {
+    transform: translate(5px, -3px) rotate(-12deg);
+  }
+}
+@keyframes welcome-route-run {
+  to {
+    stroke-dashoffset: -650;
+  }
+}
+@keyframes welcome-photo-scan {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(400%);
+  }
+}
+@keyframes welcome-point-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  85%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+@keyframes welcome-letter-elastic {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: translateY(-12px) rotate(-9deg) scale(1.2, 0.85);
+  }
+  50% {
+    transform: translateY(2px) rotate(5deg) scale(0.9, 1.12);
+  }
+  75% {
+    transform: translateY(-4px) rotate(-3deg) scale(1.06, 0.98);
+  }
+  100% {
+    transform: translateY(-5px) scale(1.08);
+  }
+}

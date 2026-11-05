@@ -1,0 +1,22 @@
+{
+  "version": "2.2.0",
+  "scope": "Production build, real pointer/keyboard/touch events on public pages; no real credentials or company data",
+  "passed": 13,
+  "checks": [
+    "mouse aciona luz, halo e inclinacao visivel da fotografia",
+    "letras reagem ao passar o mouse e o titulo permanece acessivel",
+    "hover no botao movimenta e troca o cenario sem clique",
+    "pontos da foto alternam recursos e animam icones no hover",
+    "particulas respondem sem novas requisicoes de rede",
+    "clique decorativo na foto preserva formulario e rota",
+    "botao de acesso acompanha o mouse sem enviar credenciais",
+    "pausa interrompe canvas e remove rastreamento e deslocamento magnetico",
+    "recursos continuam selecionaveis por teclado com animacoes pausadas",
+    "preferencia do sistema continua sendo padrao e aceita ativacao explicita",
+    "celular mostra a foto e permite explorar os tres pontos por toque",
+    "acesso no celular continua disponivel sem esperar animacoes",
+    "sem erros JavaScript"
+  ],
+  "effectNetworkRequests": 0,
+  "errors": []
+}

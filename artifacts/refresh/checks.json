@@ -1,6 +1,6 @@
 {
-  "version": "2.1.1",
-  "recordedAt": "2026-11-05T18:42:36.897561+00:00",
+  "version": "2.2.0",
+  "recordedAt": "2026-11-05T19:04:34.834525+00:00",
   "inputs": [
     "Almox-UCA-ERP-v2.0.0 (2) 1.zip",
     "almox-main.zip"
@@ -13,7 +13,7 @@
       "database": "isolated PostgreSQL 18.6",
       "prisma": "6.19.3 native verified engine",
       "evidence": "tests.log",
-      "note": "Resultado da revisão 2.1.0; sem mudanças em regras de negócio ou banco na correção visual 2.1.1."
+      "note": "Resultado da revisão 2.1.0; não repetido na alteração visual 2.2.0."
     },
     "welcome": {
       "scope": "Real app public login/recovery without production credentials; no authenticated company data accessed",
@@ -54,7 +54,7 @@
       "initialDatasetRequests": 1,
       "navigationDatasetRequests": 0,
       "errors": [],
-      "note": "Resultado da revisão 2.1.0; não repetido na correção visual 2.1.1."
+      "note": "Resultado da revisão 2.1.0; não repetido na alteração visual 2.2.0."
     },
     "build": {
       "command": "npm run build",
@@ -81,7 +81,33 @@
       "failed": 0,
       "skipped": 0,
       "evidence": "domain-regression.log",
-      "note": "Subset rechecked; do not add to the 96-suite count."
+      "note": "Subset rechecked in 2.1.0; not rerun for visual change 2.2.0; do not add to the 96-suite count."
+    },
+    "interactions": {
+      "version": "2.2.0",
+      "scope": "Production build, real pointer/keyboard/touch events on public pages; no real credentials or company data",
+      "passed": 13,
+      "checks": [
+        "mouse aciona luz, halo e inclinacao visivel da fotografia",
+        "letras reagem ao passar o mouse e o titulo permanece acessivel",
+        "hover no botao movimenta e troca o cenario sem clique",
+        "pontos da foto alternam recursos e animam icones no hover",
+        "particulas respondem sem novas requisicoes de rede",
+        "clique decorativo na foto preserva formulario e rota",
+        "botao de acesso acompanha o mouse sem enviar credenciais",
+        "pausa interrompe canvas e remove rastreamento e deslocamento magnetico",
+        "recursos continuam selecionaveis por teclado com animacoes pausadas",
+        "preferencia do sistema continua sendo padrao e aceita ativacao explicita",
+        "celular mostra a foto e permite explorar os tres pontos por toque",
+        "acesso no celular continua disponivel sem esperar animacoes",
+        "sem erros JavaScript"
+      ],
+      "effectNetworkRequests": 0,
+      "errors": []
+    },
+    "interactionPerformance": {
+      "evidence": "interaction-performance.json",
+      "scope": "Amostra local em Chromium headless, sem garantia de desempenho em outro computador; inclui as tarefas longas observadas."
     }
   },
   "limitations": [

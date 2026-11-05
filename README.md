@@ -1,6 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.1.1
+# Almox ERP · U.C.A. — versão 2.2.0
 
-**Versão 2.1.1:** foto de abertura maior e botão para ativar animações mesmo com movimento reduzido no dispositivo.
+**Versão 2.2.0:** abertura que reage ao mouse e ao toque, fotografia 3D, pontos interativos, partículas, letras elásticas e botões magnéticos. [Veja as interações e como atualizar](docs/INTERACOES-2.2.md).
 
 **Revisão 2.1:** vermelho vivo, novas animações, compra assistida pela reposição e diagnóstico local. Consulte [a revisão e o roteiro de evolução](docs/REVISAO-2.1.md).
 

@@ -8,6 +8,7 @@ import {
   Check,
   ClipboardCheck,
   LockKeyhole,
+  MousePointer2,
   QrCode,
   ShieldCheck,
   Wrench,
@@ -15,6 +16,7 @@ import {
 import { brand } from "@/lib/brand";
 import { Pwa } from "@/components/pwa";
 import { MotionToggle, useMotion } from "@/components/motion-preferences";
+import { WelcomeEffects } from "@/components/welcome-effects";
 
 const stories = [
   {
@@ -55,56 +57,37 @@ export default function AuthShell({
   description: string;
   children: React.ReactNode;
 }) {
+  const root = useRef<HTMLElement>(null);
   const visual = useRef<HTMLElement>(null);
-  const frame = useRef<number | null>(null);
   const { enabled } = useMotion();
   const [active, setActive] = useState(0);
   const [formFocused, setFormFocused] = useState(false);
+  const [exploring, setExploring] = useState(false);
+  const [featureFocused, setFeatureFocused] = useState(false);
   const story = stories[active];
   const Icon = story.icon;
-  const reset = () => {
-    if (frame.current !== null) cancelAnimationFrame(frame.current);
-    visual.current?.style.setProperty("--tilt-x", "0deg");
-    visual.current?.style.setProperty("--tilt-y", "0deg");
-  };
+  const storyPaused = formFocused || exploring || featureFocused;
   useEffect(() => {
-    if (!enabled || formFocused) return;
+    if (!enabled || storyPaused) return;
     const timer = setInterval(() => {
       if (document.visibilityState === "visible")
         setActive((current) => (current + 1) % stories.length);
     }, 6500);
     return () => clearInterval(timer);
-  }, [enabled, formFocused, active]);
-  useEffect(
-    () => () => {
-      if (frame.current !== null) cancelAnimationFrame(frame.current);
-    },
-    [],
-  );
+  }, [enabled, storyPaused, active]);
   return (
     <main
-      className={`login-shell uca-auth-shell welcome-shell ${formFocused ? "auth-is-editing" : ""}`}
+      ref={root}
+      className={`login-shell uca-auth-shell welcome-shell ${storyPaused ? "auth-is-editing" : ""}`}
     >
       <section
         className="login-story uca-login-visual"
         ref={visual}
-        onPointerLeave={reset}
-        onPointerMove={(event) => {
-          if (event.pointerType !== "mouse" || !enabled || formFocused) return;
-          const rect = event.currentTarget.getBoundingClientRect();
-          const x = (event.clientX - rect.left) / rect.width;
-          const y = (event.clientY - rect.top) / rect.height;
-          if (frame.current !== null) cancelAnimationFrame(frame.current);
-          frame.current = requestAnimationFrame(() => {
-            visual.current?.style.setProperty(
-              "--tilt-x",
-              `${-(y - 0.5) * 4}deg`,
-            );
-            visual.current?.style.setProperty(
-              "--tilt-y",
-              `${(x - 0.5) * 5}deg`,
-            );
-          });
+        data-scene={story.className}
+        onFocusCapture={() => setFeatureFocused(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null))
+            setFeatureFocused(false);
         }}
       >
         <div className="welcome-ambient" aria-hidden="true">
@@ -113,6 +96,7 @@ export default function AuthShell({
           <i />
           <span className="welcome-grid" />
         </div>
+        <WelcomeEffects surface={visual} scope={root} />
         <Link
           className="uca-auth-brand"
           href="/login"
@@ -135,23 +119,44 @@ export default function AuthShell({
           <p className="welcome-overline">
             <span /> Do almoxarifado à produção
           </p>
-          <h1 className="welcome-headline">
-            <span>
-              <span>Tudo no lugar.</span>
-            </span>
-            <span>
-              <span>Trabalho em</span>
-            </span>
-            <span>
-              <span className="welcome-red-word">movimento.</span>
-            </span>
+          <h1
+            className="welcome-headline"
+            aria-label="Tudo no lugar. Trabalho em movimento."
+          >
+            {["Tudo no lugar.", "Trabalho em", "movimento."].map(
+              (line, lineIndex) => (
+                <span className="welcome-line" key={line} aria-hidden="true">
+                  <span className={lineIndex === 2 ? "welcome-red-word" : ""}>
+                    {Array.from(line).map((letter, index) => (
+                      <span className="welcome-letter" key={index}>
+                        {letter === " " ? "\u00a0" : letter}
+                      </span>
+                    ))}
+                  </span>
+                </span>
+              ),
+            )}
           </h1>
           <p className="welcome-lead">
             Menos tempo procurando peças.
             <br />
             Mais tempo fazendo acontecer.
           </p>
-          <div className="welcome-showcase">
+          <div
+            className="welcome-showcase"
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") setExploring(true);
+            }}
+            onPointerLeave={() => setExploring(false)}
+          >
+            <div className="welcome-explore-hint">
+              <MousePointer2 size={14} />
+              <span className="explore-mouse">
+                Passe o mouse. Descubra o movimento.
+              </span>
+              <span className="explore-touch">Toque nos pontos e explore.</span>
+              <span className="explore-line" />
+            </div>
             <div
               className={`uca-photo-frame ${brand.implementPhotoPath ? "has-photo" : "without-photo"}`}
             >
@@ -166,6 +171,49 @@ export default function AuthShell({
                 />
               )}
               <div className="welcome-photo-vignette" aria-hidden="true" />
+              <div className="welcome-photo-scan" aria-hidden="true" />
+              <svg
+                className="welcome-photo-route"
+                viewBox="0 0 1000 600"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  className="photo-route-base"
+                  d="M155 190 C300 100 430 390 540 290 S730 100 840 210"
+                />
+                <path
+                  className="photo-route-flow"
+                  d="M155 190 C300 100 430 390 540 290 S730 100 840 210"
+                />
+              </svg>
+              <div
+                className="welcome-scene-label"
+                aria-hidden="true"
+                key={story.label}
+              >
+                <Icon size={16} /> {story.detail}
+              </div>
+              {stories.map((item, index) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  className={`welcome-photo-point photo-point-${item.className} ${active === index ? "active" : ""}`}
+                  aria-label={`Conhecer recurso: ${item.label}`}
+                  aria-pressed={active === index}
+                  data-magnetic=""
+                  onPointerEnter={(event) => {
+                    if (event.pointerType === "mouse") setActive(index);
+                  }}
+                  onFocus={() => setActive(index)}
+                  onClick={() => setActive(index)}
+                >
+                  <span className="photo-point-icon">
+                    <item.icon size={21} />
+                  </span>
+                  <span className="photo-point-label">{item.label}</span>
+                </button>
+              ))}
               <div className="welcome-photo-caption">
                 <span className="welcome-photo-mark">
                   <Check size={14} />
@@ -181,11 +229,11 @@ export default function AuthShell({
             </div>
             <div className="welcome-float-tag" aria-hidden="true">
               <span>
-                <QrCode size={24} />
+                <Icon size={24} />
               </span>
-              <div>
-                <strong>Encontrou. Conferiu.</strong>
-                <small>O próximo passo fica mais simples.</small>
+              <div key={story.label} className="welcome-float-copy">
+                <strong>{story.detail}</strong>
+                <small>Explore. Conheça. Faça acontecer.</small>
               </div>
               <ArrowUpRight size={18} />
             </div>
@@ -193,13 +241,22 @@ export default function AuthShell({
           <section
             className={`welcome-story welcome-story-${story.className}`}
             aria-label="Conheça os recursos do ERP"
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse") setExploring(true);
+            }}
+            onPointerLeave={() => setExploring(false)}
           >
             <div className="welcome-story-tabs">
               {stories.map((item, index) => (
                 <button
                   type="button"
                   key={item.label}
+                  data-magnetic=""
                   aria-pressed={index === active}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType === "mouse") setActive(index);
+                  }}
+                  onFocus={() => setActive(index)}
                   onClick={() => setActive(index)}
                   className={index === active ? "active" : ""}
                 >
@@ -207,7 +264,7 @@ export default function AuthShell({
                   {item.label}
                   <span
                     className="story-progress"
-                    key={`${active}-${enabled}-${formFocused}`}
+                    key={`${active}-${enabled}-${storyPaused}`}
                     aria-hidden="true"
                   />
                 </button>
@@ -237,7 +294,6 @@ export default function AuthShell({
         className="login-form-wrap"
         onFocusCapture={() => {
           setFormFocused(true);
-          reset();
         }}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget as Node | null))

@@ -1,0 +1,13 @@
+{
+  "version": "2.2.0",
+  "scope": "Local headless Chromium, production build, 1440x1000; sample only, not a guarantee for school computers",
+  "measuredSeconds": 4.652,
+  "browserTaskMilliseconds": 2335.7,
+  "scriptMilliseconds": 161.9,
+  "longTasksMilliseconds": [
+    84,
+    746,
+    60
+  ],
+  "networkRequestsDuringMouseMovements": 0
+}
