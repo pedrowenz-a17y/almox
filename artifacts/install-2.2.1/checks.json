@@ -1,0 +1,54 @@
+{
+  "version": "2.2.1",
+  "recordedAt": "2026-11-05T19:35:29.013907+00:00",
+  "fix": {
+    "overrides": {
+      "@emnapi/core": "1.10.0",
+      "@emnapi/wasi-threads": "1.2.1"
+    },
+    "allExistingLockedPackageVersionsPreserved": true,
+    "wasmDependencyPinsConsistent": true
+  },
+  "validation": {
+    "cleanInstall": {
+      "command": "npm ci --no-audit --no-fund",
+      "npm": "11.6.2",
+      "node": "24.22.1",
+      "platform": "Linux x64",
+      "scriptsExecuted": true,
+      "exitCode": 0,
+      "evidence": "ci.log"
+    },
+    "windowsResolution": [
+      {
+        "command": "npm ci --ignore-scripts --dry-run --no-audit --no-fund --os=win32 --cpu=x64",
+        "npm": "11.6.2",
+        "host": "Linux",
+        "target": "Windows x64",
+        "exitCode": 0
+      },
+      {
+        "command": "npm ci --ignore-scripts --dry-run --no-audit --no-fund --os=win32 --cpu=x64",
+        "npm": "11.9.0",
+        "host": "Linux",
+        "target": "Windows x64",
+        "exitCode": 0
+      }
+    ],
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "evidence": "build.log",
+      "typescriptIncluded": true
+    },
+    "lint": {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "evidence": "lint.log"
+    }
+  },
+  "limitations": [
+    "Windows package selection was validated by dry-run on Linux; native Windows execution was not performed.",
+    "No database or hosted application deployment performed."
+  ]
+}

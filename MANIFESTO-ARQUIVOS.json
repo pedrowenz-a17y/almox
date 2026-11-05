@@ -1,7 +1,7 @@
 {
-  "version": "2.2.0",
-  "revision": "interactive-welcome",
-  "generatedAt": "2026-11-05T19:05:03.957528+00:00",
+  "version": "2.2.1",
+  "revision": "npm-optional-dependency-resolution",
+  "generatedAt": "2026-11-05T19:35:29.173454+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -40,13 +40,33 @@
     },
     {
       "path": "README.md",
-      "bytes": 19256,
-      "sha256": "69da05011f8fa5325dead7eff736600518bf2e98d67259c51180336edd3a0855"
+      "bytes": 19420,
+      "sha256": "5c9f499a74a99fdd7518658851b4471af3a50dd93b7d67e81aa6d7afd3293160"
     },
     {
       "path": "artifacts/HISTORICO.md",
       "bytes": 800,
       "sha256": "38c14f9a6f929022c35dfc3760fbeef8d7daba3a9034d25b638d81c70b4a5e42"
+    },
+    {
+      "path": "artifacts/install-2.2.1/build.log",
+      "bytes": 2194,
+      "sha256": "ff41a8c33855992b7b28fe5498613bafb5c7818091d9dc232bf168e905cc10e6"
+    },
+    {
+      "path": "artifacts/install-2.2.1/checks.json",
+      "bytes": 1458,
+      "sha256": "c0a1da02006b947a6c4c29c70e4a8e56e2c45412076f9189d38ff01f413c35a2"
+    },
+    {
+      "path": "artifacts/install-2.2.1/ci.log",
+      "bytes": 963,
+      "sha256": "c936aa12ede4397dc053424d65c60b601229c058bc3d60e370d8a49524e7f875"
+    },
+    {
+      "path": "artifacts/install-2.2.1/lint.log",
+      "bytes": 35,
+      "sha256": "8fa41780687a80b192dcd4cc6eb2eedbf53a8c29463773fb70154b164b56d66c"
     },
     {
       "path": "artifacts/legacy/aceite-mobile.png",
@@ -505,8 +525,8 @@
     },
     {
       "path": "docs/INTERACOES-2.2.md",
-      "bytes": 3693,
-      "sha256": "45c0d6f112f60f6155cda9f08bce650dc4981196d18cb4d71bb32543c8e27742"
+      "bytes": 4259,
+      "sha256": "7e7b03f0fc87b6d091ce89845931271903d9bef4f71c36453ceb6363648ec880"
     },
     {
       "path": "docs/MELHORIAS-2026-11.md",
@@ -556,12 +576,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "41c77bb99b0fdd3237f6fbd2be1e5e269030d28995c9545d4df82a5365c5a896"
+      "sha256": "9b3d614e258d9f34a2eaad3cb051ae05685a4b8a23069bfa5954e94d5b7ecff7"
     },
     {
       "path": "package.json",
-      "bytes": 2164,
-      "sha256": "e7ec50fa7acd14deade559db6610b72502c789c1004e716d138877ce07b30cd2"
+      "bytes": 2231,
+      "sha256": "266225e2afd4b378912ab88533e94f6401b9e78aaf88644101fbbca429cf99a3"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",

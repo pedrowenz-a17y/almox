@@ -22,6 +22,10 @@ O formulário fica disponível desde o início. A troca automática dos destaque
 
 ## Atualizar no computador
 
+A correção **2.2.1** fixa `@emnapi/core` em `1.10.0` e `@emnapi/wasi-threads` em `1.2.1`, de acordo com a dependência exata da ferramenta WebAssembly. Isso evita que o npm tente combinar o lock existente com `wasi-threads@1.2.3`.
+
+Se o ZIP 2.2.0 apresentar `EUSAGE` no `npm ci`, execute `npm install` nessa pasta e, se terminar sem erro, continue com `npm run build` e `npm start`. Os resultados da instalação e compilação da correção ficam em `artifacts/install-2.2.1/`.
+
 Baixe o ZIP desta versão e extraia em uma pasta nova. Pare o servidor antigo com **Ctrl+C**, preserve seu `.env` e copie-o para a pasta atualizada. No CMD dessa pasta:
 
 ```bat
@@ -30,7 +34,7 @@ npm run build
 npm start
 ```
 
-Abra a URL indicada no terminal. Para desenvolver, use `npm run dev`. Se ainda vir a tela anterior, confira se o CMD está na pasta atualizada e recarregue a página com **Ctrl+F5**.
+A pasta `.next` é criada pelo Next.js para guardar a compilação. Abra o aplicativo pela URL indicada no terminal. Para desenvolver, use `npm run dev`. Se ainda vir a tela anterior, confira se o CMD está na pasta atualizada e recarregue a página com **Ctrl+F5**.
 
 A versão 2.2 não altera banco, migrations ou regras de autenticação. Problemas de conexão PostgreSQL continuam sendo diagnosticados com `npm run doctor`.
 

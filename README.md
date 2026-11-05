@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.2.0
+# Almox ERP · U.C.A. — versão 2.2.1
+
+**Correção 2.2.1:** versões dos pacotes opcionais `@emnapi/core` e `@emnapi/wasi-threads` fixadas para evitar o conflito de resolução relatado pelo `npm ci`.
 
 **Versão 2.2.0:** abertura que reage ao mouse e ao toque, fotografia 3D, pontos interativos, partículas, letras elásticas e botões magnéticos. [Veja as interações e como atualizar](docs/INTERACOES-2.2.md).
 
