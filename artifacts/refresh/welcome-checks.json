@@ -1,0 +1,18 @@
+{
+  "scope": "Real app public login/recovery without production credentials; no authenticated company data accessed",
+  "passed": 11,
+  "checks": [
+    "fontes locais carregadas, vermelho vivo e animações presentes",
+    "destaques interativos mudam sem exigir login",
+    "pausar animações funciona e preserva a preferência após recarregar",
+    "preencher o formulário pausa a troca automática dos destaques",
+    "senha pode ser mostrada e ocultada",
+    "respeita movimento reduzido do sistema e mantém o acesso utilizável",
+    "layout sem transbordamento em 320, 390, 768, 1024, 1440 e 1920 pixels",
+    "atalho móvel leva ao formulário de acesso",
+    "recuperação de senha usa a mesma identidade visual",
+    "telas privadas continuam protegidas sem sessão",
+    "sem erros JavaScript"
+  ],
+  "errors": []
+}

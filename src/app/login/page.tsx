@@ -54,8 +54,8 @@ export default function Login() {
   }
   return (
     <AuthShell
-      title="Acesse sua operação"
-      description="Entre com a conta autorizada para sua unidade."
+      title="Seu almoxarifado começa aqui."
+      description="Entre para continuar o trabalho da sua unidade."
     >
       <form onSubmit={submit} aria-busy={busy}>
         <label>
@@ -97,7 +97,7 @@ export default function Login() {
             {error}
           </div>
         )}
-        <button className="button primary full" disabled={busy}>
+        <button className="button primary full login-submit" disabled={busy}>
           {busy ? "Entrando…" : "Entrar no almoxarifado"}
           <ArrowRight size={18} />
         </button>

@@ -10,6 +10,8 @@ import {
 import Link from "@/components/workspace-link";
 import dynamic from "next/dynamic";
 import { navigateWorkspace } from "@/lib/workspace-navigation";
+import type { PurchaseDraft } from "@/lib/purchase-draft";
+import { MotionToggle } from "@/components/motion-preferences";
 import { ApiError } from "@/lib/client";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -205,6 +207,9 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   const [auditDetails, setAuditDetails] = useState<Audit | null>(null);
   const [productDetails, setProductDetails] = useState<Product | null>(null);
   const [actionBusy, setActionBusy] = useState(false);
+  const [purchaseDraft, setPurchaseDraft] = useState<PurchaseDraft | null>(
+    null,
+  );
   const permissions = user?.permissions || data?.permissions || [];
   const can = (key: string) => permissions.includes(key);
   const refresh = useCallback(async () => {
@@ -264,6 +269,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     setCountDetails(null);
     setAuditDetails(null);
     setProductDetails(null);
+    setPurchaseDraft(null);
     setToast("");
     setFilter("");
     setCategory("");
@@ -669,9 +675,26 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           data={data}
           permissions={permissions}
           onRefresh={refresh}
+          initialDraft={
+            purchaseDraft?.unitId === user?.unitId ? purchaseDraft : null
+          }
+          onDismissDraft={() => setPurchaseDraft(null)}
         />
       );
-    if (route === "/reposicao") return <Replenishment key={user?.unitId} />;
+    if (route === "/reposicao")
+      return (
+        <Replenishment
+          key={user?.unitId}
+          unitId={user!.unitId}
+          canPreparePurchase={can("purchases:write")}
+          onPreparePurchase={(draft) => {
+            if (!can("purchases:write") || draft.unitId !== user?.unitId)
+              return;
+            setPurchaseDraft(draft);
+            navigateWorkspace("/compras");
+          }}
+        />
+      );
     if (route === "/consulta")
       return <QuickLookup data={data} onScan={() => setScan(true)} />;
     if (route.startsWith("/produto/")) {
@@ -1957,8 +1980,9 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             )}
           </div>
           <div className="topbar-actions">
+            <MotionToggle compact />
             <button
-              className="icon-button"
+              className="icon-button refresh-data"
               aria-label="Atualizar dados"
               title="Atualizar dados"
               onClick={() => void refresh()}

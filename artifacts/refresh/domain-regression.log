@@ -1,0 +1,29 @@
+✔ reposição considera reserva, aplicação e recebimento parcial sem expor custos ou outra unidade (1546.082217ms)
+✔ QR resolve produto por URL/código sem cruzar unidades ou interferir no leitor de localizações (207.25766ms)
+✔ recebimento parcial e total registra documentos reais e uma entrada por item (367.789408ms)
+✔ recebimento simultâneo com mesma chave só dá uma entrada e não expõe custos ao operador (595.007833ms)
+✔ recebimento excedente ou em outra unidade é recusado sem gravar documento parcial (259.560901ms)
+✔ O.S.: reserva e aplicação não baixam saldo; faturamento baixa uma única vez (806.885878ms)
+✔ devolução após faturamento compensa a baixa original e nunca supera consumo (453.249624ms)
+✔ devolução antes do faturamento libera aplicação e cancelamento devolve reservas (393.602825ms)
+✔ reservas concorrentes não consomem duas vezes a mesma disponibilidade (344.043505ms)
+✔ aplicação duplicada é idempotente e novas chaves não ultrapassam reserva (415.642372ms)
+✔ saída avulsa e transferência não consomem estoque reservado ou aplicado (1810.679207ms)
+✔ inventário compara físico sem baixar aplicações e impede ajuste que invalida reservas (1900.493376ms)
+✔ alterar reserva invalida snapshot do inventário mesmo com mesmo saldo físico (1677.679534ms)
+✔ ordens e compras de outra unidade são inacessíveis e identificadores forjados são rejeitados (358.721811ms)
+✔ permissões específicas impedem faturamento, recebimento e leitura não autorizados (222.890024ms)
+✔ unidades de medida incompatíveis não são convertidas silenciosamente (208.850309ms)
+✔ cancelar compra vazia é auditável e compras recebidas preservam os documentos (244.418262ms)
+✔ custos documentais rejeitam precisão inválida e exigem permissão financeira (114.430573ms)
+✔ falha em um material desfaz toda baixa e faturamento da ordem (726.148372ms)
+✔ faturamento exige todos os materiais atendidos mesmo quando não há reserva pendente (768.24721ms)
+✔ reposição informa fornecedor inativo e impede usá-lo no preenchimento assistido (118.993915ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15937.98149

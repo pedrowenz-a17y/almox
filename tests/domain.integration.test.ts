@@ -4,6 +4,7 @@ import { after, afterEach, before, beforeEach, test } from "node:test";
 import type { PrismaClient } from "@prisma/client";
 import { ZodError } from "zod";
 import type { StockActor } from "../src/services/stock";
+import { buildPurchaseDraft } from "../src/lib/purchase-draft";
 let listReplenishment: typeof import("../src/services/replenishment").listReplenishment;
 let resolveQr: typeof import("../src/services/qr").resolveQr;
 
@@ -436,4 +437,17 @@ test("faturamento exige todos os materiais atendidos mesmo quando não há reser
   assert.equal(completed.status, "INVOICED");
   assert.ok(completed.materials.every(item => item.consumedQuantity.eq(item.requestedQuantity)));
   assert.equal(await db.stockMovement.count({ where: { workOrderId: order.id, type: "EXIT" } }), 2);
+});
+
+
+test("reposição informa fornecedor inativo e impede usá-lo no preenchimento assistido", async () => {
+  await db.product.update({ where: { id: fixture.productIds[0] }, data: {
+    minStock: "5", maxStock: "10", supplierId: fixture.supplierId,
+  } });
+  await db.supplier.update({ where: { id: fixture.supplierId }, data: { active: false } });
+  const rows = await listReplenishment(fixture.actor);
+  const row = rows.find(item => item.productId === fixture.productIds[0])!;
+  assert.equal(row.supplierActive, false);
+  assert.throws(() => buildPurchaseDraft(fixture.unitIds[0], rows, [fixture.productIds[0]]), /fornecedor ativo/);
+  assert.equal(await db.purchaseOrder.count({ where: { unitId: fixture.unitIds[0] } }), 0);
 });

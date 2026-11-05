@@ -1,0 +1,91 @@
+{
+  "version": "2.1.0",
+  "recordedAt": "2026-11-05T12:56:32.388645+00:00",
+  "inputs": [
+    "Almox-UCA-ERP-v2.0.0 (2) 1.zip",
+    "almox-main.zip"
+  ],
+  "checks": {
+    "nativeDatabaseTests": {
+      "passed": 96,
+      "failed": 0,
+      "skipped": 0,
+      "database": "isolated PostgreSQL 18.6",
+      "prisma": "6.19.3 native verified engine",
+      "evidence": "tests.log"
+    },
+    "welcome": {
+      "scope": "Real app public login/recovery without production credentials; no authenticated company data accessed",
+      "passed": 11,
+      "checks": [
+        "fontes locais carregadas, vermelho vivo e animações presentes",
+        "destaques interativos mudam sem exigir login",
+        "pausar animações funciona e preserva a preferência após recarregar",
+        "preencher o formulário pausa a troca automática dos destaques",
+        "senha pode ser mostrada e ocultada",
+        "respeita movimento reduzido do sistema e mantém o acesso utilizável",
+        "layout sem transbordamento em 320, 390, 768, 1024, 1440 e 1920 pixels",
+        "atalho móvel leva ao formulário de acesso",
+        "recuperação de senha usa a mesma identidade visual",
+        "telas privadas continuam protegidas sem sessão",
+        "sem erros JavaScript"
+      ],
+      "errors": []
+    },
+    "workspace": {
+      "scope": "Isolated component harness; API responses mocked; not a production authentication test",
+      "checks": [
+        "dashboard renders real components with explicit isolated fixtures",
+        "internal navigation does not refetch dataset or remount workspace",
+        "quick lookup finds accented names/codes and opens product QR",
+        "product QR download returns a PNG file",
+        "scanner accepts product labels in general consultation",
+        "replenishment filters and exports the suggested purchases",
+        "reposicao prepara pedido com fornecedor e quantidades sem salvar automaticamente",
+        "preferencia de animacao funciona no painel e nao impede a navegacao",
+        "new product opens its QR automatically after save",
+        "browser back/forward preserves workspace and current view",
+        "desktop and mobile do not overflow; reduced motion is honored",
+        "no JavaScript runtime errors"
+      ],
+      "passed": 12,
+      "initialDatasetRequests": 1,
+      "navigationDatasetRequests": 0,
+      "errors": []
+    },
+    "build": {
+      "command": "npm run build",
+      "status": "passed",
+      "evidence": "build.log"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "evidence": "typecheck.log"
+    },
+    "lint": {
+      "command": "npm run lint",
+      "status": "passed",
+      "evidence": "lint.log"
+    },
+    "doctor": {
+      "status": "passed",
+      "evidence": "doctor-checks.json",
+      "scope": "Read-only isolated PostgreSQL and fixture Auth settings responder"
+    },
+    "domainRegression": {
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "evidence": "domain-regression.log",
+      "note": "Subset rechecked; do not add to the 96-suite count."
+    }
+  },
+  "limitations": [
+    "No hosted company Supabase login, email, physical camera or printer validation.",
+    "Authenticated UI uses actual components and explicitly mocked APIs in a separate fixture app; no production auth bypass was added.",
+    "Uploaded local .env was not copied to the repository, screenshots or release package."
+  ],
+  "deployment": "No app or environment deployment executed",
+  "preview": "abertura-animada.gif"
+}

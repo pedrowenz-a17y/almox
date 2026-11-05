@@ -1,0 +1,21 @@
+{
+  "scope": "Isolated component harness; API responses mocked; not a production authentication test",
+  "checks": [
+    "dashboard renders real components with explicit isolated fixtures",
+    "internal navigation does not refetch dataset or remount workspace",
+    "quick lookup finds accented names/codes and opens product QR",
+    "product QR download returns a PNG file",
+    "scanner accepts product labels in general consultation",
+    "replenishment filters and exports the suggested purchases",
+    "reposicao prepara pedido com fornecedor e quantidades sem salvar automaticamente",
+    "preferencia de animacao funciona no painel e nao impede a navegacao",
+    "new product opens its QR automatically after save",
+    "browser back/forward preserves workspace and current view",
+    "desktop and mobile do not overflow; reduced motion is honored",
+    "no JavaScript runtime errors"
+  ],
+  "passed": 12,
+  "initialDatasetRequests": 1,
+  "navigationDatasetRequests": 0,
+  "errors": []
+}

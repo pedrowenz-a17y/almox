@@ -1,35 +1,43 @@
 /* U.C.A. workbench: steel, paper, machine red. Local font, no remote assets. */
 @font-face {
-  font-family: "Barlow Workshop";
-  src: url("/fonts/barlow-semi-condensed-semibold.ttf") format("truetype");
+  font-family: "Manrope UCA";
+  src: url("/fonts/manrope-latin-variable.woff2") format("woff2");
+  font-weight: 200 800;
   font-style: normal;
-  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans UCA";
+  src: url("/fonts/dmsans-latin-variable.woff2") format("woff2");
+  font-weight: 100 1000;
+  font-style: normal;
   font-display: swap;
 }
 :root {
-  --bg: #eef1ef;
-  --text: #263238;
-  --muted: #5f6b70;
-  --border: #dce3df;
-  --navy: #273238;
-  --navy-light: #36444a;
-  --teal: #a62c3e;
-  --teal-dark: #862033;
-  --teal-soft: #f8eaed;
-  --font-heading: "Barlow Workshop", "Arial Narrow", "Segoe UI", sans-serif;
+  --bg: #f5f6fa;
+  --text: #252632;
+  --muted: #656879;
+  --border: #e6e7ef;
+  --navy: #222328;
+  --navy-light: #32333b;
+  --teal: #e91536;
+  --teal-dark: #c70d2b;
+  --teal-soft: #fff0f3;
+  --font-body: "DM Sans UCA", "Segoe UI", sans-serif;
+  --font-heading: "Manrope UCA", "Segoe UI", sans-serif;
 }
 body {
   font-size: 14px;
 }
 h1 {
   font-size: clamp(29px, 2.8vw, 40px);
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  font-weight: 800;
+  letter-spacing: -0.04em;
 }
 h2 {
   font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 750;
+  letter-spacing: -0.03em;
 }
 h3 {
   font-size: 17px;
@@ -77,7 +85,7 @@ h3 {
     color 160ms ease;
 }
 .nav-link.active {
-  background: #4b323c;
+  background: var(--teal);
   color: #fff;
 }
 .nav-link.active::before {
@@ -87,14 +95,14 @@ h3 {
   top: 11px;
   bottom: 11px;
   width: 3px;
-  background: #ef9b9b;
+  background: #ff9bab;
   border-radius: 2px;
 }
 .nav-link:hover {
-  background: #36444a;
+  background: #32333b;
 }
 .nav-link.active:hover {
-  background: #4b323c;
+  background: var(--teal);
 }
 .nav-link svg {
   transition: transform 180ms ease;
@@ -170,10 +178,10 @@ h3 {
   transform: translateY(1px) scale(0.985);
 }
 .button.primary {
-  box-shadow: 0 2px 0 #752031;
+  box-shadow: 0 5px 14px #e9153629;
 }
 .button.primary:hover {
-  background: #862033;
+  background: var(--teal-dark);
 }
 .button.secondary:hover {
   background: #edf1ee;
@@ -216,7 +224,7 @@ h3 {
 }
 .scan-banner {
   color: #fff;
-  background: #34433f;
+  background: var(--teal);
   border: 0;
   border-radius: 8px;
   padding: 26px 30px;
@@ -248,7 +256,7 @@ h3 {
 .scan-banner-copy > span {
   text-transform: none;
   letter-spacing: 0;
-  color: #d4dfd6;
+  color: #ffe1e7;
   font-size: 12px;
 }
 .scan-banner-copy h2 {
@@ -257,17 +265,17 @@ h3 {
   font-weight: 600;
 }
 .scan-banner-copy p {
-  color: #dce5de;
+  color: #fff0f3;
   font-size: 13px;
 }
 .scan-button {
   background: #fff;
-  color: #293a31;
+  color: #c70d2b;
   border-color: #fff;
   box-shadow: none;
 }
 .scan-button:hover {
-  background: #e8eee7;
+  background: #fff0f3;
   color: #273238;
 }
 .shift-desk {

@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./uca.css";
 import "./workshop.css";
+import "./welcome.css";
+import { MotionProvider } from "@/components/motion-preferences";
 
 export const metadata: Metadata = {
   title: "Almox ERP · U.C.A.",
@@ -20,7 +22,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

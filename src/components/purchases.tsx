@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { api, DataSet, dateTime, locationPath, money, qty } from "@/lib/client";
 import { Badge, Empty, Loading, Modal } from "@/components/ui";
+import type { PurchaseDraft } from "@/lib/purchase-draft";
 
 interface PurchaseItem {
   id: string;
@@ -51,10 +52,14 @@ export default function Purchases({
   data,
   permissions,
   onRefresh,
+  initialDraft,
+  onDismissDraft,
 }: {
   data: DataSet;
   permissions: string[];
   onRefresh: () => Promise<void>;
+  initialDraft?: PurchaseDraft | null;
+  onDismissDraft?: () => void;
 }) {
   const [result, setResult] = useState<Page | null>(null);
   const [selected, setSelected] = useState<Purchase | null>(null);
@@ -64,7 +69,9 @@ export default function Purchases({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [creating, setCreating] = useState(false);
+  const [creating, setCreating] = useState(
+    !!initialDraft && permissions.includes("purchases:write"),
+  );
   const [action, setAction] = useState<"receive" | "cancel" | null>(null);
   const can = (permission: string) => permissions.includes(permission);
   useEffect(() => {
@@ -126,6 +133,7 @@ export default function Purchases({
   async function changed(purchase: Purchase, message: string) {
     setSelected(purchase);
     setCreating(false);
+    onDismissDraft?.();
     setAction(null);
     setNotice(message);
     await load();
@@ -450,11 +458,15 @@ export default function Purchases({
           )}
         </section>
       )}
-      {creating && (
+      {creating && can("purchases:write") && (
         <CreatePurchase
           data={data}
+          initialDraft={initialDraft}
           canCost={can("costs:read")}
-          onClose={() => setCreating(false)}
+          onClose={() => {
+            setCreating(false);
+            onDismissDraft?.();
+          }}
           onDone={(purchase) =>
             changed(
               purchase,
@@ -486,18 +498,33 @@ export default function Purchases({
 
 function CreatePurchase({
   data,
+  initialDraft,
   canCost,
   onClose,
   onDone,
 }: {
   data: DataSet;
+  initialDraft?: PurchaseDraft | null;
   canCost: boolean;
   onClose: () => void;
   onDone: (purchase: Purchase) => Promise<void>;
 }) {
-  const [items, setItems] = useState([
-    { key: crypto.randomUUID(), productId: "", quantity: "", unitCost: "" },
-  ]);
+  const [items, setItems] = useState(() =>
+    initialDraft?.items.length
+      ? initialDraft.items.map((item) => ({
+          ...item,
+          key: crypto.randomUUID(),
+          unitCost: "",
+        }))
+      : [
+          {
+            key: crypto.randomUUID(),
+            productId: "",
+            quantity: "",
+            unitCost: "",
+          },
+        ],
+  );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [key] = useState(() => crypto.randomUUID());
@@ -554,6 +581,16 @@ function CreatePurchase({
       }}
     >
       <form className="modal-body" onSubmit={submit}>
+        {initialDraft && (
+          <div className="notice info purchase-draft-notice">
+            <strong>Sugestões da reposição</strong>
+            <p>
+              Fornecedor e materiais já estão preenchidos. Revise quantidades,
+              informe o código do pedido e salve quando estiver tudo certo.
+              Nenhuma compra foi registrada ainda.
+            </p>
+          </div>
+        )}
         <div className="form-grid">
           <label>
             Código do pedido
@@ -561,7 +598,11 @@ function CreatePurchase({
           </label>
           <label>
             Fornecedor
-            <select name="supplierId" required>
+            <select
+              name="supplierId"
+              required
+              defaultValue={initialDraft?.supplierId ?? ""}
+            >
               <option value="">Selecione</option>
               {data.suppliers
                 .filter((supplier) => supplier.active !== false)

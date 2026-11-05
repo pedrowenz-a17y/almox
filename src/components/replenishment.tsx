@@ -6,27 +6,48 @@ import {
   ShoppingCart,
   Search,
   ArrowUpRight,
+  Plus,
+  X,
 } from "lucide-react";
 import Link from "@/components/workspace-link";
 import { api, qty, number } from "@/lib/client";
 import type { listReplenishment } from "@/services/replenishment";
 import { Badge, Empty, Loading } from "@/components/ui";
+import {
+  buildPurchaseDraft,
+  hasSuggestedQuantity,
+  type PurchaseDraft,
+} from "@/lib/purchase-draft";
 
 type Rows = Awaited<ReturnType<typeof listReplenishment>>;
 const csvCell = (value: string) =>
   `"${(/^[\s\u0000-\u001f]*[=+\-@]/.test(value) ? "'" : "") + value.replaceAll('"', '""')}"`;
-export default function Replenishment() {
+export default function Replenishment({
+  unitId,
+  canPreparePurchase,
+  onPreparePurchase,
+}: {
+  unitId: string;
+  canPreparePurchase: boolean;
+  onPreparePurchase: (draft: PurchaseDraft) => void;
+}) {
   const [rows, setRows] = useState<Rows | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [supplier, setSupplier] = useState("");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [selectionError, setSelectionError] = useState("");
   const load = useCallback(async (signal?: AbortSignal) => {
     setLoading(true);
     setError("");
     try {
       const result = await api<Rows>("/api/replenishment", { signal });
-      if (!signal?.aborted) setRows(result);
+      if (!signal?.aborted) {
+        setRows(result);
+        setSelected([]);
+        setSelectionError("");
+      }
     } catch (cause) {
       if (!signal?.aborted) {
         setRows(null);
@@ -61,6 +82,39 @@ export default function Replenishment() {
       (rows ?? []).map((r) => [r.supplierId ?? "none", r.supplierName]),
     ).entries(),
   ];
+  const selectable = (row: Rows[number]) =>
+    !!row.supplierId &&
+    row.supplierActive !== false &&
+    hasSuggestedQuantity(row.suggested);
+  const chosen = (rows ?? []).filter((row) => selected.includes(row.productId));
+  const supplierCount = new Set(chosen.map((row) => row.supplierId)).size;
+  const canPrepare =
+    canPreparePurchase &&
+    chosen.length > 0 &&
+    supplierCount === 1 &&
+    chosen.every(selectable);
+  const visibleIds = filtered.filter(selectable).map((row) => row.productId);
+  function toggleSelection(id: string) {
+    setSelectionError("");
+    setSelected((current) =>
+      current.includes(id)
+        ? current.filter((value) => value !== id)
+        : current.length < 200
+          ? [...current, id]
+          : current,
+    );
+  }
+  function prepare() {
+    try {
+      onPreparePurchase(buildPurchaseDraft(unitId, rows ?? [], selected));
+    } catch (cause) {
+      setSelectionError(
+        cause instanceof Error
+          ? cause.message
+          : "Não foi possível preparar o pedido.",
+      );
+    }
+  }
   function exportCsv() {
     const header = [
       "Código",
@@ -149,6 +203,47 @@ export default function Replenishment() {
           </button>
         </div>
       )}
+      {canPreparePurchase && (
+        <div
+          className={`replenishment-selection ${selected.length ? "has-selection" : ""}`}
+        >
+          <div>
+            <strong>
+              {selected.length
+                ? `${selected.length} ${selected.length === 1 ? "material selecionado" : "materiais selecionados"}`
+                : "Da reposição para o pedido"}
+            </strong>
+            <p>
+              {supplierCount > 1
+                ? "Há fornecedores diferentes na seleção. Prepare um pedido por fornecedor."
+                : selected.length
+                  ? "O pedido será aberto para revisão. O estoque permanece igual."
+                  : "Marque materiais de um mesmo fornecedor para preparar uma compra."}
+            </p>
+          </div>
+          {selected.length > 0 && (
+            <button
+              className="icon-button"
+              aria-label="Limpar seleção"
+              onClick={() => setSelected([])}
+            >
+              <X size={17} />
+            </button>
+          )}
+          <button
+            className="button primary"
+            disabled={!canPrepare || loading}
+            onClick={prepare}
+          >
+            <Plus size={17} /> Preparar pedido
+          </button>
+        </div>
+      )}
+      {selectionError && (
+        <p className="notice error" role="alert">
+          {selectionError}
+        </p>
+      )}
       {!rows && loading ? (
         <Loading />
       ) : (
@@ -183,6 +278,31 @@ export default function Replenishment() {
                 <table>
                   <thead>
                     <tr>
+                      {canPreparePurchase && (
+                        <th className="selection-cell">
+                          <input
+                            type="checkbox"
+                            aria-label="Selecionar sugestões deste filtro"
+                            checked={
+                              visibleIds.length > 0 &&
+                              visibleIds.every((id) => selected.includes(id))
+                            }
+                            disabled={
+                              loading ||
+                              !visibleIds.length ||
+                              visibleIds.length > 200
+                            }
+                            onChange={(event) => {
+                              setSelectionError("");
+                              setSelected(
+                                event.target.checked
+                                  ? visibleIds.slice(0, 200)
+                                  : [],
+                              );
+                            }}
+                          />
+                        </th>
+                      )}
                       <th>Material / fornecedor</th>
                       <th className="numeric">Disponível</th>
                       <th className="numeric">Mínimo</th>
@@ -194,6 +314,27 @@ export default function Replenishment() {
                   <tbody>
                     {filtered.map((r) => (
                       <tr key={r.productId}>
+                        {canPreparePurchase && (
+                          <td className="selection-cell">
+                            <input
+                              type="checkbox"
+                              aria-label={`Selecionar ${r.name}`}
+                              checked={selected.includes(r.productId)}
+                              disabled={
+                                loading ||
+                                !selectable(r) ||
+                                (selected.length >= 200 &&
+                                  !selected.includes(r.productId))
+                              }
+                              title={
+                                !selectable(r)
+                                  ? "Este material precisa de sugestão positiva e fornecedor ativo."
+                                  : undefined
+                              }
+                              onChange={() => toggleSelection(r.productId)}
+                            />
+                          </td>
+                        )}
                         <td>
                           <Link
                             className="material-link"
@@ -256,8 +397,9 @@ export default function Replenishment() {
         )
       )}
       <p className="workflow-help">
-        Esta lista ajuda a preparar a compra. Ela não cria pedidos nem movimenta
-        o estoque.
+        Sugestões consideram os pedidos em aberto. Revise as quantidades antes
+        de salvar uma nova compra. Preparar um pedido não registra a compra e
+        não movimenta o estoque.
       </p>
     </>
   );

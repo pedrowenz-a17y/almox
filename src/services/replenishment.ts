@@ -19,7 +19,7 @@ export async function listReplenishment(actor: StockActor) {
             minStock: true,
             maxStock: true,
             supplier: {
-              select: { id: true, legalName: true, tradeName: true },
+              select: { id: true, legalName: true, tradeName: true, active: true },
             },
           },
         }),
@@ -86,6 +86,7 @@ export async function listReplenishment(actor: StockActor) {
                 name: p.name,
                 unit: p.unit,
                 supplierId: p.supplier?.id ?? null,
+                supplierActive: p.supplier?.active ?? false,
                 supplierName:
                   p.supplier?.tradeName ||
                   p.supplier?.legalName ||

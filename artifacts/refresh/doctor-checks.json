@@ -1,0 +1,57 @@
+{
+  "mode": "read-only",
+  "checks": [
+    {
+      "name": "DATABASE_URL",
+      "status": "ok",
+      "message": "Formato PostgreSQL reconhecido; a conexão ainda precisa ser testada."
+    },
+    {
+      "name": "DIRECT_URL",
+      "status": "ok",
+      "message": "Formato PostgreSQL reconhecido; a conexão ainda precisa ser testada."
+    },
+    {
+      "name": "APP_URL",
+      "status": "ok",
+      "message": "Formato de origem reconhecido."
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_URL",
+      "status": "ok",
+      "message": "Formato de origem reconhecido."
+    },
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      "status": "ok",
+      "message": "Chave de tipo público reconhecida; o provedor confirma sua validade."
+    },
+    {
+      "name": "SUPABASE_SERVICE_ROLE_KEY",
+      "status": "warning",
+      "message": "Opcional para login comum. Necessária no servidor para provisionar o administrador e enviar convites."
+    },
+    {
+      "name": "Conexão PostgreSQL",
+      "status": "ok",
+      "message": "O banco respondeu. Nenhuma escrita foi executada."
+    },
+    {
+      "name": "Estrutura do ERP",
+      "status": "ok",
+      "message": "Tabelas essenciais encontradas. Isso não comprova migração ou reconciliação de dados existentes."
+    },
+    {
+      "name": "Acesso inicial",
+      "status": "warning",
+      "message": "Nenhum vínculo ativo de acesso encontrado. Siga o primeiro administrador no README; o sistema não possui senha padrão."
+    },
+    {
+      "name": "Serviço de autenticação",
+      "status": "ok",
+      "message": "O serviço respondeu à chave pública. Esta checagem não tenta login nem envia e-mail."
+    }
+  ],
+  "errors": 0,
+  "scope": "Isolated PostgreSQL with fixture Auth settings responder; no real credentials, login or email tested"
+}

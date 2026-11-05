@@ -1,6 +1,8 @@
-# Almox ERP · U.C.A. — versão 2
+# Almox ERP · U.C.A. — versão 2.1
 
-**Revisão de navegação, visual, QR de produto e reposição:** consulte [as melhorias e a validação de novembro](docs/MELHORIAS-2026-11.md).
+**Versão 2.1:** vermelho vivo, novas animações, compra assistida pela reposição e diagnóstico local. Consulte [a revisão e o roteiro de evolução](docs/REVISAO-2.1.md).
+
+A revisão anterior de navegação, QR e reposição está registrada em [MELHORIAS-2026-11.md](docs/MELHORIAS-2026-11.md).
 
 ERP de almoxarifado em português para controlar materiais por localização, QR Codes, entradas, saídas, transferências, inventários, compras e materiais de O.S./O.P. A interface consulta dados do PostgreSQL; não injeta demonstrações nem simula operações.
 
