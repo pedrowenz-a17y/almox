@@ -1,0 +1,56 @@
+{
+  "version": "2.3.1",
+  "recordedAt": "2026-11-06T01:50:43.234777+00:00",
+  "visual": {
+    "version": "2.3.1",
+    "scope": "Real components in isolated fixture; mocked data and AI; no company credentials or real OpenAI calls",
+    "passed": 10,
+    "checks": [
+      "menu usa vermelho UCA vivo, com logo oficial e texto legivel",
+      "painel preserva destaque vermelho e reduz brilhos e sobreposicoes",
+      "textos secundarios tem contraste e icones usam cores com significado",
+      "catalogo e formulario mantem acoes claras e estilo da UCA",
+      "consulta rapida e ficha QR seguem a identidade sem comprometer etiqueta",
+      "reposicao conserva alerta de atencao e pedido revisavel",
+      "assistente mantem vermelho de acao e conversa simples, sem chamada real a IA",
+      "telas seguem responsivas entre 320 e 1920 pixels",
+      "modo de movimento reduzido permanece utilizavel",
+      "sem erros JavaScript"
+    ],
+    "errors": [],
+    "primary": "rgb(233, 21, 54)"
+  },
+  "assistantRegression": {
+    "version": "2.3.1",
+    "scope": "Isolated UI harness with real components and explicitly mocked API; no real company auth or OpenAI calls",
+    "passed": 9,
+    "checks": [
+      "abrir o assistente nao consulta IA nem envia resumo automaticamente",
+      "sugestao preenche pergunta e enviar exibe resposta sem gravar operacoes",
+      "resumo depende de escolha explicita e resposta nao e executada como HTML",
+      "limpar conversa remove mensagens e trata falta de cota sem perder pergunta",
+      "fechar cancela consulta pendente e permite reabrir sem resposta tardia",
+      "conversa fica disponivel ao navegar na mesma unidade",
+      "troca de unidade bloqueia acesso durante transicao e limpa historico e consentimento",
+      "barra e janela responsivas em 320, 390, 768 e 1440 pixels",
+      "sem erros JavaScript ou chamadas de escrita em estoque"
+    ],
+    "errors": []
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "evidence": "build.log"
+  },
+  "lint": {
+    "command": "npm run lint",
+    "passed": true,
+    "evidence": "lint.log"
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "passed": true,
+    "evidence": "typecheck.log"
+  },
+  "scope": "Visual palette, text and modal presentation; isolated fixtures with real components and mocked data. No real company authentication, database or OpenAI call."
+}

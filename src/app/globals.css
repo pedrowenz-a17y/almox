@@ -875,20 +875,20 @@ button:active:not(:disabled) {
   flex-shrink: 0;
 }
 .stat-icon.teal {
-  background: #ecf5f1;
-  color: #4b9680;
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 .stat-icon.blue {
-  background: #edf2f9;
-  color: #668ca9;
+  background: #f0f1f4;
+  color: #505766;
 }
 .stat-icon.amber {
-  background: #fcf4e8;
-  color: #c59648;
+  background: #fff5df;
+  color: #a16000;
 }
 .stat-icon.red {
-  background: #faeeeb;
-  color: #ca8578;
+  background: var(--teal-soft);
+  color: #b80c2a;
 }
 .stat-value {
   display: block;
@@ -898,25 +898,25 @@ button:active:not(:disabled) {
   font-weight: 750;
   letter-spacing: -1.2px;
   margin: 8px 0 10px;
-  color: #253c46;
+  color: var(--text);
 }
 .stat-caption {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 8px;
-  color: #9ba6ac;
+  color: var(--muted);
 }
 .stat-caption.attention {
-  color: #b79052;
+  color: #976009;
 }
 .stat-card.red .stat-caption.attention {
-  color: #c1897e;
+  color: #b80c2a;
 }
 .tiny-line {
   width: 8px;
   height: 2px;
-  background: #94b8aa;
+  background: var(--teal);
   border-radius: 2px;
 }
 .scan-banner {
@@ -1191,9 +1191,9 @@ button:active:not(:disabled) {
   justify-content: center;
   width: 31px;
   height: 32px;
-  border: 1px solid #edf0ef;
-  background: #f8faf9;
-  color: #91a198;
+  border: 1px solid var(--border);
+  background: #f6f7f9;
+  color: #6b7280;
   border-radius: 6px;
 }
 .alert-product-copy {
@@ -1211,7 +1211,7 @@ button:active:not(:disabled) {
 .alert-row small {
   display: block;
   font-size: 8px;
-  color: #a6afb4;
+  color: var(--muted);
   margin-top: 3px;
 }
 .alert-row > span:last-child {
@@ -1230,7 +1230,7 @@ button:active:not(:disabled) {
   justify-content: center;
   gap: 8px;
   font-size: 9px;
-  color: #83988d;
+  color: var(--teal-dark);
   border-top: 1px solid #edf0ef;
   min-height: 38px;
 }
@@ -1262,7 +1262,7 @@ button:active:not(:disabled) {
 }
 .section-title-row p {
   font-size: 9px;
-  color: #99a6ad;
+  color: var(--muted);
   margin-top: 3px;
 }
 .section-title-row .text-link {
@@ -1311,7 +1311,7 @@ button:active:not(:disabled) {
 .quick-actions small {
   display: block;
   font-size: 8px;
-  color: #9ca8af;
+  color: var(--muted);
   margin-top: 3px;
 }
 .action-icon {
@@ -1324,20 +1324,20 @@ button:active:not(:disabled) {
   flex-shrink: 0;
 }
 .action-icon.teal {
-  background: #edf7f1;
-  color: #64a18d;
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 .action-icon.orange {
-  background: #fcf3e9;
-  color: #c5a178;
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 .action-icon.blue {
-  background: #edf3fa;
-  color: #83a0c7;
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 .action-icon.purple {
-  background: #f2f0f8;
-  color: #a291bf;
+  background: var(--teal-soft);
+  color: var(--teal);
 }
 .dashboard-lower {
   display: grid;
@@ -2055,11 +2055,11 @@ td.numeric {
 }
 .field-info span {
   font-size: 10px;
-  color: #86a093;
+  color: var(--muted);
 }
 .field-info strong {
   font-size: 18px;
-  color: #467e67;
+  color: var(--text);
   margin-top: 4px;
 }
 .segmented {
@@ -2358,15 +2358,15 @@ td.numeric {
 }
 .empty-state strong {
   font-size: 13px;
-  color: #839a8d;
+  color: var(--text);
 }
 .empty-state p {
   font-size: 11px;
-  color: #a4b3aa;
+  color: var(--muted);
   max-width: 310px;
 }
 .empty-state svg {
-  color: #aac0b2;
+  color: #858c98;
 }
 .table-wrap > .empty-state {
   min-height: 220px;
@@ -2377,12 +2377,15 @@ td.numeric {
 }
 .popular-list .empty-state strong {
   font-size: 10px;
+  color: var(--text);
 }
 .popular-list .empty-state p {
   font-size: 9px;
+  color: var(--muted);
 }
 .popular-list .empty-state svg {
   width: 25px;
+  color: #858c98;
 }
 @keyframes appear {
   from {
@@ -2659,6 +2662,7 @@ td.numeric {
   }
   .stat-value {
     font-size: 36px;
+    color: var(--text);
   }
   .stat-card {
     padding: 20px 23px;
@@ -2693,6 +2697,7 @@ td.numeric {
   }
   .quick-actions small {
     font-size: 10px;
+    color: var(--muted);
   }
   .dashboard-lower {
     grid-template-columns: minmax(0, 2.7fr) minmax(240px, 1fr);
@@ -2751,6 +2756,7 @@ td.numeric {
   }
   .stat-caption {
     font-size: 7px;
+    color: var(--muted);
   }
   .scan-banner {
     padding: 20px;
@@ -2793,6 +2799,9 @@ td.numeric {
   .alert-product-icon {
     width: 27px;
     height: 29px;
+    background: #f6f7f9;
+    color: #6b7280;
+    border: 1px solid var(--border);
   }
   .alert-row {
     gap: 8px;
@@ -2817,6 +2826,7 @@ td.numeric {
   }
   .quick-actions small {
     font-size: 7px;
+    color: var(--muted);
   }
   .quick-actions > button > svg:last-child,
   .quick-actions > a > svg:last-child {
@@ -2981,10 +2991,12 @@ td.numeric {
   }
   .stat-value {
     font-size: 27px;
+    color: var(--text);
   }
   .stat-caption {
     font-size: 6px;
     gap: 4px;
+    color: var(--muted);
   }
   .scan-banner {
     flex-wrap: wrap;
@@ -3060,6 +3072,9 @@ td.numeric {
   }
   .alert-product-icon {
     display: none;
+    background: #f6f7f9;
+    color: #6b7280;
+    border: 1px solid var(--border);
   }
   .alert-row > span:last-child > small {
     font-size: 6px;
@@ -3069,6 +3084,7 @@ td.numeric {
   }
   .alert-row small {
     font-size: 7px;
+    color: var(--muted);
   }
   .count-pill {
     font-size: 8px;
@@ -3085,6 +3101,7 @@ td.numeric {
   }
   .quick-actions small {
     font-size: 8px;
+    color: var(--muted);
   }
   .quick-actions > button,
   .quick-actions > a {
@@ -3373,9 +3390,11 @@ td.numeric {
     font-size: 28px;
     margin-top: 8px;
     margin-bottom: 8px;
+    color: var(--text);
   }
   .stat-caption {
     font-size: 7px;
+    color: var(--muted);
   }
   .scan-banner {
     padding: 20px;
@@ -3498,6 +3517,9 @@ td.numeric {
     display: flex;
     width: 34px;
     height: 34px;
+    background: #f6f7f9;
+    color: #6b7280;
+    border: 1px solid var(--border);
   }
   .alert-product-copy strong {
     font-size: 12px;
@@ -3505,6 +3527,7 @@ td.numeric {
   .alert-row small {
     font-size: 10px;
     margin-top: 3px;
+    color: var(--muted);
   }
   .alert-row > span:last-child > strong {
     font-size: 16px;
@@ -3519,12 +3542,14 @@ td.numeric {
   .panel-bottom-link {
     min-height: 44px;
     font-size: 11px;
+    color: var(--teal-dark);
   }
   .section-title-row h2 {
     font-size: 14px;
   }
   .section-title-row p {
     font-size: 10px;
+    color: var(--muted);
   }
   .section-title-row .text-link {
     font-size: 10px;
@@ -3544,6 +3569,7 @@ td.numeric {
   }
   .quick-actions small {
     font-size: 8px;
+    color: var(--muted);
   }
   .quick-actions > button > svg:last-child,
   .quick-actions > a > svg:last-child {
@@ -3931,9 +3957,11 @@ td.numeric {
   }
   .field-info span {
     font-size: 10px;
+    color: var(--muted);
   }
   .field-info strong {
     font-size: 18px;
+    color: var(--text);
   }
   .checkbox-label > input {
     min-height: 17px;
@@ -4151,9 +4179,11 @@ td.numeric {
   }
   .stat-value {
     font-size: 26px;
+    color: var(--text);
   }
   .stat-caption {
     font-size: 6px;
+    color: var(--muted);
   }
   .scan-banner {
     padding: 16px;
@@ -4191,6 +4221,7 @@ td.numeric {
   }
   .quick-actions small {
     font-size: 7px;
+    color: var(--muted);
   }
   .action-icon {
     width: 29px;

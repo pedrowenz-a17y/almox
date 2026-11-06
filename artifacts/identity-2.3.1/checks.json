@@ -1,0 +1,19 @@
+{
+  "version": "2.3.1",
+  "scope": "Real components in isolated fixture; mocked data and AI; no company credentials or real OpenAI calls",
+  "passed": 10,
+  "checks": [
+    "menu usa vermelho UCA vivo, com logo oficial e texto legivel",
+    "painel preserva destaque vermelho e reduz brilhos e sobreposicoes",
+    "textos secundarios tem contraste e icones usam cores com significado",
+    "catalogo e formulario mantem acoes claras e estilo da UCA",
+    "consulta rapida e ficha QR seguem a identidade sem comprometer etiqueta",
+    "reposicao conserva alerta de atencao e pedido revisavel",
+    "assistente mantem vermelho de acao e conversa simples, sem chamada real a IA",
+    "telas seguem responsivas entre 320 e 1920 pixels",
+    "modo de movimento reduzido permanece utilizavel",
+    "sem erros JavaScript"
+  ],
+  "errors": [],
+  "primary": "rgb(233, 21, 54)"
+}

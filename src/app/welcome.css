@@ -432,17 +432,17 @@
 }
 .app-shell .stat-card {
   background: #fff;
-  border: 1px solid #e8e9f0;
-  border-radius: 15px;
-  box-shadow: 0 4px 16px #21264404;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: none;
   padding: 23px;
   transition:
     transform 220ms,
     box-shadow 220ms;
 }
 .app-shell .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px #2126440c;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 12px #17182008;
 }
 .app-shell .stat-value {
   font-weight: 800;
@@ -453,22 +453,22 @@
   font-size: 11px;
 }
 .app-shell .panel {
-  border-radius: 14px;
-  box-shadow: 0 4px 20px #21264403;
+  border-radius: 12px;
+  box-shadow: none;
 }
 .app-shell .nav-link {
   border-radius: 9px;
 }
 .app-shell .nav-link.active {
-  box-shadow: 0 5px 16px #e915362b;
+  box-shadow: none;
 }
 .app-shell .nav-link.active::before {
-  background: #ff4865;
+  background: #fff;
 }
 .app-shell .scan-banner {
-  border-radius: 16px;
-  background: #e91536;
-  box-shadow: 0 9px 24px #e9153614;
+  border-radius: 12px;
+  background: var(--teal);
+  box-shadow: none;
 }
 .app-shell .scan-banner h2 {
   font-family: var(--font-heading);
@@ -487,6 +487,7 @@
   transform: rotate(25deg);
   animation: banner-glint 18s ease-in-out infinite;
   pointer-events: none;
+  display: none;
 }
 .app-shell .scan-banner > .scan-banner-copy {
   flex: 1;
@@ -524,9 +525,9 @@
     box-shadow 220ms;
 }
 .app-shell .quick-action:hover {
-  transform: translateY(-4px);
-  border-color: #e9153650;
-  box-shadow: 0 8px 20px #e9153608;
+  transform: translateY(-2px);
+  border-color: #ef8ba1;
+  box-shadow: none;
 }
 .app-shell .chart-bars .bar {
   animation-duration: 700ms;
@@ -548,14 +549,14 @@
   border-radius: 9px;
 }
 .app-shell .button.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px #e915362b;
+  transform: translateY(-1px);
+  box-shadow: none;
 }
 .app-shell .button.primary:active {
   transform: translateY(0);
 }
 .app-shell .modal {
-  border-radius: 17px;
+  border-radius: 12px;
 }
 .app-shell .replenishment-brief strong,
 .app-shell .lookup-material-stock > strong {
@@ -935,6 +936,8 @@
   .app-shell .stat-card {
     padding: 16px;
     border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: none;
   }
   .app-shell .stats-grid {
     gap: 10px;
@@ -983,4 +986,7 @@
   :root:not([data-motion="full"]) .welcome-shell .uca-photo-frame {
     transform: none !important;
   }
+}
+.app-shell .scan-banner::before {
+  display: none;
 }

@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.3.0
+# Almox ERP · U.C.A. — versão 2.3.1
+
+**Versão 2.3.1:** identidade U.C.A. nas telas internas: vermelho vivo, superfícies claras e menos efeitos decorativos. [Veja as prévias e a paleta](docs/IDENTIDADE-UCA.md).
 
 **Versão 2.3.0:** assistente OpenAI nas telas internas, com orientação e análise de resumo autorizado da unidade. [Configurar e usar o assistente](docs/ASSISTENTE-IA.md).
 

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { createPortal } from "react-dom";
 import { LoaderCircle, Send, Sparkles, Trash2 } from "lucide-react";
 import { Modal } from "@/components/ui";
 import { api } from "@/lib/client";
@@ -89,132 +88,126 @@ export default function Assistant({
       >
         <Sparkles size={19} />
       </button>
-      {open &&
-        createPortal(
-          <Modal
-            title="Assistente do almoxarifado"
-            subtitle="Orientação, análise e sugestões para revisar com a equipe."
-            onClose={close}
-            wide
-          >
-            <div className="ai-panel">
-              <p className="ai-intro">
-                Tire dúvidas sobre as telas, O.S./O.P., estoque, compras,
-                inventário e relatórios. As respostas são sugestões e não
-                registram operações.
-              </p>
-              {!messages.length && (
-                <div
-                  className="ai-suggestions"
-                  aria-label="Sugestões de perguntas"
-                >
-                  {suggestions.map((text) => (
-                    <button
-                      type="button"
-                      key={text}
-                      disabled={busy}
-                      onClick={() => setQuestion(text)}
-                    >
-                      {text}
-                    </button>
-                  ))}
-                </div>
-              )}
-              <label className="ai-data-option">
-                <input
-                  type="checkbox"
-                  checked={includeUnit}
-                  disabled={busy}
-                  onChange={(event) => setIncludeUnit(event.target.checked)}
-                />{" "}
-                Incluir resumo da unidade atual
-              </label>
-              <p className="ai-sharing">
-                Ao enviar, sua pergunta e o histórico recente serão enviados à
-                OpenAI. Com a opção acima, será incluída uma amostra de saldos e
-                dos registros que seu perfil pode consultar. Custos e dados
-                pessoais de funcionários não entram nesse resumo. Não envie
-                senhas ou chaves.
-              </p>
+      {open && (
+        <Modal
+          title="Assistente do almoxarifado"
+          subtitle="Orientação, análise e sugestões para revisar com a equipe."
+          onClose={close}
+          wide
+        >
+          <div className="ai-panel">
+            <p className="ai-intro">
+              Pergunte sobre O.S./O.P., estoque e outras telas. As respostas
+              orientam a equipe; nenhuma operação é registrada pela IA.
+            </p>
+            {!messages.length && (
               <div
-                className="ai-conversation"
-                role="log"
-                aria-label="Conversa com o assistente"
-                aria-live="polite"
-                aria-busy={busy}
+                className="ai-suggestions"
+                aria-label="Sugestões de perguntas"
               >
-                {!messages.length && (
-                  <p className="ai-empty">
-                    Escolha uma sugestão ou escreva sua pergunta. Para analisar
-                    os registros atuais, ative o resumo da unidade.
-                  </p>
-                )}
-                {messages.map((message, index) => (
-                  <article
-                    className={`ai-message ai-${message.role}`}
-                    key={index}
-                  >
-                    <strong>
-                      {message.role === "user" ? "Você" : "Assistente"}
-                    </strong>
-                    <p>{message.content}</p>
-                    {message.scope && <small>{message.scope}</small>}
-                  </article>
-                ))}
-                {busy && (
-                  <p className="ai-loading">
-                    <LoaderCircle className="spin" size={17} /> Consultando o
-                    assistente…
-                  </p>
-                )}
-                <div ref={end} />
-              </div>
-              {error && (
-                <p className="notice error" role="alert">
-                  {error}
-                </p>
-              )}
-              <form onSubmit={send} className="ai-composer">
-                <label htmlFor="ai-question">Sua pergunta</label>
-                <textarea
-                  id="ai-question"
-                  rows={3}
-                  maxLength={1600}
-                  value={question}
-                  onChange={(event) => setQuestion(event.target.value)}
-                  disabled={busy}
-                  placeholder="Ex.: como conferir materiais aplicados em ordens ainda não faturadas?"
-                />
-                <div className="ai-actions">
+                {suggestions.map((text) => (
                   <button
                     type="button"
-                    className="button"
-                    disabled={busy || !messages.length}
-                    onClick={() => {
-                      setMessages([]);
-                      setError("");
-                    }}
+                    key={text}
+                    disabled={busy}
+                    onClick={() => setQuestion(text)}
                   >
-                    <Trash2 size={15} /> Limpar conversa
+                    {text}
                   </button>
-                  <button
-                    className="button primary"
-                    disabled={busy || question.trim().length < 2}
-                  >
-                    <Send size={15} />{" "}
-                    {busy ? "Consultando…" : "Enviar pergunta"}
-                  </button>
-                </div>
-              </form>
-              <p className="ai-footnote">
-                Confira as respostas antes de agir. O resumo é limitado e não
-                confirma contagem física, custo real ou integração com outro
-                ERP.
-              </p>
+                ))}
+              </div>
+            )}
+            <label className="ai-data-option">
+              <input
+                type="checkbox"
+                checked={includeUnit}
+                disabled={busy}
+                onChange={(event) => setIncludeUnit(event.target.checked)}
+              />{" "}
+              Incluir resumo da unidade atual
+            </label>
+            <p className="ai-sharing">
+              Suas perguntas e o histórico recente vão para a OpenAI. Ao incluir
+              o resumo, também enviamos uma amostra autorizada da unidade, sem
+              custos ou dados pessoais de funcionários. Não envie senhas ou
+              chaves.
+            </p>
+            <div
+              className="ai-conversation"
+              role="log"
+              aria-label="Conversa com o assistente"
+              aria-live="polite"
+              aria-busy={busy}
+            >
+              {!messages.length && (
+                <p className="ai-empty">
+                  Escolha uma sugestão ou escreva sua pergunta. Para analisar os
+                  registros atuais, ative o resumo da unidade.
+                </p>
+              )}
+              {messages.map((message, index) => (
+                <article
+                  className={`ai-message ai-${message.role}`}
+                  key={index}
+                >
+                  <strong>
+                    {message.role === "user" ? "Você" : "Assistente"}
+                  </strong>
+                  <p>{message.content}</p>
+                  {message.scope && <small>{message.scope}</small>}
+                </article>
+              ))}
+              {busy && (
+                <p className="ai-loading">
+                  <LoaderCircle className="spin" size={17} /> Consultando o
+                  assistente…
+                </p>
+              )}
+              <div ref={end} />
             </div>
-          </Modal>,
-          document.body,
-        )}
+            {error && (
+              <p className="notice error" role="alert">
+                {error}
+              </p>
+            )}
+            <form onSubmit={send} className="ai-composer">
+              <label htmlFor="ai-question">Sua pergunta</label>
+              <textarea
+                id="ai-question"
+                rows={3}
+                maxLength={1600}
+                value={question}
+                onChange={(event) => setQuestion(event.target.value)}
+                disabled={busy}
+                placeholder="Ex.: como conferir materiais aplicados em ordens ainda não faturadas?"
+              />
+              <div className="ai-actions">
+                <button
+                  type="button"
+                  className="button"
+                  disabled={busy || !messages.length}
+                  onClick={() => {
+                    setMessages([]);
+                    setError("");
+                  }}
+                >
+                  <Trash2 size={15} /> Limpar conversa
+                </button>
+                <button
+                  className="button primary"
+                  disabled={busy || question.trim().length < 2}
+                >
+                  <Send size={15} /> {busy ? "Consultando…" : "Enviar pergunta"}
+                </button>
+              </div>
+            </form>
+            <p className="ai-footnote">
+              Revise antes de agir. O resumo é parcial e não confirma contagem
+              física, custos reais ou sincronização com outro ERP.
+            </p>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

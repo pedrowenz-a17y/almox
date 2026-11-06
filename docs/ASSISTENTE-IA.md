@@ -40,7 +40,7 @@ Perguntas úteis:
 - Como planejar uma contagem periódica e investigar diferenças?
 - Como usar as etiquetas, consultas e relatórios do aplicativo?
 
-![Prévia de teste do assistente](../artifacts/assistant-2.3.0/assistente-desktop.png)
+![Prévia de teste do assistente](../artifacts/identity-2.3.1/assistente.png)
 
 ## Limites e privacidade
 

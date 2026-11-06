@@ -1,0 +1,17 @@
+{
+  "version": "2.3.1",
+  "scope": "Isolated UI harness with real components and explicitly mocked API; no real company auth or OpenAI calls",
+  "passed": 9,
+  "checks": [
+    "abrir o assistente nao consulta IA nem envia resumo automaticamente",
+    "sugestao preenche pergunta e enviar exibe resposta sem gravar operacoes",
+    "resumo depende de escolha explicita e resposta nao e executada como HTML",
+    "limpar conversa remove mensagens e trata falta de cota sem perder pergunta",
+    "fechar cancela consulta pendente e permite reabrir sem resposta tardia",
+    "conversa fica disponivel ao navegar na mesma unidade",
+    "troca de unidade bloqueia acesso durante transicao e limpa historico e consentimento",
+    "barra e janela responsivas em 320, 390, 768 e 1440 pixels",
+    "sem erros JavaScript ou chamadas de escrita em estoque"
+  ],
+  "errors": []
+}

@@ -1,6 +1,8 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { X, PackageOpen, LoaderCircle } from "lucide-react";
+const subscribeToDOM = () => () => {};
 export function Modal({
   title,
   subtitle,
@@ -15,11 +17,17 @@ export function Modal({
   wide?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const target = useSyncExternalStore(
+    subscribeToDOM,
+    () => document.body,
+    () => null,
+  );
   const onCloseRef = useRef(onClose);
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
   useEffect(() => {
+    if (!target) return;
     const previous = document.activeElement as HTMLElement | null;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -51,8 +59,9 @@ export function Modal({
       document.body.style.overflow = original;
       previous?.focus();
     };
-  }, []);
-  return (
+  }, [target]);
+  if (!target) return null;
+  return createPortal(
     <div
       className="modal-backdrop"
       onMouseDown={(event) => {
@@ -82,7 +91,8 @@ export function Modal({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    target,
   );
 }
 export function Empty({

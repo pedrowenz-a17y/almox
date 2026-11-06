@@ -2,9 +2,9 @@
 :root {
   --navy: #242528;
   --navy-light: #343539;
-  --teal: #bd2030;
-  --teal-dark: #a01826;
-  --teal-soft: #fbebed;
+  --teal: var(--uca-red);
+  --teal-dark: var(--uca-red-hover);
+  --teal-soft: var(--uca-red-soft);
   --text: #292b30;
   --muted: #616770;
   --border: #e2e3e7;
@@ -12,13 +12,16 @@
   --red: #b91c2e;
   --font-body: "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
   --font-heading: var(--font-body);
+  --uca-red: #e91536;
+  --uca-red-hover: #c70d2b;
+  --uca-red-soft: #fff0f3;
 }
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid #cf5966;
+  outline: 3px solid var(--teal);
   outline-offset: 3px;
 }
 small {
@@ -189,14 +192,14 @@ td small,
   color: white;
 }
 .sidebar .nav-link.active {
-  background: #63242d;
+  background: var(--teal);
   color: #fff;
 }
 .sidebar .nav-link.active::before {
-  background: #ee6c7a;
+  background: #fff;
 }
 .sidebar .nav-link.active svg {
-  color: #ffbdc6;
+  color: #fff;
 }
 .sidebar-bottom {
   padding-top: 22px;
