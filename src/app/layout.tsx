@@ -4,6 +4,7 @@ import "./uca.css";
 import "./workshop.css";
 import "./welcome.css";
 import "./welcome-interactions.css";
+import "./assistant.css";
 import { MotionProvider } from "@/components/motion-preferences";
 
 export const metadata: Metadata = {

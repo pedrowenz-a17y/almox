@@ -1,0 +1,58 @@
+{
+  "version": "2.3.0",
+  "recordedAt": "2026-11-06T00:59:46.535910+00:00",
+  "serviceTests": {
+    "passed": 17,
+    "failed": 0,
+    "evidence": "tests.log",
+    "scope": "Mocked provider and database; no real OpenAI calls"
+  },
+  "ui": {
+    "version": "2.3.0",
+    "scope": "Isolated UI harness with real components and explicitly mocked API; no real company auth or OpenAI calls",
+    "passed": 9,
+    "checks": [
+      "abrir o assistente nao consulta IA nem envia resumo automaticamente",
+      "sugestao preenche pergunta e enviar exibe resposta sem gravar operacoes",
+      "resumo depende de escolha explicita e resposta nao e executada como HTML",
+      "limpar conversa remove mensagens e trata falta de cota sem perder pergunta",
+      "fechar cancela consulta pendente e permite reabrir sem resposta tardia",
+      "conversa fica disponivel ao navegar na mesma unidade",
+      "troca de unidade bloqueia acesso durante transicao e limpa historico e consentimento",
+      "barra e janela responsivas em 320, 390, 768 e 1440 pixels",
+      "sem erros JavaScript ou chamadas de escrita em estoque"
+    ],
+    "errors": []
+  },
+  "http": {
+    "version": "2.3.0",
+    "scope": "Real production build without company credentials; no OpenAI call",
+    "passed": 4,
+    "checks": [
+      "sem origem recusada antes de autenticar",
+      "origem externa recusada antes de autenticar",
+      "sem sessão válida não alcança configuração de IA",
+      "GET não expõe configuração da IA"
+    ]
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "evidence": "build.log"
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "passed": true,
+    "evidence": "typecheck.log"
+  },
+  "lint": {
+    "command": "npm run lint",
+    "passed": true,
+    "evidence": "lint.log"
+  },
+  "limitations": [
+    "No real OpenAI API key was used or charged; account/model availability needs validation after configuration.",
+    "Public HTTP checks use the production build without company credentials. UI uses real components and explicitly mocked APIs in a separate application.",
+    "No company database was accessed or changed, and no site/environment deployment was executed."
+  ]
+}

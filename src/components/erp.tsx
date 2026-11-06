@@ -11,6 +11,7 @@ import Link from "@/components/workspace-link";
 import dynamic from "next/dynamic";
 import { navigateWorkspace } from "@/lib/workspace-navigation";
 import type { PurchaseDraft } from "@/lib/purchase-draft";
+import Assistant from "@/components/assistant";
 import { MotionToggle } from "@/components/motion-preferences";
 import { ApiError } from "@/lib/client";
 import { usePathname, useRouter } from "next/navigation";
@@ -1980,6 +1981,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             )}
           </div>
           <div className="topbar-actions">
+            <Assistant key={`${user?.id}:${user?.unitId}:${permissions.join("|")}:${switchingUnit}`} disabled={!user || switchingUnit} />
             <MotionToggle compact />
             <button
               className="icon-button refresh-data"

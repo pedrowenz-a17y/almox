@@ -1,0 +1,25 @@
+✔ assistente rejeita instruções de sistema, contexto do cliente e perguntas acima do limite (5.391267ms)
+✔ sem chave não consulta dados nem chama a OpenAI (4.49ms)
+✔ orientação envia apenas histórico limitado e manual, sem chave no corpo ou armazenamento de resposta (7.970968ms)
+✔ resumo é carregado pelo ator autenticado e nunca por unidade vinda do cliente (6.254203ms)
+✔ erro 401 do provedor não revela corpo ou credenciais (1.153888ms)
+✔ erro 403 do provedor não revela corpo ou credenciais (0.372089ms)
+✔ erro 429 do provedor não revela corpo ou credenciais (0.40213ms)
+✔ erro 500 do provedor não revela corpo ou credenciais (0.581626ms)
+✔ falha de transporte não expõe detalhes da exceção (0.849291ms)
+✔ resposta sem texto retorna erro controlado (1.816856ms)
+✔ resposta incompleta é identificada para o usuário (1.731506ms)
+✔ limite de chamadas separa usuário e unidade e expira após um minuto (0.84095ms)
+✔ corpo da requisição é limitado antes de interpretar JSON (13.343542ms)
+✔ resumo usa somente a unidade autenticada e calcula físico/disponível sem dupla baixa (2.127112ms)
+✔ ordens, compras e inventários respeitam permissões e mantêm limites de amostragem (1.700188ms)
+✔ retorno malformado é tratado e chave é removida se aparecer no texto de resposta (4.914573ms)
+✔ resumo de saldos e aplicações usa uma única fotografia consistente do banco (24.141689ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1060.713007

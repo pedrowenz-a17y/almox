@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.2.2
+# Almox ERP · U.C.A. — versão 2.3.0
+
+**Versão 2.3.0:** assistente OpenAI nas telas internas, com orientação e análise de resumo autorizado da unidade. [Configurar e usar o assistente](docs/ASSISTENTE-IA.md).
 
 **Versão 2.2.2:** abertura simplificada, uma legenda e caminho que acende as caixas em vermelho na passagem da luz. [Veja a revisão da abertura](docs/ABERTURA-2.2.2.md).
 

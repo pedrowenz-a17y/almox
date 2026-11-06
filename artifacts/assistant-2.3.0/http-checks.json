@@ -1,0 +1,11 @@
+{
+  "version": "2.3.0",
+  "scope": "Real production build without company credentials; no OpenAI call",
+  "passed": 4,
+  "checks": [
+    "sem origem recusada antes de autenticar",
+    "origem externa recusada antes de autenticar",
+    "sem sessão válida não alcança configuração de IA",
+    "GET não expõe configuração da IA"
+  ]
+}

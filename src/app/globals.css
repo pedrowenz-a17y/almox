@@ -3278,7 +3278,7 @@ td.numeric {
   .topbar-actions {
     gap: 2px;
   }
-  .topbar-actions > .icon-button:first-child {
+  .topbar-actions > .refresh-data {
     display: none;
   }
   .topbar-divider {
