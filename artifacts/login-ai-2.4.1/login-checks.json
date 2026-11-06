@@ -1,0 +1,62 @@
+{
+  "scope": "Login real em build de produção local; envio de formulário interceptado com resposta fictícia, sem autenticação externa.",
+  "passed": 5,
+  "checks": [
+    "foto sem caminho, caixas, legenda rotativa ou animação contínua",
+    "login cabe na tela de computador, celular e paisagem sem rolagem",
+    "erro de acesso permanece visível e não cria rolagem nas telas comuns",
+    "senha, recuperação, teclado e movimento reduzido preservados",
+    "tela excepcionalmente pequena mantém campos acessíveis por rolagem"
+  ],
+  "sizes": [
+    [
+      1920,
+      930
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      1280,
+      720
+    ],
+    [
+      1366,
+      650
+    ],
+    [
+      1280,
+      600
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      900,
+      650
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      360,
+      640
+    ],
+    [
+      320,
+      568
+    ],
+    [
+      844,
+      390
+    ]
+  ],
+  "errors": []
+}

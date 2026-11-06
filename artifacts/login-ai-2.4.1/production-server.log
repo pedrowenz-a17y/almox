@@ -1,0 +1,10 @@
+
+> almox-erp@2.4.1 start
+> node --env-file-if-exists=.env scripts/start.mjs
+
+.env not found. Continuing without it.
+▲ Next.js 16.4.2
+- Local:         http://127.0.0.1:3107
+- Network:       http://127.0.0.1:3107
+✓ Ready in 0ms
+✓ Running next.config took 5ms

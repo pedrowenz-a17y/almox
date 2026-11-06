@@ -199,7 +199,7 @@ export interface DataSet {
   roles?: Role[];
 }
 export class ApiError extends Error {
-  constructor(message: string, public status: number, public code?: string) {
+  constructor(message: string, public status: number, public code?: string, public retryAfter?: number) {
     super(message);
     this.name = "ApiError";
   }
@@ -220,7 +220,7 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
       ? "Sem conexão. Não é possível registrar operações no momento."
       : "Não foi possível acessar o servidor. Verifique a conexão e tente novamente.", 0, offline ? "OFFLINE" : "NETWORK_ERROR");
   }
-  let result: { data?: T; error?: string; code?: string };
+  let result: { data?: T; error?: string; code?: string; retryAfter?: unknown };
   try {
     result = await response.json();
     if (!result || typeof result !== "object") throw new Error("Invalid response");
@@ -232,9 +232,12 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- Discard authenticated in-memory state when the verified server session expires.
       window.location.assign(`/login?reason=expired&next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
     }
+    const rawRetry = typeof result.retryAfter === "number" ? result.retryAfter : Number(response.headers.get("retry-after"));
+    const retryAfter = response.status === 429 && Number.isFinite(rawRetry) && rawRetry > 0
+      ? Math.min(3600, Math.ceil(rawRetry)) : undefined;
     throw new ApiError(result.error || (response.status >= 500
       ? "Serviço temporariamente indisponível. Tente novamente em instantes."
-      : "Não foi possível concluir a operação."), response.status, result.code);
+      : "Não foi possível concluir a operação."), response.status, result.code, retryAfter);
   }
   if (!("data" in result)) {
     throw new ApiError("A resposta do servidor está incompleta. Nenhuma operação deve ser considerada confirmada.", 502, "INVALID_RESPONSE");

@@ -1,4 +1,4 @@
-# Assistente OpenAI — Almox ERP 2.3
+# Assistente OpenAI — Almox ERP 2.4.1
 
 O botão **Assistente IA** na barra superior das telas internas abre uma conversa para orientação nos módulos do aplicativo: produtos, QR Codes, localizações, movimentações, reposição, compras, inventário, O.S./O.P., relatórios e configuração. A IA apresenta análises e sugestões; salvar operações continua sendo uma ação explícita nas telas do ERP.
 
@@ -52,8 +52,25 @@ Cada resposta tem limite de 1.200 tokens de saída e tempo de 25 segundos para a
 
 O assistente não recebe ferramentas, SQL, credenciais ou permissão de escrita no estoque. A IA pode errar: uma recomendação deve ser conferida nos registros e procedimentos da empresa. Ela não deve ser usada para fabricar resultados do TCC, afirmar custos reais sem dados ou executar faturamentos e ajustes automaticamente.
 
+## Quando aparece aviso de limite
+
+A mensagem agora diferencia três situações. O aplicativo não consegue liberar créditos ou alterar os limites da sua conta OpenAI.
+
+| Aviso                           | O que significa                                          | Próximo passo                                                                                                                                                                                                       |
+| ------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cinco perguntas em um minuto    | Proteção local por usuário/unidade                       | Aguarde a contagem. O servidor informa o tempo restante e mantém a pergunta digitada.                                                                                                                               |
+| Frequência limitada pela OpenAI | O provedor identificou `rate_limit_exceeded`             | Aguarde o `Retry-After` informado, com contagem na tela. Se recorrente, o administrador deve verificar uso e limites do projeto.                                                                                    |
+| Cota da API indisponível        | O provedor identificou `insufficient_quota`              | O administrador precisa conferir saldo, faturamento e limites do projeto da API. A assinatura do ChatGPT é separada e não inclui créditos de API. Aguardar ou criar nova chave no mesmo projeto não adiciona saldo. |
+| Limite sem causa informada      | A OpenAI respondeu 429 sem uma classificação reconhecida | Aguarde a contagem; se persistir, confira uso, saldo e limites. O aplicativo não atribui esse caso automaticamente à falta de crédito.                                                                              |
+
+Nenhuma tentativa é repetida automaticamente. A contagem aplica-se aos limites temporários, preserva a pergunta e continua válida ao fechar/reabrir ou limpar a conversa. Ela não é uma forma de contornar os limites do provedor. Para cota indisponível, o botão para consultar faturamento abre o painel oficial da API; nenhuma cobrança é autorizada pelo aplicativo.
+
+Se uma chave foi compartilhada no chat, em um arquivo público ou no repositório, revogue-a no painel OpenAI e configure uma nova somente no servidor. Não envie o `.env` nem a chave para diagnosticar um limite.
+
 ## Validação
 
 Passaram 17 testes de serviço, nove verificações de interface e quatro verificações HTTP de proteção do endpoint. Compilação, TypeScript e ESLint também passaram. Os testes de serviço usam respostas simuladas para verificar permissões, isolamento de unidade, limites, exclusão de segredos e mensagens de erro. O laboratório de interface usa os componentes reais com dados/API fictícios. Sem chave fornecida, não houve chamada real ou gasto de créditos OpenAI; a integração com uma conta real precisa ser conferida após a configuração.
 
 Evidências em `artifacts/assistant-2.3.0/`.
+
+Na revisão 2.4.1, foram acrescentados testes simulados para distinguir cota/frequência/429 desconhecido, limitar o envelope de erro, validar `Retry-After`, preservar a expiração da sessão e manter o corpo do provedor privado. Nenhuma chave real foi usada nem houve chamada paga nesta revisão.

@@ -1,0 +1,279 @@
+/* Public photography stays clear. Motion is confined to the surrounding brand. */
+.welcome-shell .welcome-effects {
+  z-index: 1;
+}
+.welcome-shell .welcome-photo .uca-photo-frame {
+  transform: none;
+}
+.welcome-shell .welcome-photo .uca-implement-photo {
+  animation: none;
+  transform: none;
+}
+
+.login-screen {
+  height: 100svh;
+  min-height: 600px;
+}
+.login-screen .uca-login-visual {
+  min-height: 0;
+  padding: clamp(20px, 3vh, 36px) clamp(28px, 4vw, 76px) 20px;
+}
+.login-screen .uca-auth-brand {
+  flex-shrink: 0;
+}
+.login-screen .uca-visual-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  gap: clamp(10px, 1.6vh, 18px);
+  margin: 0;
+  padding: clamp(16px, 2.8vh, 30px) 0 16px;
+}
+.login-screen .welcome-overline,
+.login-screen .uca-visual-body > .welcome-lead {
+  margin: 0;
+}
+.login-screen .welcome-headline {
+  font-size: clamp(38px, min(3.9vw, 6.8vh), 68px);
+  line-height: 1.06;
+  margin: 0;
+}
+.login-screen .welcome-photo {
+  display: block;
+  min-height: 0;
+  margin: 0;
+}
+.login-screen .welcome-photo .uca-photo-frame {
+  height: 100%;
+  width: 100%;
+}
+.login-screen .welcome-photo .uca-implement-photo {
+  height: 100%;
+  aspect-ratio: auto;
+  object-position: center 55%;
+}
+.login-screen .uca-auth-context {
+  flex-shrink: 0;
+  margin: 0;
+  padding-top: 12px;
+}
+.login-screen .login-form-wrap {
+  position: static;
+  align-self: stretch;
+  min-height: 0;
+  padding: 24px clamp(30px, 4vw, 76px);
+}
+.login-screen .welcome-form-heading {
+  margin-bottom: 20px;
+}
+.login-screen .login-lock {
+  width: 48px;
+  height: 48px;
+}
+.login-screen .login-form form {
+  margin-top: 24px;
+  gap: 16px;
+}
+.login-screen .login-form input,
+.login-screen .login-form .login-submit {
+  min-height: 50px;
+}
+.login-screen .login-secure {
+  margin-top: 20px;
+  padding-top: 16px;
+}
+.login-screen .login-help {
+  margin-top: 14px;
+}
+.login-screen .welcome-form-signature {
+  display: none;
+}
+.login-screen .welcome-motion-link {
+  margin-top: 10px;
+}
+@media (min-width: 901px) and (max-height: 780px) {
+  .login-screen .login-form-wrap {
+    padding-block: 18px;
+  }
+  .login-screen .welcome-form-heading {
+    margin-bottom: 14px;
+  }
+  .login-screen .login-lock {
+    width: 38px;
+    height: 38px;
+  }
+  .login-screen .login-form h2 {
+    font-size: 30px;
+  }
+  .login-screen .login-form > p {
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  .login-screen .login-form form {
+    margin-top: 18px;
+    gap: 12px;
+  }
+  .login-screen .login-form input,
+  .login-screen .login-form .login-submit {
+    min-height: 46px;
+  }
+  .login-screen .login-secure {
+    margin-top: 14px;
+    padding-top: 10px;
+  }
+  .login-screen .login-help {
+    margin-top: 10px;
+  }
+}
+@media (min-width: 901px) and (max-height: 680px) {
+  .login-screen .welcome-form-heading {
+    display: none;
+  }
+  .login-screen .login-help {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .login-screen {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 100svh;
+  }
+  .login-screen .uca-login-visual {
+    flex: 0 0 auto;
+    padding: 14px 24px;
+  }
+  .login-screen .uca-auth-brand img {
+    width: 70px;
+    height: 46px;
+  }
+  .login-screen .uca-auth-brand > span:last-child {
+    font-size: 22px;
+  }
+  .login-screen .uca-visual-body,
+  .login-screen .uca-auth-context,
+  .login-screen .welcome-effects,
+  .login-screen .welcome-form-heading {
+    display: none;
+  }
+  .login-screen .login-form-wrap {
+    flex: 1;
+    padding: 22px 24px;
+  }
+  .login-screen .login-form {
+    max-width: 430px;
+  }
+  .login-screen .login-form h2 {
+    font-size: 28px;
+    max-width: 17ch;
+  }
+  .login-screen .login-form > p {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .login-screen .login-form form {
+    margin-top: 20px;
+    gap: 12px;
+  }
+  .login-screen .login-form input,
+  .login-screen .login-form .login-submit {
+    min-height: 46px;
+  }
+  .login-screen .login-secure {
+    margin-top: 16px;
+    padding-top: 0;
+  }
+  .login-screen .login-help {
+    margin-top: 12px;
+  }
+  .login-screen .welcome-motion-link {
+    margin-top: 6px;
+  }
+}
+@media (max-width: 900px) and (max-height: 650px) {
+  .login-screen .uca-login-visual {
+    padding-block: 10px;
+  }
+  .login-screen .uca-auth-brand img {
+    height: 40px;
+    width: 62px;
+  }
+  .login-screen .login-form-wrap {
+    padding-block: 16px;
+  }
+  .login-screen .login-secure {
+    display: none;
+  }
+}
+/* Small landscape screens and zoom retain access instead of clipping the form. */
+@media (max-width: 900px) and (max-height: 480px) {
+  .login-screen .uca-auth-brand img {
+    height: 32px;
+    width: 50px;
+  }
+  .login-screen .uca-auth-brand small,
+  .login-screen .login-form > h2,
+  .login-screen .login-form > p,
+  .login-screen .welcome-motion-link {
+    display: none;
+  }
+  .login-screen .login-form-wrap {
+    padding-block: 12px;
+  }
+  .login-screen .login-form form {
+    margin: 0;
+    gap: 8px;
+  }
+  .login-screen .login-form input,
+  .login-screen .login-form .login-submit {
+    min-height: 40px;
+  }
+}
+@media (max-width: 900px) and (max-height: 650px) {
+  .login-screen .login-form-wrap {
+    padding-block: 12px;
+  }
+  .login-screen:has(.notice.error) .login-help {
+    display: none;
+  }
+}
+@media (max-width: 900px) and (max-height: 650px) {
+  .login-screen:has(.notice.error) .login-form > p,
+  .login-screen:has(.notice.error) .welcome-motion-link {
+    display: none;
+  }
+  .login-screen:has(.notice.error) .login-form h2 {
+    font-size: 24px;
+  }
+  .login-screen:has(.notice.error) .login-form form {
+    margin-top: 12px;
+    gap: 10px;
+  }
+  .login-screen:has(.notice.error) .login-form input,
+  .login-screen:has(.notice.error) .login-form .login-submit {
+    min-height: 44px;
+  }
+}
+@media (min-width: 901px) and (max-height: 680px) {
+  .login-screen:has(.notice.error) .login-form > p {
+    display: none;
+  }
+}
+@media (min-width: 600px) and (max-width: 900px) and (max-height: 480px) {
+  .login-screen .login-form {
+    max-width: 600px;
+  }
+  .login-screen .login-form form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+  }
+  .login-screen .login-form form > .auth-recovery-link,
+  .login-screen .login-form form > .notice,
+  .login-screen .login-form form > .login-submit {
+    grid-column: 1 / -1;
+  }
+}

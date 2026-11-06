@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { LoaderCircle, Send, Sparkles, Trash2 } from "lucide-react";
 import { Modal } from "@/components/ui";
-import { api } from "@/lib/client";
+import { api, ApiError } from "@/lib/client";
 
 type Message = { role: "user" | "assistant"; content: string; scope?: string };
 const suggestions = [
@@ -23,9 +23,22 @@ export default function Assistant({
   const [includeUnit, setIncludeUnit] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState("");
+  const [retryUntil, setRetryUntil] = useState(0);
+  const [clock, setClock] = useState(() => Date.now());
+  const remaining = Math.max(0, Math.ceil((retryUntil - clock) / 1000));
   const controller = useRef<AbortController | null>(null);
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => () => controller.current?.abort(), []);
+  useEffect(() => {
+    if (!retryUntil) return;
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setClock(now);
+      if (now >= retryUntil) clearInterval(interval);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [retryUntil]);
   useEffect(() => {
     if (open) end.current?.scrollIntoView({ block: "nearest" });
   }, [messages, busy, open]);
@@ -37,7 +50,7 @@ export default function Assistant({
   async function send(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const text = question.trim();
-    if (busy || text.length < 2) return;
+    if (busy || remaining > 0 || text.length < 2) return;
     const history = messages
       .slice(-4)
       .map(({ role, content }) => ({ role, content: content.slice(0, 1800) }));
@@ -45,6 +58,7 @@ export default function Assistant({
     controller.current = abort;
     setBusy(true);
     setError("");
+    setErrorCode("");
     try {
       const result = await api<{ answer: string; scope: string }>(
         "/api/assistant",
@@ -63,12 +77,21 @@ export default function Assistant({
         setQuestion("");
       }
     } catch (cause) {
-      if (!abort.signal.aborted)
+      if (!abort.signal.aborted) {
+        if (cause instanceof ApiError) {
+          setErrorCode(cause.code || "");
+          if (cause.retryAfter) {
+            const now = Date.now();
+            setClock(now);
+            setRetryUntil(now + cause.retryAfter * 1000);
+          }
+        }
         setError(
           cause instanceof Error
             ? cause.message
             : "Não foi possível consultar o assistente.",
         );
+      }
     } finally {
       if (controller.current === abort) {
         controller.current = null;
@@ -166,8 +189,22 @@ export default function Assistant({
               <div ref={end} />
             </div>
             {error && (
-              <p className="notice error" role="alert">
-                {error}
+              <div className="notice error ai-error" role="alert">
+                <p>{error}</p>
+                {errorCode === "AI_QUOTA" && (
+                  <a
+                    href="https://platform.openai.com/settings/organization/billing/overview"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Conferir faturamento da API OpenAI
+                  </a>
+                )}
+              </div>
+            )}
+            {remaining > 0 && (
+              <p className="ai-limit-status" role="status">
+                Você poderá enviar outra pergunta em {remaining}s.
               </p>
             )}
             <form onSubmit={send} className="ai-composer">
@@ -189,15 +226,21 @@ export default function Assistant({
                   onClick={() => {
                     setMessages([]);
                     setError("");
+                    setErrorCode("");
                   }}
                 >
                   <Trash2 size={15} /> Limpar conversa
                 </button>
                 <button
                   className="button primary"
-                  disabled={busy || question.trim().length < 2}
+                  disabled={busy || remaining > 0 || question.trim().length < 2}
                 >
-                  <Send size={15} /> {busy ? "Consultando…" : "Enviar pergunta"}
+                  <Send size={15} />{" "}
+                  {busy
+                    ? "Consultando…"
+                    : remaining > 0
+                      ? `Aguarde ${remaining}s`
+                      : "Enviar pergunta"}
                 </button>
               </div>
             </form>

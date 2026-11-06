@@ -4,6 +4,7 @@ import { Prisma, type PrismaClient } from "@prisma/client";
 import { AppError } from "../src/lib/http";
 import {
   assistantInput,
+  AssistantError,
   askAssistant,
   assistantLimit,
   readAssistantBody,
@@ -341,4 +342,152 @@ test("resumo de saldos e aplicações usa uma única fotografia consistente do b
     isolationLevel: "RepeatableRead",
     timeout: 10000,
   });
+});
+
+test("429 por falta de cota informa faturamento separado e não promete resolver aguardando", async () => {
+  for (const field of ["code", "type"]) {
+    await assert.rejects(
+      askAssistant(
+        actor,
+        { question: "Ajude" },
+        {
+          env,
+          fetch: (async () =>
+            new Response(
+              JSON.stringify({
+                error: {
+                  [field]: "insufficient_quota",
+                  message: `private ${env.OPENAI_API_KEY}`,
+                  requestId: "private-request",
+                },
+              }),
+              { status: 429, headers: { "Retry-After": "2" } },
+            )) as typeof fetch,
+        },
+      ),
+      (error) => {
+        assert.ok(error instanceof AssistantError);
+        assert.equal(error.code, "AI_QUOTA");
+        assert.equal(error.retryAfter, undefined);
+        assert.match(error.message, /ChatGPT.*separada/);
+        assert.ok(!error.message.includes("private"));
+        return true;
+      },
+    );
+  }
+});
+
+test("429 por frequência respeita Retry-After limitado e distingue limite do provedor", async () => {
+  for (const [header, seconds] of [
+    ["12", 12],
+    ["9999999", 3600],
+    ["invalid", 60],
+  ] as const) {
+    await assert.rejects(
+      askAssistant(
+        actor,
+        { question: "Ajude" },
+        {
+          env,
+          fetch: (async () =>
+            new Response(
+              JSON.stringify({
+                error: { code: "rate_limit_exceeded", message: "private" },
+              }),
+              { status: 429, headers: { "Retry-After": header } },
+            )) as typeof fetch,
+        },
+      ),
+      (error) => {
+        assert.ok(error instanceof AssistantError);
+        assert.equal(error.code, "AI_PROVIDER_RATE_LIMIT");
+        assert.equal(error.retryAfter, seconds);
+        assert.ok(!error.message.includes("private"));
+        return true;
+      },
+    );
+  }
+});
+
+test("429 sem classificação ou com envelope grande nunca é atribuído à falta de crédito", async () => {
+  for (const body of [
+    "not json",
+    JSON.stringify({ error: { code: "other_limit", message: "private" } }),
+    "x".repeat(16385),
+  ]) {
+    await assert.rejects(
+      askAssistant(
+        actor,
+        { question: "Ajude" },
+        {
+          env,
+          fetch: (async () =>
+            new Response(body, { status: 429 })) as typeof fetch,
+        },
+      ),
+      (error) => {
+        assert.ok(error instanceof AssistantError);
+        assert.equal(error.code, "AI_PROVIDER_LIMIT");
+        assert.equal(error.retryAfter, 60);
+        assert.match(error.message, /não informou a causa/);
+        assert.ok(!error.message.includes("private"));
+        return true;
+      },
+    );
+  }
+});
+
+test("limite local informa tempo restante real e resposta segura com Retry-After", async () => {
+  const user = { ...actor, id: "countdown-rate-test" };
+  const start = Date.now();
+  for (let i = 0; i < 5; i++) assistantLimit(user, start);
+  let failure: AssistantError | undefined;
+  try {
+    assistantLimit(user, start + 47_000);
+  } catch (error) {
+    if (error instanceof AssistantError) failure = error;
+    else throw error;
+  }
+  assert.ok(failure);
+  assert.equal(failure.code, "AI_RATE_LIMIT");
+  assert.equal(failure.retryAfter, 13);
+  const response = failure.toResponse();
+  assert.equal(response.status, 429);
+  assert.equal(response.headers.get("retry-after"), "13");
+  const payload = await response.json();
+  assert.deepEqual(Object.keys(payload).sort(), [
+    "code",
+    "error",
+    "retryAfter",
+  ]);
+  assert.equal(payload.retryAfter, 13);
+  assert.doesNotThrow(() => assistantLimit(user, start + 60_000));
+});
+
+test("Retry-After do provedor aceita data HTTP e não repete chamadas automaticamente", async () => {
+  let calls = 0;
+  await assert.rejects(
+    askAssistant(
+      actor,
+      { question: "Ajude" },
+      {
+        env,
+        fetch: (async () => {
+          calls++;
+          return new Response('{"error":{"code":"rate_limit_exceeded"}}', {
+            status: 429,
+            headers: {
+              "Retry-After": new Date(Date.now() + 120000).toUTCString(),
+            },
+          });
+        }) as typeof fetch,
+      },
+    ),
+    (error) => {
+      assert.ok(error instanceof AssistantError);
+      assert.ok(error.retryAfter! >= 119 && error.retryAfter! <= 120);
+      return true;
+    },
+  );
+  assert.equal(calls, 1);
 });

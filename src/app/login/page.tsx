@@ -54,6 +54,7 @@ export default function Login() {
   }
   return (
     <AuthShell
+      fitScreen
       title="Seu almoxarifado começa aqui."
       description="Entre para continuar o trabalho da sua unidade."
     >

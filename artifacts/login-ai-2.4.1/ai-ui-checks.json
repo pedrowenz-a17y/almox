@@ -1,0 +1,12 @@
+{
+  "scope": "Componentes reais em harness separado, respostas de API fictícias, sem uso de chave ou créditos reais.",
+  "passed": 5,
+  "checks": [
+    "frequência temporária mantém pergunta, bloqueia novas chamadas e informa contagem",
+    "limpar e fechar conversa não geram nova consulta nem removem cooldown",
+    "cota indisponível explica faturamento separado e não oferece falsa espera resolutiva",
+    "limite local é distinto e não deixa o link de cota anterior",
+    "429 desconhecido não afirma saldo insuficiente e mantém orientação segura"
+  ],
+  "errors": []
+}

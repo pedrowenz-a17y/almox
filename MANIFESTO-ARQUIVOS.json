@@ -1,7 +1,7 @@
 {
-  "version": "2.4.0",
-  "revision": "operational-control-orders-inventory-reconciliation",
-  "generatedAt": "2026-11-06T10:58:43.720043+00:00",
+  "version": "2.4.1",
+  "revision": "clean-login-and-specific-ai-limit-errors",
+  "generatedAt": "2026-11-06T13:40:29.689177+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 22368,
-      "sha256": "fa076fae26354e55a0ae59fcd1146b0fb65b9475071fb81bb53771dfcfacab43"
+      "bytes": 22561,
+      "sha256": "70ff1a6efcdb6b36c1b616d9d9443c17e2f8a7514c9dd076375272061d63ee92"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -322,6 +322,96 @@
       "path": "artifacts/legacy/reports-labels-checks.json",
       "bytes": 6596,
       "sha256": "013fb04ddcdd2ea687695f359e72ea5feedf63dc3dee88b08ae6421d2ab6e821"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/README.md",
+      "bytes": 1282,
+      "sha256": "4f3aacf0d5325ac5d501242869ca00e4ec50a3d6522fe72a5908e6a68a84314f"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/ai-browser.log",
+      "bytes": 408,
+      "sha256": "20711c79bc3d30e8796ccba22af7c3c087a268f8e5a7f86e5ba4591baaafe555"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/ai-fixture-build.log",
+      "bytes": 618,
+      "sha256": "1ecd7ad55cf3ed7135d2db78ba097a0947b6f067464cb21484d59dd641ea6df5"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/ai-fixture-server.log",
+      "bytes": 153,
+      "sha256": "bd103740cd33a1e6672074f9e293eeaf71c147fcc32c8b30421dd1d23a24e4b8"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/ai-ui-checks.json",
+      "bytes": 588,
+      "sha256": "b7305ec09863a84ca8f40a338c169ada177c63f121fa9c609eb12df8e3f55544"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/build.log",
+      "bytes": 2536,
+      "sha256": "0ff5fcd4f29c45990fc7375ad938485334c62c015de31cee8681408197930b86"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/ia-cota-api.png",
+      "bytes": 276990,
+      "sha256": "b2841938c6dd747fc476a0f52d9012c9e3e636998f0cffb7c27ef552ce7fb109"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/ia-limite-temporario.png",
+      "bytes": 266283,
+      "sha256": "ab876efb4159f465a03bd820f1531e77b5c3257e3d045b05bb751c93018c8129"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/lint.log",
+      "bytes": 35,
+      "sha256": "0bba1285439aa207b3d57248fb493f0c1aae49b1d5b41bca42c7ac77e9974b81"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/login-1366.png",
+      "bytes": 449477,
+      "sha256": "600e9ec654eeecc5a2332127ebabd69e52e9b29d556be4ee1f3a3057ffad6366"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/login-browser.log",
+      "bytes": 360,
+      "sha256": "baf5298fe64536920956ae4ba3f7320d198ed7f78e4715e60917ec6d0d487ad4"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/login-checks.json",
+      "bytes": 994,
+      "sha256": "1fea1497fd370aa8fd4607326015318a109f2a56016e8f8566beb300e7f8d4a1"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/login-desktop.png",
+      "bytes": 842484,
+      "sha256": "75f1f8d9ef95844b548d4496a6eb7c07761c981830c1cccae0137e3c79da7558"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/login-erro.png",
+      "bytes": 521241,
+      "sha256": "530850dd85adbaf6ab62e79212fea777d6539a8ae0407984ee4fd307479157c1"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/login-mobile.png",
+      "bytes": 43449,
+      "sha256": "d9b97b4fab3e40f0c5f044106fe647e14b0079a526df907af9d860c751660812"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/production-server.log",
+      "bytes": 263,
+      "sha256": "f2a98728199782ec3bac2d840d99f4d9adb610eaceb8176a922898126fbc81cd"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/tests.log",
+      "bytes": 16570,
+      "sha256": "342236e58cba065a535761c1bba9337b2428c44427eebfdf1d6946a4dee92e6d"
+    },
+    {
+      "path": "artifacts/login-ai-2.4.1/typecheck.log",
+      "bytes": 44,
+      "sha256": "2d744d5c31c3f622d2acfa87f51d2e6458bf04605861cea4bfa411b3e9ff073e"
     },
     {
       "path": "artifacts/operational-controls/README.md",
@@ -840,8 +930,8 @@
     },
     {
       "path": "docs/ASSISTENTE-IA.md",
-      "bytes": 5038,
-      "sha256": "0c0137b4f68c229052116b8b1d39d6a68af20124a4c94baeea3baf8b68879bb0"
+      "bytes": 7969,
+      "sha256": "39cb65bc23ae9d0a85af00d57130aac33bb24636477e83d5063d6715d4878b21"
     },
     {
       "path": "docs/AUDIT_2026-10.md",
@@ -877,6 +967,11 @@
       "path": "docs/INTERACOES-2.2.md",
       "bytes": 4420,
       "sha256": "c3e6a66dbfe1c140063e7e246bc4478739a853682b56e2b6b4ffda6a78a1baa9"
+    },
+    {
+      "path": "docs/LOGIN-IA-2.4.1.md",
+      "bytes": 3869,
+      "sha256": "cbe6e1c3304b17dc65c86e9e1b6edab8227647820d96578743ade16ad4ebefd4"
     },
     {
       "path": "docs/MELHORIAS-2026-11.md",
@@ -931,12 +1026,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "28b1355dac38f55ae8ecdb4d5a48e1101222ac5fe3130a33fcdd6bbec88fcbe0"
+      "sha256": "b965634f5361fc078acdb5c319a1ce53298441e025a4f437f9de3d4d012e3969"
     },
     {
       "path": "package.json",
       "bytes": 2231,
-      "sha256": "24b88b008045bd7657097e1887105aadf8ecdbe3b533b8c94825f815913468b2"
+      "sha256": "9ab3502990349dc326f7db526530e997d5ea4d7719c1b2d9cd8f462d9f71657e"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1155,8 +1250,8 @@
     },
     {
       "path": "src/app/api/assistant/route.ts",
-      "bytes": 477,
-      "sha256": "359d68efb1fdf868c2843cb4d3777d5b721b32853d346c375e9d91c05262b0e3"
+      "bytes": 616,
+      "sha256": "87a7fdbfee6837943a95a2c5a3680118213ec4e7e90f07a52ec5a46f32fdab95"
     },
     {
       "path": "src/app/api/auth/login/route.ts",
@@ -1355,8 +1450,8 @@
     },
     {
       "path": "src/app/assistant.css",
-      "bytes": 3465,
-      "sha256": "f64077ea2e5b9512ab57afa4e2c4e8899c1bfd28949b6be84e30e180f98fa3bf"
+      "bytes": 3742,
+      "sha256": "95b53faa3522c8e37e25848970563b99d454f3a493098ce775e5610f80725d64"
     },
     {
       "path": "src/app/auth/callback/route.ts",
@@ -1380,13 +1475,18 @@
     },
     {
       "path": "src/app/layout.tsx",
-      "bytes": 923,
-      "sha256": "70d906f926201fc739c4a70d82bc8faf615e94811950b46825e733c001e01495"
+      "bytes": 952,
+      "sha256": "cfe2f621bf244dd85c1916edeb014ee9a7aecac55ae38a606ce9be63bde9ce9b"
+    },
+    {
+      "path": "src/app/login-screen.css",
+      "bytes": 6323,
+      "sha256": "52c4d6e3f8159277e60e658dd55b4c1943b03938741a49a1bbe9037299da0dda"
     },
     {
       "path": "src/app/login/page.tsx",
-      "bytes": 3210,
-      "sha256": "a92769316097c11fef3348e330693a69c4216e289d79d1e5eb69ca439efcad2f"
+      "bytes": 3226,
+      "sha256": "86943534886b9576ca0617b5a711b8a2d0aad1288e89f8130a38f6a25356e695"
     },
     {
       "path": "src/app/operational.css",
@@ -1420,13 +1520,13 @@
     },
     {
       "path": "src/components/assistant.tsx",
-      "bytes": 7354,
-      "sha256": "5d8acd08b4e71cd4460c781f8de6c2146a88651cfccfd5006976e775709c245e"
+      "bytes": 8954,
+      "sha256": "e907a3438c62e66164b890c1d016e18a172ddbe2227dce6299621d29c78992bb"
     },
     {
       "path": "src/components/auth-shell.tsx",
-      "bytes": 4820,
-      "sha256": "b7ef50ef8c5c0d9627308e488269718ddee6ca869c88bc885e7f006455b63b89"
+      "bytes": 4918,
+      "sha256": "e5200f2dd5bfd34efd869a2f10a13dce081d151e105f2c56e504750718c489cb"
     },
     {
       "path": "src/components/catalog-form.tsx",
@@ -1534,9 +1634,9 @@
       "sha256": "f10c921af98092cf4a5cc6c43a3967c3105b0fc3c9e03ebb93069b18298daf74"
     },
     {
-      "path": "src/components/welcome-journey.tsx",
-      "bytes": 6480,
-      "sha256": "e1e7ed71152537807688ab897fbf048235be0dd2ddbe56265cb9f0aea0afa5cd"
+      "path": "src/components/welcome-photo.tsx",
+      "bytes": 728,
+      "sha256": "90aeba80a175e39343064935f9325070201b1881b3cffcc2fa06936a0a9bb3ee"
     },
     {
       "path": "src/components/workspace-link.tsx",
@@ -1565,8 +1665,8 @@
     },
     {
       "path": "src/lib/client.ts",
-      "bytes": 9258,
-      "sha256": "cb009a73e9fa1ac2aa40d587a66cd1112583d383eb0a88f5a869d2d7294f88bf"
+      "bytes": 9595,
+      "sha256": "aceaed37cb301c10e65919ce291a0af2e5195d1cede8c1d80d910fc8e4177611"
     },
     {
       "path": "src/lib/db.ts",
@@ -1625,8 +1725,8 @@
     },
     {
       "path": "src/services/assistant.ts",
-      "bytes": 8880,
-      "sha256": "81466e5dd0f2fb4df41944d02c6f4de9b45c0215f12d4f5125c2b0fcad2f994c"
+      "bytes": 12434,
+      "sha256": "560a1a42bc23bf987a4adae7d169c4d60b7328ee2b089b8f85cb85ad3c9d28f0"
     },
     {
       "path": "src/services/catalog.ts",
@@ -1689,9 +1789,14 @@
       "sha256": "88beef18f07b4a2c9c57463d91b5653c54665f12d8cce146a95dd92acf5aa094"
     },
     {
+      "path": "tests/api-retry.test.ts",
+      "bytes": 2666,
+      "sha256": "2e05626e6c9e9c111a4cadf51c88e9ce3172c37a570977c1898aca71465f16a3"
+    },
+    {
       "path": "tests/assistant.test.ts",
-      "bytes": 10612,
-      "sha256": "de6973e668495de9f49765343b17e879d40966d03b0e191d649fb9d841b779cd"
+      "bytes": 15060,
+      "sha256": "5b91c585c5924f8eff232216e116edb3c92785f7933fc84bd1c709d31a257ec5"
     },
     {
       "path": "tests/auth-config.test.ts",

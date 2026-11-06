@@ -1,0 +1,5 @@
+PASS frequência temporária mantém pergunta, bloqueia novas chamadas e informa contagem
+PASS limpar e fechar conversa não geram nova consulta nem removem cooldown
+PASS cota indisponível explica faturamento separado e não oferece falsa espera resolutiva
+PASS limite local é distinto e não deixa o link de cota anterior
+PASS 429 desconhecido não afirma saldo insuficiente e mantém orientação segura

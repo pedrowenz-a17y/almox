@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.4.0
+# Almox ERP · U.C.A. — versão 2.4.1
+
+**Versão 2.4.1:** login com foto limpa, layout ajustado à tela e avisos da IA que distinguem espera temporária de cota da API. [Veja as mudanças e como atualizar](docs/LOGIN-IA-2.4.1.md).
 
 **Versão 2.4.0:** retiradas produtivas por O.S./O.P., identificação na entrega, devoluções pendentes, conferências periódicas e custos de materiais com conciliação por arquivo. [Fluxo, atualização e limites](docs/CONTROLE-OPERACIONAL-2.4.md). [Diagnóstico do banco no CMD](docs/DIAGNOSTICO-BANCO.md).
 

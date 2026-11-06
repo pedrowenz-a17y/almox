@@ -1,0 +1,5 @@
+PASS foto sem caminho, caixas, legenda rotativa ou animação contínua
+PASS login cabe na tela de computador, celular e paisagem sem rolagem
+PASS erro de acesso permanece visível e não cria rolagem nas telas comuns
+PASS senha, recuperação, teclado e movimento reduzido preservados
+PASS tela excepcionalmente pequena mantém campos acessíveis por rolagem

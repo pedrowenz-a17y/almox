@@ -193,3 +193,22 @@
 .ai-assistant > strong {
   color: var(--teal-dark);
 }
+
+.ai-error {
+  display: block;
+  line-height: 1.7;
+}
+.ai-error p {
+  margin: 0;
+}
+.ai-error a {
+  display: inline-block;
+  margin-top: 8px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.ai-limit-status {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 8px 0 12px;
+}

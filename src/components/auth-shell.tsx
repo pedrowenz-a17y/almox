@@ -5,17 +5,19 @@ import { ArrowDown, LockKeyhole, ShieldCheck, Wrench } from "lucide-react";
 import { brand } from "@/lib/brand";
 import { Pwa } from "@/components/pwa";
 import { useMotion } from "@/components/motion-preferences";
-import { WelcomeJourney } from "@/components/welcome-journey";
+import { WelcomePhoto } from "@/components/welcome-photo";
 import { WelcomeEffects } from "@/components/welcome-effects";
 
 export default function AuthShell({
   title,
   description,
   children,
+  fitScreen = false,
 }: {
   title: string;
   description: string;
   children: React.ReactNode;
+  fitScreen?: boolean;
 }) {
   const root = useRef<HTMLElement>(null);
   const visual = useRef<HTMLElement>(null);
@@ -24,7 +26,7 @@ export default function AuthShell({
   return (
     <main
       ref={root}
-      className={`login-shell uca-auth-shell welcome-shell ${formFocused ? "auth-is-editing" : ""}`}
+      className={`login-shell uca-auth-shell welcome-shell ${fitScreen ? "login-screen" : ""} ${formFocused ? "auth-is-editing" : ""}`}
     >
       <section className="login-story uca-login-visual" ref={visual}>
         <div className="welcome-ambient" aria-hidden="true">
@@ -79,10 +81,12 @@ export default function AuthShell({
             <br />
             Mais tempo fazendo acontecer.
           </p>
-          <WelcomeJourney paused={formFocused} />
-          <a className="welcome-skip" href="#login-access">
-            Ir para o acesso <ArrowDown size={15} />
-          </a>
+          <WelcomePhoto />
+          {!fitScreen && (
+            <a className="welcome-skip" href="#login-access">
+              Ir para o acesso <ArrowDown size={15} />
+            </a>
+          )}
         </div>
         <p className="uca-auth-context">
           <span>{brand.context}</span>
