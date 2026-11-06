@@ -1,0 +1,16 @@
+{
+  "scope": "Servidor de produção em loopback com configuração Supabase fictícia e sem sessão; sem login ou conexão ao provedor real.",
+  "passed": 10,
+  "checks": [
+    "Acesso anônimo recusado: /api/operational-pending",
+    "Acesso anônimo recusado: /api/inventory-schedules",
+    "Acesso anônimo recusado: /api/order-costs",
+    "Acesso anônimo recusado: /api/reconciliation",
+    "Acesso anônimo recusado: /api/inventory/123e4567-e89b-42d3-a456-000000009999",
+    "Origem externa recusada: /api/inventory-schedules",
+    "Origem externa recusada: /api/reconciliation/preview",
+    "Origem externa recusada: /api/inventory/123e4567-e89b-42d3-a456-000000009999/reject",
+    "Tela pública de login responde no servidor de produção",
+    "Página interna sem sessão redireciona para login"
+  ]
+}

@@ -262,10 +262,12 @@ describe("movimentações reais no PostgreSQL", () => {
     const entry = await enter(100);
     const exit = await createMovement(f.operator, {
       type: "EXIT",
+      purpose: "OTHER", note: "Material destinado a uso administrativo",
+      receivedByName: "Responsável de teste", receivedByIdentifier: "MAT-TEST-1",
       productId: f.productId,
       sourceId: f.sourceId,
       quantity: 15,
-      reference: "OS-2026-001",
+      reference: "ADMIN-TEST-001",
       idempotencyKey: requestKey(),
     });
     const transfer = await createMovement(f.operator, {
@@ -295,7 +297,7 @@ describe("movimentações reais no PostgreSQL", () => {
     assert.equal(history[0].destinationAfter?.toFixed(3), "100.000");
     assert.equal(history[1].sourceBefore?.toFixed(3), "100.000");
     assert.equal(history[1].sourceAfter?.toFixed(3), "85.000");
-    assert.equal(history[1].reference, "OS-2026-001");
+    assert.equal(history[1].reference, "ADMIN-TEST-001");
     assert.equal(history[2].sourceAfter?.toFixed(3), "60.000");
     assert.equal(history[2].destinationAfter?.toFixed(3), "25.000");
     for (const movement of [entry, exit, transfer]) {
@@ -330,6 +332,8 @@ describe("movimentações reais no PostgreSQL", () => {
     await assert.rejects(
       createMovement(f.operator, {
         type: "EXIT",
+        purpose: "OTHER", note: "Material destinado a uso administrativo",
+        receivedByName: "Responsável de teste", receivedByIdentifier: "MAT-TEST-1",
         productId: f.productId,
         sourceId: f.sourceId,
         quantity: 11,
@@ -554,6 +558,8 @@ describe("movimentações reais no PostgreSQL", () => {
       [1, 2].map(() =>
         createMovement(f.operator, {
           type: "EXIT",
+          purpose: "OTHER", note: "Material destinado a uso administrativo",
+          receivedByName: "Responsável de teste", receivedByIdentifier: "MAT-TEST-1",
           productId: f.productId,
           sourceId: f.sourceId,
           quantity: 80,
@@ -583,6 +589,8 @@ describe("movimentações reais no PostgreSQL", () => {
     });
     await assert.rejects(createMovement(f.operator, {
       type: "EXIT",
+      purpose: "OTHER", note: "Material destinado a uso administrativo",
+      receivedByName: "Responsável de teste", receivedByIdentifier: "MAT-TEST-1",
       productId: f.productId,
       sourceId: f.sourceId,
       quantity: 2,
@@ -794,6 +802,8 @@ describe("inventário e aprovação", () => {
     await enter(1);
     await createMovement(f.operator, {
       type: "EXIT",
+      purpose: "OTHER", note: "Material destinado a uso administrativo",
+      receivedByName: "Responsável de teste", receivedByIdentifier: "MAT-TEST-1",
       productId: f.productId,
       sourceId: f.sourceId,
       quantity: 1,

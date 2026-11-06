@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
 import {
   assertActiveLocation,
@@ -19,6 +20,8 @@ import {
 export const inventorySchema = z
   .object({
     locationId: z.string().uuid(),
+    scheduleId: z.string().uuid().optional(),
+    allowEarly: z.boolean().optional(),
     items: z
       .array(
         z
@@ -65,6 +68,17 @@ export const countInclude = {
   },
 } satisfies Prisma.InventoryCountInclude;
 
+export async function getInventoryCount(actor: StockActor, rawId: string) {
+  requirePermission(actor, "inventory:count");
+  const id = z.string().uuid().parse(rawId);
+  const count = await prisma.inventoryCount.findFirst({
+    where: { id, unitId: actor.unitId },
+    include: countInclude,
+  });
+  if (!count) throw new AppError("Contagem não encontrada.", 404);
+  return count;
+}
+
 function staleCount() {
   return new AppError(
     "O estoque desta localização mudou desde a contagem. Atualize os saldos e registre uma nova contagem.",
@@ -81,6 +95,12 @@ export async function createInventoryCount(
   const parsed = inventorySchema.parse(rawInput);
   const input = {
     locationId: parsed.locationId,
+    ...(parsed.scheduleId
+      ? {
+          scheduleId: parsed.scheduleId,
+          allowEarly: parsed.allowEarly ?? false,
+        }
+      : {}),
     note: parsed.note,
     items: [...parsed.items].sort((a, b) =>
       a.productId.localeCompare(b.productId),
@@ -109,6 +129,46 @@ export async function createInventoryCount(
     }
 
     await assertActiveLocation(tx, input.locationId, actor.unitId);
+    const schedule = input.scheduleId
+      ? await tx.inventorySchedule.findFirst({
+          where: {
+            id: input.scheduleId,
+            unitId: actor.unitId,
+            locationId: input.locationId,
+            active: true,
+          },
+        })
+      : null;
+    if (input.scheduleId && !schedule)
+      throw new AppError(
+        "A programação está inativa, mudou de local ou não pertence a esta unidade.",
+        409,
+      );
+    if (
+      schedule &&
+      schedule.nextDueAt.getTime() > Date.now() &&
+      !input.allowEarly
+    )
+      throw new AppError(
+        "Esta conferência ainda não venceu. Confirme explicitamente a antecipação para registrá-la.",
+        409,
+      );
+    if (
+      schedule &&
+      (await tx.inventoryCount.findFirst({
+        where: {
+          unitId: actor.unitId,
+          scheduleId: schedule.id,
+          scheduleDueAt: schedule.nextDueAt,
+          status: "PENDING",
+        },
+        select: { id: true },
+      }))
+    )
+      throw new AppError(
+        "Este ciclo já tem uma contagem aguardando aprovação. Se ela estiver desatualizada, um supervisor deve encerrá-la antes da recontagem.",
+        409,
+      );
     const balances = await tx.inventoryBalance.findMany({
       where: { locationId: input.locationId, unitId: actor.unitId },
     });
@@ -138,7 +198,12 @@ export async function createInventoryCount(
     for (const item of input.items) {
       await assertActiveProduct(tx, item.productId, actor.unitId);
       const expected = new Prisma.Decimal(item.expectedQuantity);
-      const stock = await availability(tx, item.productId, input.locationId, actor.unitId);
+      const stock = await availability(
+        tx,
+        item.productId,
+        input.locationId,
+        actor.unitId,
+      );
       if (!stock.physical.eq(expected)) throw staleCount();
       const counted = new Prisma.Decimal(item.countedQuantity);
       const difference = counted.minus(expected);
@@ -158,9 +223,14 @@ export async function createInventoryCount(
         locationId: input.locationId,
         unitId: actor.unitId,
         userId: actor.id,
+        ...(schedule
+          ? { scheduleId: schedule.id, scheduleDueAt: schedule.nextDueAt }
+          : {}),
         note: input.note,
         status: "PENDING",
-        items: { create: items.map((item) => ({ ...item, unitId: actor.unitId })) },
+        items: {
+          create: items.map((item) => ({ ...item, unitId: actor.unitId })),
+        },
       },
       include: countInclude,
     });
@@ -174,6 +244,13 @@ export async function createInventoryCount(
         after: {
           status: "PENDING",
           locationId: input.locationId,
+          ...(schedule
+            ? {
+                scheduleId: schedule.id,
+                scheduleDueAt: schedule.nextDueAt.toISOString(),
+                anticipated: Boolean(input.allowEarly),
+              }
+            : {}),
           note: input.note,
           items: items.map((item) => ({
             productId: item.productId,
@@ -211,6 +288,11 @@ export async function approveInventoryCount(actor: StockActor, rawId: string) {
     });
     if (!count) throw new AppError("Contagem não encontrada.", 404);
     if (count.status === "APPROVED") return count;
+    if (count.status === "REJECTED")
+      throw new AppError(
+        "Esta contagem foi encerrada sem ajuste. Registre uma nova contagem.",
+        409,
+      );
 
     await assertActiveLocation(tx, count.locationId, actor.unitId);
     const balances = await tx.inventoryBalance.findMany({
@@ -232,7 +314,12 @@ export async function approveInventoryCount(actor: StockActor, rawId: string) {
     for (const item of count.items) {
       await assertActiveProduct(tx, item.productId, actor.unitId);
       const balance = byProduct.get(item.productId);
-      const stock = await availability(tx, item.productId, count.locationId, actor.unitId);
+      const stock = await availability(
+        tx,
+        item.productId,
+        count.locationId,
+        actor.unitId,
+      );
       if (
         !stock.physical.eq(item.expectedQuantity) ||
         !stock.applied.eq(item.expectedAppliedQuantity) ||
@@ -240,14 +327,21 @@ export async function approveInventoryCount(actor: StockActor, rawId: string) {
       )
         throw staleCount();
       if (item.countedQuantity.lt(stock.reserved))
-        throw new AppError("A contagem deixaria reservas sem saldo. Libere ou corrija as reservas antes de aprovar o ajuste.", 409);
+        throw new AppError(
+          "A contagem deixaria reservas sem saldo. Libere ou corrija as reservas antes de aprovar o ajuste.",
+          409,
+        );
     }
 
     for (const item of count.items) {
       if (item.difference.isZero()) continue;
       const incoming = item.difference.gt(0);
-      const bookedBefore = item.expectedQuantity.plus(item.expectedAppliedQuantity);
-      const bookedAfter = item.countedQuantity.plus(item.expectedAppliedQuantity);
+      const bookedBefore = item.expectedQuantity.plus(
+        item.expectedAppliedQuantity,
+      );
+      const bookedAfter = item.countedQuantity.plus(
+        item.expectedAppliedQuantity,
+      );
       await writeBalance(
         tx,
         item.productId,
@@ -299,15 +393,56 @@ export async function approveInventoryCount(actor: StockActor, rawId: string) {
         },
       });
     }
+    const approvedAt = new Date();
     const approved = await tx.inventoryCount.update({
       where: { id: count.id },
       data: {
         status: "APPROVED",
         approvedById: actor.id,
-        approvedAt: new Date(),
+        approvedAt,
       },
       include: countInclude,
     });
+    if (count.scheduleId && count.scheduleDueAt) {
+      const schedule = await tx.inventorySchedule.findFirst({
+        where: {
+          id: count.scheduleId,
+          unitId: actor.unitId,
+          locationId: count.locationId,
+          active: true,
+        },
+      });
+      if (
+        schedule &&
+        schedule.nextDueAt.getTime() === count.scheduleDueAt.getTime()
+      ) {
+        // Only the approved snapshot can close this cycle. A reprogrammed or already closed
+        // cycle is preserved, so older pending counts cannot advance it a second time.
+        const nextDueAt = new Date(
+          Math.max(approvedAt.getTime(), schedule.nextDueAt.getTime()) +
+            schedule.intervalDays * 86400000,
+        );
+        await tx.inventorySchedule.update({
+          where: { id: schedule.id },
+          data: { nextDueAt, lastCountId: count.id },
+        });
+        await tx.auditLog.create({
+          data: {
+            unitId: actor.unitId,
+            userId: actor.id,
+            action: "INVENTORY_SCHEDULE_COMPLETED",
+            entity: "InventorySchedule",
+            entityId: schedule.id,
+            before: { nextDueAt: schedule.nextDueAt.toISOString() },
+            after: {
+              countId: count.id,
+              approvedAt: approvedAt.toISOString(),
+              nextDueAt: nextDueAt.toISOString(),
+            },
+          },
+        });
+      }
+    }
     await tx.auditLog.create({
       data: {
         userId: actor.id,
@@ -324,5 +459,54 @@ export async function approveInventoryCount(actor: StockActor, rawId: string) {
       },
     });
     return approved;
+  });
+}
+
+/** A rejected proposal does not change balances or complete a scheduled cycle. */
+export async function rejectInventoryCount(
+  actor: StockActor,
+  rawId: string,
+  rawInput: unknown,
+) {
+  requirePermission(actor, "inventory:adjust");
+  const id = z.string().uuid().parse(rawId);
+  const { note } = z
+    .object({ note: z.string().trim().min(10).max(2000) })
+    .strict()
+    .parse(rawInput);
+  return serializable(async (tx) => {
+    const count = await tx.inventoryCount.findFirst({
+      where: { id, unitId: actor.unitId },
+      include: countInclude,
+    });
+    if (!count) throw new AppError("Contagem não encontrada.", 404);
+    if (count.status === "REJECTED") return count;
+    if (count.status === "APPROVED")
+      throw new AppError(
+        "Uma contagem aprovada não pode ser encerrada sem ajuste.",
+        409,
+      );
+    const rejected = await tx.inventoryCount.update({
+      where: { id },
+      data: { status: "REJECTED" },
+      include: countInclude,
+    });
+    await tx.auditLog.create({
+      data: {
+        unitId: actor.unitId,
+        userId: actor.id,
+        action: "INVENTORY_REJECTED",
+        entity: "InventoryCount",
+        entityId: count.id,
+        before: { status: count.status },
+        after: {
+          status: "REJECTED",
+          note,
+          locationId: count.locationId,
+          scheduleId: count.scheduleId,
+        },
+      },
+    });
+    return rejected;
   });
 }

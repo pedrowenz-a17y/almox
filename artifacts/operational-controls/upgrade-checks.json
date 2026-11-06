@@ -1,0 +1,10 @@
+{
+  "scope": "Atualização de cópia fictícia criada em PostgreSQL local isolado; nenhum banco empresarial acessado.",
+  "checks": [
+    "Ordens abertas/faturadas, quantidades e saldo legado preservados",
+    "Sem custo retroativo inventado, mesmo com preço cadastral existente",
+    "Contagens anteriores preservadas sem vínculo artificial de agenda",
+    "Novas tabelas com RLS habilitada"
+  ],
+  "passed": 4
+}

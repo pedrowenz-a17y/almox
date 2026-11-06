@@ -2,6 +2,9 @@
 const views = new Set([
   "/",
   "/dashboard",
+  "/pendencias",
+  "/conferencias",
+  "/conciliacao",
   "/produtos",
   "/estoque",
   "/localizacoes",

@@ -1,11 +1,15 @@
 import "dotenv/config";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
-import { chromium } from "@playwright/test";
+import { chromium, expect } from "@playwright/test";
+import { randomUUID } from "node:crypto";
 import { qaConfig, qaCredentials } from "./qa-config.mjs";
 const { baseURL: base, unitId } = qaConfig({ writes: true });
 const credentials = qaCredentials("ADMIN");
-assert.ok(process.env.QA_LOCATION_ID, "Defina QA_LOCATION_ID de um local pai na unidade exclusiva de testes.");
+assert.ok(
+  process.env.QA_LOCATION_ID,
+  "Defina QA_LOCATION_ID de um local pai na unidade exclusiva de testes.",
+);
 await fs.mkdir("artifacts", { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
@@ -27,19 +31,30 @@ const data = async () => {
 };
 try {
   await page.goto(`${base}/login`);
-  await page
-    .getByLabel("E-mail", { exact: true })
-    .fill(credentials.email);
-  await page
-    .getByLabel("Senha", { exact: true })
-    .fill(credentials.password);
+  await page.getByLabel("E-mail", { exact: true }).fill(credentials.email);
+  await page.getByLabel("Senha", { exact: true }).fill(credentials.password);
   await page.getByRole("button", { name: "Entrar no almoxarifado" }).click();
   await page.waitForURL("**/dashboard");
-  const selection = await context.request.post(`${base}/api/unit`, { headers: { Origin: base }, data: { unitId } });
+  const selection = await context.request.post(`${base}/api/unit`, {
+    headers: { Origin: base },
+    data: { unitId },
+  });
   assert.equal(selection.status(), 200, await selection.text());
+  const meResponse = await context.request.get(`${base}/api/me`);
+  assert.equal(meResponse.status(), 200);
+  const actor = (await meResponse.json()).data;
+  const participant = {
+    name: "Pessoa de homologação de retirada",
+    identifier: `QA-${tag}`,
+  };
   const initial = await data();
-  const sector = initial.locations.find((l) => l.id === process.env.QA_LOCATION_ID);
-  assert.ok(sector, "Localização pai ausente ou fora da unidade de homologação.");
+  const sector = initial.locations.find(
+    (l) => l.id === process.env.QA_LOCATION_ID,
+  );
+  assert.ok(
+    sector,
+    "Localização pai ausente ou fora da unidade de homologação.",
+  );
   await page.goto(`${base}/produtos`);
   await page.getByRole("button", { name: "Novo produto", exact: true }).click();
   let dialog = page.getByRole("dialog");
@@ -84,6 +99,62 @@ try {
   const move = async (action, quantity) => {
     await page.getByRole("button", { name: action, exact: true }).click();
     const d = page.getByRole("dialog");
+    const withdrawal = action === "Retirar material";
+    if (withdrawal) {
+      await d
+        .getByRole("combobox", { name: "Finalidade da saída", exact: true })
+        .selectOption("PRODUCTIVE");
+      await expect(
+        d.getByRole("button", { name: "Revisar movimentação", exact: true }),
+      ).toBeDisabled();
+      await expect(
+        d.getByRole("button", { name: "Abrir O.S.", exact: true }),
+      ).toBeVisible();
+      await expect(
+        d.getByRole("button", { name: "Abrir O.P.", exact: true }),
+      ).toBeVisible();
+      const forbidden = await context.request.post(`${base}/api/movements`, {
+        headers: { Origin: base },
+        data: {
+          type: "EXIT",
+          purpose: "PRODUCTIVE",
+          productId: product.id,
+          quantity: "1",
+          sourceId: source.id,
+          note: "Tentativa produtiva controlada da homologação",
+          idempotencyKey: randomUUID(),
+        },
+      });
+      assert.equal(
+        forbidden.status(),
+        400,
+        "O servidor também deve exigir ordem em saída produtiva.",
+      );
+      assert.equal(
+        Number(
+          (await data()).balances.find(
+            (item) =>
+              item.productId === product.id && item.locationId === source.id,
+          ).quantity,
+        ),
+        100,
+      );
+      checks.push(
+        "Retirada produtiva avulsa bloqueada na UI e na API, sem alterar estoque",
+      );
+      await d
+        .getByRole("combobox", { name: "Finalidade da saída", exact: true })
+        .selectOption("OTHER");
+      await d
+        .getByLabel("Quem retirou o material", { exact: true })
+        .fill(participant.name);
+      await d
+        .getByLabel("Matrícula ou identificação da pessoa", { exact: true })
+        .fill(participant.identifier);
+      await d
+        .getByLabel("Justificativa da saída (obrigatória)", { exact: true })
+        .fill("Uso não produtivo exclusivo da homologação controlada");
+    }
     await d
       .locator("label")
       .filter({ hasText: "Produto / material" })
@@ -91,8 +162,48 @@ try {
       .selectOption(product.id);
     await d.getByRole("spinbutton").fill(quantity);
     await d.getByRole("button", { name: "Revisar movimentação" }).click();
+    const pending = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === "/api/movements" &&
+        response.request().method() === "POST",
+    );
     await d.getByRole("button", { name: "Confirmar movimentação" }).click();
+    const response = await pending;
+    const payload = response.request().postDataJSON();
+    const result = await response.json();
+    assert.equal(
+      response.status(),
+      201,
+      result.error || "A movimentação precisa ser confirmada pelo servidor.",
+    );
+    assert.equal(Number(payload.quantity), Number(quantity));
+    assert.equal(payload.type, withdrawal ? "EXIT" : "ENTRY");
+    assert.ok(payload.idempotencyKey);
+    if (withdrawal) {
+      assert.equal(payload.purpose, "OTHER");
+      assert.equal(payload.receivedByName, participant.name);
+      assert.equal(payload.receivedByIdentifier, participant.identifier);
+      assert.equal(
+        payload.deliveredById,
+        undefined,
+        "O entregador vem da sessão do servidor.",
+      );
+    }
     await d.waitFor({ state: "hidden" });
+    if (withdrawal) {
+      const audit = (await data()).audit.find(
+        (item) => item.entityId === result.data.id && item.action === "EXIT",
+      );
+      assert.ok(audit, "A retirada precisa de auditoria persistida.");
+      assert.equal(audit.after.purpose, "OTHER");
+      assert.equal(audit.after.handoff.deliveredById, actor.id);
+      assert.equal(audit.after.handoff.receivedByName, participant.name);
+      assert.equal(
+        audit.after.handoff.receivedByIdentifier,
+        participant.identifier,
+      );
+      assert.equal(audit.after.handoff.confirmation, "DECLARED_BY_OPERATOR");
+    }
   };
   await move("Entrada", "100");
   assert.equal(
@@ -109,7 +220,9 @@ try {
     ).quantity,
     "85",
   );
-  checks.push("Retirada de 15 pela UI");
+  checks.push(
+    "Retirada não produtiva de 15 pela UI com motivo, pessoa identificada e entregador autenticado na auditoria",
+  );
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${base}/operacao`);
   await page

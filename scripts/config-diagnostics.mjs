@@ -86,7 +86,7 @@ export function inspectConfiguration(env, { production = false } = {}) {
       "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
       role === "public" ? "ok" : "error",
       role === "public"
-        ? "Chave de tipo público reconhecida; o provedor confirma sua validade."
+        ? "Formato de chave pública reconhecido; a validade será consultada no serviço de autenticação."
         : role === "secret"
           ? "Esta variável contém uma chave administrativa. Substitua pela Publishable/anon e faça a rotação da chave exposta no Supabase."
           : "Copie a chave Publishable (ou anon legada) do mesmo projeto Supabase.",
@@ -112,10 +112,20 @@ export function databaseFailure(code) {
       "O servidor do banco não foi alcançado. Confira projeto ativo, rede e host. Em rede sem IPv6, use a conexão Session pooler fornecida pelo Supabase.",
     P1002:
       "A conexão com o banco excedeu o tempo de espera. Confira a rede e o estado do projeto Supabase.",
+    P1003:
+      "O banco informado não existe neste servidor. Copie a conexão completa de Connect no Supabase, sem alterar o nome da base manualmente.",
+    P1010:
+      "O usuário do banco não possui acesso à base informada. Confira o usuário e as permissões fornecidos pelo administrador.",
     P1011:
       "A conexão TLS com o banco falhou. Confira os parâmetros e certificados indicados pelo provedor; mantenha a verificação habilitada.",
+    P1017:
+      "O servidor encerrou a conexão. Confira o estado do projeto, o pooler e os limites de conexões antes de tentar novamente.",
     P2021:
       "As tabelas do ERP não foram encontradas. Revise a instalação/migração desta base antes de aplicar migrations; preserve dados e backups existentes.",
+    P2022:
+      "A estrutura do banco está diferente da versão do aplicativo: uma coluna necessária não foi encontrada. Revise as migrations e preserve dados e backups existentes.",
+    P2024:
+      "O tempo de espera por uma conexão do pool foi excedido. Revise os limites e o modo de conexão indicado pelo Supabase; reinicie processos locais que não estão em uso.",
   };
   return (
     messages[code] ||

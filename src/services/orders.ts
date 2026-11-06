@@ -32,14 +32,22 @@ const common = {
 const materialAction = {
   ...common, materialId: z.string().uuid(), quantity: quantitySchema({ positive: true }),
 };
+const personName = z.string().trim().min(3).max(120);
+const personIdentifier = z.string().trim().min(1).max(80);
+const reason = z.string().trim().min(10).max(2000);
 export const orderActionSchema = z.discriminatedUnion("action", [
   z.object({ ...common, action: z.literal("REQUEST"), productId: z.string().uuid(),
     locationId: z.string().uuid(), quantity: quantitySchema({ positive: true }),
     unit: z.string().trim().min(1).max(20).optional() }).strict(),
   z.object({ ...materialAction, action: z.literal("RESERVE") }).strict(),
   z.object({ ...materialAction, action: z.literal("RELEASE") }).strict(),
-  z.object({ ...materialAction, action: z.literal("APPLY") }).strict(),
-  z.object({ ...materialAction, action: z.literal("RETURN"), note: z.string().trim().min(3).max(2000) }).strict(),
+  z.object({ ...materialAction, action: z.literal("APPLY"),
+    receivedByName: personName, receivedByIdentifier: personIdentifier }).strict(),
+  z.object({ ...materialAction, action: z.literal("REQUEST_RETURN"), note: reason }).strict(),
+  z.object({ ...materialAction, action: z.literal("CANCEL_RETURN"), note: reason }).strict(),
+  z.object({ ...materialAction, action: z.literal("REDUCE_REQUEST"), note: reason }).strict(),
+  z.object({ ...materialAction, action: z.literal("RETURN"), note: z.string().trim().min(3).max(2000),
+    returnedByName: personName, returnedByIdentifier: personIdentifier }).strict(),
   z.object({ ...common, action: z.literal("INVOICE"), reference: z.string().trim().min(1).max(200) }).strict(),
   z.object({ ...common, action: z.literal("CANCEL"), note: z.string().trim().min(3).max(2000) }).strict(),
 ]);
@@ -49,6 +57,19 @@ export const paginationSchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).default(25),
   q: z.string().trim().max(100).default(""),
 });
+
+/** Material valuation is financial information, including in mutation responses. */
+function redactOrderCosts<T>(actor: StockActor, value: T): T {
+  if (actor.permissions.includes("costs:read")) return value;
+  function scrub(input: unknown): unknown {
+    if (Array.isArray(input)) return input.map(scrub);
+    if (input && typeof input === "object" && !(input instanceof Date) && !Prisma.Decimal.isDecimal(input))
+      return Object.fromEntries(Object.entries(input).filter(([key]) => key !== "invoicedUnitCost")
+        .map(([key, item]) => [key, scrub(item)]));
+    return input;
+  }
+  return scrub(value) as T;
+}
 
 export async function listOrders(actor: StockActor, query: Record<string, unknown> = {}) {
   requirePermission(actor, "orders:read");
@@ -61,7 +82,7 @@ export async function listOrders(actor: StockActor, query: Record<string, unknow
       take: pageSize, orderBy: { createdAt: "desc" } }),
     prisma.workOrder.count({ where }),
   ]);
-  return { items, total, page, pageSize };
+  return redactOrderCosts(actor, { items, total, page, pageSize });
 }
 
 async function scopedOrder(tx: StockTransaction, actor: StockActor, id: string) {
@@ -72,7 +93,7 @@ async function scopedOrder(tx: StockTransaction, actor: StockActor, id: string) 
 
 export async function getOrder(actor: StockActor, rawId: string) {
   requirePermission(actor, "orders:read");
-  return scopedOrder(prisma, actor, z.string().uuid().parse(rawId));
+  return redactOrderCosts(actor, await scopedOrder(prisma, actor, z.string().uuid().parse(rawId)));
 }
 
 async function remember(tx: StockTransaction, actor: StockActor, key: string, hash: string, type: string, id: string) {
@@ -96,7 +117,7 @@ export async function createOrder(actor: StockActor, rawInput: unknown) {
   requirePermission(actor, "orders:write");
   const { idempotencyKey, ...input } = orderSchema.parse(rawInput);
   const hash = payloadHash(actor, "order:create", input);
-  return serializable(async (tx) => {
+  const result = await serializable(async (tx) => {
     const previous = await findIdempotentResource(tx, actor, idempotencyKey, hash, "order");
     if (previous) return scopedOrder(tx, actor, previous);
     const order = await tx.workOrder.create({ data: { ...input, unitId: actor.unitId, userId: actor.id } });
@@ -104,6 +125,7 @@ export async function createOrder(actor: StockActor, rawInput: unknown) {
     await remember(tx, actor, idempotencyKey, hash, "order", order.id);
     return scopedOrder(tx, actor, order.id);
   });
+  return redactOrderCosts(actor, result);
 }
 
 /** Reservation, application, invoicing and compensation are separate audited state transitions. */
@@ -111,10 +133,10 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
   const id = z.string().uuid().parse(rawId);
   const { idempotencyKey, ...input } = orderActionSchema.parse(rawInput);
   const permission = input.action === "INVOICE" ? "orders:invoice"
-    : ["APPLY", "RETURN"].includes(input.action) ? "orders:apply" : "orders:write";
+    : ["APPLY", "RETURN", "REQUEST_RETURN", "CANCEL_RETURN"].includes(input.action) ? "orders:apply" : "orders:write";
   requirePermission(actor, permission);
   const hash = payloadHash(actor, "order:action", { id, ...input });
-  return serializable(async (tx) => {
+  const result = await serializable(async (tx) => {
     const previous = await findIdempotentResource(tx, actor, idempotencyKey, hash, "orderAction");
     if (previous) return scopedOrder(tx, actor, previous);
     const order = await scopedOrder(tx, actor, id);
@@ -129,7 +151,7 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
       await remember(tx, actor, idempotencyKey, hash, "orderAction", id);
       return order;
     }
-    if (order.status === "CANCELLED" || (order.status === "INVOICED" && input.action !== "RETURN"))
+    if (order.status === "CANCELLED" || (order.status === "INVOICED" && !["RETURN", "REQUEST_RETURN", "CANCEL_RETURN"].includes(input.action)))
       throw new AppError("A situação desta ordem não permite esta operação.", 409);
 
     if (input.action === "REQUEST") {
@@ -150,6 +172,8 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
       update: { requestedQuantity: { increment: quantity } } });
       await event(tx, actor, id, "REQUESTED", { materialId: material.id, quantity, note: input.note });
     } else if (input.action === "INVOICE") {
+      if (order.materials.some(material => material.pendingReturnQuantity.gt(0)))
+        throw new AppError("Confirme o recebimento das devoluções pendentes antes de faturar a ordem.", 409);
       if (order.materials.some(material => material.reservedQuantity.gt(0)))
         throw new AppError("Aplique ou libere todas as reservas antes de confirmar o faturamento.", 409);
       if (order.materials.some(material => !material.requestedQuantity.eq(
@@ -159,11 +183,15 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
       const applied = order.materials.filter(material => material.appliedQuantity.gt(0));
       if (!applied.length) throw new AppError("Não há materiais aplicados pendentes de baixa.", 409);
       for (const material of applied) {
+        // This is a catalog estimate captured now, never an implicit ERP costing method.
+        const valuation = await tx.product.findFirstOrThrow({ where: { id: material.productId, unitId: actor.unitId },
+          select: { unitCost: true } });
         await documentMovement(tx, actor, { type: "EXIT", productId: material.productId,
           locationId: material.locationId, quantity: material.appliedQuantity,
           note: input.note, reference: input.reference, workOrderId: id, orderMaterialId: material.id });
         await tx.orderMaterial.update({ where: { id: material.id }, data: {
           consumedQuantity: { increment: material.appliedQuantity }, appliedQuantity: 0,
+          invoicedUnitCost: valuation.unitCost,
         } });
         await event(tx, actor, id, "CONSUMED", { materialId: material.id, quantity: material.appliedQuantity,
           note: input.note, reference: input.reference });
@@ -172,6 +200,8 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
         invoiceReference: input.reference, invoicedAt: new Date() } });
       await event(tx, actor, id, "INVOICED", { note: input.note, reference: input.reference });
     } else if (input.action === "CANCEL") {
+      if (order.materials.some(material => material.pendingReturnQuantity.gt(0)))
+        throw new AppError("Confirme as devoluções pendentes antes de cancelar a ordem.", 409);
       if (order.materials.some(material => material.appliedQuantity.gt(0)))
         throw new AppError("Registre a devolução dos materiais aplicados antes de cancelar a ordem.", 409);
       for (const material of order.materials.filter(item => item.reservedQuantity.gt(0))) {
@@ -190,6 +220,7 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
       const quantity = new Prisma.Decimal(input.quantity);
       const stock = await availability(tx, material.productId, material.locationId, actor.unitId);
       const data: Prisma.OrderMaterialUpdateInput = {};
+      const handoff: Record<string, Prisma.InputJsonValue> = {};
       let type: string = input.action;
       if (input.action === "RESERVE") {
         const pending = material.requestedQuantity.minus(material.reservedQuantity)
@@ -204,10 +235,30 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
         if (quantity.gt(material.reservedQuantity)) throw new AppError("Reserve o material antes de aplicá-lo; quantidade maior que a reserva.", 409);
         data.reservedQuantity = { decrement: quantity };
         data.appliedQuantity = { increment: quantity }; type = "APPLIED";
-      } else if (order.status === "OPEN") {
+        const recorder = await tx.user.findUniqueOrThrow({ where: { id: actor.id }, select: { name: true } });
+        handoff.handoff = { deliveredById: actor.id, deliveredByName: recorder.name,
+          receivedByName: input.receivedByName, receivedByIdentifier: input.receivedByIdentifier,
+          confirmation: "DECLARED_BY_OPERATOR" };
+      } else if (input.action === "REQUEST_RETURN") {
+        const returnable = order.status === "OPEN" ? material.appliedQuantity
+          : material.consumedQuantity.minus(material.returnedQuantity);
+        if (quantity.gt(returnable.minus(material.pendingReturnQuantity)))
+          throw new AppError("Solicitação excede a quantidade disponível para devolução ou já pendente.", 409);
+        data.pendingReturnQuantity = { increment: quantity }; type = "RETURN_REQUESTED";
+      } else if (input.action === "CANCEL_RETURN") {
+        if (quantity.gt(material.pendingReturnQuantity))
+          throw new AppError("Cancelamento excede a quantidade pendente de devolução.", 409);
+        data.pendingReturnQuantity = { decrement: quantity }; type = "RETURN_REQUEST_CANCELLED";
+      } else if (input.action === "REDUCE_REQUEST") {
+        const uncommitted = material.requestedQuantity.minus(material.reservedQuantity)
+          .minus(material.appliedQuantity).minus(material.consumedQuantity).plus(material.returnedQuantity);
+        if (quantity.gt(uncommitted))
+          throw new AppError("Redução excede o saldo solicitado sem reserva ou aplicação. Libere ou devolva os materiais antes.", 409);
+        data.requestedQuantity = { decrement: quantity }; type = "REQUEST_REDUCED";
+      } else if (input.action === "RETURN" && order.status === "OPEN") {
         if (quantity.gt(material.appliedQuantity)) throw new AppError("Devolução excede o material aplicado ainda não baixado.", 409);
         data.appliedQuantity = { decrement: quantity }; type = "RETURNED_BEFORE_INVOICE";
-      } else {
+      } else if (input.action === "RETURN") {
         const returnable = material.consumedQuantity.minus(material.returnedQuantity);
         if (quantity.gt(returnable)) throw new AppError("Devolução excede o consumo ainda não devolvido.", 409);
         const original = await tx.stockMovement.findFirst({ where: { unitId: actor.unitId,
@@ -219,10 +270,21 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
           returnOfId: original.id });
         data.returnedQuantity = { increment: quantity }; type = "RETURNED_AFTER_INVOICE";
       }
+      if (input.action === "RETURN") {
+        data.pendingReturnQuantity = { decrement: Prisma.Decimal.min(quantity, material.pendingReturnQuantity) };
+        const recorder = await tx.user.findUniqueOrThrow({ where: { id: actor.id }, select: { name: true } });
+        handoff.returnReceipt = { receivedById: actor.id, receivedByName: recorder.name,
+          returnedByName: input.returnedByName, returnedByIdentifier: input.returnedByIdentifier,
+          confirmation: "DECLARED_BY_OPERATOR" };
+      }
       const changed = await tx.orderMaterial.update({ where: { id: material.id }, data });
-      await touchBalance(tx, material.productId, material.locationId, actor.unitId);
+      if (!["REQUEST_RETURN", "CANCEL_RETURN", "REDUCE_REQUEST"].includes(input.action))
+        await touchBalance(tx, material.productId, material.locationId, actor.unitId);
       await event(tx, actor, id, type, { materialId: material.id, quantity, note: input.note,
-        metadata: { reservedBefore: material.reservedQuantity.toFixed(3),
+        metadata: { ...handoff, requestedBefore: material.requestedQuantity.toFixed(3),
+          requestedAfter: changed.requestedQuantity.toFixed(3),
+          pendingReturnBefore: material.pendingReturnQuantity.toFixed(3),
+          pendingReturnAfter: changed.pendingReturnQuantity.toFixed(3), reservedBefore: material.reservedQuantity.toFixed(3),
           appliedBefore: material.appliedQuantity.toFixed(3), consumedBefore: material.consumedQuantity.toFixed(3),
           returnedBefore: material.returnedQuantity.toFixed(3), reservedAfter: changed.reservedQuantity.toFixed(3),
           appliedAfter: changed.appliedQuantity.toFixed(3), consumedAfter: changed.consumedQuantity.toFixed(3),
@@ -231,4 +293,5 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
     await remember(tx, actor, idempotencyKey, hash, "orderAction", id);
     return scopedOrder(tx, actor, id);
   });
+  return redactOrderCosts(actor, result);
 }

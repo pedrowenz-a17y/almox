@@ -48,10 +48,28 @@ export const movementSchema = z
     destinationId: z.string().uuid().nullish(),
     note: z.string().trim().max(2000).optional(),
     reference: z.string().trim().max(200).optional(),
+    purpose: z.enum(["PRODUCTIVE", "OTHER", "LOSS"]).optional(),
+    receivedByName: z.string().trim().min(3).max(120).optional(),
+    receivedByIdentifier: z.string().trim().min(1).max(80).optional(),
     idempotencyKey: idempotencyKeySchema,
   })
   .strict()
   .superRefine((input, context) => {
+    if (input.type === "EXIT") {
+      if (!input.purpose || input.purpose === "PRODUCTIVE")
+        context.addIssue({ code: "custom", path: ["purpose"],
+          message: "Retiradas produtivas exigem uma O.S./O.P. Use a aplicação de materiais na ordem. Para exceções, informe outra finalidade ou perda." });
+      if (!input.note || input.note.length < 10)
+        context.addIssue({ code: "custom", path: ["note"], message: "Justifique a saída com pelo menos 10 caracteres." });
+      if (input.purpose === "OTHER") {
+        if (!input.receivedByName)
+          context.addIssue({ code: "custom", path: ["receivedByName"], message: "Identifique quem retirou o material." });
+        if (!input.receivedByIdentifier)
+          context.addIssue({ code: "custom", path: ["receivedByIdentifier"], message: "Informe a matrícula ou identificação de quem retirou." });
+      }
+    } else if (input.purpose || input.receivedByName || input.receivedByIdentifier) {
+      context.addIssue({ code: "custom", path: ["purpose"], message: "Finalidade de retirada e recebedor devem ser informados apenas em saídas." });
+    }
     if (input.type !== "ENTRY" && !input.sourceId) {
       context.addIssue({
         code: "custom",
@@ -284,6 +302,8 @@ export async function findIdempotentResource(
 export async function createMovement(actor: StockActor, rawInput: unknown) {
   requirePermission(actor, "stock:move");
   const parsed = movementSchema.parse(rawInput);
+  if (parsed.type === "EXIT" && parsed.purpose === "LOSS")
+    requirePermission(actor, "inventory:adjust");
   const input = {
     type: parsed.type,
     productId: parsed.productId,
@@ -293,7 +313,12 @@ export async function createMovement(actor: StockActor, rawInput: unknown) {
     note: parsed.note ?? "",
     reference: parsed.reference ?? "",
   };
-  const hash = payloadHash(actor, "movement", input);
+  const declaration = parsed.type === "EXIT" ? {
+    purpose: parsed.purpose,
+    receivedByName: parsed.receivedByName ?? null,
+    receivedByIdentifier: parsed.receivedByIdentifier ?? null,
+  } : null;
+  const hash = payloadHash(actor, "movement", declaration ? { ...input, declaration } : input);
   return serializable(async (tx) => {
     const previousId = await findIdempotentResource(
       tx,
@@ -362,6 +387,11 @@ export async function createMovement(actor: StockActor, rawInput: unknown) {
       },
       include: movementInclude,
     });
+    const handoff = parsed.type === "EXIT" && parsed.purpose === "OTHER" ? {
+      deliveredById: actor.id, deliveredByName: movement.user.name,
+      receivedByName: parsed.receivedByName!, receivedByIdentifier: parsed.receivedByIdentifier!,
+      confirmation: "DECLARED_BY_OPERATOR",
+    } : null;
     await tx.auditLog.create({
       data: {
         userId: actor.id,
@@ -385,6 +415,7 @@ export async function createMovement(actor: StockActor, rawInput: unknown) {
           destinationQuantity: destinationAfter?.toFixed(3) ?? null,
           note: input.note,
           reference: input.reference,
+          ...(declaration ? { purpose: declaration.purpose!, handoff } : {}),
         },
       },
     });

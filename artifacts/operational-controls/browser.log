@@ -1,0 +1,8 @@
+PASS painel mostra destinos e abre a ordem escolhida sem perder o workspace
+PASS entrega exige nome e identificação e revisa o destinatário antes de confirmar
+PASS pedido de devolução bloqueia faturamento e pode ser cancelado com justificativa
+PASS agenda inicia inventário com local bloqueado e envia o vínculo da programação
+PASS contagem fora do resumo de 500 registros abre por ID e encerra sem ajuste
+PASS custos exibem snapshot conhecido e não consolidam preço ausente
+PASS CSV passa pela prévia e salva apenas documento de conferência
+PASS novas páginas cabem em telas menores e não geram erro JavaScript

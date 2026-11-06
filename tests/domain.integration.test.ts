@@ -109,7 +109,7 @@ test("reposição considera reserva, aplicação e recebimento parcial sem expor
   await enter('20');
   const order = await orderWithRequest('5');
   await orders.actOnOrder(fixture.actor, order.id, { action: 'RESERVE', materialId: order.materials[0].id, quantity: '5', idempotencyKey: key() });
-  await orders.actOnOrder(fixture.actor, order.id, { action: 'APPLY', materialId: order.materials[0].id, quantity: '2', idempotencyKey: key() });
+  await action(order.id, order.materials[0].id, 'APPLY', '2');
   const purchase = await purchases.createPurchase(fixture.actor, { code: `TEST-${key()}`, supplierId: fixture.supplierId,
     items: [{ productId: fixture.productIds[0], quantity: '30' }], idempotencyKey: key() });
   await purchases.receivePurchase(fixture.actor, purchase.id, { documentReference: 'DOC-TEST', items: [
@@ -145,7 +145,10 @@ async function orderWithRequest(quantity = "30", kind = "SERVICE") {
 }
 async function action(orderId: string, materialId: string, action: string, quantity: string, options: Record<string, unknown> = {}) {
   return orders.actOnOrder(fixture.actor, orderId, { action, materialId, quantity,
-    note: "Operação de teste", idempotencyKey: key(), ...options });
+    note: "Operação de teste", idempotencyKey: key(),
+    ...(action === "APPLY" ? { receivedByName: "Recebedor de teste", receivedByIdentifier: "MAT-TEST-1" } : {}),
+    ...(action === "RETURN" ? { returnedByName: "Devolvente de teste", returnedByIdentifier: "MAT-TEST-1" } : {}),
+    ...options });
 }
 async function count(expectedQuantity: string, countedQuantity: string) {
   return inventories.createInventoryCount(fixture.actor, { locationId: fixture.locationIds[0],
@@ -293,7 +296,7 @@ test("saída avulsa e transferência não consomem estoque reservado ou aplicado
   await action(order.id, id, "RESERVE", "80");
   await action(order.id, id, "APPLY", "40");
   await assert.rejects(stock.createMovement(fixture.actor, { type: "EXIT", productId: fixture.productIds[0],
-    sourceId: fixture.locationIds[0], quantity: "21", idempotencyKey: key() }), status(409));
+    sourceId: fixture.locationIds[0], quantity: "21", purpose: "LOSS", note: "Perda justificada no teste", idempotencyKey: key() }), status(409));
   await assert.rejects(stock.createMovement(fixture.actor, { type: "TRANSFER", productId: fixture.productIds[0],
     sourceId: fixture.locationIds[0], destinationId: fixture.locationIds[1], quantity: "1", idempotencyKey: key() }), status(404));
   assert.equal((await amounts()).quantity, "100.000");
@@ -450,4 +453,198 @@ test("reposição informa fornecedor inativo e impede usá-lo no preenchimento a
   assert.equal(row.supplierActive, false);
   assert.throws(() => buildPurchaseDraft(fixture.unitIds[0], rows, [fixture.productIds[0]]), /fornecedor ativo/);
   assert.equal(await db.purchaseOrder.count({ where: { unitId: fixture.unitIds[0] } }), 0);
+});
+
+test("aplicação exige recebedor identificado e distingue declaração do operador de confirmação independente", async () => {
+  await enter();
+  const order = await orderWithRequest("10");
+  const materialId = order.materials[0].id;
+  await action(order.id, materialId, "RESERVE", "10");
+  const input = { action: "APPLY", materialId, quantity: "10", idempotencyKey: key() };
+  await assert.rejects(orders.actOnOrder(fixture.actor, order.id, input), ZodError);
+  await assert.rejects(orders.actOnOrder(fixture.actor, order.id, { ...input,
+    receivedByName: "Funcionário de teste", receivedByIdentifier: "MAT-1", deliveredById: key() }), ZodError);
+  assert.equal((await amounts()).applied, "0.000");
+  const applied = await action(order.id, materialId, "APPLY", "10", {
+    idempotencyKey: input.idempotencyKey, receivedByName: "Funcionário de teste", receivedByIdentifier: "MAT-1",
+  });
+  const event = applied.events.find(event => event.type === "APPLIED")!;
+  assert.deepEqual((event.metadata as Record<string, unknown>).handoff, {
+    deliveredById: fixture.userId, deliveredByName: "Responsável de teste",
+    receivedByName: "Funcionário de teste", receivedByIdentifier: "MAT-1", confirmation: "DECLARED_BY_OPERATOR",
+  });
+  await assert.rejects(action(order.id, materialId, "APPLY", "10", {
+    idempotencyKey: input.idempotencyKey, receivedByName: "Outra pessoa", receivedByIdentifier: "MAT-2",
+  }), status(409));
+  assert.equal(await db.stockMovement.count({ where: { workOrderId: order.id } }), 0);
+});
+
+test("pedido de devolução não libera material e recebimento parcial exige identificação antes de encerrar a solicitação", async () => {
+  await enter();
+  const order = await orderWithRequest("10");
+  const materialId = order.materials[0].id;
+  await action(order.id, materialId, "RESERVE", "10");
+  await action(order.id, materialId, "APPLY", "10");
+  const before = await amounts();
+  const requestKey = key();
+  await Promise.all([1, 2].map(() => action(order.id, materialId, "REQUEST_RETURN", "4", { idempotencyKey: requestKey })));
+  assert.deepEqual(await amounts(), before);
+  assert.equal((await orders.getOrder(fixture.actor, order.id)).materials[0].pendingReturnQuantity.toFixed(3), "4.000");
+  await assert.rejects(action(order.id, materialId, "REQUEST_RETURN", "7"), status(409));
+  await assert.rejects(orders.actOnOrder(fixture.actor, order.id, {
+    action: "INVOICE", reference: "FAT-TEST", idempotencyKey: key(),
+  }), status(409));
+  await assert.rejects(orders.actOnOrder(fixture.actor, order.id, {
+    action: "RETURN", materialId, quantity: "2", note: "Retorno sem identificação", idempotencyKey: key(),
+  }), ZodError);
+  const receiptKey = key();
+  const partial = await action(order.id, materialId, "RETURN", "2", { idempotencyKey: receiptKey });
+  await action(order.id, materialId, "RETURN", "2", { idempotencyKey: receiptKey });
+  assert.equal(partial.materials[0].pendingReturnQuantity.toFixed(3), "2.000");
+  assert.equal((await amounts()).quantity, "100.000");
+  assert.equal((await amounts()).physical, "92.000");
+  const receipt = partial.events.find(event => event.type === "RETURNED_BEFORE_INVOICE")!;
+  assert.deepEqual((receipt.metadata as Record<string, unknown>).returnReceipt, {
+    receivedById: fixture.userId, receivedByName: "Responsável de teste", returnedByName: "Devolvente de teste",
+    returnedByIdentifier: "MAT-TEST-1", confirmation: "DECLARED_BY_OPERATOR",
+  });
+  const completed = await action(order.id, materialId, "RETURN", "2");
+  assert.equal(completed.materials[0].pendingReturnQuantity.toFixed(3), "0.000");
+  await action(order.id, materialId, "REDUCE_REQUEST", "4");
+  await orders.actOnOrder(fixture.actor, order.id, { action: "INVOICE", reference: "FAT-TEST", idempotencyKey: key() });
+  assert.equal((await amounts()).quantity, "94.000");
+  assert.equal(await db.stockMovement.count({ where: { workOrderId: order.id, type: "EXIT" } }), 1);
+});
+
+test("redução de requisição só encerra saldo descomprometido e exige justificativa", async () => {
+  await enter();
+  const order = await orderWithRequest("10");
+  const materialId = order.materials[0].id;
+  await action(order.id, materialId, "RESERVE", "8");
+  await assert.rejects(action(order.id, materialId, "REDUCE_REQUEST", "3"), status(409));
+  await assert.rejects(action(order.id, materialId, "REDUCE_REQUEST", "2", { note: "curto" }), ZodError);
+  const reduced = await action(order.id, materialId, "REDUCE_REQUEST", "2");
+  assert.equal(reduced.materials[0].requestedQuantity.toFixed(3), "8.000");
+  await assert.rejects(action(order.id, materialId, "REDUCE_REQUEST", "1"), status(409));
+  assert.equal((await amounts()).reserved, "8.000");
+  assert.equal((await amounts()).quantity, "100.000");
+  assert.ok(reduced.events.some(event => event.type === "REQUEST_REDUCED" && event.quantity?.eq(2)));
+});
+
+test("devolução solicitada após faturamento só repõe saldo quando o operador recebe fisicamente", async () => {
+  await enter();
+  const order = await orderWithRequest("10");
+  const materialId = order.materials[0].id;
+  await action(order.id, materialId, "RESERVE", "10");
+  await action(order.id, materialId, "APPLY", "10");
+  await orders.actOnOrder(fixture.actor, order.id, { action: "INVOICE", reference: "FAT-TEST", idempotencyKey: key() });
+  const requested = await action(order.id, materialId, "REQUEST_RETURN", "3");
+  assert.equal(requested.materials[0].pendingReturnQuantity.toFixed(3), "3.000");
+  assert.equal((await amounts()).quantity, "90.000");
+  const keyOfReceipt = key();
+  await Promise.all([1, 2].map(() => action(order.id, materialId, "RETURN", "4", { idempotencyKey: keyOfReceipt })));
+  const returned = await orders.getOrder(fixture.actor, order.id);
+  assert.equal(returned.materials[0].pendingReturnQuantity.toFixed(3), "0.000");
+  assert.equal(returned.materials[0].returnedQuantity.toFixed(3), "4.000");
+  assert.equal((await amounts()).quantity, "94.000");
+  assert.equal(await db.stockMovement.count({ where: { workOrderId: order.id, type: "ENTRY" } }), 1);
+  await assert.rejects(action(order.id, materialId, "REQUEST_RETURN", "7"), status(409));
+});
+
+test("faturamento congela estimativa cadastral e não expõe custo em consultas ou mutações sem permissão", async () => {
+  await db.product.update({ where: { id: fixture.productIds[0] }, data: { unitCost: "12.34" } });
+  await enter();
+  const order = await orderWithRequest("10");
+  const materialId = order.materials[0].id;
+  await action(order.id, materialId, "RESERVE", "10");
+  await action(order.id, materialId, "APPLY", "10");
+  const invoice = { action: "INVOICE", reference: "FAT-TEST", idempotencyKey: key() };
+  const operator = { ...fixture.actor, permissions: fixture.actor.permissions.filter(permission => permission !== "costs:read") };
+  const result = await orders.actOnOrder(operator, order.id, invoice);
+  assert.ok(!("invoicedUnitCost" in result.materials[0]));
+  assert.equal((await orders.getOrder(fixture.actor, order.id)).materials[0].invoicedUnitCost?.toFixed(2), "12.34");
+  await db.product.update({ where: { id: fixture.productIds[0] }, data: { unitCost: "99.99" } });
+  await action(order.id, materialId, "RETURN", "2");
+  assert.equal((await orders.getOrder(fixture.actor, order.id)).materials[0].invoicedUnitCost?.toFixed(2), "12.34");
+  assert.equal(JSON.stringify(await orders.getOrder(operator, order.id)).includes("invoicedUnitCost"), false);
+  assert.equal(JSON.stringify(await orders.listOrders(operator)).includes("invoicedUnitCost"), false);
+  assert.equal(JSON.stringify(await orders.actOnOrder(operator, order.id, invoice)).includes("invoicedUnitCost"), false);
+});
+
+test("custo ausente continua desconhecido no faturamento e ordens antigas não recebem estimativa retroativa", async () => {
+  await enter();
+  const order = await orderWithRequest("2");
+  const materialId = order.materials[0].id;
+  assert.equal(order.materials[0].invoicedUnitCost, null);
+  await action(order.id, materialId, "RESERVE", "2");
+  await action(order.id, materialId, "APPLY", "2");
+  const invoiced = await orders.actOnOrder(fixture.actor, order.id, {
+    action: "INVOICE", reference: "FAT-SEM-CUSTO", idempotencyKey: key(),
+  });
+  assert.equal(invoiced.materials[0].invoicedUnitCost, null);
+});
+
+test("saída manual exige exceção justificada; aplicação produtiva segue pela ordem e destinatário integra idempotência", async () => {
+  await enter();
+  const base = { type: "EXIT", productId: fixture.productIds[0], sourceId: fixture.locationIds[0],
+    quantity: "3", note: "Material destinado à manutenção interna", idempotencyKey: key() };
+  for (const fields of [{}, { purpose: "PRODUCTIVE" }, { purpose: "OTHER" }, { purpose: "LOSS", note: "curto" }])
+    await assert.rejects(stock.createMovement(fixture.actor, { ...base, ...fields }), ZodError);
+  assert.equal((await amounts()).quantity, "100.000");
+  const input = { ...base, purpose: "OTHER", receivedByName: "Funcionário de teste", receivedByIdentifier: "MAT-1" };
+  const movement = await stock.createMovement(fixture.actor, input);
+  await stock.createMovement(fixture.actor, input);
+  const audit = await db.auditLog.findFirstOrThrow({ where: { entityId: movement.id, action: "EXIT" } });
+  assert.equal((audit.after as Record<string, unknown>).purpose, "OTHER");
+  assert.deepEqual((audit.after as Record<string, unknown>).handoff, {
+    deliveredById: fixture.userId, deliveredByName: "Responsável de teste", receivedByName: "Funcionário de teste",
+    receivedByIdentifier: "MAT-1", confirmation: "DECLARED_BY_OPERATOR",
+  });
+  await assert.rejects(stock.createMovement(fixture.actor, { ...input, receivedByIdentifier: "MAT-2" }), status(409));
+  assert.equal((await amounts()).quantity, "97.000");
+  await stock.createMovement(fixture.actor, { ...base, purpose: "LOSS", note: "Perda de material identificada em conferência", idempotencyKey: key() });
+  assert.equal((await amounts()).quantity, "94.000");
+});
+
+test("cancelar pedido incorreto de devolução é auditável e não simula entrada física", async () => {
+  await enter();
+  const order = await orderWithRequest("10");
+  const materialId = order.materials[0].id;
+  await action(order.id, materialId, "RESERVE", "10");
+  await action(order.id, materialId, "APPLY", "10");
+  await action(order.id, materialId, "REQUEST_RETURN", "3");
+  const before = await amounts();
+  const balanceBefore = await db.inventoryBalance.findUniqueOrThrow({ where: {
+    productId_locationId: { productId: fixture.productIds[0], locationId: fixture.locationIds[0] },
+  } });
+  await assert.rejects(action(order.id, materialId, "CANCEL_RETURN", "4"), status(409));
+  await assert.rejects(action(order.id, materialId, "CANCEL_RETURN", "1", { note: "curto" }), ZodError);
+  const operator = { ...fixture.actor, permissions: ["orders:read", "orders:apply"] };
+  const cancelKey = key();
+  const cancel = { action: "CANCEL_RETURN", materialId, quantity: "3", note: "Solicitação aberta por engano", idempotencyKey: cancelKey };
+  await Promise.all([1, 2].map(() => orders.actOnOrder(operator, order.id, cancel)));
+  const completed = await orders.getOrder(fixture.actor, order.id);
+  assert.equal(completed.materials[0].pendingReturnQuantity.toFixed(3), "0.000");
+  assert.equal(completed.materials[0].appliedQuantity.toFixed(3), "10.000");
+  assert.equal(completed.events.filter(event => event.type === "RETURN_REQUEST_CANCELLED").length, 1);
+  assert.deepEqual(await amounts(), before);
+  const balanceAfter = await db.inventoryBalance.findUniqueOrThrow({ where: { id: balanceBefore.id } });
+  assert.equal(balanceAfter.version, balanceBefore.version);
+  assert.equal(await db.stockMovement.count({ where: { workOrderId: order.id } }), 0);
+  await orders.actOnOrder(fixture.actor, order.id, { action: "INVOICE", reference: "FAT-TEST", idempotencyKey: key() });
+  await action(order.id, materialId, "REQUEST_RETURN", "1");
+  await action(order.id, materialId, "CANCEL_RETURN", "1");
+  assert.equal((await amounts()).quantity, "90.000");
+});
+
+test("perda exige aprovação de ajuste além da permissão operacional e não baixa saldo quando recusada", async () => {
+  await enter();
+  const operator = { ...fixture.actor, permissions: ["stock:move"] };
+  const input = { type: "EXIT", purpose: "LOSS", productId: fixture.productIds[0], sourceId: fixture.locationIds[0],
+    quantity: "2", note: "Perda identificada em conferência física", idempotencyKey: key() };
+  await assert.rejects(stock.createMovement(operator, input), status(403));
+  assert.equal((await amounts()).quantity, "100.000");
+  assert.equal(await db.idempotencyRecord.count({ where: { key: input.idempotencyKey } }), 0);
+  await stock.createMovement(fixture.actor, input);
+  assert.equal((await amounts()).quantity, "98.000");
 });

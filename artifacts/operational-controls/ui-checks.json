@@ -1,0 +1,15 @@
+{
+  "scope": "Componentes reais em harness separado com API fictícia; não comprova autenticação real nem integração ERP externa.",
+  "checks": [
+    "painel mostra destinos e abre a ordem escolhida sem perder o workspace",
+    "entrega exige nome e identificação e revisa o destinatário antes de confirmar",
+    "pedido de devolução bloqueia faturamento e pode ser cancelado com justificativa",
+    "agenda inicia inventário com local bloqueado e envia o vínculo da programação",
+    "contagem fora do resumo de 500 registros abre por ID e encerra sem ajuste",
+    "custos exibem snapshot conhecido e não consolidam preço ausente",
+    "CSV passa pela prévia e salva apenas documento de conferência",
+    "novas páginas cabem em telas menores e não geram erro JavaScript"
+  ],
+  "passed": 8,
+  "errors": []
+}

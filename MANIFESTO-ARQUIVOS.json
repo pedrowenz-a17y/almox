@@ -1,7 +1,7 @@
 {
-  "version": "2.3.2",
-  "revision": "dashboard-photo-gentle-motion",
-  "generatedAt": "2026-11-06T02:13:33.386870+00:00",
+  "version": "2.4.0",
+  "revision": "operational-control-orders-inventory-reconciliation",
+  "generatedAt": "2026-11-06T10:58:43.720043+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 20105,
-      "sha256": "422d834ff08ffdb02dba81d00839c24470090aea2d99055d97c2b383d9cd5e1d"
+      "bytes": 22368,
+      "sha256": "fa076fae26354e55a0ae59fcd1146b0fb65b9475071fb81bb53771dfcfacab43"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -322,6 +322,121 @@
       "path": "artifacts/legacy/reports-labels-checks.json",
       "bytes": 6596,
       "sha256": "013fb04ddcdd2ea687695f359e72ea5feedf63dc3dee88b08ae6421d2ab6e821"
+    },
+    {
+      "path": "artifacts/operational-controls/README.md",
+      "bytes": 1330,
+      "sha256": "5991335341a15b93a747e8178bdd580c3f185d76750311d4a284f013e1c5f618"
+    },
+    {
+      "path": "artifacts/operational-controls/auth-gates.json",
+      "bytes": 813,
+      "sha256": "272cba10c82eb55a86d9f188c9b4b9b7d67554ae54e6f2b07bde37e50f69581f"
+    },
+    {
+      "path": "artifacts/operational-controls/browser.log",
+      "bytes": 627,
+      "sha256": "8d9c6c3e4ca4e8b29ab197c4ff3c462aac307d7852b5befa12bb5d4bce0d5e24"
+    },
+    {
+      "path": "artifacts/operational-controls/build.log",
+      "bytes": 2486,
+      "sha256": "d53cfbf7eb12931c6ffee4a5c2fff381d238b5aabe58f0c5e0868efff6d7a7e9"
+    },
+    {
+      "path": "artifacts/operational-controls/conciliacao-desktop.png",
+      "bytes": 214846,
+      "sha256": "5da368b11fee2366191999e94d2dace7f943d76a9c84f333826ae42498d15327"
+    },
+    {
+      "path": "artifacts/operational-controls/conciliacao-mobile.png",
+      "bytes": 116179,
+      "sha256": "d6a4dac86c9b92162a7f121a0ab0a851669e449b31d20ed4585abfa4dd1fa8c9"
+    },
+    {
+      "path": "artifacts/operational-controls/conferencias-desktop.png",
+      "bytes": 95762,
+      "sha256": "beed8f32b30bcb6b4578d1be8970357fe4350e4e051c32038a104f0352924775"
+    },
+    {
+      "path": "artifacts/operational-controls/conferencias-mobile.png",
+      "bytes": 42377,
+      "sha256": "c353682551400a54e4b6142c69ff9062543a420476fb493c814f560a62880a3f"
+    },
+    {
+      "path": "artifacts/operational-controls/csv-race-ui.json",
+      "bytes": 284,
+      "sha256": "989c3422bbdf77b49c8f1e2c34fb56bd015722dcbeeabf54a82a3a098226324e"
+    },
+    {
+      "path": "artifacts/operational-controls/custos-desktop.png",
+      "bytes": 125948,
+      "sha256": "f19d308568400f61ecb70451e690b596c4026ca6b87472a2797f22ef7fb43566"
+    },
+    {
+      "path": "artifacts/operational-controls/database-checks.json",
+      "bytes": 718,
+      "sha256": "fbd177be3f646732fb3aa6eb8cd8423787a174ac61a17917cb961b0963c92ff6"
+    },
+    {
+      "path": "artifacts/operational-controls/entrega-identificada.png",
+      "bytes": 216556,
+      "sha256": "fed0ec1b204103afd71a18c648f011ec56df4fe27278a37fe34f7e0482dd1c22"
+    },
+    {
+      "path": "artifacts/operational-controls/lint.log",
+      "bytes": 35,
+      "sha256": "5773658e2ca6895277dab72e6f49cec1c5721e21ba2b4ab9bbbb14b851429e0a"
+    },
+    {
+      "path": "artifacts/operational-controls/npm-ci.log",
+      "bytes": 964,
+      "sha256": "79f29a74fd56bc3c1b1e29df0d03b7a5f3c34cddad89e5a056cc4f83460d4b35"
+    },
+    {
+      "path": "artifacts/operational-controls/pendencias-desktop.png",
+      "bytes": 143015,
+      "sha256": "afaf23873d182744ee964824a1c6f60be0511e9bfa329ab918c388a3447d7d4e"
+    },
+    {
+      "path": "artifacts/operational-controls/pendencias-mobile.png",
+      "bytes": 79938,
+      "sha256": "7ba5b0b7d061b6c5b92d895d9910de0ce93c7dd1fd13f03204cde3c2db0712e0"
+    },
+    {
+      "path": "artifacts/operational-controls/production-server.log",
+      "bytes": 263,
+      "sha256": "b0c54a33b8b4f59e8da353b9b1f18ef1739649bf7c5c7050289c4750b8411cd6"
+    },
+    {
+      "path": "artifacts/operational-controls/tests.log",
+      "bytes": 15880,
+      "sha256": "963b21b39c8a3ba88af3bb72ec4d98738aaffa2ac048bbf141721141519d5219"
+    },
+    {
+      "path": "artifacts/operational-controls/typecheck.log",
+      "bytes": 44,
+      "sha256": "a509ece5fe116087f19946669c659933dd5532f251fffc28e8ef4e5f2a688f57"
+    },
+    {
+      "path": "artifacts/operational-controls/ui-checks.json",
+      "bytes": 829,
+      "sha256": "cefb820229f7e9a148663af249e31f0137e82c0a8d863644d507e096c6c73d9b"
+    },
+    {
+      "path": "artifacts/operational-controls/ui-fixture-build.log",
+      "bytes": 618,
+      "sha256": "a135d9bd3e5564ddc59e4c49e8a035d6c1b859435272efb2c1856b8241ae62dc"
+    },
+    {
+      "path": "artifacts/operational-controls/ui-fixture-server.log",
+      "bytes": 154,
+      "sha256": "0e38e09e4ab883f2e32caf0e56053ea6df066be6a194fb2ab3c58645db81fede"
+    },
+    {
+      "path": "artifacts/operational-controls/upgrade-checks.json",
+      "bytes": 416,
+      "sha256": "29a081be6190af5e7683f38067ed42da626d75f72f9d876a1eee53060026f4c4"
     },
     {
       "path": "artifacts/refresh/abertura-animada.gif",
@@ -739,9 +854,19 @@
       "sha256": "808758fd7cf8f05f4d1e9fe125e6cedfbdd27221a34c8b1bb43409274e9dc167"
     },
     {
+      "path": "docs/CONTROLE-OPERACIONAL-2.4.md",
+      "bytes": 7524,
+      "sha256": "4c1fbe116a790c663e81cb04c34a60a7304bd30283df14602080c5fd9e9b62f2"
+    },
+    {
       "path": "docs/DELIVERY.md",
       "bytes": 17439,
       "sha256": "1f2f6bc2d89a98b5e2a2875a4130a959f2f7809e2f487dc352f56f3234783899"
+    },
+    {
+      "path": "docs/DIAGNOSTICO-BANCO.md",
+      "bytes": 8016,
+      "sha256": "0a3284a9950059333df9172f1f1e58d6fc55d52b7f0a8f2aed272b44806fd185"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
@@ -806,12 +931,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "d2f01c30104f48ca718eb0160c712c80844547025185749d104f532c0dc37bce"
+      "sha256": "28b1355dac38f55ae8ecdb4d5a48e1101222ac5fe3130a33fcdd6bbec88fcbe0"
     },
     {
       "path": "package.json",
       "bytes": 2231,
-      "sha256": "f148f62561640ff25bac53d54c6881d33d43c3f52efb7a5e0bbc7f99f17db64c"
+      "sha256": "24b88b008045bd7657097e1887105aadf8ecdbe3b533b8c94825f815913468b2"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -839,14 +964,19 @@
       "sha256": "6607801b8f6ef462fff15335d1c2276893171cc1f25b6ed6800170f855e0234b"
     },
     {
+      "path": "prisma/migrations/20261106160000_operational_controls/migration.sql",
+      "bytes": 7253,
+      "sha256": "25970853030335e45da08cdef0efe023beae3d06387f3ab7c63c674d58650ff6"
+    },
+    {
       "path": "prisma/migrations/migration_lock.toml",
       "bytes": 128,
       "sha256": "99836963713b4f5b269ad49af0ed3d7b0b2e336115c2f92dc9ac683d139d0900"
     },
     {
       "path": "prisma/schema.prisma",
-      "bytes": 24062,
-      "sha256": "ddc1a15564140b5cc4f2adaf73aeb96c0b65880314d506a19d81fcbc45fe72cb"
+      "bytes": 27355,
+      "sha256": "0bdfaf8117aa981e0331d467a88eed5687822280e340494ef4e4c02d2a7d99a2"
     },
     {
       "path": "prisma/seed.ts",
@@ -930,13 +1060,18 @@
     },
     {
       "path": "scripts/config-diagnostics.mjs",
-      "bytes": 4636,
-      "sha256": "f560a3cd1915819ebb76d471c7353dbc4b6740b025ab856b495f5c3bd66f1e53"
+      "bytes": 5485,
+      "sha256": "dc19c09161d348cc9c407dda5c2c4e4b2dbef76297823b4406072beac7d6dbea"
+    },
+    {
+      "path": "scripts/database-diagnostics.mjs",
+      "bytes": 8359,
+      "sha256": "fb3bd2cebb1e5504d297b37f677bcb3184c03cdff1f504757f97db653faa0de8"
     },
     {
       "path": "scripts/doctor.mjs",
-      "bytes": 4307,
-      "sha256": "d58d287625dc3d7b180b6c66a4f939ac525238f6089b211de7d7ad2c1c17a16e"
+      "bytes": 4843,
+      "sha256": "78267750afd70145427b58b356e535c8e6c07a994479ff8d7cbe40eb282c5d54"
     },
     {
       "path": "scripts/local-db.mjs",
@@ -975,8 +1110,8 @@
     },
     {
       "path": "scripts/verify-api.mjs",
-      "bytes": 22401,
-      "sha256": "20470ce922d2de3bb4547456da3b7a06e06cdd3a2c2e8bd82574e1567b33864a"
+      "bytes": 24583,
+      "sha256": "53f193d5bfd395b702565ff25bdfe714f7248fcbe45902fac3ba476af54ec98d"
     },
     {
       "path": "scripts/verify-auth-flows.mjs",
@@ -990,13 +1125,13 @@
     },
     {
       "path": "scripts/verify-operations.mjs",
-      "bytes": 8347,
-      "sha256": "3a7de6705a9a22736705aa5a1b3449993ed65b0805cf0a50a47aea5ff0a25ef4"
+      "bytes": 12323,
+      "sha256": "e4874b94115fb166804a4c2b8137086f793a0062ff3e426d7c492ebeb031e4da"
     },
     {
       "path": "scripts/verify-orders-ui.mjs",
-      "bytes": 16645,
-      "sha256": "830785419d420f53d0dd525e63766cb0dd88c6d38fec8e56ce0613517649d999"
+      "bytes": 20925,
+      "sha256": "1ab639ca58ceefe7c14fdfe5813da99bfa493aa3440930da739562821a2f2c47"
     },
     {
       "path": "scripts/verify-public.mjs",
@@ -1069,9 +1204,29 @@
       "sha256": "fd69a7020199f53d3db87e6e38878cd35e00b73ae2ed96aaf666ee896bb21832"
     },
     {
+      "path": "src/app/api/inventory-schedules/[id]/route.ts",
+      "bytes": 389,
+      "sha256": "a8565d24becc126b9388560d71c59c95ff67a37c41e05a85ffe81a395ff25cea"
+    },
+    {
+      "path": "src/app/api/inventory-schedules/route.ts",
+      "bytes": 483,
+      "sha256": "b3de4410d4832a51e033916bd83c2822f72740f40a25d23e21e574e30b0dbab0"
+    },
+    {
       "path": "src/app/api/inventory/[id]/approve/route.ts",
       "bytes": 353,
       "sha256": "86e70a90679455b367bf477ac34751ce963aee1c7b14cb12659c45635ec0367a"
+    },
+    {
+      "path": "src/app/api/inventory/[id]/reject/route.ts",
+      "bytes": 372,
+      "sha256": "de9847ce678136c30f8eeb3834f5387a0abf0943ae5284857a1ff2a105530eea"
+    },
+    {
+      "path": "src/app/api/inventory/[id]/route.ts",
+      "bytes": 343,
+      "sha256": "eac538556ad528bb93400118bbea3eba0a862ea4fc528ae442e192e36b8579cc"
     },
     {
       "path": "src/app/api/inventory/route.ts",
@@ -1087,6 +1242,16 @@
       "path": "src/app/api/movements/route.ts",
       "bytes": 303,
       "sha256": "ab402d06170a7dfd6b716ce56200a73e150b1665021de2eb0c48e00cfbc5aee0"
+    },
+    {
+      "path": "src/app/api/operational-pending/route.ts",
+      "bytes": 309,
+      "sha256": "86c038093303fad1ac0697a9ef2679bc3c95e6da5771fa7b01bce0280b3e5526"
+    },
+    {
+      "path": "src/app/api/order-costs/route.ts",
+      "bytes": 326,
+      "sha256": "0b7e84d2d5ced01085928c43638c3e7623df5b7f90d8aa1a3c70d71c2393e377"
     },
     {
       "path": "src/app/api/orders/[id]/actions/route.ts",
@@ -1132,6 +1297,26 @@
       "path": "src/app/api/qr/[id]/route.ts",
       "bytes": 1538,
       "sha256": "d31db5d704ffa750c954a62363af129d92c48f33c222046e08f3e719439edc7b"
+    },
+    {
+      "path": "src/app/api/reconciliation/[id]/route.ts",
+      "bytes": 324,
+      "sha256": "ad061f440a7a0b500081f52f4664b3b9bd2d430665b6b66686a10b84c077781b"
+    },
+    {
+      "path": "src/app/api/reconciliation/preview/route.ts",
+      "bytes": 378,
+      "sha256": "150d4c001316570e763f7cb64cc6a67ea859f463c1daff4425905d53fb08b137"
+    },
+    {
+      "path": "src/app/api/reconciliation/route.ts",
+      "bytes": 512,
+      "sha256": "f0c784442c73f7e69f8eefc677d26b26bcda58f93ab0e4c3e2215a82204c28da"
+    },
+    {
+      "path": "src/app/api/reconciliation/setup/route.ts",
+      "bytes": 256,
+      "sha256": "ba14d659c2d726910f834296306a0d0857eef771186ad280dd4816382f2edb31"
     },
     {
       "path": "src/app/api/replenishment/route.ts",
@@ -1195,13 +1380,18 @@
     },
     {
       "path": "src/app/layout.tsx",
-      "bytes": 895,
-      "sha256": "f5b700d59a7fc7da260975b3420941f8d0c1cbc0ec552d37b298b5686789ca54"
+      "bytes": 923,
+      "sha256": "70d906f926201fc739c4a70d82bc8faf615e94811950b46825e733c001e01495"
     },
     {
       "path": "src/app/login/page.tsx",
       "bytes": 3210,
       "sha256": "a92769316097c11fef3348e330693a69c4216e289d79d1e5eb69ca439efcad2f"
+    },
+    {
+      "path": "src/app/operational.css",
+      "bytes": 1280,
+      "sha256": "c3c4a2091fe19e481c522f12dce475868a0bf5420ea94c8f910812905946843b"
     },
     {
       "path": "src/app/recuperar-senha/page.tsx",
@@ -1250,13 +1440,18 @@
     },
     {
       "path": "src/components/erp.tsx",
-      "bytes": 87947,
-      "sha256": "13e5f22c07ac1811a7b1919b953fbda97b3ec13deaf8da457b31e786c3394a6b"
+      "bytes": 93420,
+      "sha256": "f6e3c28ca11517905f520d0b6c600332ea7ef104b57614d6c8f4110b3ec97efb"
     },
     {
       "path": "src/components/inventory-form.tsx",
-      "bytes": 9271,
-      "sha256": "cfaa62b23911a77e2828fe6d175ce0e4d4bbe503b567e832abd89119a07ecc7d"
+      "bytes": 9410,
+      "sha256": "2a704cffbb497eb161a2a8cdd2018cca91eca5ef8cc1188d0293ff2627893688"
+    },
+    {
+      "path": "src/components/inventory-schedules.tsx",
+      "bytes": 15281,
+      "sha256": "28affabbbd172397b0dc7fc6c5a5f48ffbe057784e05d67ad1deca34f991db52"
     },
     {
       "path": "src/components/labels.tsx",
@@ -1270,8 +1465,8 @@
     },
     {
       "path": "src/components/movement-form.tsx",
-      "bytes": 13303,
-      "sha256": "455fa3b01d1ade9640b0dfc5e8eff23089796e135b70ae7db72b87b6ff2d35e6"
+      "bytes": 19892,
+      "sha256": "9cfe7d945d0c068f35d88d9b37d12315b06f6890dbdf080d43fd6758a092619e"
     },
     {
       "path": "src/components/movement-table.tsx",
@@ -1279,9 +1474,14 @@
       "sha256": "33f1bfd41b2ccb1bcaecc55bf37ef2a7792a9a3979c24792bd2c8a9a8a3cc5db"
     },
     {
+      "path": "src/components/operational-pending.tsx",
+      "bytes": 6548,
+      "sha256": "0a8c91322ef058f73b9a2481de6fbb915fc00db53652d149e5e800ed2ed246cd"
+    },
+    {
       "path": "src/components/orders.tsx",
-      "bytes": 30118,
-      "sha256": "7ed26c8ecf9f7fc7517de247b231cf0b13b6f593c4666ebfdf5679e96d82ea58"
+      "bytes": 40743,
+      "sha256": "ad37eb45a613e7c84efd29f4a4bb87ad4e3400256139880dba7ce233ba0c36de"
     },
     {
       "path": "src/components/product-overview.tsx",
@@ -1302,6 +1502,11 @@
       "path": "src/components/quick-lookup.tsx",
       "bytes": 3866,
       "sha256": "2ed3ae370cddb8ff783c55dfe92148238553c7119fb77c7b4f55a9fe2688e41b"
+    },
+    {
+      "path": "src/components/reconciliation.tsx",
+      "bytes": 29223,
+      "sha256": "dd47a0486dea9e3160e0baba29e1eb59dca47569d232d4edb688b9b4b6b8ae69"
     },
     {
       "path": "src/components/replenishment.tsx",
@@ -1350,8 +1555,8 @@
     },
     {
       "path": "src/lib/auth.ts",
-      "bytes": 4514,
-      "sha256": "0bfc4c7df55a60df882369561a286c946a90e2325628bee8b66df7a0fb9354e0"
+      "bytes": 4534,
+      "sha256": "ac81226a1d759ce3057bd0a036fba4141a11997a43dbe0cd38ae2e57bd788a28"
     },
     {
       "path": "src/lib/brand.ts",
@@ -1384,6 +1589,11 @@
       "sha256": "12fe3ee430b3ffba7acf538ba66ceb5419473780dbc3af227d81cac740fdd26f"
     },
     {
+      "path": "src/lib/reconciliation-csv.ts",
+      "bytes": 2093,
+      "sha256": "33e1bbc07b5e7f9e733bf7b8064137805e44a7c313396364e559bac5dc614150"
+    },
+    {
       "path": "src/lib/replenishment.ts",
       "bytes": 812,
       "sha256": "359b876bb93aba7a4276c793138c9f1785194a20d23f21a5fbc3824d58f64f86"
@@ -1400,8 +1610,8 @@
     },
     {
       "path": "src/lib/workspace-navigation.ts",
-      "bytes": 1022,
-      "sha256": "6f249ce2bf114407173eabb2ce0cfcdb68fdd200cb69628c0cbe75e02c5b0296"
+      "bytes": 1076,
+      "sha256": "3ded8902b55eafab353a58b102612142be386cea245c687b30187b9e162b569a"
     },
     {
       "path": "src/proxy.ts",
@@ -1424,14 +1634,29 @@
       "sha256": "3517e23e9063cfac198c4e1c9aff995fa1b026153f9c93f9fd66a61922de19d1"
     },
     {
+      "path": "src/services/inventory-schedules.ts",
+      "bytes": 6803,
+      "sha256": "3a9cd72ca3992e83da2777b8d4ce89a29ef7b419e46e868395922088547ae4b3"
+    },
+    {
       "path": "src/services/inventory.ts",
-      "bytes": 10513,
-      "sha256": "18abada41c538d7e8fed8844f87c14c84c9944127bc3844228ab014e7852ddff"
+      "bytes": 15919,
+      "sha256": "8d81f67ea978d59e72f66f6c3d5ad42997ee289b19f65f1d4eabfd0d788ee0aa"
+    },
+    {
+      "path": "src/services/operational-pending.ts",
+      "bytes": 5858,
+      "sha256": "dfde52987eb987c97aa42035509209be286e533dcc75f7a6ebf5b9e91f4891b1"
+    },
+    {
+      "path": "src/services/order-costs.ts",
+      "bytes": 4266,
+      "sha256": "6279f1d31e57dfd1860a4a016eb077ec6982b7cc88b5330800aeb223936a0982"
     },
     {
       "path": "src/services/orders.ts",
-      "bytes": 14543,
-      "sha256": "568880fc91e0b67a08d2529dffe7f08d63c851e70d7724e817c28c07b9f68381"
+      "bytes": 19326,
+      "sha256": "49f1aa92edbd9646ac920012df9f664c9aece6470cce78997e649c547378d245"
     },
     {
       "path": "src/services/purchases.ts",
@@ -1444,14 +1669,19 @@
       "sha256": "f791e8d87b46887e5734362e7ea259c09e7acb4566750a10f6bc8ee51df9f5c4"
     },
     {
+      "path": "src/services/reconciliation.ts",
+      "bytes": 13023,
+      "sha256": "f18ea0178c152759993803dfd1d9bcce56008884d72038737f5a707ff06f29b9"
+    },
+    {
       "path": "src/services/replenishment.ts",
       "bytes": 3477,
       "sha256": "96dee373dd5ac5ec7c43f8d019210e88bf3bb12dde98aae9abc9ec4cb7534d8d"
     },
     {
       "path": "src/services/stock.ts",
-      "bytes": 15092,
-      "sha256": "16cdc286fbc627bad2146fe362a5b1c2bc5f6691d49fe073e2361e2bbb367f39"
+      "bytes": 17153,
+      "sha256": "c2abb0cd64bae741c02d74775d3002f649821fd57d1a5322fee2a879e61c88ff"
     },
     {
       "path": "src/services/user-access.ts",
@@ -1479,14 +1709,34 @@
       "sha256": "12423e1dfe38eff882e4a62d7d256e4d6603a303a0df992fddedf023f09dd89b"
     },
     {
+      "path": "tests/database-diagnostics.test.ts",
+      "bytes": 8021,
+      "sha256": "04ea791fb880231a40f6c3544dada763e5e412e2d8b9c4ac6dafb5c3592e5457"
+    },
+    {
       "path": "tests/database-security.integration.test.ts",
       "bytes": 3887,
       "sha256": "0d7f16a485fe59d9b713c3a790e43a482251e1d00c305ac3bdfe7a008fe45add"
     },
     {
       "path": "tests/domain.integration.test.ts",
-      "bytes": 28961,
-      "sha256": "4d21b446810995f9778949da1d7bc2d828a7f6248e67be46980f606c8a33b360"
+      "bytes": 41968,
+      "sha256": "ca1cc0789853bb18c95d27c75ce79d9fdc6adb5d7eb1b26754cd77c2904b7b62"
+    },
+    {
+      "path": "tests/inventory-schedules.integration.test.ts",
+      "bytes": 14060,
+      "sha256": "532433a3a8ec47918f0c8ad52fb1e1ca63db780368d5dc04db38ae1a6404b216"
+    },
+    {
+      "path": "tests/operational-pending.integration.test.ts",
+      "bytes": 9222,
+      "sha256": "99d096798d72b21760d6f6328aa9e1012448aa5bd6250b9eadf5ec4ebfffcc18"
+    },
+    {
+      "path": "tests/order-costs.test.ts",
+      "bytes": 1211,
+      "sha256": "4ada792747c362530d3f3b46ae2baa8618a2c270225e42f31974d582f08d4783"
     },
     {
       "path": "tests/purchase-draft.test.ts",
@@ -1499,14 +1749,24 @@
       "sha256": "8a606d3f4ce3ddafeed94ab68b4e494fa336c6b6dad2bae5b4e01659de5f7a46"
     },
     {
+      "path": "tests/reconciliation-csv.test.ts",
+      "bytes": 1478,
+      "sha256": "48d8ea19499406b0ff7a75b93bb9470f01455e4b0d3ea560cbad4f8f77f6f0ab"
+    },
+    {
+      "path": "tests/reconciliation.integration.test.ts",
+      "bytes": 14327,
+      "sha256": "428de3e6eb67dc53ef4f7d5776f65218c241afa65a56138e676231693d3d18b9"
+    },
+    {
       "path": "tests/security.test.ts",
       "bytes": 3531,
       "sha256": "6391fa1784fa1259a8e0d4ea48918a946632e196c0c948fe57400c24225cbd82"
     },
     {
       "path": "tests/stock.integration.test.ts",
-      "bytes": 29198,
-      "sha256": "03a4ae91f4375463f5e81ad1ec80f021589ba8153ee69c14711151a1dc4285e1"
+      "bytes": 29996,
+      "sha256": "75083f8a1ffe32b6a6b2f16a52d3adc41e4e2fe07f7511ff34ec227d245f4ef5"
     },
     {
       "path": "tests/user-access.integration.test.ts",

@@ -14,7 +14,7 @@ import type { PurchaseDraft } from "@/lib/purchase-draft";
 import Assistant from "@/components/assistant";
 import { MotionToggle } from "@/components/motion-preferences";
 import { ApiError } from "@/lib/client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowDownLeft,
   ArrowRight,
@@ -117,8 +117,21 @@ const Purchases = dynamic(() => import("@/components/purchases"), {
 });
 import { brand } from "@/lib/brand";
 
+const OperationalPending = dynamic(
+  () => import("@/components/operational-pending"),
+  { loading: () => <Loading /> },
+);
+const InventorySchedules = dynamic(
+  () => import("@/components/inventory-schedules"),
+  { loading: () => <Loading /> },
+);
+const Reconciliation = dynamic(() => import("@/components/reconciliation"), {
+  loading: () => <Loading />,
+});
+
 const navigation = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/pendencias", label: "Pendências", icon: Bell },
   { path: "/produtos", label: "Produtos", icon: Package },
   { path: "/estoque", label: "Estoque", icon: Boxes },
   { path: "/consulta", label: "Consulta rápida", icon: Search },
@@ -133,6 +146,17 @@ const navigation = [
   { path: "/qrcodes", label: "QR Codes", icon: QrCode },
   { path: "/fornecedores", label: "Fornecedores", icon: Truck },
   { path: "/inventario", label: "Inventário", icon: ClipboardCheck },
+  {
+    path: "/conferencias",
+    label: "Conferências periódicas",
+    icon: FileClock,
+    permission: "inventory:count",
+  },
+  {
+    path: "/conciliacao",
+    label: "Custos e conciliação",
+    icon: ChartNoAxesCombined,
+  },
   {
     path: "/ordens-servico",
     label: "Ordens de serviço",
@@ -168,6 +192,7 @@ type MoveOptions = {
 export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   const [now, setNow] = useState(() => Date.now());
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const route = pathname === "/" ? "/dashboard" : pathname;
   const [data, setData] = useState<DataSet | null>(null);
@@ -203,7 +228,11 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [movement, setMovement] = useState<MoveOptions | null>(null);
   const [scan, setScan] = useState(false);
-  const [count, setCount] = useState<{ location?: string } | null>(null);
+  const [count, setCount] = useState<{
+    location?: string;
+    scheduleId?: string;
+  } | null>(null);
+  const [countRejectionReason, setCountRejectionReason] = useState("");
   const [countDetails, setCountDetails] = useState<InventoryCount | null>(null);
   const [auditDetails, setAuditDetails] = useState<Audit | null>(null);
   const [productDetails, setProductDetails] = useState<Product | null>(null);
@@ -267,6 +296,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     setMovement(null);
     setScan(false);
     setCount(null);
+    setCountRejectionReason("");
     setCountDetails(null);
     setAuditDetails(null);
     setProductDetails(null);
@@ -351,6 +381,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     setEditor(null);
     setMovement(null);
     setCount(null);
+    setCountRejectionReason("");
     setCountDetails(null);
     await refresh();
     setToast(message);
@@ -387,6 +418,49 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
       await complete("Inventário aprovado. Os ajustes foram registrados.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Não foi possível aprovar.");
+    } finally {
+      setActionBusy(false);
+    }
+  }
+  async function openInventoryCount(id?: string) {
+    navigateWorkspace("/inventario");
+    if (!id) return;
+    const generation = refreshGeneration.current;
+    setError("");
+    try {
+      const result = await api<InventoryCount>(
+        `/api/inventory/${encodeURIComponent(id)}`,
+      );
+      if (generation !== refreshGeneration.current) return;
+      setCountRejectionReason("");
+      setCountDetails(result);
+    } catch (cause) {
+      if (generation === refreshGeneration.current)
+        setError(
+          cause instanceof Error
+            ? cause.message
+            : "Não foi possível abrir a contagem.",
+        );
+    }
+  }
+  async function rejectCount(id: string) {
+    setActionBusy(true);
+    setError("");
+    try {
+      await api(`/api/inventory/${id}/reject`, {
+        method: "POST",
+        body: JSON.stringify({ note: countRejectionReason }),
+      });
+      setCountRejectionReason("");
+      await complete(
+        "Contagem encerrada sem ajustar saldos. Você pode registrar uma nova conferência.",
+      );
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "Não foi possível encerrar a contagem.",
+      );
     } finally {
       setActionBusy(false);
     }
@@ -450,6 +524,12 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                   "Página não encontrada";
   const descriptions: Record<string, string> = {
     "/dashboard": "Saldos, movimentações e pendências da unidade.",
+    "/pendencias":
+      "Retiradas, devoluções e conferências que precisam de atenção.",
+    "/conferencias":
+      "Uma rotina de contagem para manter físico e sistema em acordo.",
+    "/conciliacao":
+      "Custos de materiais por ordem e comparação revisável com o ERP.",
     "/produtos":
       "Cadastre materiais, defina mínimos e imprima o QR de cada produto.",
     "/estoque": "Acompanhe o saldo real de cada material, em cada localização.",
@@ -659,11 +739,41 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
       );
     const required = navigation.find((item) => item.path === route)?.permission;
     if (required && !can(required)) return <Denied />;
+    if (route === "/pendencias")
+      return (
+        <OperationalPending
+          key={`${user?.unitId}-${now}`}
+          onOpenOrder={(id, kind) =>
+            navigateWorkspace(
+              `/${kind === "SERVICE" ? "ordens-servico" : "ordens-producao"}?ordem=${encodeURIComponent(id)}`,
+            )
+          }
+          onInventory={(id) => void openInventoryCount(id)}
+          onSchedules={() => navigateWorkspace("/conferencias")}
+        />
+      );
+    if (route === "/conferencias")
+      return (
+        <InventorySchedules
+          key={`${user?.unitId}-${now}`}
+          data={data}
+          permissions={permissions}
+          onViewInventory={(id) => void openInventoryCount(id)}
+          onStart={(locationId, scheduleId) =>
+            setCount({ location: locationId, scheduleId })
+          }
+        />
+      );
+    if (route === "/conciliacao" && !can("reports:read") && !can("costs:read"))
+      return <Denied />;
+    if (route === "/conciliacao")
+      return <Reconciliation key={user?.unitId} permissions={permissions} />;
     if (route === "/ordens-servico" || route === "/ordens-producao")
       return (
         <Orders
           key={`${user?.unitId}-${route}`}
           kind={route === "/ordens-servico" ? "SERVICE" : "PRODUCTION"}
+          initialOrderId={searchParams.get("ordem") || undefined}
           data={data}
           permissions={permissions}
           onRefresh={refresh}
@@ -1506,11 +1616,19 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                       <td>{c.items.length}</td>
                       <td>
                         <Badge
-                          tone={c.status === "APPROVED" ? "success" : "warning"}
+                          tone={
+                            c.status === "APPROVED"
+                              ? "success"
+                              : c.status === "REJECTED"
+                                ? "neutral"
+                                : "warning"
+                          }
                         >
                           {c.status === "APPROVED"
                             ? "Aprovado"
-                            : "Aguardando aprovação"}
+                            : c.status === "REJECTED"
+                              ? "Encerrada sem ajuste"
+                              : "Aguardando aprovação"}
                         </Badge>
                       </td>
                       <td>
@@ -1819,7 +1937,16 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         <span className="nav-caption">Principal</span>
         <nav aria-label="Navegação principal">
           {navigation
-            .filter((n) => !n.permission || can(n.permission))
+            .filter(
+              (n) =>
+                (!n.permission || can(n.permission)) &&
+                (n.path !== "/pendencias" ||
+                  can("orders:read") ||
+                  can("inventory:count")) &&
+                (n.path !== "/conciliacao" ||
+                  can("reports:read") ||
+                  can("costs:read")),
+            )
             .map((n) => (
               <Link
                 key={n.path}
@@ -1981,7 +2108,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             )}
           </div>
           <div className="topbar-actions">
-            <Assistant key={`${user?.id}:${user?.unitId}:${permissions.join("|")}:${switchingUnit}`} disabled={!user || switchingUnit} />
+            <Assistant
+              key={`${user?.id}:${user?.unitId}:${permissions.join("|")}:${switchingUnit}`}
+              disabled={!user || switchingUnit}
+            />
             <MotionToggle compact />
             <button
               className="icon-button refresh-data"
@@ -2131,6 +2261,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         <InventoryForm
           data={data}
           initialLocation={count.location}
+          scheduleId={count.scheduleId}
           onClose={() => setCount(null)}
           onDone={() =>
             complete("Contagem registrada e enviada para aprovação.")
@@ -2191,7 +2322,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           wide
           title="Conferir inventário"
           subtitle={`${locationPath(data, countDetails.locationId)} · ${dateTime(countDetails.createdAt)}`}
-          onClose={() => setCountDetails(null)}
+          onClose={() => {
+            setCountDetails(null);
+            setCountRejectionReason("");
+          }}
         >
           <div className="modal-body">
             <p>{countDetails.note}</p>
@@ -2244,8 +2378,34 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                 >
                   <Check size={18} />
                   {actionBusy
-                    ? "Aprovando…"
+                    ? "Processando…"
                     : "Confirmar aprovação e ajustar estoque"}
+                </button>
+                <div className="notice info">
+                  Contagem incorreta ou obsoleta? Encerre esta proposta com uma
+                  justificativa e registre uma nova contagem. O encerramento
+                  preserva o histórico e os saldos atuais.
+                </div>
+                <label>
+                  Motivo para encerrar sem ajuste
+                  <textarea
+                    value={countRejectionReason}
+                    maxLength={2000}
+                    minLength={10}
+                    onChange={(event) =>
+                      setCountRejectionReason(event.target.value)
+                    }
+                    placeholder="Descreva por que esta contagem precisa ser refeita."
+                  />
+                </label>
+                <button
+                  className="button secondary"
+                  disabled={
+                    actionBusy || countRejectionReason.trim().length < 10
+                  }
+                  onClick={() => void rejectCount(countDetails.id)}
+                >
+                  Encerrar contagem sem ajuste
                 </button>
               </>
             )}

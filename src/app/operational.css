@@ -1,0 +1,55 @@
+/* Operational forms share the U.C.A. palette and leave room for readable labels. */
+.reconciliation-form {
+  padding: 0 22px 22px;
+}
+.reconciliation-workspace .notice.info {
+  display: block;
+  line-height: 1.7;
+}
+.reconciliation-workspace .notice.info > strong {
+  display: block;
+  margin-bottom: 5px;
+}
+.reconciliation-workspace .form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 18px 22px;
+}
+.reconciliation-workspace .form-actions > span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.inventory-schedules .panel-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inventory-schedules .panel-heading h2 > svg {
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .inventory-schedules > .panel-heading,
+  .reconciliation-workspace .panel-heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .inventory-schedules .workflow-actions {
+    justify-content: flex-start;
+    max-width: none;
+  }
+  .inventory-schedules .workflow-actions > .button {
+    flex: 1;
+  }
+  .inventory-schedules .workflow-actions > .square {
+    flex: 0 0 44px;
+  }
+  .reconciliation-workspace .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .reconciliation-form {
+    padding: 0 20px 20px;
+  }
+}

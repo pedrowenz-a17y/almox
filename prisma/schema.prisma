@@ -18,6 +18,7 @@ enum MovementType {
 enum CountStatus {
   PENDING
   APPROVED
+  REJECTED
 }
 
 model Role {
@@ -44,27 +45,30 @@ model RolePermission {
 }
 
 model User {
-  id             String           @id @default(uuid()) @db.Uuid
-  name           String
-  email          String           @unique
-  authUserId     String?          @unique @db.Uuid
-  passwordHash   String           @default("")
-  active         Boolean          @default(true)
-  roleId         String           @db.Uuid
-  role           Role             @relation(fields: [roleId], references: [id])
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  sessions       Session[]
-  movements      StockMovement[]
-  counts         InventoryCount[] @relation("CountCreator")
-  approvals      InventoryCount[] @relation("CountApprover")
-  audits         AuditLog[]
-  assets         ImageAsset[]
-  memberships    UnitMembership[]
-  workOrders     WorkOrder[]
-  orderEvents    OrderEvent[]
-  purchaseOrders PurchaseOrder[]
-  receipts       Receipt[]
+  id                         String                @id @default(uuid()) @db.Uuid
+  name                       String
+  email                      String                @unique
+  authUserId                 String?               @unique @db.Uuid
+  passwordHash               String                @default("")
+  active                     Boolean               @default(true)
+  roleId                     String                @db.Uuid
+  role                       Role                  @relation(fields: [roleId], references: [id])
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  sessions                   Session[]
+  movements                  StockMovement[]
+  counts                     InventoryCount[]      @relation("CountCreator")
+  approvals                  InventoryCount[]      @relation("CountApprover")
+  audits                     AuditLog[]
+  assets                     ImageAsset[]
+  memberships                UnitMembership[]
+  workOrders                 WorkOrder[]
+  orderEvents                OrderEvent[]
+  purchaseOrders             PurchaseOrder[]
+  receipts                   Receipt[]
+  assignedInventorySchedules InventorySchedule[]   @relation("ScheduleAssignee")
+  createdInventorySchedules  InventorySchedule[]   @relation("ScheduleCreator")
+  reconciliationBatches      ReconciliationBatch[]
 
   @@index([roleId])
 }
@@ -211,6 +215,8 @@ model Location {
   incoming        StockMovement[]    @relation("Destination")
   counts          InventoryCount[]
 
+  inventorySchedules InventorySchedule[]
+
   @@unique([unitId, code])
   @@unique([unitId, id])
   @@index([unitId])
@@ -285,21 +291,25 @@ model StockMovement {
 }
 
 model InventoryCount {
-  unitId          String?              @db.Uuid
-  operationalUnit OperationalUnit?     @relation(fields: [unitId], references: [id], onDelete: Restrict)
-  id              String               @id @default(uuid()) @db.Uuid
-  locationId      String               @db.Uuid
-  location        Location             @relation(fields: [locationId], references: [id])
-  userId          String               @db.Uuid
-  user            User                 @relation("CountCreator", fields: [userId], references: [id])
-  approvedById    String?              @db.Uuid
-  approvedBy      User?                @relation("CountApprover", fields: [approvedById], references: [id])
-  status          CountStatus          @default(PENDING)
-  note            String
-  createdAt       DateTime             @default(now())
-  approvedAt      DateTime?
-  items           InventoryCountItem[]
-  movements       StockMovement[]
+  unitId           String?              @db.Uuid
+  operationalUnit  OperationalUnit?     @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  id               String               @id @default(uuid()) @db.Uuid
+  locationId       String               @db.Uuid
+  location         Location             @relation(fields: [locationId], references: [id])
+  userId           String               @db.Uuid
+  user             User                 @relation("CountCreator", fields: [userId], references: [id])
+  approvedById     String?              @db.Uuid
+  approvedBy       User?                @relation("CountApprover", fields: [approvedById], references: [id])
+  status           CountStatus          @default(PENDING)
+  note             String
+  createdAt        DateTime             @default(now())
+  approvedAt       DateTime?
+  items            InventoryCountItem[]
+  movements        StockMovement[]
+  scheduleId       String?              @db.Uuid
+  scheduleDueAt    DateTime?
+  schedule         InventorySchedule?   @relation("InventoryScheduleCounts", fields: [scheduleId], references: [id], onDelete: Restrict)
+  lastForSchedules InventorySchedule[]  @relation("InventoryScheduleLastCount")
 
   @@unique([unitId, id])
   @@index([unitId])
@@ -393,34 +403,36 @@ model Organization {
 }
 
 model OperationalUnit {
-  id                 String               @id @default(uuid()) @db.Uuid
-  organizationId     String               @db.Uuid
-  organization       Organization         @relation(fields: [organizationId], references: [id], onDelete: Restrict)
-  code               String               @unique
-  name               String
-  active             Boolean              @default(true)
-  createdAt          DateTime             @default(now())
-  memberships        UnitMembership[]
-  categories         Category[]
-  suppliers          Supplier[]
-  products           Product[]
-  warehouses         Warehouse[]
-  locations          Location[]
-  balances           InventoryBalance[]
-  movements          StockMovement[]
-  counts             InventoryCount[]
-  countItems         InventoryCountItem[]
-  idempotencyRecords IdempotencyRecord[]
-  audits             AuditLog[]
-  settings           AppSettings?
-  assets             ImageAsset[]
-  workOrders         WorkOrder[]
-  orderMaterials     OrderMaterial[]
-  orderEvents        OrderEvent[]
-  purchaseOrders     PurchaseOrder[]
-  purchaseItems      PurchaseOrderItem[]
-  receipts           Receipt[]
-  receiptItems       ReceiptItem[]
+  id                    String                @id @default(uuid()) @db.Uuid
+  organizationId        String                @db.Uuid
+  organization          Organization          @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  code                  String                @unique
+  name                  String
+  active                Boolean               @default(true)
+  createdAt             DateTime              @default(now())
+  memberships           UnitMembership[]
+  categories            Category[]
+  suppliers             Supplier[]
+  products              Product[]
+  warehouses            Warehouse[]
+  locations             Location[]
+  balances              InventoryBalance[]
+  movements             StockMovement[]
+  counts                InventoryCount[]
+  countItems            InventoryCountItem[]
+  idempotencyRecords    IdempotencyRecord[]
+  audits                AuditLog[]
+  settings              AppSettings?
+  assets                ImageAsset[]
+  workOrders            WorkOrder[]
+  orderMaterials        OrderMaterial[]
+  orderEvents           OrderEvent[]
+  purchaseOrders        PurchaseOrder[]
+  purchaseItems         PurchaseOrderItem[]
+  receipts              Receipt[]
+  receiptItems          ReceiptItem[]
+  inventorySchedules    InventorySchedule[]
+  reconciliationBatches ReconciliationBatch[]
 
   @@index([organizationId])
 }
@@ -477,22 +489,24 @@ model WorkOrder {
 }
 
 model OrderMaterial {
-  id                String          @id @default(uuid()) @db.Uuid
-  unitId            String          @db.Uuid
-  operationalUnit   OperationalUnit @relation(fields: [unitId], references: [id], onDelete: Restrict)
-  orderId           String          @db.Uuid
-  order             WorkOrder       @relation(fields: [orderId], references: [id], onDelete: Restrict)
-  productId         String          @db.Uuid
-  product           Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
-  locationId        String          @db.Uuid
-  location          Location        @relation(fields: [locationId], references: [id], onDelete: Restrict)
-  requestedQuantity Decimal         @default(0) @db.Decimal(18, 3)
-  reservedQuantity  Decimal         @default(0) @db.Decimal(18, 3)
-  appliedQuantity   Decimal         @default(0) @db.Decimal(18, 3)
-  consumedQuantity  Decimal         @default(0) @db.Decimal(18, 3)
-  returnedQuantity  Decimal         @default(0) @db.Decimal(18, 3)
-  events            OrderEvent[]
-  movements         StockMovement[]
+  id                    String          @id @default(uuid()) @db.Uuid
+  unitId                String          @db.Uuid
+  operationalUnit       OperationalUnit @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  orderId               String          @db.Uuid
+  order                 WorkOrder       @relation(fields: [orderId], references: [id], onDelete: Restrict)
+  productId             String          @db.Uuid
+  product               Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+  locationId            String          @db.Uuid
+  location              Location        @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  requestedQuantity     Decimal         @default(0) @db.Decimal(18, 3)
+  reservedQuantity      Decimal         @default(0) @db.Decimal(18, 3)
+  appliedQuantity       Decimal         @default(0) @db.Decimal(18, 3)
+  consumedQuantity      Decimal         @default(0) @db.Decimal(18, 3)
+  returnedQuantity      Decimal         @default(0) @db.Decimal(18, 3)
+  pendingReturnQuantity Decimal         @default(0) @db.Decimal(18, 3)
+  invoicedUnitCost      Decimal?        @db.Decimal(18, 2)
+  events                OrderEvent[]
+  movements             StockMovement[]
 
   @@unique([orderId, productId, locationId])
   @@unique([unitId, id])
@@ -609,4 +623,47 @@ model ReceiptItem {
   @@index([purchaseOrderItemId])
   @@index([productId])
   @@index([locationId])
+}
+
+// A count completes a cycle only when approved against its recorded due date.
+model InventorySchedule {
+  id              String           @id @default(uuid()) @db.Uuid
+  unitId          String           @db.Uuid
+  operationalUnit OperationalUnit  @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  locationId      String           @db.Uuid
+  location        Location         @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  title           String
+  intervalDays    Int
+  nextDueAt       DateTime
+  assigneeId      String?          @db.Uuid
+  assignee        User?            @relation("ScheduleAssignee", fields: [assigneeId], references: [id], onDelete: Restrict)
+  active          Boolean          @default(true)
+  lastCountId     String?          @db.Uuid
+  lastCount       InventoryCount?  @relation("InventoryScheduleLastCount", fields: [lastCountId], references: [id], onDelete: Restrict)
+  counts          InventoryCount[] @relation("InventoryScheduleCounts")
+  createdById     String           @db.Uuid
+  createdBy       User             @relation("ScheduleCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([unitId, id])
+  @@index([unitId, active, nextDueAt])
+  @@index([locationId])
+}
+
+// Review documents only. An import never adjusts stock or the external ERP.
+model ReconciliationBatch {
+  id              String          @id @default(uuid()) @db.Uuid
+  unitId          String          @db.Uuid
+  operationalUnit OperationalUnit @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  sourceName      String
+  referenceAt     DateTime
+  kind            String
+  createdById     String          @db.Uuid
+  createdBy       User            @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt       DateTime        @default(now())
+  result          Json
+
+  @@unique([unitId, id])
+  @@index([unitId, createdAt])
 }

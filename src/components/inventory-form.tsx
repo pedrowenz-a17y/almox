@@ -7,11 +7,13 @@ import { Scanner } from "@/components/scanner";
 export default function InventoryForm({
   data,
   initialLocation,
+  scheduleId,
   onClose,
   onDone,
 }: {
   data: DataSet;
   initialLocation?: string;
+  scheduleId?: string;
   onClose: () => void;
   onDone: () => Promise<void>;
 }) {
@@ -59,7 +61,13 @@ export default function InventoryForm({
     try {
       await api("/api/inventory", {
         method: "POST",
-        body: JSON.stringify({ locationId, items, note, idempotencyKey: key }),
+        body: JSON.stringify({
+          locationId,
+          items,
+          note,
+          scheduleId,
+          idempotencyKey: key,
+        }),
       });
       await onDone();
     } catch (e) {
@@ -93,7 +101,7 @@ export default function InventoryForm({
               <select
                 required
                 value={locationId}
-                disabled={review}
+                disabled={review || !!scheduleId}
                 onChange={(e) => select(e.target.value)}
               >
                 <option value="">Selecione a localização</option>
@@ -105,7 +113,7 @@ export default function InventoryForm({
                     </option>
                   ))}
               </select>
-              {!review && (
+              {!review && !scheduleId && (
                 <button
                   type="button"
                   className="button secondary square"

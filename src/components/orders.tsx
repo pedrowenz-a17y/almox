@@ -11,6 +11,9 @@ type OrderAction =
   | "RELEASE"
   | "APPLY"
   | "RETURN"
+  | "REQUEST_RETURN"
+  | "CANCEL_RETURN"
+  | "REDUCE_REQUEST"
   | "INVOICE"
   | "CANCEL";
 interface Material {
@@ -22,6 +25,7 @@ interface Material {
   appliedQuantity: string;
   consumedQuantity: string;
   returnedQuantity: string;
+  pendingReturnQuantity?: string;
   product: { id: string; name: string; internalCode: string; unit: string };
   location: { id: string; name: string; code: string };
 }
@@ -45,6 +49,18 @@ interface Order {
     reference?: string;
     createdAt: string;
     user?: { name: string };
+    metadata?: {
+      handoff?: {
+        deliveredByName?: string;
+        receivedByName: string;
+        receivedByIdentifier: string;
+      };
+      returnReceipt?: {
+        receivedByName?: string;
+        returnedByName: string;
+        returnedByIdentifier: string;
+      };
+    };
   }[];
 }
 interface Page {
@@ -57,8 +73,11 @@ const labels: Record<OrderAction, string> = {
   REQUEST: "Requisitar material",
   RESERVE: "Reservar",
   RELEASE: "Liberar reserva",
-  APPLY: "Registrar aplicação",
-  RETURN: "Registrar devolução",
+  APPLY: "Entregar e aplicar",
+  RETURN: "Receber devolução",
+  REQUEST_RETURN: "Solicitar devolução",
+  CANCEL_RETURN: "Cancelar pedido de devolução",
+  REDUCE_REQUEST: "Encerrar saldo solicitado",
   INVOICE: "Confirmar faturamento",
   CANCEL: "Cancelar ordem",
 };
@@ -72,7 +91,10 @@ const eventLabels: Record<string, string> = {
   REQUESTED: "Material requisitado",
   RESERVED: "Material reservado",
   RELEASED: "Reserva liberada",
-  APPLIED: "Material aplicado",
+  APPLIED: "Aplicação registrada",
+  RETURN_REQUESTED: "Devolução solicitada",
+  RETURN_REQUEST_CANCELLED: "Pedido de devolução cancelado",
+  REQUEST_REDUCED: "Saldo solicitado encerrado",
   RETURNED: "Material devolvido",
   RETURNED_BEFORE_INVOICE: "Devolução antes do faturamento",
   RETURNED_AFTER_INVOICE: "Devolução após o faturamento",
@@ -83,7 +105,7 @@ const eventLabels: Record<string, string> = {
 const permissionFor = (action: OrderAction) =>
   action === "INVOICE"
     ? "orders:invoice"
-    : ["APPLY", "RETURN"].includes(action)
+    : ["APPLY", "RETURN", "REQUEST_RETURN", "CANCEL_RETURN"].includes(action)
       ? "orders:apply"
       : "orders:write";
 
@@ -92,11 +114,13 @@ export default function Orders({
   data,
   permissions,
   onRefresh,
+  initialOrderId,
 }: {
   kind: OrderKind;
   data: DataSet;
   permissions: string[];
   onRefresh: () => Promise<void>;
+  initialOrderId?: string;
 }) {
   const [result, setResult] = useState<Page | null>(null);
   const [selected, setSelected] = useState<Order | null>(null);
@@ -123,6 +147,10 @@ export default function Orders({
             Number(material.returnedQuantity)) *
             1000,
         ) > 0,
+    ) ?? false;
+  const pendingReturn =
+    selected?.materials.some(
+      (material) => Number(material.pendingReturnQuantity || 0) > 0,
     ) ?? false;
   const title = kind === "SERVICE" ? "Ordens de Serviço" : "Ordens de Produção";
   useEffect(() => {
@@ -169,6 +197,27 @@ export default function Orders({
     void load(controller.signal);
     return () => controller.abort();
   }, [load]);
+  useEffect(() => {
+    if (!initialOrderId) return;
+    const controller = new AbortController();
+    void api<Order>(`/api/orders/${encodeURIComponent(initialOrderId)}`, {
+      signal: controller.signal,
+    })
+      .then((order) => {
+        if (order.kind !== kind)
+          throw new Error("Esta ordem pertence a outro tipo de operação.");
+        if (!controller.signal.aborted) setSelected(order);
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted)
+          setError(
+            cause instanceof Error
+              ? cause.message
+              : "Não foi possível abrir a ordem.",
+          );
+      });
+    return () => controller.abort();
+  }, [initialOrderId, kind]);
   async function open(order: Order) {
     setError("");
     try {
@@ -298,6 +347,7 @@ export default function Orders({
                       className="button secondary"
                       disabled={
                         pendingRequest ||
+                        pendingReturn ||
                         !selected.materials.some(
                           (material) => Number(material.appliedQuantity) > 0,
                         )
@@ -323,13 +373,22 @@ export default function Orders({
             <div className="notice warning">
               Faturamento bloqueado: todos os materiais requisitados precisam
               estar integralmente aplicados. Reservas liberadas continuam
-              pendentes de atendimento.
+              pendentes de atendimento. Encerre, com justificativa, o saldo que
+              não será utilizado.
+            </div>
+          )}
+          {selected.status === "OPEN" && pendingReturn && (
+            <div className="notice warning">
+              Há devoluções aguardando recebimento físico. Confirme o
+              recebimento antes de faturar; a solicitação ainda não libera
+              estoque.
             </div>
           )}
           <p className="workflow-help">
             A reserva compromete a disponibilidade. A aplicação retira o
             material do local físico e mantém a baixa definitiva pendente até a
-            confirmação do faturamento.
+            confirmação do faturamento. A entrega é registrada pelo usuário
+            conectado, com identificação de quem retira.
           </p>
           <section className="panel">
             <div className="panel-heading">
@@ -344,7 +403,7 @@ export default function Orders({
                     <th className="numeric">Reservado</th>
                     <th className="numeric">Aplicado, sem baixa</th>
                     <th className="numeric">Baixado</th>
-                    <th className="numeric">Devolvido</th>
+                    <th className="numeric">Devoluções</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
@@ -372,6 +431,15 @@ export default function Orders({
                       </td>
                       <td className="numeric">
                         {qty(material.returnedQuantity)}
+                        <small>Recebido após faturamento</small>
+                        {Number(material.pendingReturnQuantity || 0) > 0 && (
+                          <small>
+                            <Badge tone="warning">
+                              {qty(material.pendingReturnQuantity || 0)}{" "}
+                              aguardando recebimento
+                            </Badge>
+                          </small>
+                        )}
                       </td>
                       <td>
                         <div className="workflow-row-actions">
@@ -380,13 +448,24 @@ export default function Orders({
                                 "RESERVE",
                                 "RELEASE",
                                 "APPLY",
+                                "REQUEST_RETURN",
+                                "CANCEL_RETURN",
                                 "RETURN",
+                                "REDUCE_REQUEST",
                               ] as OrderAction[])
                             : selected.status === "INVOICED"
-                              ? (["RETURN"] as OrderAction[])
+                              ? ([
+                                  "REQUEST_RETURN",
+                                  "CANCEL_RETURN",
+                                  "RETURN",
+                                ] as OrderAction[])
                               : []
                           )
-                            .filter((type) => can(permissionFor(type)))
+                            .filter(
+                              (type) =>
+                                can(permissionFor(type)) &&
+                                canAct(type, material),
+                            )
                             .map((type) => (
                               <button
                                 key={type}
@@ -421,7 +500,7 @@ export default function Orders({
                     <th>Data</th>
                     <th>Evento</th>
                     <th>Quantidade</th>
-                    <th>Responsável</th>
+                    <th>Registro / participantes</th>
                     <th>Documento / motivo</th>
                   </tr>
                 </thead>
@@ -429,11 +508,49 @@ export default function Orders({
                   {selected.events.map((event) => (
                     <tr key={event.id}>
                       <td>{dateTime(event.createdAt)}</td>
-                      <td>{eventLabels[event.type] || event.type}</td>
+                      <td>
+                        {event.type === "APPLIED" && event.metadata?.handoff
+                          ? "Entrega e aplicação registradas"
+                          : eventLabels[event.type] || event.type}
+                      </td>
                       <td>
                         {event.quantity == null ? "—" : qty(event.quantity)}
                       </td>
-                      <td>{event.user?.name || "—"}</td>
+                      <td>
+                        {event.user?.name || "—"}
+                        {event.metadata?.handoff && (
+                          <small>
+                            Entrega:{" "}
+                            {event.metadata.handoff.deliveredByName ||
+                              event.user?.name ||
+                              "Usuário registrado"}
+                            <br />
+                            Retirou: {
+                              event.metadata.handoff.receivedByName
+                            } · {event.metadata.handoff.receivedByIdentifier}
+                            <br />
+                            Identificação declarada pelo operador
+                          </small>
+                        )}
+                        {event.metadata?.returnReceipt && (
+                          <small>
+                            Devolveu:{" "}
+                            {event.metadata.returnReceipt.returnedByName} ·{" "}
+                            {event.metadata.returnReceipt.returnedByIdentifier}
+                            <br />
+                            Recebimento:{" "}
+                            {event.metadata.returnReceipt.receivedByName ||
+                              event.user?.name ||
+                              "Usuário registrado"}
+                          </small>
+                        )}
+                        {event.type === "APPLIED" &&
+                          !event.metadata?.handoff && (
+                            <small>
+                              Registro anterior sem identificação de retirada.
+                            </small>
+                          )}
+                      </td>
                       <td>
                         {event.reference || "—"}
                         <small>{event.note}</small>
@@ -591,6 +708,53 @@ export default function Orders({
   );
 }
 
+function uncommitted(material: Material) {
+  return Math.max(
+    0,
+    Math.round(
+      (Number(material.requestedQuantity) -
+        Number(material.reservedQuantity) -
+        Number(material.appliedQuantity) -
+        Number(material.consumedQuantity) +
+        Number(material.returnedQuantity)) *
+        1000,
+    ) / 1000,
+  );
+}
+function returnable(material: Material) {
+  return Math.max(
+    0,
+    Math.round(
+      (Number(material.appliedQuantity) +
+        Number(material.consumedQuantity) -
+        Number(material.returnedQuantity)) *
+        1000,
+    ) / 1000,
+  );
+}
+function actionLimit(type: OrderAction, material: Material) {
+  if (type === "RESERVE" || type === "REDUCE_REQUEST")
+    return uncommitted(material);
+  if (type === "RELEASE" || type === "APPLY")
+    return Number(material.reservedQuantity);
+  if (type === "REQUEST_RETURN")
+    return Math.max(
+      0,
+      Math.round(
+        (returnable(material) - Number(material.pendingReturnQuantity || 0)) *
+          1000,
+      ) / 1000,
+    );
+  if (type === "RETURN") return returnable(material);
+  if (type === "CANCEL_RETURN")
+    return Number(material.pendingReturnQuantity || 0);
+  return undefined;
+}
+function canAct(type: OrderAction, material: Material) {
+  const limit = actionLimit(type, material);
+  return limit === undefined || limit > 0;
+}
+
 function CreateOrder({
   kind,
   onClose,
@@ -645,7 +809,7 @@ function CreateOrder({
         </label>
         <label>
           Descrição resumida
-          <input name="title" required minLength={2} maxLength={200} />
+          <input name="title" required minLength={3} maxLength={200} />
         </label>
         <label>
           Detalhes
@@ -697,6 +861,23 @@ function ActionForm({
   const [productId, setProductId] = useState("");
   const product = data.products.find((product) => product.id === productId);
   const quantityAction = !["INVOICE", "CANCEL"].includes(action.type);
+  const limit = action.material
+    ? actionLimit(action.type, action.material)
+    : undefined;
+  const requiresNote = [
+    "CANCEL",
+    "RETURN",
+    "REQUEST_RETURN",
+    "CANCEL_RETURN",
+    "REDUCE_REQUEST",
+  ].includes(action.type);
+  const noteMinLength = [
+    "REQUEST_RETURN",
+    "CANCEL_RETURN",
+    "REDUCE_REQUEST",
+  ].includes(action.type)
+    ? 10
+    : 3;
   async function confirm() {
     if (!review || busy) return;
     setBusy(true);
@@ -772,6 +953,18 @@ function ActionForm({
                 <p>Local: {locationPath(data, String(review.locationId))}</p>
               )}
               {review.reference && <p>Documento: {String(review.reference)}</p>}
+              {review.receivedByName && (
+                <p>
+                  Retirou: <strong>{String(review.receivedByName)}</strong> ·{" "}
+                  {String(review.receivedByIdentifier)}
+                </p>
+              )}
+              {review.returnedByName && (
+                <p>
+                  Devolveu: <strong>{String(review.returnedByName)}</strong> ·{" "}
+                  {String(review.returnedByIdentifier)}
+                </p>
+              )}
               <p>{String(review.note || "Sem observação complementar.")}</p>
             </div>
             <div className="notice info">
@@ -830,7 +1023,14 @@ function ActionForm({
                     : ""}
                 <input
                   name="quantity"
-                  defaultValue={String(draft.quantity || "")}
+                  defaultValue={String(
+                    draft.quantity ||
+                      (["RETURN", "CANCEL_RETURN"].includes(action.type) &&
+                      Number(action.material?.pendingReturnQuantity || 0) > 0
+                        ? action.material?.pendingReturnQuantity
+                        : ""),
+                  )}
+                  max={limit}
                   type="number"
                   inputMode="decimal"
                   min="0.001"
@@ -865,27 +1065,102 @@ function ActionForm({
                 devolvidos antes do cancelamento.
               </div>
             )}
+            {action.type === "REQUEST_RETURN" && (
+              <div className="notice info">
+                Solicite apenas o material que será devolvido. O estoque
+                permanece comprometido até o recebimento físico confirmado.
+              </div>
+            )}
+            {action.type === "CANCEL_RETURN" && (
+              <div className="notice warning">
+                Cancela somente a solicitação de devolução. O material continua
+                aplicado ou consumido na ordem; esta operação não registra
+                recebimento físico nem libera estoque. Justifique por que a
+                devolução não será realizada.
+              </div>
+            )}
+            {action.type === "REDUCE_REQUEST" && (
+              <div className="notice warning">
+                Encerra somente a quantidade solicitada que não está reservada
+                nem aplicada. Informe por que esse saldo não será utilizado; o
+                estoque não será movimentado.
+              </div>
+            )}
             {action.type === "RETURN" && (
               <div className="notice info">
                 Antes do faturamento, a devolução reverte a aplicação. Depois do
                 faturamento, gera uma entrada de compensação vinculada à baixa
-                original.
+                original. Confirme apenas o material efetivamente recebido.
               </div>
             )}
             {action.type === "APPLY" && (
               <div className="notice info">
                 A aplicação usa a quantidade reservada. A baixa definitiva
-                permanece pendente até a confirmação do faturamento.
+                permanece pendente até a confirmação do faturamento. Registre a
+                entrega no momento da retirada.
               </div>
+            )}
+            {["APPLY", "RETURN"].includes(action.type) && (
+              <>
+                <label>
+                  {action.type === "APPLY"
+                    ? "Quem retirou o material"
+                    : "Quem devolveu o material"}
+                  <input
+                    name={
+                      action.type === "APPLY"
+                        ? "receivedByName"
+                        : "returnedByName"
+                    }
+                    defaultValue={String(
+                      draft[
+                        action.type === "APPLY"
+                          ? "receivedByName"
+                          : "returnedByName"
+                      ] || "",
+                    )}
+                    required
+                    minLength={3}
+                    maxLength={120}
+                    autoComplete="off"
+                  />
+                </label>
+                <label>
+                  Matrícula ou identificação da pessoa
+                  <input
+                    name={
+                      action.type === "APPLY"
+                        ? "receivedByIdentifier"
+                        : "returnedByIdentifier"
+                    }
+                    defaultValue={String(
+                      draft[
+                        action.type === "APPLY"
+                          ? "receivedByIdentifier"
+                          : "returnedByIdentifier"
+                      ] || "",
+                    )}
+                    required
+                    minLength={1}
+                    maxLength={80}
+                    autoComplete="off"
+                  />
+                </label>
+                <p className="workflow-help">
+                  {action.type === "APPLY"
+                    ? "Você será registrado como responsável pela entrega. A identificação de quem retira é declarada por você."
+                    : "Você será registrado como responsável pelo recebimento físico da devolução."}
+                </p>
+              </>
             )}
             <label>
               Motivo / observação
-              {action.type === "CANCEL" ? " (obrigatório)" : ""}
+              {requiresNote ? " (obrigatório)" : ""}
               <textarea
                 name="note"
                 defaultValue={String(draft.note || "")}
-                required={action.type === "CANCEL"}
-                minLength={action.type === "CANCEL" ? 3 : undefined}
+                required={requiresNote}
+                minLength={requiresNote ? noteMinLength : undefined}
                 maxLength={2000}
                 rows={3}
               />

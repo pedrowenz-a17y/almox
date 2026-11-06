@@ -64,7 +64,7 @@ export function redactCosts<T>(value: T, user: Pick<SessionUser, 'permissions'>)
     if (Array.isArray(item)) return item.map(clean);
     if (item instanceof Date || item === null || typeof item !== 'object') return item;
     if ('toJSON' in item && typeof item.toJSON === 'function') return item;
-    return Object.fromEntries(Object.entries(item).filter(([key]) => !['passwordHash', 'tokenHash', 'password', 'access_token', 'refresh_token'].includes(key) && (costs || !['unitCost', 'totalCost', 'unitPrice', 'totalPrice'].includes(key))).map(([key, val]) => [key, clean(val)]));
+    return Object.fromEntries(Object.entries(item).filter(([key]) => !['passwordHash', 'tokenHash', 'password', 'access_token', 'refresh_token'].includes(key) && (costs || !['unitCost', 'invoicedUnitCost', 'totalCost', 'unitPrice', 'totalPrice'].includes(key))).map(([key, val]) => [key, clean(val)]));
   }
   return clean(value) as T;
 }

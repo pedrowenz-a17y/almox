@@ -1,0 +1,20 @@
+{
+  "scope": "PostgreSQL isolado local, estrutura migrada, sem identidades empresariais e sem testar Supabase Auth real.",
+  "checks": [
+    {
+      "name": "Conexão PostgreSQL",
+      "status": "ok",
+      "message": "O banco respondeu. Nenhuma escrita foi executada."
+    },
+    {
+      "name": "Estrutura do ERP",
+      "status": "ok",
+      "message": "Estrutura básica 2.4 encontrada. Isso não valida os dados, todo o histórico de migrations ou a reconciliação de dados existentes."
+    },
+    {
+      "name": "Acesso inicial",
+      "status": "warning",
+      "message": "Nenhum vínculo ativo de acesso encontrado. Siga o primeiro administrador no README; o sistema não possui senha padrão."
+    }
+  ]
+}

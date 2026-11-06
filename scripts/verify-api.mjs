@@ -3,15 +3,32 @@ import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 
-import { qaConfig, qaCredentials, mergeResponseCookies, cookieHeader } from "./qa-config.mjs";
+import {
+  qaConfig,
+  qaCredentials,
+  mergeResponseCookies,
+  cookieHeader,
+} from "./qa-config.mjs";
 
 const { baseURL: base, unitId } = qaConfig({ writes: true });
 const adminCredentials = qaCredentials("ADMIN");
 const operatorCredentials = qaCredentials("OPERATOR");
 const supervisorCredentials = qaCredentials("SUPERVISOR");
-assert.equal(new Set([adminCredentials.email, operatorCredentials.email, supervisorCredentials.email]).size, 3, "Use três contas distintas de homologação.");
+assert.equal(
+  new Set([
+    adminCredentials.email,
+    operatorCredentials.email,
+    supervisorCredentials.email,
+  ]).size,
+  3,
+  "Use três contas distintas de homologação.",
+);
 const run = randomUUID().slice(0, 8);
 const tag = `QA-API-${run}`;
+const withdrawalParticipant = {
+  name: "Pessoa de homologação HTTP",
+  identifier: `QA-${run}`,
+};
 const evidence = {
   run,
   startedAt: new Date().toISOString(),
@@ -93,17 +110,26 @@ function expectStatus(result, status) {
 async function login(email, password) {
   const cookie = new Map();
   const result = await request("/api/auth/login", {
-    method: "POST", cookie, body: { email, password },
+    method: "POST",
+    cookie,
+    body: { email, password },
   });
   expectStatus(result, 200);
   const setCookies = result.headers.getSetCookie();
   assert.ok(setCookies.length > 0);
-  assert.ok(setCookies.every(value => /HttpOnly/i.test(value)));
-  assert.ok(setCookies.every(value => /SameSite=lax/i.test(value)));
+  assert.ok(setCookies.every((value) => /HttpOnly/i.test(value)));
+  assert.ok(setCookies.every((value) => /SameSite=lax/i.test(value)));
   assert.ok(cookie.size > 0, "Login precisa devolver cookies de sessão.");
-  expectStatus(await request("/api/unit", { method: "POST", cookie, body: { unitId } }), 200);
+  expectStatus(
+    await request("/api/unit", { method: "POST", cookie, body: { unitId } }),
+    200,
+  );
   const me = expectStatus(await request("/api/me", { cookie }), 200);
-  assert.equal(me.unitId, unitId, "A unidade de homologação deve estar ativa na sessão.");
+  assert.equal(
+    me.unitId,
+    unitId,
+    "A unidade de homologação deve estar ativa na sessão.",
+  );
   return cookie;
 }
 
@@ -120,15 +146,26 @@ async function move(cookie, body) {
     method: "POST",
     cookie,
     body: {
+      ...(body.type === "EXIT"
+        ? {
+            purpose: "OTHER",
+            receivedByName: withdrawalParticipant.name,
+            receivedByIdentifier: withdrawalParticipant.identifier,
+          }
+        : {}),
       ...body,
       idempotencyKey: body.idempotencyKey || randomUUID(),
-      note: `Verificação HTTP ${run}`,
+      note: body.note ?? `Verificação HTTP ${run}`,
     },
   });
 }
 async function data(cookie = adminCookie) {
   const result = expectStatus(await request("/api/data", { cookie }), 200);
-  assert.equal(result.unitId, unitId, "Os dados devem pertencer à unidade de homologação selecionada.");
+  assert.equal(
+    result.unitId,
+    unitId,
+    "Os dados devem pertencer à unidade de homologação selecionada.",
+  );
   return result;
 }
 function quantity(dataset, productId, locationId) {
@@ -348,12 +385,30 @@ try {
     operatorRole && supervisorRole,
     "Seed must provide operator and supervisor roles",
   );
-  const operatorCookie = await login(operatorCredentials.email, operatorCredentials.password);
-  const supervisorCookie = await login(supervisorCredentials.email, supervisorCredentials.password);
-  const operator = expectStatus(await request("/api/me", { cookie: operatorCookie }), 200);
-  const supervisor = expectStatus(await request("/api/me", { cookie: supervisorCookie }), 200);
-  assert.ok(operator.permissions.includes("stock:move") && !operator.permissions.includes("catalog:write"));
-  assert.ok(supervisor.permissions.includes("catalog:write") && !supervisor.permissions.includes("costs:read"));
+  const operatorCookie = await login(
+    operatorCredentials.email,
+    operatorCredentials.password,
+  );
+  const supervisorCookie = await login(
+    supervisorCredentials.email,
+    supervisorCredentials.password,
+  );
+  const operator = expectStatus(
+    await request("/api/me", { cookie: operatorCookie }),
+    200,
+  );
+  const supervisor = expectStatus(
+    await request("/api/me", { cookie: supervisorCookie }),
+    200,
+  );
+  assert.ok(
+    operator.permissions.includes("stock:move") &&
+      !operator.permissions.includes("catalog:write"),
+  );
+  assert.ok(
+    supervisor.permissions.includes("catalog:write") &&
+      !supervisor.permissions.includes("costs:read"),
+  );
   await check(
     "Operator cannot manage catalog, settings, users or costs",
     async () => {
@@ -461,9 +516,37 @@ try {
     },
   );
   await check(
+    "Productive or unidentified manual withdrawals are rejected without changing stock",
+    async () => {
+      const fixture = {
+        type: "EXIT",
+        productId: product.id,
+        quantity: "1",
+        sourceId: source.id,
+      };
+      for (const invalid of [
+        { purpose: undefined },
+        { purpose: "PRODUCTIVE" },
+        { receivedByName: undefined },
+        { receivedByIdentifier: undefined },
+        { note: "curto" },
+        { deliveredById: me.id },
+      ])
+        expectStatus(
+          await move(operatorCookie, { ...fixture, ...invalid }),
+          400,
+        );
+      expectStatus(
+        await move(operatorCookie, { ...fixture, purpose: "LOSS" }),
+        403,
+      );
+      assert.equal(quantity(await data(), product.id, source.id), 100);
+    },
+  );
+  await check(
     "Withdrawal of 15 yields 85 and blocks negative stock",
     async () => {
-      expectStatus(
+      const withdrawal = expectStatus(
         await move(operatorCookie, {
           type: "EXIT",
           productId: product.id,
@@ -472,7 +555,24 @@ try {
         }),
         201,
       );
-      assert.equal(quantity(await data(), product.id, source.id), 85);
+      const current = await data();
+      assert.equal(quantity(current, product.id, source.id), 85);
+      const audit = current.audit.find(
+        (item) => item.entityId === withdrawal.id && item.action === "EXIT",
+      );
+      assert.ok(audit, "A retirada identificada deve ser auditada.");
+      assert.equal(audit.after.purpose, "OTHER");
+      assert.equal(audit.after.handoff.deliveredById, operator.id);
+      assert.equal(audit.after.handoff.deliveredByName, operator.name);
+      assert.equal(
+        audit.after.handoff.receivedByName,
+        withdrawalParticipant.name,
+      );
+      assert.equal(
+        audit.after.handoff.receivedByIdentifier,
+        withdrawalParticipant.identifier,
+      );
+      assert.equal(audit.after.handoff.confirmation, "DECLARED_BY_OPERATOR");
       expectStatus(
         await move(operatorCookie, {
           type: "EXIT",
@@ -634,12 +734,20 @@ try {
       );
     },
   );
-  await check("Catálogo não aceita redefinição de senha fora do Supabase Auth", async () => {
-    expectStatus(await request(`/api/catalog/users/${operator.id}`, {
-      method: "PATCH", cookie: adminCookie, body: { password: "nao-deve-ser-aceita-2026" },
-    }), 400);
-    expectStatus(await request("/api/me", { cookie: operatorCookie }), 200);
-  });
+  await check(
+    "Catálogo não aceita redefinição de senha fora do Supabase Auth",
+    async () => {
+      expectStatus(
+        await request(`/api/catalog/users/${operator.id}`, {
+          method: "PATCH",
+          cookie: adminCookie,
+          body: { password: "nao-deve-ser-aceita-2026" },
+        }),
+        400,
+      );
+      expectStatus(await request("/api/me", { cookie: operatorCookie }), 200);
+    },
+  );
   await check(
     "Login rate limit persists and blocks sixth failed attempt",
     async () => {
@@ -661,16 +769,19 @@ try {
       );
     },
   );
-  await check("Logout removes session cookies and denies the next protected request", async () => {
-    expectStatus(
-      await request("/api/auth/logout", {
-        method: "POST",
-        cookie: operatorCookie,
-      }),
-      200,
-    );
-    expectStatus(await request("/api/me", { cookie: operatorCookie }), 401);
-  });
+  await check(
+    "Logout removes session cookies and denies the next protected request",
+    async () => {
+      expectStatus(
+        await request("/api/auth/logout", {
+          method: "POST",
+          cookie: operatorCookie,
+        }),
+        200,
+      );
+      expectStatus(await request("/api/me", { cookie: operatorCookie }), 401);
+    },
+  );
   evidence.result = "passed";
 } catch (error) {
   evidence.result = "failed";

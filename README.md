@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.3.2
+# Almox ERP · U.C.A. — versão 2.4.0
+
+**Versão 2.4.0:** retiradas produtivas por O.S./O.P., identificação na entrega, devoluções pendentes, conferências periódicas e custos de materiais com conciliação por arquivo. [Fluxo, atualização e limites](docs/CONTROLE-OPERACIONAL-2.4.md). [Diagnóstico do banco no CMD](docs/DIAGNOSTICO-BANCO.md).
 
 **Versão 2.3.2:** foto semitransparente restaurada no painel e animações leves de entrada e interação. [Veja a prévia do painel](docs/PAINEL-2.3.2.md).
 
@@ -30,12 +32,15 @@ Esta versão utiliza **Supabase PostgreSQL e Supabase Auth**, com Next.js implan
 - QR Code de localização, câmera ou código manual, etiquetas e impressão em lote.
 - Inventário físico com proposta, aprovação autorizada e rejeição de contagem obsoleta.
 - Compras com recebimentos parciais/completos e entradas vinculadas ao documento recebido.
-- O.S./O.P. com requisição, reserva, aplicação, consumo no faturamento e devoluções rastreáveis.
+- O.S./O.P. com requisição, reserva, entrega/aplicação identificada e baixa somente no faturamento.
+- Painel de pendências, solicitações de devolução sem baixa/entrada antecipada e recebimento confirmado pelo operador.
+- Agenda de conferências por local/responsável, com recorrência após aprovação do inventário.
+- Custos de materiais capturados no faturamento e conciliação por CSV revisável, sem correção automática do ERP.
 - Organizações, unidades operacionais e permissões por vínculo do usuário com cada unidade.
 - Relatórios operacionais, CSV, Excel e impressão para PDF.
 - Interface responsiva, identidade U.C.A., recuperação de senha pelo Supabase e PWA sem movimentação offline.
 
-O faturamento de uma O.S./O.P. fica **bloqueado até todos os materiais requisitados serem atendidos**, conforme a regra confirmada pelo responsável. A referência é informada por usuário autorizado; não há emissão automática de nota fiscal.
+O faturamento de uma O.S./O.P. fica **bloqueado até todos os materiais requisitados serem atendidos**, como regra de validação deste projeto, sujeita à homologação da empresa. A referência é informada por usuário autorizado; não há emissão automática de nota fiscal.
 
 ## Tecnologias e estrutura
 
@@ -66,15 +71,15 @@ cp .env.example .env
 
 Preencha `.env` com valores reais. Não versione esse arquivo.
 
-| Variável | Finalidade |
-| --- | --- |
-| `DATABASE_URL` | Conexão Prisma de execução. Copie do painel Connect do Supabase; para serverless, escolha o pooler compatível com Prisma 6. |
-| `DIRECT_URL` | Conexão direta ou pooler em modo de sessão para migrations. Não use transaction pooling para tarefas que dependem de sessão. |
-| `APP_URL` | Origem exata, sem caminho, como `http://localhost:3000` no desenvolvimento ou a URL HTTPS pública em produção. |
-| `APP_ALLOWED_ORIGINS` | Origens adicionais explicitamente autorizadas, separadas por vírgula, sem curingas. |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase usado pela autenticação. |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Chave publicável do projeto. Nunca coloque chave secreta ou `service_role` aqui. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Chave administrativa exclusiva do servidor, necessária para convites/provisionamento. Não é retornada ao navegador. |
+| Variável                               | Finalidade                                                                                                                   |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                         | Conexão Prisma de execução. Copie do painel Connect do Supabase; para serverless, escolha o pooler compatível com Prisma 6.  |
+| `DIRECT_URL`                           | Conexão direta ou pooler em modo de sessão para migrations. Não use transaction pooling para tarefas que dependem de sessão. |
+| `APP_URL`                              | Origem exata, sem caminho, como `http://localhost:3000` no desenvolvimento ou a URL HTTPS pública em produção.               |
+| `APP_ALLOWED_ORIGINS`                  | Origens adicionais explicitamente autorizadas, separadas por vírgula, sem curingas.                                          |
+| `NEXT_PUBLIC_SUPABASE_URL`             | URL do projeto Supabase usado pela autenticação.                                                                             |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Chave publicável do projeto. Nunca coloque chave secreta ou `service_role` aqui.                                             |
+| `SUPABASE_SERVICE_ROLE_KEY`            | Chave administrativa exclusiva do servidor, necessária para convites/provisionamento. Não é retornada ao navegador.          |
 
 URLs de banco exigem codificação dos caracteres reservados de usuário/senha. Utilize TLS conforme o provedor. Não invente host, porta ou parâmetros; siga o painel Connect e a [documentação Prisma/Supabase](https://supabase.com/docs/guides/database/prisma). O guia de migração detalha pooling.
 
@@ -147,13 +152,13 @@ Supabase Auth é o único provedor ativo. `Session` e hashes antigos permanecem 
 
 Selecione a unidade, cadastre materiais e estrutura física, gere etiquetas e registre o inventário inicial aprovado por entradas/ajustes auditados. Nunca preencha saldo arbitrário nem altere quantidades no cadastro de produto ou diretamente no banco.
 
-| Quantidade | Significado |
-| --- | --- |
+| Quantidade       | Significado                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------ |
 | Registrada (`Q`) | Saldo de entradas menos saídas/ajustes, ainda incluindo materiais aplicados não faturados. |
-| Reservada (`R`) | Material separado para ordem, ainda na prateleira. |
-| Aplicada (`A`) | Material entregue à ordem, aguardando consumo no faturamento. |
-| Física | `Q − A`: quantidade esperada na localização para contagem. |
-| Disponível | `Q − R − A`: quantidade que outra operação pode usar. |
+| Reservada (`R`)  | Material separado para ordem, ainda na prateleira.                                         |
+| Aplicada (`A`)   | Material entregue à ordem, aguardando consumo no faturamento.                              |
+| Física           | `Q − A`: quantidade esperada na localização para contagem.                                 |
+| Disponível       | `Q − R − A`: quantidade que outra operação pode usar.                                      |
 
 Saídas/transferências exigem disponível suficiente e não consomem reservas/aplicações. Transferências redistribuem na mesma unidade sem alterar o total. **Estoque negativo permanece bloqueado nesta versão**, inclusive diante de configuração legada diferente.
 
@@ -165,18 +170,18 @@ No **Inventário**, conte a quantidade física. A proposta fica pendente para qu
 
 ## Perfis padrão
 
-| Ação | Administrador | Supervisor | Operador |
-| --- | --- | --- | --- |
-| Consultar catálogo/saldo e QR | Sim | Sim | Sim |
-| Movimentar e contar inventário | Sim | Sim | Sim |
-| Aprovar inventário/gerenciar catálogo | Sim | Sim | Não |
-| Consultar ordens/compras | Sim | Sim | Sim |
-| Criar ordem, requisitar/reservar/liberar, faturar/cancelar | Sim | Sim | Não |
-| Aplicar/devolver em ordem | Sim | Sim | Sim |
-| Criar/cancelar compra | Sim | Sim | Não |
-| Receber compra | Sim | Sim | Sim |
-| Relatórios | Sim | Sim | Não |
-| Custos, usuários, configurações e exclusões autorizadas | Sim | Não | Não |
+| Ação                                                       | Administrador | Supervisor | Operador |
+| ---------------------------------------------------------- | ------------- | ---------- | -------- |
+| Consultar catálogo/saldo e QR                              | Sim           | Sim        | Sim      |
+| Movimentar e contar inventário                             | Sim           | Sim        | Sim      |
+| Aprovar inventário/gerenciar catálogo                      | Sim           | Sim        | Não      |
+| Consultar ordens/compras                                   | Sim           | Sim        | Sim      |
+| Criar ordem, requisitar/reservar/liberar, faturar/cancelar | Sim           | Sim        | Não      |
+| Aplicar/devolver em ordem                                  | Sim           | Sim        | Sim      |
+| Criar/cancelar compra                                      | Sim           | Sim        | Não      |
+| Receber compra                                             | Sim           | Sim        | Sim      |
+| Relatórios                                                 | Sim           | Sim        | Não      |
+| Custos, usuários, configurações e exclusões autorizadas    | Sim           | Não        | Não      |
 
 Permissões são verificadas no backend; custos são removidos de retornos sem autorização. O modelo aceita expansão, mas não há editor visual completo de políticas. Conta Supabase sem vínculo ativo não concede acesso ao ERP.
 

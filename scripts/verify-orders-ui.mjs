@@ -11,6 +11,10 @@ const tag = `UI-ORD-${Date.now()}`;
 const checks = [];
 const errors = [];
 const fixtures = {};
+const participant = {
+  name: "Pessoa de homologação UI",
+  identifier: `QA-${tag}`,
+};
 await fs.mkdir("artifacts", { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
@@ -42,7 +46,7 @@ async function call(path, body) {
   );
   return payload.data;
 }
-async function mutate(path, click) {
+async function mutate(path, click, inspectPayload) {
   const pending = page.waitForResponse(
     (response) =>
       new URL(response.url()).pathname === path &&
@@ -50,6 +54,7 @@ async function mutate(path, click) {
   );
   await click();
   const response = await pending;
+  if (inspectPayload) inspectPayload(response.request().postDataJSON());
   const body = await response.json();
   assert.ok(
     response.ok(),
@@ -125,24 +130,87 @@ async function materialAction(order, action, quantity) {
   const names = {
     RESERVE: "Reservar",
     RELEASE: "Liberar reserva",
-    APPLY: "Registrar aplicação",
-    RETURN: "Registrar devolução",
+    APPLY: "Entregar e aplicar",
+    RETURN: "Receber devolução",
+    REQUEST_RETURN: "Solicitar devolução",
+    CANCEL_RETURN: "Cancelar pedido de devolução",
+    REDUCE_REQUEST: "Encerrar saldo solicitado",
   };
   const row = page.getByRole("row").filter({ hasText: fixtures.product.name });
   await row.getByRole("button", { name: names[action], exact: true }).click();
   const dialog = page.getByRole("dialog");
   await dialog.locator("input[name=quantity]").fill(quantity);
+  if (["APPLY", "RETURN"].includes(action)) {
+    const prefix = action === "APPLY" ? "receivedBy" : "returnedBy";
+    await dialog.locator(`input[name=${prefix}Name]`).fill(participant.name);
+    await dialog
+      .locator(`input[name=${prefix}Identifier]`)
+      .fill(participant.identifier);
+  }
   await dialog
     .locator("textarea[name=note]")
     .fill(`Homologação isolada: ${action}`);
   await dialog
     .getByRole("button", { name: "Revisar operação", exact: true })
     .click();
-  return mutate(`/api/orders/${order.id}/actions`, () =>
-    dialog
-      .getByRole("button", { name: "Confirmar operação", exact: true })
-      .click(),
+  const updated = await mutate(
+    `/api/orders/${order.id}/actions`,
+    () =>
+      dialog
+        .getByRole("button", { name: "Confirmar operação", exact: true })
+        .click(),
+    (body) => {
+      assert.equal(body.action, action);
+      assert.equal(Number(body.quantity), Number(quantity));
+      assert.ok(body.materialId && body.idempotencyKey);
+      assert.equal(
+        body.deliveredById,
+        undefined,
+        "O cliente não escolhe o entregador autenticado.",
+      );
+      assert.equal(
+        body.receivedById,
+        undefined,
+        "O cliente não escolhe quem confirma o recebimento.",
+      );
+      if (["APPLY", "RETURN"].includes(action)) {
+        const prefix = action === "APPLY" ? "receivedBy" : "returnedBy";
+        assert.equal(body[`${prefix}Name`], participant.name);
+        assert.equal(body[`${prefix}Identifier`], participant.identifier);
+      }
+      if (
+        ["REQUEST_RETURN", "CANCEL_RETURN", "REDUCE_REQUEST"].includes(action)
+      )
+        assert.ok(body.note.trim().length >= 10);
+    },
   );
+  if (["APPLY", "RETURN"].includes(action)) {
+    const type =
+      action === "APPLY"
+        ? "APPLIED"
+        : updated.status === "INVOICED"
+          ? "RETURNED_AFTER_INVOICE"
+          : "RETURNED_BEFORE_INVOICE";
+    const event = updated.events.filter((item) => item.type === type).at(-1);
+    assert.ok(event, "A entrega ou recebimento precisa gerar evento.");
+    assert.equal(event.user.id, fixtures.actor.id);
+    const handoff =
+      action === "APPLY"
+        ? event.metadata.handoff
+        : event.metadata.returnReceipt;
+    const prefix = action === "APPLY" ? "receivedBy" : "returnedBy";
+    assert.equal(handoff[`${prefix}Name`], participant.name);
+    assert.equal(handoff[`${prefix}Identifier`], participant.identifier);
+    assert.equal(
+      handoff[action === "APPLY" ? "deliveredById" : "receivedById"],
+      fixtures.actor.id,
+    );
+    assert.equal(handoff.confirmation, "DECLARED_BY_OPERATOR");
+    await expect(
+      page.getByText(participant.identifier, { exact: false }).last(),
+    ).toBeVisible();
+  }
+  return updated;
 }
 async function invoice(order) {
   await expect(
@@ -211,6 +279,7 @@ try {
     .click();
   await page.waitForURL("**/dashboard");
   await call("/api/unit", { unitId });
+  fixtures.actor = await call("/api/me");
   pass("Login real e seleção da unidade de homologação");
   fixtures.supplier = await call("/api/catalog/suppliers", {
     legalName: `${tag} fornecedor exclusivo QA`,
@@ -337,6 +406,19 @@ try {
     appliedQuantity: 3,
     availableQuantity: 91,
   });
+  const reduced = await materialAction(fixtures.service, "REDUCE_REQUEST", "1");
+  assert.equal(Number(reduced.materials[0].requestedQuantity), 9);
+  await stock({
+    quantity: 100,
+    physicalQuantity: 97,
+    reservedQuantity: 6,
+    appliedQuantity: 3,
+    availableQuantity: 91,
+  });
+  await requestMaterial(fixtures.service, "1");
+  pass(
+    "Saldo devolvido encerrado com justificativa, sem movimentar estoque; nova requisição recompõe o atendimento planejado",
+  );
   await materialAction(fixtures.service, "RELEASE", "6");
   await expect(
     page.getByRole("button", { name: "Confirmar faturamento", exact: true }),
@@ -353,7 +435,23 @@ try {
     appliedQuantity: 10,
     availableQuantity: 90,
   });
-  let service = await invoice(fixtures.service);
+  let service = await materialAction(fixtures.service, "REQUEST_RETURN", "2");
+  assert.equal(Number(service.materials[0].pendingReturnQuantity), 2);
+  await stock({ quantity: 100, physicalQuantity: 90, availableQuantity: 90 });
+  await expect(
+    page.getByRole("button", { name: "Confirmar faturamento", exact: true }),
+  ).toBeDisabled();
+  service = await materialAction(fixtures.service, "CANCEL_RETURN", "2");
+  assert.equal(Number(service.materials[0].pendingReturnQuantity), 0);
+  assert.equal(Number(service.materials[0].appliedQuantity), 10);
+  assert.ok(
+    service.events.some((event) => event.type === "RETURN_REQUEST_CANCELLED"),
+  );
+  await stock({ quantity: 100, physicalQuantity: 90, availableQuantity: 90 });
+  pass(
+    "Pedido de devolução bloqueia faturamento; cancelamento justificado do pedido mantém material aplicado e não libera estoque",
+  );
+  service = await invoice(fixtures.service);
   assert.equal(service.status, "INVOICED");
   assert.equal(Number(service.materials[0].consumedQuantity), 10);
   await stock({
@@ -366,7 +464,11 @@ try {
   pass(
     "Faturamento manual da O.S. integralmente atendida baixa exatamente 10 uma vez",
   );
+  service = await materialAction(fixtures.service, "REQUEST_RETURN", "2");
+  assert.equal(Number(service.materials[0].pendingReturnQuantity), 2);
+  await stock({ quantity: 90, physicalQuantity: 90, availableQuantity: 90 });
   service = await materialAction(fixtures.service, "RETURN", "2");
+  assert.equal(Number(service.materials[0].pendingReturnQuantity), 0);
   assert.equal(Number(service.materials[0].returnedQuantity), 2);
   await stock({ quantity: 92, physicalQuantity: 92, availableQuantity: 92 });
   await page.setViewportSize({ width: 390, height: 844 });

@@ -5,6 +5,7 @@ import "./workshop.css";
 import "./welcome.css";
 import "./welcome-interactions.css";
 import "./assistant.css";
+import "./operational.css";
 import { MotionProvider } from "@/components/motion-preferences";
 
 export const metadata: Metadata = {

@@ -1,0 +1,9 @@
+{
+  "scope": "Componentes reais em harness isolado; APIs fictícias, sem acesso real ao ERP.",
+  "passed": 2,
+  "checks": [
+    "Leitura tardia de A não substitui arquivo B escolhido depois.",
+    "Trocar tipo invalida leitura pendente e exige um novo arquivo."
+  ],
+  "errors": []
+}
