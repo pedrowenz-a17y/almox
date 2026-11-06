@@ -1,7 +1,7 @@
 {
-  "version": "2.3.1",
-  "revision": "uca-vivid-restrained-identity",
-  "generatedAt": "2026-11-06T01:50:43.679090+00:00",
+  "version": "2.3.2",
+  "revision": "dashboard-photo-gentle-motion",
+  "generatedAt": "2026-11-06T02:13:33.386870+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 19946,
-      "sha256": "7e9d833009d2e070d4db8492a682f319e4343c3d2e9477be0d3e7ea3aa9c48d9"
+      "bytes": 20105,
+      "sha256": "422d834ff08ffdb02dba81d00839c24470090aea2d99055d97c2b383d9cd5e1d"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -92,6 +92,46 @@
       "path": "artifacts/assistant-2.3.0/ui-checks.json",
       "bytes": 866,
       "sha256": "02ca8c430e7cc3d0559eb06ac06f8837c4f7ca88d8f349aa0511db94f077fbab"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/build.log",
+      "bytes": 2176,
+      "sha256": "443967b8d846542ea2cc5c07e4e5d5ad17375c00c254b0ce745f66eb69270b16"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/checks.json",
+      "bytes": 702,
+      "sha256": "56f527a8086dd849db1e880235df49eb5b342f3cb8d60beeaab2c500ca3d1677"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/lint.log",
+      "bytes": 35,
+      "sha256": "6c3bc9f0aef6bcb2d60acf997a85ec25492da1ec804bb38b93576757401d5675"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/painel-desktop.png",
+      "bytes": 264301,
+      "sha256": "833f9ff675b63365fb45987a95943bf6380bbdfa58778580e203e64a7180d23d"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/painel-mobile.png",
+      "bytes": 192685,
+      "sha256": "69be08065e7dd567d75325d0eecd497b71d0c22932126d7d5b2e72be308c54e5"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/painel.gif",
+      "bytes": 1718740,
+      "sha256": "799c2b635df1359849992a3bb4d01475dc1b2681397a94fe40de4fecd15ea4c7"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/typecheck.log",
+      "bytes": 44,
+      "sha256": "3118c436891b79a9650cfe4c18a5758c59394ba49336398af1dacbfe1df8638a"
+    },
+    {
+      "path": "artifacts/dashboard-2.3.2/validation.json",
+      "bytes": 1242,
+      "sha256": "e1ffade203ac2912516587fb263fff94015b5f8bad956326f72181203aa88109"
     },
     {
       "path": "artifacts/identity-2.3.1/assistant-regression/assistente-desktop.png",
@@ -729,6 +769,11 @@
       "sha256": "9287eadfe6c2cb81b6c687445c44a51857cf5175d6cf1ba2cf60926d5634082e"
     },
     {
+      "path": "docs/PAINEL-2.3.2.md",
+      "bytes": 1334,
+      "sha256": "50d1c4851ffd220fe237f5b9bf43469a5fee1f0612f02275fbc0a9e619fc7b10"
+    },
+    {
       "path": "docs/REVISAO-2.1.md",
       "bytes": 8707,
       "sha256": "adb7459693f684bf5d7159b51f69e2aec167758e01fe8183155ff8d66a4e17c3"
@@ -761,12 +806,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "ba871229cd1645cc93251afb98fca9ea28ebc9fa53f0cc6d517186b06cb1d3ae"
+      "sha256": "d2f01c30104f48ca718eb0160c712c80844547025185749d104f532c0dc37bce"
     },
     {
       "path": "package.json",
       "bytes": 2231,
-      "sha256": "46c76eda78212f7dbd8faee53410452b54f92cf63ac28a4c8ee6e689e6cb7206"
+      "sha256": "f148f62561640ff25bac53d54c6881d33d43c3f52efb7a5e0bbc7f99f17db64c"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1175,8 +1220,8 @@
     },
     {
       "path": "src/app/welcome.css",
-      "bytes": 20769,
-      "sha256": "9de158a11b6c2977331e34869c7b9e2d9de4708a93dbe8985db2c49f441cd3a6"
+      "bytes": 22840,
+      "sha256": "dea5efb57cc43537fc64f9d9f5f8cf84a8b7303d5f01c9c4fe0ab69a9ac36188"
     },
     {
       "path": "src/app/workshop.css",

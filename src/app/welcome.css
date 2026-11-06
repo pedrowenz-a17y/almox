@@ -479,15 +479,14 @@
 .app-shell .scan-banner::after {
   content: "";
   position: absolute;
-  width: 80px;
+  width: 120px;
   top: -100%;
   bottom: -100%;
-  left: -150px;
-  background: linear-gradient(90deg, transparent, #ffffff12, transparent);
-  transform: rotate(25deg);
-  animation: banner-glint 18s ease-in-out infinite;
+  left: -140px;
+  background: linear-gradient(90deg, transparent, #ffffff16, transparent);
+  transform: translateX(0) rotate(22deg);
+  opacity: 0;
   pointer-events: none;
-  display: none;
 }
 .app-shell .scan-banner > .scan-banner-copy {
   flex: 1;
@@ -750,16 +749,6 @@
     transform: none;
   }
 }
-@keyframes banner-glint {
-  0%,
-  65% {
-    transform: translateX(0) rotate(25deg);
-  }
-  95%,
-  100% {
-    transform: translateX(1800px) rotate(25deg);
-  }
-}
 
 /* Keep access in view while the larger photograph extends the visual panel. */
 @media (min-width: 801px) {
@@ -988,5 +977,98 @@
   }
 }
 .app-shell .scan-banner::before {
+  display: block;
+  width: 48%;
+  opacity: 0.14;
+  transform: scale(1.04);
+  mask-image: linear-gradient(90deg, transparent, #000 40%);
+}
+:root[data-motion="full"] .app-shell .scan-banner {
+  animation: banner-arrive 550ms 100ms cubic-bezier(0.2, 0.75, 0.2, 1) backwards;
+}
+:root[data-motion="full"] .app-shell .scan-banner::before {
+  animation: banner-photo-drift 16s ease-in-out infinite alternate;
+}
+:root[data-motion="full"] .app-shell .stats-grid .stat-card {
+  animation: dashboard-tile-in 480ms var(--tile-delay, 0ms)
+    cubic-bezier(0.2, 0.75, 0.2, 1) backwards;
+}
+.app-shell .stats-grid .stat-card:nth-child(2) {
+  --tile-delay: 60ms;
+}
+.app-shell .stats-grid .stat-card:nth-child(3) {
+  --tile-delay: 120ms;
+}
+.app-shell .stats-grid .stat-card:nth-child(4) {
+  --tile-delay: 180ms;
+}
+.app-shell .scan-banner-icon,
+.app-shell .scan-button > svg {
+  transition: transform 220ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-motion="full"] .app-shell .scan-banner:hover::after {
+    animation: banner-reflection 1100ms ease-out both;
+  }
+  :root[data-motion="full"] .app-shell .scan-banner:hover .scan-banner-icon {
+    transform: rotate(-5deg) scale(1.06);
+  }
+  :root[data-motion="full"] .app-shell .scan-button:hover > svg {
+    transform: translateX(3px);
+  }
+}
+:root:not([data-motion="full"]) .app-shell .scan-banner::after {
   display: none;
+}
+:root:not([data-motion="full"]) .app-shell .stat-card:hover,
+:root:not([data-motion="full"]) .app-shell .quick-action:hover {
+  transform: none;
+}
+@media (max-width: 760px) {
+  .app-shell .scan-banner::before {
+    width: 65%;
+    opacity: 0.1;
+  }
+}
+@keyframes banner-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dashboard-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes banner-photo-drift {
+  from {
+    transform: translateX(0) scale(1.04);
+  }
+  to {
+    transform: translateX(7px) scale(1.08);
+  }
+}
+@keyframes banner-reflection {
+  0% {
+    opacity: 0;
+    transform: translateX(0) rotate(22deg);
+  }
+  15%,
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(1500px) rotate(22deg);
+  }
 }

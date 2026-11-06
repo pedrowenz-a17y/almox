@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.3.1
+# Almox ERP · U.C.A. — versão 2.3.2
+
+**Versão 2.3.2:** foto semitransparente restaurada no painel e animações leves de entrada e interação. [Veja a prévia do painel](docs/PAINEL-2.3.2.md).
 
 **Versão 2.3.1:** identidade U.C.A. nas telas internas: vermelho vivo, superfícies claras e menos efeitos decorativos. [Veja as prévias e a paleta](docs/IDENTIDADE-UCA.md).
 

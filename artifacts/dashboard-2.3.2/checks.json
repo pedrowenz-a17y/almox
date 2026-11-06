@@ -1,0 +1,17 @@
+{
+  "version": "2.3.2",
+  "scope": "Real dashboard components with mocked data; no company database",
+  "passed": 9,
+  "checks": [
+    "foto oficial restaurada com transparência sobre o vermelho UCA",
+    "movimento de fundo leve sem mudar texto ou botão de posição",
+    "hover aciona reflexo uma vez e resposta do ícone",
+    "cartões entram em sequência e ficam interativos ao terminar",
+    "botão do banner continua abrindo o leitor de etiquetas",
+    "pausa preserva a fotografia estática e remove o reflexo",
+    "painel sem transbordamento de 320 a 1920 pixels",
+    "preferência do dispositivo é respeitada com retomada explícita",
+    "sem erros JavaScript"
+  ],
+  "errors": []
+}
