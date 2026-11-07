@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.4.1
+# Almox ERP · U.C.A. — versão 2.5.0
+
+**Versão 2.5.0:** assistente local gratuito com mensagens em português, referência de conversa, consultas autorizadas e comparações de estoque. Funciona sem créditos OpenAI. [Usar e configurar](docs/ASSISTENTE-IA.md).
 
 **Versão 2.4.1:** login com foto limpa, layout ajustado à tela e avisos da IA que distinguem espera temporária de cota da API. [Veja as mudanças e como atualizar](docs/LOGIN-IA-2.4.1.md).
 
@@ -40,6 +42,7 @@ Esta versão utiliza **Supabase PostgreSQL e Supabase Auth**, com Next.js implan
 - Custos de materiais capturados no faturamento e conciliação por CSV revisável, sem correção automática do ERP.
 - Organizações, unidades operacionais e permissões por vínculo do usuário com cada unidade.
 - Relatórios operacionais, CSV, Excel e impressão para PDF.
+- Assistente local por mensagens: localização de peças, análise do disponível, pendências, reposição e custos autorizados, sem API paga por padrão.
 - Interface responsiva, identidade U.C.A., recuperação de senha pelo Supabase e PWA sem movimentação offline.
 
 O faturamento de uma O.S./O.P. fica **bloqueado até todos os materiais requisitados serem atendidos**, como regra de validação deste projeto, sujeita à homologação da empresa. A referência é informada por usuário autorizado; não há emissão automática de nota fiscal.

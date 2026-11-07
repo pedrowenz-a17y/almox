@@ -1,0 +1,18 @@
+{
+  "scope": "Componentes reais e motor local real com PostgreSQL isolado e dados fictícios. Autenticação HTTP do harness simulada. Nenhuma chamada ao provedor externo ou escrita operacional pelo chat.",
+  "passed": 9,
+  "checks": [
+    "abrir e escolher sugestão não dispara uma pergunta nem chama provedor externo",
+    "sem consentimento responde orientação sem apresentar saldo consultado",
+    "busca real reconhece nomes e pede código quando há mais de um produto",
+    "consulta mostra saldo contábil, físico esperado e disponível calculados no banco",
+    "frase curta retoma o produto e consulta novamente após mudança de saldo",
+    "perguntas fora do domínio pedem esclarecimento e limpar remove a referência anterior",
+    "texto parecido com credencial é bloqueado antes de enviar e páginas menores permanecem acessíveis",
+    "troca de modo no servidor limpa a conversa antes de permitir uso externo",
+    "troca de unidade descarta conversa e a consulta seguinte não usa o produto da unidade anterior"
+  ],
+  "externalProviderCalls": 0,
+  "questions": 12,
+  "errors": []
+}

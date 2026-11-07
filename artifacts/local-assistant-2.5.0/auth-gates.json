@@ -1,0 +1,13 @@
+{
+  "scope": "Build de produção em loopback com configuração pública Supabase fictícia, sem sessão nem credenciais reais. Não comprova login no provedor real.",
+  "passed": 7,
+  "checks": [
+    "GET anônimo recusado: /api/assistant",
+    "GET anônimo recusado: /api/data",
+    "POST sem sessão recusado",
+    "POST origem externa recusado",
+    "POST sem origem recusado",
+    "Workspace sem sessão redireciona para login",
+    "Login público responde"
+  ]
+}

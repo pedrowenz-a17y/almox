@@ -212,3 +212,45 @@
   font-size: 12px;
   margin: 8px 0 12px;
 }
+.ai-mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--teal-dark);
+  font-size: 12px;
+}
+.ai-links,
+.ai-followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ai-links {
+  margin-top: 12px;
+}
+.ai-links a,
+.ai-followups button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  color: var(--text);
+  background: white;
+  font-size: 11px;
+  text-align: left;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.ai-links a:hover,
+.ai-followups button:hover {
+  border-color: var(--teal);
+  color: var(--teal-dark);
+  background: var(--teal-soft);
+}
+.ai-links a:focus-visible,
+.ai-followups button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}

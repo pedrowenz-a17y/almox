@@ -1,0 +1,9 @@
+PASS abrir e escolher sugestão não dispara uma pergunta nem chama provedor externo
+PASS sem consentimento responde orientação sem apresentar saldo consultado
+PASS busca real reconhece nomes e pede código quando há mais de um produto
+PASS consulta mostra saldo contábil, físico esperado e disponível calculados no banco
+PASS frase curta retoma o produto e consulta novamente após mudança de saldo
+PASS perguntas fora do domínio pedem esclarecimento e limpar remove a referência anterior
+PASS texto parecido com credencial é bloqueado antes de enviar e páginas menores permanecem acessíveis
+PASS troca de modo no servidor limpa a conversa antes de permitir uso externo
+PASS troca de unidade descarta conversa e a consulta seguinte não usa o produto da unidade anterior

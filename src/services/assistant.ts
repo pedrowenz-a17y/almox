@@ -18,6 +18,7 @@ export const assistantInput = z
       .max(4)
       .default([]),
     includeUnit: z.boolean().default(false),
+    mode: z.enum(["local", "openai"]).optional(),
   })
   .strict();
 
@@ -99,10 +100,10 @@ async function providerLimitCode(response: Response) {
 }
 
 const buckets = new Map<string, { start: number; count: number }>();
-export function assistantLimit(actor: StockActor, now = Date.now()) {
+export function assistantLimit(actor: StockActor, now = Date.now(), limit = 5) {
   for (const [key, bucket] of buckets)
     if (now - bucket.start >= 60_000) buckets.delete(key);
-  const key = `${actor.unitId}:${actor.id}`;
+  const key = `${limit}:${actor.unitId}:${actor.id}`;
   const bucket = buckets.get(key);
   if (!bucket && buckets.size >= 2000)
     throw new AssistantError(
@@ -111,9 +112,11 @@ export function assistantLimit(actor: StockActor, now = Date.now()) {
       "AI_BUSY",
       60,
     );
-  if ((bucket?.count ?? 0) >= 5)
+  if ((bucket?.count ?? 0) >= limit)
     throw new AssistantError(
-      "Você enviou cinco perguntas em um minuto. Aguarde a contagem para enviar outra; sua pergunta foi mantida.",
+      limit === 5
+        ? "Você enviou cinco perguntas em um minuto. Aguarde a contagem para enviar outra; sua pergunta foi mantida."
+        : `Limite de proteção de ${limit} mensagens por minuto nesta instalação. Aguarde a contagem; sua pergunta foi mantida.`,
       429,
       "AI_RATE_LIMIT",
       bucket
