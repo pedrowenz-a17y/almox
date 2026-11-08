@@ -43,9 +43,9 @@ async function verify() {
   pe(await fs.readFile(path.join(unpacked, 'Almox ERP.exe')), 0x8664);
   const data = await fs.readFile(installer); pe(data, 0x14c);
   if (data.length < 50 * 1024 * 1024 || !data.includes(Buffer.from('NullsoftInst'))) throw new Error('Instalador incompleto.');
-  const report = { version, installer: path.basename(installer), bytes: data.length, sha256: hash(data), serverFilesVerified: entries.length,
+  const report = { version, platform: process.platform, architecture: process.arch, installer: path.basename(installer), bytes: data.length, sha256: hash(data), serverFilesVerified: entries.length,
     privateEnvFiles: 0, checks: ['PE Windows x64 do aplicativo', 'NSIS completo com desinstalador', 'Prisma e bibliotecas nativas Windows', 'todos os recursos do servidor preservados por hash', 'ASAR corresponde ao código validado', 'sem .env ou harness de teste'],
-    limitation: 'Compilação cruzada em Linux. A instalação e a proteção DPAPI ainda precisam de homologação em Windows físico.' };
+    limitation: process.platform === 'win32' ? 'Compilação em Windows. A homologação operacional no computador de destino continua necessária.' : 'Compilação cruzada em Linux. A instalação e a proteção DPAPI ainda precisam de homologação em Windows físico.' };
   const output = path.join(desktop, '../artifacts/desktop-2.6.0/package-checks.json');
   await fs.writeFile(output, JSON.stringify(report, null, 2) + '\n');
   await fs.writeFile(path.join(desktop, 'dist/SHA256SUMS.txt'), `${report.sha256}  ${report.installer}\n`);

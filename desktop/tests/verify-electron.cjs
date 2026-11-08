@@ -115,7 +115,10 @@ async function verify() {
   await application.close(); application = null;
   await expect.poll(async () => { try { await fetch(`${localOrigin}/login`); return false; } catch { return true; } }, { timeout: 10000 }).toBe(true);
   record('fechar o aplicativo encerra o servidor local');
-  await fs.writeFile(path.join(evidence, 'electron-checks.json'), JSON.stringify({ scope: 'Electron real em Linux/Xvfb, Next de produção e provedor fictício. DPAPI substituída apenas no teste por AES. Não comprova instalação em Windows físico nem login no Supabase real.', passed: checks.length, checks }, null, 2) + '\n');
+  const scope = process.platform === 'win32'
+    ? 'Electron real em Windows, Next de produção, DPAPI nativa e provedor fictício. Não comprova login no Supabase real ou homologação operacional.'
+    : 'Electron real em Linux/Xvfb, Next de produção e provedor fictício. DPAPI substituída apenas no teste por AES. Não comprova instalação em Windows físico nem login no Supabase real.';
+  await fs.writeFile(path.join(evidence, 'electron-checks.json'), JSON.stringify({ scope, passed: checks.length, checks }, null, 2) + '\n');
 }
 verify().catch(async error => { console.error(error); process.exitCode = 1; }).finally(async () => {
   await application?.close().catch(() => {}); fixture?.close();

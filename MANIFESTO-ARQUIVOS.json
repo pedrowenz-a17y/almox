@@ -1,7 +1,7 @@
 {
   "version": "2.6.0",
-  "revision": "windows-desktop-installer-and-automatic-server",
-  "generatedAt": "2026-11-08T03:04:19.074882+00:00",
+  "revision": "windows-native-validation-and-release-workflow",
+  "generatedAt": "2026-11-08T03:18:27.966474+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -12,6 +12,11 @@
       "path": ".env.example",
       "bytes": 1972,
       "sha256": "7d03f61991cad4b6834593fb4974ff01f456e6eacbcde943f488e2e9b2d0dc8f"
+    },
+    {
+      "path": ".github/workflows/desktop-windows.yml",
+      "bytes": 3301,
+      "sha256": "ac8b9933cadc717aa333530fbbd1b20a8dd34636d38f0db0c7286cdecbf3dcba"
     },
     {
       "path": ".gitignore",
@@ -1135,8 +1140,8 @@
     },
     {
       "path": "desktop/scripts/verify-package.cjs",
-      "bytes": 3844,
-      "sha256": "12dd56cd3699a189563e160cbc6a3bd8549284843d7107830fd84ec8b9bd0b2e"
+      "bytes": 4035,
+      "sha256": "50274c7bb544e9cfa0713f9a125fea6b5bc8c6ae2b92bf450c93751220b4f626"
     },
     {
       "path": "desktop/setup/index.html",
@@ -1160,8 +1165,13 @@
     },
     {
       "path": "desktop/tests/verify-electron.cjs",
-      "bytes": 10093,
-      "sha256": "04f9c40fd2e949a9e1cb28accb0c079e8e878ca8f36eb3e6555023846fa5a059"
+      "bytes": 10300,
+      "sha256": "5d1089f6f40d9be886653924a1cb647a772e659a76491827bc89a81bcbd0fcf5"
+    },
+    {
+      "path": "desktop/tests/verify-installed.cjs",
+      "bytes": 7684,
+      "sha256": "7a9a7b58a0024579b1917f5afbfd6ecb5a5755adacb19fe521ea6a3dc272860b"
     },
     {
       "path": "docs/ABERTURA-2.2.2.md",
@@ -1207,6 +1217,11 @@
       "path": "docs/DIAGNOSTICO-BANCO.md",
       "bytes": 8016,
       "sha256": "0a3284a9950059333df9172f1f1e58d6fc55d52b7f0a8f2aed272b44806fd185"
+    },
+    {
+      "path": "docs/ENTREGA-WINDOWS-2.6.0.md",
+      "bytes": 1547,
+      "sha256": "c88650678d54bf348f1940d822b4cb6fa85a3e5e537ddb337de5587235b1ee35"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
