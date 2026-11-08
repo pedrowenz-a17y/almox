@@ -1,0 +1,14 @@
+<resources>
+    <style name="Theme.Almox" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#ED0B3C</item>
+        <item name="colorPrimaryDark">#1E1F24</item>
+        <item name="colorAccent">#ED0B3C</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">#F7F7FA</item>
+    </style>
+</resources>

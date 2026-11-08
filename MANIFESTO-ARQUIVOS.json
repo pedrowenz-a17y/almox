@@ -1,7 +1,7 @@
 {
-  "version": "2.6.0",
-  "revision": "windows-tested-release",
-  "generatedAt": "2026-11-08T03:36:59.918941+00:00",
+  "version": "2.7.0",
+  "revision": "android-client-and-vercel-preparation",
+  "generatedAt": "2026-11-08T04:21:14.638539+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -14,19 +14,34 @@
       "sha256": "7d03f61991cad4b6834593fb4974ff01f456e6eacbcde943f488e2e9b2d0dc8f"
     },
     {
+      "path": ".gitattributes",
+      "bytes": 108,
+      "sha256": "6f17b984126b58f8fb781caf508e056e592aa6740c232120d9cb456272002f30"
+    },
+    {
+      "path": ".github/workflows/android.yml",
+      "bytes": 2117,
+      "sha256": "01e1041e2adcf3e18678c303c5b2d030d25f29bbb6f78afff71e8ad152ae4e4c"
+    },
+    {
       "path": ".github/workflows/desktop-windows.yml",
       "bytes": 3301,
       "sha256": "ac8b9933cadc717aa333530fbbd1b20a8dd34636d38f0db0c7286cdecbf3dcba"
     },
     {
       "path": ".gitignore",
-      "bytes": 190,
-      "sha256": "bab3f12d45e166c6baf703ac90bea217d08b59a4cde05e66e4bc27467fbe5b48"
+      "bytes": 313,
+      "sha256": "2aea8d009e62a6ad7f1e7953afec8e2077867c449f17b6fa1c2aa4c91eeb7abd"
     },
     {
       "path": ".nvmrc",
       "bytes": 3,
       "sha256": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56"
+    },
+    {
+      "path": ".vercelignore",
+      "bytes": 168,
+      "sha256": "2a2651d3371b600197a0cd3b4cc2f9e65ae90b431f06da798e631fd0bc94acfb"
     },
     {
       "path": "AGENTS.md",
@@ -1319,6 +1334,91 @@
       "sha256": "82c20680bbfee0c63db36b09913f6ab7633515d30d91326a1e694204d9f4cc66"
     },
     {
+      "path": "mobile/app/build.gradle",
+      "bytes": 1866,
+      "sha256": "a37c6c1b2c894d2da06e3110d59a6100d7e87cc2636e371f232d7a8f136a6a89"
+    },
+    {
+      "path": "mobile/app/src/androidTest/java/br/uca/almox/mobile/MobileAppTest.java",
+      "bytes": 5198,
+      "sha256": "62df550c4f34a300cc7f0b979a546f5e3b29f1a276c1753fffc5f5669df15c6e"
+    },
+    {
+      "path": "mobile/app/src/main/AndroidManifest.xml",
+      "bytes": 1104,
+      "sha256": "a3596d8d536453e5cb8c1d7736465e6f3189e1f4b442abebd191ffe33997acc6"
+    },
+    {
+      "path": "mobile/app/src/main/java/br/uca/almox/mobile/ConnectionPolicy.java",
+      "bytes": 3531,
+      "sha256": "b416ffd974d4ec5dc714ec78c1113ad7e4028496d723b480eec1b7e034acf3d5"
+    },
+    {
+      "path": "mobile/app/src/main/java/br/uca/almox/mobile/MainActivity.java",
+      "bytes": 19507,
+      "sha256": "5029777130394a199935e19f3eda9a5e6897fc66fa4d5d4e8e64ee614f5459e2"
+    },
+    {
+      "path": "mobile/app/src/main/java/br/uca/almox/mobile/NativeFiles.java",
+      "bytes": 7986,
+      "sha256": "609c42e4acdd81e11c70f80e78922a8c3f0870c9fa696eef6dabe808d7b8530f"
+    },
+    {
+      "path": "mobile/app/src/main/res/drawable/uca_icon.png",
+      "bytes": 71125,
+      "sha256": "778d450205c19772cd19d99b1f9745e6fb8a4f0c2e24df54cd942c43a1efe71d"
+    },
+    {
+      "path": "mobile/app/src/main/res/values/ids.xml",
+      "bytes": 279,
+      "sha256": "f05cf450488080547c2d064dbc45d352d1c5868e4895967056a6d9e8a75bb2db"
+    },
+    {
+      "path": "mobile/app/src/main/res/values/styles.xml",
+      "bytes": 690,
+      "sha256": "2d9ea7a1481f4f66c2b59add7d253a4a6677a1573dd659be4831586e731b6f73"
+    },
+    {
+      "path": "mobile/app/src/test/java/br/uca/almox/mobile/ConnectionPolicyTest.java",
+      "bytes": 2755,
+      "sha256": "f22dd64447cc90e7850ac1b55b3eae68c06b6c3a8874a176526025e4660411d3"
+    },
+    {
+      "path": "mobile/build.gradle",
+      "bytes": 70,
+      "sha256": "96a33edb21d173da2c36f5312f50cdfb9f71d9f5078c081c81f2d029547f6cb9"
+    },
+    {
+      "path": "mobile/gradle.properties",
+      "bytes": 106,
+      "sha256": "c3154e3d5f1a042cf9c144e754b436fd100b11dfa2a71a9a4fc5772f8f5c5661"
+    },
+    {
+      "path": "mobile/gradle/wrapper/gradle-wrapper.jar",
+      "bytes": 43705,
+      "sha256": "81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f"
+    },
+    {
+      "path": "mobile/gradle/wrapper/gradle-wrapper.properties",
+      "bytes": 338,
+      "sha256": "3fb35582e5424775b45f566273d3909032a49f26c0d7d063f92a92e7b5e467d5"
+    },
+    {
+      "path": "mobile/gradlew",
+      "bytes": 8774,
+      "sha256": "c76f16038b4e70b84ed0b3b9e08e82a8ecaf66ec0efdfdecdece92520fa3cecb"
+    },
+    {
+      "path": "mobile/gradlew.bat",
+      "bytes": 2894,
+      "sha256": "0f3ed8f03b50934cb8c48b15a470d5c20a30a5385825e48b55bcc8ea3d8f8e18"
+    },
+    {
+      "path": "mobile/settings.gradle",
+      "bytes": 273,
+      "sha256": "98e777087c4de83c8f782bfbb3f5b07ff8208f1e78fff091237ad27be52a97ff"
+    },
+    {
       "path": "next-env.d.ts",
       "bytes": 288,
       "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
@@ -1331,12 +1431,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "ecc8cc37607dbd01e72e84352900c43399136b24f9ae419d1324d7459f013a30"
+      "sha256": "458e7a440de4e2ba9b09e4528c8276090ca489d17cb32d183c5476a48a6341a6"
     },
     {
       "path": "package.json",
       "bytes": 2450,
-      "sha256": "3c60bc86bcaf9878461c3c29c3c2638eb5a05a1d204674066b565313d88fc917"
+      "sha256": "ba3f12ec8306b0fa99a753ff4bceb24e46a0e370fd1956157446ec4d24eff126"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1960,8 +2060,8 @@
     },
     {
       "path": "src/lib/auth-config.ts",
-      "bytes": 3781,
-      "sha256": "54fdc67f34e5783f161755e931d3d75cf26cb7b791910073bba863020f9e2bfe"
+      "bytes": 4068,
+      "sha256": "80e76121b9525d26888756b41cfa25e4efff1b6fbda3c0ca67362b5462724990"
     },
     {
       "path": "src/lib/auth-rate-limit.ts",
@@ -2145,8 +2245,8 @@
     },
     {
       "path": "tests/auth-config.test.ts",
-      "bytes": 3668,
-      "sha256": "c7da46d1928f5130f837e029f4c014d5d51609d414437bd3b75faf62944b6c50"
+      "bytes": 4870,
+      "sha256": "955d1b9cab25e1d16846a00dabcc7e7944bd7d11cf2f89277ea2690e883e3e16"
     },
     {
       "path": "tests/catalog.integration.test.ts",
@@ -2255,8 +2355,8 @@
     },
     {
       "path": "vercel.json",
-      "bytes": 147,
-      "sha256": "9fd4ea9e9bbb01391e7e946e1b2d3e2af2dd003b27067dadcdcaf4f20b799fb1"
+      "bytes": 177,
+      "sha256": "13a59b0d3171cf0338810db84ad0b11a657ba0290006f6b9ff42126a9b3174c2"
     }
   ]
 }

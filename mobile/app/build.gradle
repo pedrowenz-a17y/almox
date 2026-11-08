@@ -1,0 +1,43 @@
+plugins { id 'com.android.application' }
+
+def configuredOrigin = providers.gradleProperty('erpOrigin').getOrElse('https://almox-e51d362d7bb7b9030e673ef18c99f.vercel.app')
+android {
+    namespace 'br.uca.almox.mobile'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'br.uca.almox.mobile'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '1.0.0'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField 'String', 'ERP_ORIGIN', '"' + configuredOrigin.replace('\\', '\\\\').replace('"', '\\"') + '"'
+    }
+    buildFeatures { buildConfig true }
+    signingConfigs {
+        release {
+            if (System.getenv('ALMOX_KEYSTORE')) {
+                storeFile file(System.getenv('ALMOX_KEYSTORE'))
+                storePassword System.getenv('ALMOX_STORE_PASSWORD')
+                keyAlias 'almox'
+                keyPassword System.getenv('ALMOX_KEY_PASSWORD') ?: System.getenv('ALMOX_STORE_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; if (System.getenv('ALMOX_KEYSTORE')) signingConfig signingConfigs.release }
+        debug { applicationIdSuffix '.test'; versionNameSuffix '-teste' }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    testOptions { animationsDisabled = true }
+}
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.webkit:webkit:1.14.0'
+    implementation 'androidx.activity:activity:1.10.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}

@@ -3,7 +3,7 @@ import { after, before, describe, test } from 'node:test';
 import { allowedOrigins, appOrigin, authServiceUnavailable, AuthConfigurationError, exactOrigin, safeReturnPath, supabasePublicConfig } from '../src/lib/auth-config';
 
 describe('configuração e redirecionamento de autenticação', () => {
-  const keys = ['APP_URL', 'APP_ALLOWED_ORIGINS', 'VERCEL', 'VERCEL_URL', 'NODE_ENV', 'NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'] as const;
+  const keys = ['APP_URL', 'APP_ALLOWED_ORIGINS', 'VERCEL', 'VERCEL_URL', 'VERCEL_ENV', 'VERCEL_PROJECT_PRODUCTION_URL', 'NODE_ENV', 'NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY'] as const;
   let previous: Record<string, string | undefined>;
   before(() => { previous = Object.fromEntries(keys.map(key => [key, process.env[key]])); });
   after(() => { for (const key of keys) { if (previous[key] === undefined) delete process.env[key]; else Object.assign(process.env, { [key]: previous[key] }); } });
@@ -23,6 +23,20 @@ describe('configuração e redirecionamento de autenticação', () => {
     delete process.env.APP_URL; delete process.env.VERCEL; delete process.env.VERCEL_URL;
     Object.assign(process.env, { NODE_ENV: 'production' });
     assert.throws(() => appOrigin(), AuthConfigurationError);
+  });
+  test('Vercel usa o domínio de produção do próprio projeto sem confiar no Host da requisição', () => {
+    delete process.env.APP_URL; delete process.env.APP_ALLOWED_ORIGINS;
+    Object.assign(process.env, { VERCEL: '1', VERCEL_ENV: 'production', VERCEL_URL: 'almox-deployment.vercel.app', VERCEL_PROJECT_PRODUCTION_URL: 'almox-empresa.vercel.app' });
+    assert.equal(appOrigin(), 'https://almox-empresa.vercel.app');
+    assert.deepEqual([...allowedOrigins()].sort(), ['https://almox-deployment.vercel.app', 'https://almox-empresa.vercel.app'].sort());
+    process.env.VERCEL_ENV = 'preview';
+    assert.equal(appOrigin(), 'https://almox-deployment.vercel.app');
+    assert.equal(allowedOrigins().has('https://almox-empresa.vercel.app'), false);
+    process.env.VERCEL_ENV = 'production'; process.env.VERCEL_PROJECT_PRODUCTION_URL = 'almox.vercel.app.evil.invalid';
+    assert.equal(appOrigin(), 'https://almox-deployment.vercel.app');
+    process.env.APP_URL = 'https://erp.example.invalid';
+    assert.equal(appOrigin(), 'https://erp.example.invalid');
+    delete process.env.VERCEL_ENV; delete process.env.VERCEL_PROJECT_PRODUCTION_URL;
   });
   test('redirecionamentos externos, barras invertidas e loops de login são recusados', () => {
     for (const value of ['//malicious.invalid', 'https://malicious.invalid', '/\\malicious.invalid', '/login', '/auth/callback?code=x', '/\nmalicious.invalid']) assert.equal(safeReturnPath(value), '/dashboard');

@@ -13,3 +13,11 @@ desktop/node_modules/
 desktop/server/
 desktop/dist/
 desktop/.cache/
+mobile/.gradle/
+mobile/**/build/
+mobile/local.properties
+mobile/*.jks
+mobile/*.keystore
+mobile/dist/
+mobile/.sdk/
+private/

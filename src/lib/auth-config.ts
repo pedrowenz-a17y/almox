@@ -16,14 +16,17 @@ export function exactOrigin(value: string): string {
   }
 }
 
-function vercelOrigin(): string | undefined {
-  const host = process.env.VERCEL_URL;
+function vercelOrigin(host = process.env.VERCEL_URL): string | undefined {
   if (process.env.VERCEL === '1' && host && /^[a-z0-9.-]+\.vercel\.app$/i.test(host)) return `https://${host.toLowerCase()}`;
+}
+
+function vercelProductionOrigin(): string | undefined {
+  return process.env.VERCEL_ENV === 'production' ? vercelOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL) : undefined;
 }
 
 export function appOrigin(): string {
   if (process.env.APP_URL?.trim()) return exactOrigin(process.env.APP_URL.trim());
-  const deployment = vercelOrigin();
+  const deployment = vercelProductionOrigin() || vercelOrigin();
   if (deployment) return deployment;
   if (process.env.NODE_ENV !== 'production') return 'http://localhost:3000';
   throw new AuthConfigurationError('Configure APP_URL com o endereço HTTPS desta instalação.');
@@ -34,6 +37,8 @@ export function allowedOrigins(): Set<string> {
   for (const value of (process.env.APP_ALLOWED_ORIGINS || '').split(',').filter(v => v.trim())) origins.add(exactOrigin(value.trim()));
   const deployment = vercelOrigin();
   if (deployment) origins.add(deployment);
+  const production = vercelProductionOrigin();
+  if (production) origins.add(production);
   return origins;
 }
 
