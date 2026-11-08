@@ -155,8 +155,8 @@
     },
     {
       "path": "artifacts/desktop-2.6.0/configuracao-desktop.png",
-      "bytes": 155159,
-      "sha256": "334951eed19e317e06db6e1cc7c0adbec8446a8c1fa0872bf1646b523eaddd2a"
+      "bytes": 155523,
+      "sha256": "9cbc58c609dec49264163438fc453d45bbd34bae00bb5ecdd7f7a9bf0ae71017"
     },
     {
       "path": "artifacts/desktop-2.6.0/desktop-tests.log",
@@ -195,8 +195,8 @@
     },
     {
       "path": "artifacts/desktop-2.6.0/login-desktop.png",
-      "bytes": 582812,
-      "sha256": "4f99cdff9e71781674201600e5c65ca607ad1d1146b58966ba2af41ce8109436"
+      "bytes": 561812,
+      "sha256": "c2b753e6ece17dcf595bb0ec36e99ac4f87bdb2e49a698ae3d68e0107c9541de"
     },
     {
       "path": "artifacts/desktop-2.6.0/package-checks.json",
@@ -1100,8 +1100,8 @@
     },
     {
       "path": "desktop/main.cjs",
-      "bytes": 10858,
-      "sha256": "da15d47de18aa8724caf29846a31ca64c68bca88f2d0e9afd2b717723b06e69b"
+      "bytes": 10905,
+      "sha256": "4f645f506d2538948c29f6fa88fe2f6427a1584467a1595f4413dfefc80a39ae"
     },
     {
       "path": "desktop/package-lock.json",
@@ -1120,8 +1120,8 @@
     },
     {
       "path": "desktop/runtime.cjs",
-      "bytes": 7359,
-      "sha256": "626e95d70be261212bd686e3a2d9bd73af9133a86c895c282af67eab924c7ef3"
+      "bytes": 8069,
+      "sha256": "3ddce2776ccfa0de7462545a6541c0ad7c8c2d336d90db83f1d1911f2919f393"
     },
     {
       "path": "desktop/scripts/build.cjs",
@@ -1160,13 +1160,13 @@
     },
     {
       "path": "desktop/tests/runtime.test.cjs",
-      "bytes": 7847,
-      "sha256": "d2e1c32c16f70e531407c4b8e041c62afa2e172d82257544f2edc2bd7296f688"
+      "bytes": 8917,
+      "sha256": "9470343bebbf3b185773a6bdd251898c05dd418ad5fe48a891692d1f414db878"
     },
     {
       "path": "desktop/tests/verify-electron.cjs",
-      "bytes": 10300,
-      "sha256": "5d1089f6f40d9be886653924a1cb647a772e659a76491827bc89a81bcbd0fcf5"
+      "bytes": 10585,
+      "sha256": "971c7eadd16bc76d8df71fcbc81f9851a89516d4ee411498c50fc86341b13694"
     },
     {
       "path": "desktop/tests/verify-installed.cjs",

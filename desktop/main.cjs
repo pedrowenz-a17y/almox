@@ -1,12 +1,10 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain, safeStorage, shell } = require('electron');
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const { pathToFileURL } = require('node:url');
-const { serverOrigin, importEnvironment, saveConfiguration, loadConfiguration, startLocalServer, isWithinOrigin, cameraAllowed } = require('./runtime.cjs');
+const { serverOrigin, importEnvironment, saveConfiguration, loadConfiguration, startLocalServer, isWithinOrigin, cameraAllowed, isSetupFile } = require('./runtime.cjs');
 
 let window, setupWindow, localServer, activeOrigin, changing = false, shuttingDown = false, setupError = '';
 const setupFile = path.join(__dirname, 'setup', 'index.html');
-const setupUrl = pathToFileURL(setupFile).href;
 const configFile = () => path.join(app.getPath('userData'), 'connection.json');
 const icon = path.join(__dirname, 'assets', 'icon.png');
 const allowedContents = new Map();
@@ -69,7 +67,9 @@ async function initialize() {
 }
 
 function assertSetup(event) {
-  if (!setupWindow || event.sender !== setupWindow.webContents || event.senderFrame !== event.sender.mainFrame || event.senderFrame.url !== setupUrl)
+  const frame = event.senderFrame, mainFrame = event.sender.mainFrame;
+  if (!setupWindow || event.sender.id !== setupWindow.webContents.id || !frame || frame.processId !== mainFrame.processId ||
+    frame.routingId !== mainFrame.routingId || !isSetupFile(frame.url, setupFile))
     throw new Error('Ação não autorizada.');
 }
 

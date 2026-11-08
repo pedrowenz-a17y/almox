@@ -5,6 +5,8 @@ const http = require('node:http');
 const { spawn } = require('node:child_process');
 const { randomBytes } = require('node:crypto');
 const dotenv = require('dotenv');
+const { fileURLToPath } = require('node:url');
+const realpathSync = require('node:fs').realpathSync;
 
 const ENV_KEYS = ['DATABASE_URL', 'DIRECT_URL', 'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', 'ASSISTANT_PROVIDER', 'OPENAI_API_KEY', 'OPENAI_MODEL'];
@@ -51,6 +53,17 @@ function isWithinOrigin(value, origin) {
 function cameraAllowed(requestingOrigin, origin, details = {}) {
   // Chromium may serialize a permission origin without a trailing slash.
   return isWithinOrigin(requestingOrigin, origin) && details.isMainFrame !== false;
+}
+
+function isSetupFile(value, expected, platform = process.platform, resolve = realpathSync) {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'file:' || url.hostname || url.search || url.hash) return false;
+    const actualPath = resolve(fileURLToPath(url, { windows: platform === 'win32' }));
+    const expectedPath = resolve(expected);
+    // Windows may expose an expanded path rather than the 8.3 alias used by os.tmpdir().
+    return platform === 'win32' ? actualPath.toLowerCase() === expectedPath.toLowerCase() : actualPath === expectedPath;
+  } catch { return false; }
 }
 
 async function saveConfiguration(file, config, secureStorage) {
@@ -125,4 +138,4 @@ async function startLocalServer({ executable, serverDirectory, env, inheritedEnv
   throw new Error('O servidor local não iniciou. Use Configurar conexão para importar o arquivo novamente ou conectar ao ERP hospedado.');
 }
 
-module.exports = { serverOrigin, importEnvironment, isWithinOrigin, cameraAllowed, saveConfiguration, loadConfiguration, startLocalServer, availablePort };
+module.exports = { serverOrigin, importEnvironment, isWithinOrigin, cameraAllowed, isSetupFile, saveConfiguration, loadConfiguration, startLocalServer, availablePort };

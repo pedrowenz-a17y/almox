@@ -56,6 +56,11 @@ async function verify() {
   let setup = await windowsFor(application, page => page.url().endsWith('/setup/index.html'));
   await expect(setup.getByRole('heading', { name: 'Como vamos conectar?' })).toBeVisible();
   await expect(setup.getByRole('button', { name: 'Escolher arquivo de configuração' })).toBeVisible();
+  const startup = await setup.evaluate(async () => {
+    try { return { ok: true, state: await window.almoxSetup.status() }; }
+    catch (error) { return { ok: false, message: String(error) }; }
+  });
+  assert.equal(startup.ok, true, `Configuração IPC: ${JSON.stringify(startup)}`);
   await setup.screenshot({ path: path.join(evidence, 'configuracao-desktop.png') });
   assert.equal(await setup.evaluate(() => typeof require), 'undefined');
   assert.equal(await setup.evaluate(() => typeof process), 'undefined');

@@ -5,7 +5,7 @@ const path = require('node:path');
 const os = require('node:os');
 const { once } = require('node:events');
 const { randomBytes, createCipheriv, createDecipheriv } = require('node:crypto');
-const { serverOrigin, importEnvironment, isWithinOrigin, cameraAllowed, saveConfiguration, loadConfiguration, startLocalServer } = require('../runtime.cjs');
+const { serverOrigin, importEnvironment, isWithinOrigin, cameraAllowed, isSetupFile, saveConfiguration, loadConfiguration, startLocalServer } = require('../runtime.cjs');
 
 const source = [
   'DATABASE_URL="postgresql://fixture:fake%23@127.0.0.1:5432/desktop_test"',
@@ -51,6 +51,16 @@ test('câmera fica limitada à origem autorizada e ao quadro principal', () => {
   assert.equal(cameraAllowed('https://outside.example.invalid', 'https://erp.example.invalid'), false);
   assert.equal(isWithinOrigin('https://erp.example.invalid.evil.invalid', 'https://erp.example.invalid'), false);
   assert.equal(cameraAllowed('https://erp.example.invalid', undefined), false);
+});
+test('IPC só aceita o arquivo de configuração e reconhece aliases/capitalização de caminhos Windows', () => {
+  const identity = value => value;
+  assert.equal(isSetupFile('file:///D:/Almox/setup/index.html', 'd:\\almox\\setup\\index.html', 'win32', identity), true);
+  const canonical = value => value.replace(/RUNNER~1/i, 'runneradmin');
+  assert.equal(isSetupFile('file:///C:/Users/runneradmin/Temp/Almox/setup/index.html', 'C:\\Users\\RUNNER~1\\Temp\\Almox\\setup\\index.html', 'win32', canonical), true);
+  for (const url of ['https://outside.example.invalid/setup/index.html', 'file://outside/share/setup/index.html', 'file:///D:/Almox/setup/index.html?other=1', 'file:///D:/Almox/setup/other.html'])
+    assert.equal(isSetupFile(url, 'D:\\Almox\\setup\\index.html', 'win32', identity), false);
+  assert.equal(isSetupFile('file:///opt/Almox/setup/index.html', '/opt/Almox/setup/index.html', 'linux', identity), true);
+  assert.equal(isSetupFile('file:///opt/almox/setup/index.html', '/opt/Almox/setup/index.html', 'linux', identity), false);
 });
 test('configuração local é cifrada; leitura e substituição preservam caracteres da credencial', async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'almox-desktop-config-'));
