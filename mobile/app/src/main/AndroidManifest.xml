@@ -1,9 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <application android:allowBackup="false" android:usesCleartextTraffic="false"
+    <application android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules"
+        tools:targetApi="31" android:usesCleartextTraffic="false"
         android:label="Almox ERP" android:icon="@drawable/uca_icon" android:theme="@style/Theme.Almox"
         android:supportsRtl="true" android:hardwareAccelerated="true">
         <activity android:name=".MainActivity" android:exported="true" android:windowSoftInputMode="adjustResize"

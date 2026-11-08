@@ -18,6 +18,10 @@ jobs:
       - name: Compilar, testar e analisar Android
         working-directory: mobile
         run: ./gradlew --no-daemon testDebugUnitTest lintRelease assembleRelease assembleDebug assembleDebugAndroidTest
+      - name: Conferir APK release e manifesto
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/apkanalyzer" manifest print mobile/app/build/outputs/apk/release/app-release-unsigned.apk > mobile/app/build/manifest-release.xml
+          python mobile/tools/verify-apk.py mobile/app/build/outputs/apk/release/app-release-unsigned.apk mobile/app/build/manifest-release.xml mobile/app/build/apk-checks.json
       - name: Habilitar emulador no runner descartável
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -47,4 +51,6 @@ jobs:
             mobile/app/build/outputs/androidTest-results/
             mobile/app/build/reports/
             mobile/app/build/almox-android.png
+            mobile/app/build/manifest-release.xml
+            mobile/app/build/apk-checks.json
           if-no-files-found: error

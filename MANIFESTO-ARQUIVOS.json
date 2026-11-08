@@ -20,8 +20,8 @@
     },
     {
       "path": ".github/workflows/android.yml",
-      "bytes": 2117,
-      "sha256": "01e1041e2adcf3e18678c303c5b2d030d25f29bbb6f78afff71e8ad152ae4e4c"
+      "bytes": 2631,
+      "sha256": "19eb73d658e3ccb1377408d3f714a54ebc718ad2c63a2596dbd5b3b43f11cb52"
     },
     {
       "path": ".github/workflows/desktop-windows.yml",
@@ -1345,8 +1345,8 @@
     },
     {
       "path": "mobile/app/src/main/AndroidManifest.xml",
-      "bytes": 1104,
-      "sha256": "a3596d8d536453e5cb8c1d7736465e6f3189e1f4b442abebd191ffe33997acc6"
+      "bytes": 1271,
+      "sha256": "33b52b00a05ce75b1c6f5aeb19e633d62c185f58ba0ed5965766dc48ced8a48b"
     },
     {
       "path": "mobile/app/src/main/java/br/uca/almox/mobile/ConnectionPolicy.java",
@@ -1355,8 +1355,8 @@
     },
     {
       "path": "mobile/app/src/main/java/br/uca/almox/mobile/MainActivity.java",
-      "bytes": 19507,
-      "sha256": "5029777130394a199935e19f3eda9a5e6897fc66fa4d5d4e8e64ee614f5459e2"
+      "bytes": 19505,
+      "sha256": "25768d12e89edee3bc1f74f4b17849ac71a61f48b351ba2ab9355561988381e3"
     },
     {
       "path": "mobile/app/src/main/java/br/uca/almox/mobile/NativeFiles.java",
@@ -1364,9 +1364,14 @@
       "sha256": "609c42e4acdd81e11c70f80e78922a8c3f0870c9fa696eef6dabe808d7b8530f"
     },
     {
-      "path": "mobile/app/src/main/res/drawable/uca_icon.png",
+      "path": "mobile/app/src/main/res/drawable-nodpi/uca_icon.png",
       "bytes": 71125,
       "sha256": "778d450205c19772cd19d99b1f9745e6fb8a4f0c2e24df54cd942c43a1efe71d"
+    },
+    {
+      "path": "mobile/app/src/main/res/values-v27/styles.xml",
+      "bytes": 223,
+      "sha256": "a34dd2a342ab79bee0362c5d7f2e885e6e56c0b68793c991d28c84dea56d2902"
     },
     {
       "path": "mobile/app/src/main/res/values/ids.xml",
@@ -1374,9 +1379,19 @@
       "sha256": "f05cf450488080547c2d064dbc45d352d1c5868e4895967056a6d9e8a75bb2db"
     },
     {
+      "path": "mobile/app/src/main/res/values/strings.xml",
+      "bytes": 94,
+      "sha256": "e7f388cede6c5f41a5d97bf59f8171a18c2a04011285f20fcdcce682c802cb0f"
+    },
+    {
       "path": "mobile/app/src/main/res/values/styles.xml",
-      "bytes": 690,
-      "sha256": "2d9ea7a1481f4f66c2b59add7d253a4a6677a1573dd659be4831586e731b6f73"
+      "bytes": 686,
+      "sha256": "2c891b2c2c1577ce9c688742f8cc6813861002a684786d18ccabbbcc57b6039b"
+    },
+    {
+      "path": "mobile/app/src/main/res/xml/data_extraction_rules.xml",
+      "bytes": 591,
+      "sha256": "f2f358d89c06fa712f6887b9bac1d9859b8843ec79f614084d32029efb76db5c"
     },
     {
       "path": "mobile/app/src/test/java/br/uca/almox/mobile/ConnectionPolicyTest.java",
@@ -1417,6 +1432,21 @@
       "path": "mobile/settings.gradle",
       "bytes": 273,
       "sha256": "98e777087c4de83c8f782bfbb3f5b07ff8208f1e78fff091237ad27be52a97ff"
+    },
+    {
+      "path": "mobile/signing-certificate.pem",
+      "bytes": 1529,
+      "sha256": "4b03ac346e1f21353b99ed1017e8a2fc6e01b38885b00eedb7bc9d97a590e50e"
+    },
+    {
+      "path": "mobile/tools/SignApk.java",
+      "bytes": 1993,
+      "sha256": "f1c079a3180f4989ce8d70a5dc67813d6190b42f094008a3f5b389a783360b4b"
+    },
+    {
+      "path": "mobile/tools/verify-apk.py",
+      "bytes": 2225,
+      "sha256": "c6508e0c449b6d6836adea8c49e402ee38013ba78df55cdca32ed86597af58be"
     },
     {
       "path": "next-env.d.ts",

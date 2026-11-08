@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             final String candidate;
             try { candidate = ConnectionPolicy.origin(input.getText().toString()); }
             catch (IllegalArgumentException exception) { status.setText(exception.getMessage()); return; }
-            connect.setEnabled(false); status.setText("Conferindo o servidor…");
+            connect.setEnabled(false); status.setText(R.string.checking_server);
             worker.execute(() -> {
                 String result = checkServer(candidate);
                 runOnUiThread(() -> {
