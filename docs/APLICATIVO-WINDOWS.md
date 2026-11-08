@@ -4,7 +4,7 @@ O aplicativo tem instalador `.exe`, ícone U.C.A., atalhos na área de trabalho/
 
 ## Instalar e abrir
 
-1. Baixe `Almox-ERP-2.6.0-Windows-x64-Setup.exe` na [entrega 2.6.0](https://github.com/pedrowenz-a17y/almox/releases/tag/v2.6.0).
+1. Baixe o arquivo `Almox-ERP-2.6.0-Windows-x64-Setup.exe` fornecido com esta entrega. O ZIP do código-fonte do GitHub não é o instalador.
 2. Execute o instalador e escolha a pasta. A instalação é feita para a conta Windows atual.
 3. Abra **Almox ERP** pelo atalho.
 4. Na primeira abertura, escolha uma das conexões abaixo.
