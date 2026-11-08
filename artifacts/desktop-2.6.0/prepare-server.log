@@ -1,0 +1,35 @@
+
+> almox-erp@2.6.0 desktop:prepare
+> npm --prefix desktop run prepare:server
+
+
+> almox-desktop@2.6.0 prepare:server
+> node scripts/prepare-server.cjs
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Prisma schema loaded from desktop/.cache/schema.prisma
+Warning: Your current platform `debian-openssl-3.0.x` is not included in your generator's `binaryTargets` configuration ["windows"].
+To fix it, use this generator config in your schema.prisma:
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
+}
+Note, that by providing `native`, Prisma Client automatically resolves `debian-openssl-3.0.x`.
+Read more about deploying Prisma Client: https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/generators
+
+
+✔ Generated Prisma Client (v6.19.3) to ./desktop/server/node_modules/.prisma/client in 828ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+npm warn using --force Recommended protections disabled.
+
+up to date in 386ms
+npm warn using --force Recommended protections disabled.
+
+up to date in 348ms
+Servidor windows preparado sem arquivos .env.

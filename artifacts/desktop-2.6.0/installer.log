@@ -1,0 +1,19 @@
+
+> almox-desktop@2.6.0 dist:win
+> node scripts/package-windows.cjs
+
+  • electron-builder  version=26.18.0 os=6.18.57
+  • loaded configuration  file=package.json ("build" field)
+  • skipped dependencies rebuild  reason=npmRebuild is set to false
+  • packaging       platform=win32 arch=x64 electron=45.2.3 appOutDir=dist/win-unpacked
+  • downloaded      label=electron progress=100%
+  • downloaded electron zip extracted successfully  output=/workspace/almox/desktop/dist/win-unpacked
+  • searching for node modules  pm=npm searchDir=/workspace/almox/desktop
+  • updating asar integrity executable resource  executablePath=dist/win-unpacked/Almox ERP.exe
+  • no code signing certificate configured, signing is skipped  path=dist/win-unpacked/Almox ERP.exe
+  • building        target=nsis file=dist/Almox-ERP-2.6.0-Windows-x64-Setup.exe archs=x64 oneClick=false perMachine=false
+  • no code signing certificate configured, signing is skipped  path=/tmp/t-l5MbsX/elevate-staging-1/resources/elevate.exe
+Desinstalador NSIS extraído e validado pelo leitor oficial.
+  • no code signing certificate configured, signing is skipped  path=dist/Almox-ERP-2.6.0-Windows-x64-Setup.__uninstaller.exe
+  • no code signing certificate configured, signing is skipped  path=dist/Almox-ERP-2.6.0-Windows-x64-Setup.exe
+  • building block map  blockMapFile=dist/Almox-ERP-2.6.0-Windows-x64-Setup.exe.blockmap

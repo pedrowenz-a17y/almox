@@ -1,7 +1,7 @@
 {
-  "version": "2.5.0",
-  "revision": "local-conversational-erp-assistant",
-  "generatedAt": "2026-11-07T16:50:06.991248+00:00",
+  "version": "2.6.0",
+  "revision": "windows-desktop-installer-and-automatic-server",
+  "generatedAt": "2026-11-08T03:04:19.074882+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -15,8 +15,8 @@
     },
     {
       "path": ".gitignore",
-      "bytes": 122,
-      "sha256": "a966e6725a8654c181fa4fc1ce4dd849ec03761fbd176d46d8481ef8af48d14e"
+      "bytes": 190,
+      "sha256": "bab3f12d45e166c6baf703ac90bea217d08b59a4cde05e66e4bc27467fbe5b48"
     },
     {
       "path": ".nvmrc",
@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 22943,
-      "sha256": "1ca515e089aaabb3356bb7929ec5cead8c3c9eee663448b441379c5ae4b81d08"
+      "bytes": 23275,
+      "sha256": "ee344dccbfe7ce2fba63cdea77b49e1f2016478f25ed38f7c2ca0ff427eb175b"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -132,6 +132,86 @@
       "path": "artifacts/dashboard-2.3.2/validation.json",
       "bytes": 1242,
       "sha256": "e1ffade203ac2912516587fb263fff94015b5f8bad956326f72181203aa88109"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/README.md",
+      "bytes": 1484,
+      "sha256": "b83064287f4dd7c26adefc5a676b0ec115f0c4677f3c566a682332a112024ee3"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/SHA256SUMS.txt",
+      "bytes": 104,
+      "sha256": "696f6ae7e76d3fbf7de76be1a85e3d0c151d795190993c820764d4aa4ff9528c"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/build.log",
+      "bytes": 2557,
+      "sha256": "ec5b3c3db645715c479bc72aa29faddfb37aabe9ccd7dd4261d75a43bc3d4624"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/configuracao-desktop.png",
+      "bytes": 155159,
+      "sha256": "334951eed19e317e06db6e1cc7c0adbec8446a8c1fa0872bf1646b523eaddd2a"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/desktop-tests.log",
+      "bytes": 1048,
+      "sha256": "39ca139784e2183f35d6433d06ca96d70caddad5314bcd0e0d60708cd2220493"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/electron-checks.json",
+      "bytes": 948,
+      "sha256": "e1cc87adc3d990ed0c78e90ef6053aaefa6ea8fcef1661f6e0a0010d41843069"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/electron.log",
+      "bytes": 689,
+      "sha256": "a56ffaabe4b45054e96f6b17b47a11756671517ac766d9bab4f1b3217e757290"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/health-tests.log",
+      "bytes": 295,
+      "sha256": "138aefad8372f5ec1f6365727c708f98a0b0e969ed724ceb89a002343782eb52"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/installer-integrity.log",
+      "bytes": 536,
+      "sha256": "d841d5db12307bc1d296389fbc34477a0f27b8ad241181230cbd128ed9def4d8"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/installer.log",
+      "bytes": 1416,
+      "sha256": "04a05fcf5956968df180133e09cb1f21b3002e69870117aa8fcdf17728ba1597"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/lint.log",
+      "bytes": 35,
+      "sha256": "7facb14e34129d468780b1caff3e2e47c5041c24687412a26eaf586890f1bb4a"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/login-desktop.png",
+      "bytes": 582812,
+      "sha256": "4f99cdff9e71781674201600e5c65ca607ad1d1146b58966ba2af41ce8109436"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/package-checks.json",
+      "bytes": 651,
+      "sha256": "f5e8834c290540a169f9516ec5bb746fa3ab641cb034aa13176f7912692f6c77"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/prepare-server.log",
+      "bytes": 1398,
+      "sha256": "a75eab09f4bf1e33995267cb050776d31d65a608987d662174e3ffbe06bd49b9"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/tests.log",
+      "bytes": 20646,
+      "sha256": "cd3c530a6f5b367dbef0652195ad46c0b3a2144a1ba109721e206d0c0e8c5277"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/typecheck.log",
+      "bytes": 44,
+      "sha256": "e177b3379591cb713a8bc8c692c7fc35d530d669f3878ab6f9c46ad3f36d75f1"
     },
     {
       "path": "artifacts/identity-2.3.1/assistant-regression/assistente-desktop.png",
@@ -994,9 +1074,104 @@
       "sha256": "ed9c8b079fdc249dd5dc73d8433206afe7bfab622996bbc004c2dfd037044581"
     },
     {
+      "path": "desktop/assets/OFL-Manrope.txt",
+      "bytes": 4387,
+      "sha256": "58172e0c0fac2cda8a37b348164bb55e44b0e69051e557e92b1d3f6910141f7b"
+    },
+    {
+      "path": "desktop/assets/icon.ico",
+      "bytes": 46244,
+      "sha256": "ca7b1f1fd0a0e96c5351c2d5d37fd8ee9f9d1e13c88ccf6ebae021718d0fa205"
+    },
+    {
+      "path": "desktop/assets/icon.png",
+      "bytes": 71125,
+      "sha256": "778d450205c19772cd19d99b1f9745e6fb8a4f0c2e24df54cd942c43a1efe71d"
+    },
+    {
+      "path": "desktop/assets/manrope.woff2",
+      "bytes": 29056,
+      "sha256": "300cfcfd1c51a0f5a1100c761655e6e12c575a5993c1ee21323a7cbc4e70c948"
+    },
+    {
+      "path": "desktop/main.cjs",
+      "bytes": 10858,
+      "sha256": "da15d47de18aa8724caf29846a31ca64c68bca88f2d0e9afd2b717723b06e69b"
+    },
+    {
+      "path": "desktop/package-lock.json",
+      "bytes": 127121,
+      "sha256": "b314ce211e59025aa757d22d76f406e00968a45589dfd03926af484537065dd0"
+    },
+    {
+      "path": "desktop/package.json",
+      "bytes": 1699,
+      "sha256": "65d6098a6cb43ae86c64f87ef7b35034f17aaeefc9e64bcac181009172bb63b2"
+    },
+    {
+      "path": "desktop/preload.cjs",
+      "bytes": 293,
+      "sha256": "757e8225bfca8acc44ba7dd8d8fed3ff7836ef8b30c711deae52d192198001b9"
+    },
+    {
+      "path": "desktop/runtime.cjs",
+      "bytes": 7359,
+      "sha256": "626e95d70be261212bd686e3a2d9bd73af9133a86c895c282af67eab924c7ef3"
+    },
+    {
+      "path": "desktop/scripts/build.cjs",
+      "bytes": 1024,
+      "sha256": "9dea5e7c1686a7dc0d8f415f98d4918c24b791ad8b4e7c3c83d630b1d5e49c88"
+    },
+    {
+      "path": "desktop/scripts/package-windows.cjs",
+      "bytes": 1640,
+      "sha256": "554408ea8862055bef2e468443d2f2d86590f3afcc458fed20940bd7ba9a0722"
+    },
+    {
+      "path": "desktop/scripts/prepare-server.cjs",
+      "bytes": 5045,
+      "sha256": "926dba20fa9f517514ca12dde9dfea2129f60af446c2f8958531f32cf19e6a67"
+    },
+    {
+      "path": "desktop/scripts/verify-package.cjs",
+      "bytes": 3844,
+      "sha256": "12dd56cd3699a189563e160cbc6a3bd8549284843d7107830fd84ec8b9bd0b2e"
+    },
+    {
+      "path": "desktop/setup/index.html",
+      "bytes": 2383,
+      "sha256": "47871203ea999dadb1bd3348c96d0b5bf9b66c764ff9e943dd20ebdcd1dfa066"
+    },
+    {
+      "path": "desktop/setup/setup.css",
+      "bytes": 3177,
+      "sha256": "d1fcb750be73018d556abbc87ad23072fd1062a56cb356b37ab34988c45ae967"
+    },
+    {
+      "path": "desktop/setup/setup.js",
+      "bytes": 1237,
+      "sha256": "027fbd44ce491322ca93d830ce807ae6e9abf19acd70eb99cf051b7f01fc9cf6"
+    },
+    {
+      "path": "desktop/tests/runtime.test.cjs",
+      "bytes": 7847,
+      "sha256": "d2e1c32c16f70e531407c4b8e041c62afa2e172d82257544f2edc2bd7296f688"
+    },
+    {
+      "path": "desktop/tests/verify-electron.cjs",
+      "bytes": 10093,
+      "sha256": "04f9c40fd2e949a9e1cb28accb0c079e8e878ca8f36eb3e6555023846fa5a059"
+    },
+    {
       "path": "docs/ABERTURA-2.2.2.md",
       "bytes": 1935,
       "sha256": "034d314af3655b700ede0427a0a40d840742a8aeb768463ff2111586fede373a"
+    },
+    {
+      "path": "docs/APLICATIVO-WINDOWS.md",
+      "bytes": 6048,
+      "sha256": "10369a0b7295821d270e2c78de7be956489c01da8652c4ab2944a15232665d4b"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -1085,8 +1260,8 @@
     },
     {
       "path": "eslint.config.mjs",
-      "bytes": 372,
-      "sha256": "6f70e95fcbec5f7d2753425daa2d964bfb6f9b6af36dfd01d5aab753db1fb169"
+      "bytes": 527,
+      "sha256": "82c20680bbfee0c63db36b09913f6ab7633515d30d91326a1e694204d9f4cc66"
     },
     {
       "path": "next-env.d.ts",
@@ -1101,12 +1276,12 @@
     {
       "path": "package-lock.json",
       "bytes": 319900,
-      "sha256": "9c3f872df2259c157b34ff3f1441f90e130be4a4078f2fce8428b07176cad130"
+      "sha256": "ecc8cc37607dbd01e72e84352900c43399136b24f9ae419d1324d7459f013a30"
     },
     {
       "path": "package.json",
-      "bytes": 2231,
-      "sha256": "d178d3c9eb71d46a7e49f693504f47b2386c0b2f6008d9d3c8b42c0f412fbdf7"
+      "bytes": 2450,
+      "sha256": "3c60bc86bcaf9878461c3c29c3c2638eb5a05a1d204674066b565313d88fc917"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1362,6 +1537,11 @@
       "path": "src/app/api/data/route.ts",
       "bytes": 8817,
       "sha256": "b80ba3d0e1d2607118f63be0acd27a450c8a917e9721df5797eb7efc311dba52"
+    },
+    {
+      "path": "src/app/api/desktop-health/route.ts",
+      "bytes": 714,
+      "sha256": "c4375d9edcaaf2b7f57a136fb6e06986327186d4a94892384ed4b88ab9136be1"
     },
     {
       "path": "src/app/api/files/[id]/route.ts",
@@ -1725,8 +1905,8 @@
     },
     {
       "path": "src/lib/auth-config.ts",
-      "bytes": 3511,
-      "sha256": "4e94b93496cc797154d61ec7da2f1547637dbaf4aba1c8229a5219c133d3a25b"
+      "bytes": 3781,
+      "sha256": "54fdc67f34e5783f161755e931d3d75cf26cb7b791910073bba863020f9e2bfe"
     },
     {
       "path": "src/lib/auth-rate-limit.ts",
@@ -1934,6 +2114,11 @@
       "sha256": "0d7f16a485fe59d9b713c3a790e43a482251e1d00c305ac3bdfe7a008fe45add"
     },
     {
+      "path": "tests/desktop-health.test.ts",
+      "bytes": 2438,
+      "sha256": "1611da2ab95a995092389811f6f2912f6d7e60a3ec867cc71ed27c55dc5440fc"
+    },
+    {
       "path": "tests/domain.integration.test.ts",
       "bytes": 41968,
       "sha256": "ca1cc0789853bb18c95d27c75ce79d9fdc6adb5d7eb1b26754cd77c2904b7b62"
@@ -2010,8 +2195,8 @@
     },
     {
       "path": "tsconfig.json",
-      "bytes": 654,
-      "sha256": "134bd48cc9e31130b513b9f75d3467be6343528a2c1511c028beb4fec33b158f"
+      "bytes": 730,
+      "sha256": "cefbf25875c1a9b41faa78ac465f085fb89fc9b182e5352d85ba35bb22619128"
     },
     {
       "path": "vercel.json",

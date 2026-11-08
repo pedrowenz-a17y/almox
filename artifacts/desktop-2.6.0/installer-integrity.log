@@ -1,0 +1,23 @@
+
+7-Zip (z) 24.09 (x64) : Copyright (c) 1999-2024 Igor Pavlov : 2024-11-28
+ 64-bit locale=C.UTF-8 Threads:5 OPEN_MAX:16384, ASM
+
+Scanning the drive for archives:
+1 file, 181196504 bytes (173 MiB)
+
+Testing archive: desktop/dist/Almox-ERP-2.6.0-Windows-x64-Setup.exe
+--
+Path = desktop/dist/Almox-ERP-2.6.0-Windows-x64-Setup.exe
+Type = Nsis
+Physical Size = 181196504
+Method = Deflate
+Solid = -
+Headers Size = 97668
+Embedded Stub Size = 84992
+SubType = NSIS-3 Unicode
+
+Everything is Ok
+
+Files: 10
+Size:       180636013
+Compressed: 181196504

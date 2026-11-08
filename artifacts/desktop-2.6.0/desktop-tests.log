@@ -1,0 +1,24 @@
+
+> almox-erp@2.6.0 desktop:test
+> npm --prefix desktop test
+
+
+> almox-desktop@2.6.0 test
+> node --test tests/*.test.cjs
+
+✔ aceita HTTPS e loopback, recusa credenciais, caminhos e protocolos externos (1.436453ms)
+✔ importa só configuração de execução, ignora credenciais administrativas e comandos (1.927311ms)
+✔ recusa configuração ausente, chave administrativa e arquivo excessivo sem mostrar valores (0.863898ms)
+✔ câmera fica limitada à origem autorizada e ao quadro principal (0.182281ms)
+✔ configuração local é cifrada; leitura e substituição preservam caracteres da credencial (22.049183ms)
+✔ recusa salvar segredos quando a proteção do sistema não está disponível (0.465779ms)
+✔ servidor inicia em loopback, usa porta própria e encerra sem CMD nem variáveis perigosas herdadas (330.138426ms)
+✔ falha de inicialização resulta em erro legível, sem vazar saída do processo (258.343188ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 763.590635

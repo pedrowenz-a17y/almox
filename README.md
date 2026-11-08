@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.5.0
+# Almox ERP · U.C.A. — versão 2.6.0
+
+**Versão 2.6.0:** aplicativo para Windows x64 com instalador, atalhos, janela própria e servidor local que inicia e encerra junto com o aplicativo. Também conecta ao ERP hospedado. [Instalar, configurar e gerar o executável](docs/APLICATIVO-WINDOWS.md).
 
 **Versão 2.5.0:** assistente local gratuito com mensagens em português, referência de conversa, consultas autorizadas e comparações de estoque. Funciona sem créditos OpenAI. [Usar e configurar](docs/ASSISTENTE-IA.md).
 
@@ -24,7 +26,7 @@ A revisão anterior de navegação, QR e reposição está registrada em [MELHOR
 
 ERP de almoxarifado em português para controlar materiais por localização, QR Codes, entradas, saídas, transferências, inventários, compras e materiais de O.S./O.P. A interface consulta dados do PostgreSQL; não injeta demonstrações nem simula operações.
 
-Esta versão utiliza **Supabase PostgreSQL e Supabase Auth**, com Next.js implantável na Vercel ou em servidor Node.js. O pacote contém código-fonte e migrations. Ele não é um instalador de Windows/Android: para compartilhar o ERP em funcionamento, configure os serviços e compartilhe a URL HTTPS da implantação.
+Esta versão utiliza **Supabase PostgreSQL e Supabase Auth**, com Next.js implantável na Vercel ou em servidor Node.js. O ZIP do repositório contém código-fonte e migrations; o instalador Windows é distribuído separadamente. Para compartilhar o ERP entre funcionários, configure os serviços e utilize a URL HTTPS da implantação ou a conexão do aplicativo desktop com esse endereço.
 
 **Não existe login ou senha padrão nesta versão.** O administrador precisa de uma identidade autorizada no Supabase Auth e de um vínculo explícito com a unidade do ERP. Credenciais de demonstração de versões anteriores não autenticam aqui. O procedimento de primeiro acesso está abaixo.
 

@@ -47,8 +47,10 @@ export function safeReturnPath(value: string | null | undefined, fallback = '/da
 }
 
 export function supabasePublicConfig() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  // Read on the server at runtime: an installed desktop server is configured after its build.
+  // Reflect avoids static replacement of NEXT_PUBLIC_* by the compiler (including alias folding).
+  const url = Reflect.get(process.env, 'NEXT_PUBLIC_SUPABASE_URL') as string | undefined;
+  const key = Reflect.get(process.env, 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY') as string | undefined;
   if (!url || !key) throw new AuthConfigurationError();
   let secretKey = key.startsWith('sb_secret_');
   if (key.split('.').length === 3) {

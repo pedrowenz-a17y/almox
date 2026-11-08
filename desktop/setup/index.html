@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>Configurar Almox ERP</title>
+  <link rel="stylesheet" href="setup.css">
+</head>
+<body>
+  <main>
+    <aside>
+      <img src="../assets/icon.png" alt="U.C.A. Implementos Agrícolas" width="88" height="88">
+      <p class="brand">Almox<span>ERP</span></p>
+      <p class="eyebrow">DO ALMOXARIFADO À PRODUÇÃO</p>
+      <h1>Seu trabalho.<br>Em um só <em>lugar.</em></h1>
+      <p class="intro">Materiais, ordens e conferências. Agora, direto no seu computador.</p>
+      <div class="line" aria-hidden="true"></div>
+      <p class="note">U.C.A. Implementos Agrícolas<br>Grupo Capacle</p>
+    </aside>
+    <section>
+      <p class="eyebrow red">BEM-VINDO AO ALMOX</p>
+      <h2>Como vamos conectar?</h2>
+      <p class="description">Configure uma vez. Nas próximas aberturas, o aplicativo cuida da conexão.</p>
+      <form id="remote-form">
+        <h3>ERP da empresa</h3>
+        <p>Use o endereço fornecido pelo responsável pelo sistema.</p>
+        <label for="origin">Endereço do ERP</label>
+        <input id="origin" name="origin" type="url" placeholder="https://almox.suaempresa.com.br" autocomplete="url" required maxlength="2048">
+        <button type="submit">Conectar ao ERP <span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="divider"><span>ou neste computador</span></div>
+      <div class="local">
+        <h3>Iniciar meu servidor</h3>
+        <p>Importe o arquivo <strong>.env</strong> do projeto. O servidor abrirá junto com o aplicativo, sem CMD.</p>
+        <button id="import-local" type="button" class="secondary">Escolher arquivo de configuração</button>
+        <small>O banco e o login precisam de internet. Credenciais ficam protegidas na sua conta Windows. A chave administrativa não é importada.</small>
+      </div>
+      <p id="status" role="status" aria-live="polite"></p>
+      <footer><span id="version">Almox ERP</span><span>Acesso com sua conta autorizada</span></footer>
+    </section>
+  </main>
+  <script src="setup.js"></script>
+</body>
+</html>

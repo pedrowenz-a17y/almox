@@ -1,6 +1,6 @@
 {
   "name": "almox-erp",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
@@ -25,7 +25,11 @@
     "migration:map": "node scripts/migration-map-units.mjs",
     "verify:public": "node scripts/verify-public.mjs",
     "verify:orders": "node scripts/verify-orders-ui.mjs",
-    "verify:auth": "node scripts/verify-auth-flows.mjs"
+    "verify:auth": "node scripts/verify-auth-flows.mjs",
+    "desktop:install": "npm --prefix desktop ci",
+    "desktop:test": "npm --prefix desktop test",
+    "desktop:prepare": "npm --prefix desktop run prepare:server",
+    "desktop:dist": "node desktop/scripts/build.cjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.1",

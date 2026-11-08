@@ -1,0 +1,16 @@
+{
+  "scope": "Electron real em Linux/Xvfb, Next de produção e provedor fictício. DPAPI substituída apenas no teste por AES. Não comprova instalação em Windows físico nem login no Supabase real.",
+  "passed": 10,
+  "checks": [
+    "primeira abertura mostra configuração com preload limitado e sem Node no renderer",
+    "configuração recusa HTTP externo",
+    "ERP abre em janela com sandbox e sem preload privilegiado",
+    "janela de etiqueta preserva impressão e isolamento de Node",
+    "navegação principal não abandona a origem autorizada",
+    "reabertura usa conexão salva sem configuração nem CMD",
+    "importação inicia o servidor real automaticamente em porta livre e abre o login UCA",
+    "arquivo de conexão não armazena credenciais em texto simples",
+    "build usa Supabase e APP_URL definidos na instalação, conferidos por provedor HTTP fictício",
+    "fechar o aplicativo encerra o servidor local"
+  ]
+}

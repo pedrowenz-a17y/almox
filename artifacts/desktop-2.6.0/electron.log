@@ -1,0 +1,10 @@
+PASS primeira abertura mostra configuração com preload limitado e sem Node no renderer
+PASS configuração recusa HTTP externo
+PASS ERP abre em janela com sandbox e sem preload privilegiado
+PASS janela de etiqueta preserva impressão e isolamento de Node
+PASS navegação principal não abandona a origem autorizada
+PASS reabertura usa conexão salva sem configuração nem CMD
+PASS importação inicia o servidor real automaticamente em porta livre e abre o login UCA
+PASS arquivo de conexão não armazena credenciais em texto simples
+PASS build usa Supabase e APP_URL definidos na instalação, conferidos por provedor HTTP fictício
+PASS fechar o aplicativo encerra o servidor local
