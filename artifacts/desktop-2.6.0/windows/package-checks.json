@@ -1,0 +1,19 @@
+{
+  "version": "2.6.0",
+  "platform": "win32",
+  "architecture": "x64",
+  "installer": "Almox-ERP-2.6.0-Windows-x64-Setup.exe",
+  "bytes": 181697301,
+  "sha256": "e595c39e6b82becd54592d4e4e3941cd1e5bb571b0750d20371dda639872d4c6",
+  "serverFilesVerified": 2236,
+  "privateEnvFiles": 0,
+  "checks": [
+    "PE Windows x64 do aplicativo",
+    "NSIS completo com desinstalador",
+    "Prisma e bibliotecas nativas Windows",
+    "todos os recursos do servidor preservados por hash",
+    "ASAR corresponde ao código validado",
+    "sem .env ou harness de teste"
+  ],
+  "limitation": "Compilação em Windows. A homologação operacional no computador de destino continua necessária."
+}

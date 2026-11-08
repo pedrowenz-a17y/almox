@@ -4,12 +4,12 @@ O aplicativo tem instalador `.exe`, ícone U.C.A., atalhos na área de trabalho/
 
 ## Instalar e abrir
 
-1. Baixe o arquivo `Almox-ERP-2.6.0-Windows-x64-Setup.exe` fornecido com esta entrega. O ZIP do código-fonte do GitHub não é o instalador.
+1. Baixe [Almox-ERP-2.6.0-Windows-x64-Setup.exe](https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/Almox-ERP-2.6.0-Windows-x64-Setup.exe). O ZIP do código-fonte do GitHub não é o instalador.
 2. Execute o instalador e escolha a pasta. A instalação é feita para a conta Windows atual.
 3. Abra **Almox ERP** pelo atalho.
 4. Na primeira abertura, escolha uma das conexões abaixo.
 
-O instalador ainda não tem certificado de assinatura digital. A identidade do editor não é certificada pelo Windows. O SHA-256 do arquivo está em `SHA256SUMS.txt`, junto ao download. A compilação cruzada e o conteúdo do pacote foram verificados; a instalação em Windows físico precisa de homologação antes de distribuir para a empresa.
+O instalador ainda não tem certificado de assinatura digital. A identidade do editor não é certificada pelo Windows. O SHA-256 está em [SHA256SUMS.txt](https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/SHA256SUMS.txt). Esta entrega foi compilada, instalada, aberta, reaberta e desinstalada em um runner Windows. A configuração cifrada foi recuperada por DPAPI real, e os componentes nativos do Prisma/Sharp foram carregados. A homologação operacional no computador de destino continua necessária antes da distribuição empresarial.
 
 ## Usar neste computador, sem CMD
 
@@ -61,8 +61,14 @@ node desktop/tests/verify-electron.cjs
 
 O último comando precisa do build de produção e de uma sessão gráfica. No Linux, usa Xvfb; no Windows, usa a sessão gráfica e a DPAPI reais. A extração Unix do desinstalador utiliza o leitor oficial PE/NSIS do electron-builder 26.18.0, sem executar o instalador intermediário. A dependência está fixada e o adaptador precisa ser revisado se essa versão mudar.
 
+## Validar e publicar pelo GitHub
+
+Em **Actions → Instalador Windows → Run workflow**, a rotina manual compila em Windows, executa os testes e instala o aplicativo em uma máquina descartável. Ela confere o servidor embutido, as bibliotecas nativas, a configuração por DPAPI, a reabertura e a desinstalação. O teste de instalação só executa nesse runner para proteger computadores de desenvolvimento.
+
+A compilação tem acesso de leitura ao repositório. Apenas o job final pode criar a release e enviar os anexos, após o sucesso dos testes. Não recebe credenciais do banco ou da empresa e não faz deploy do ERP. As actions oficiais são fixadas por revisão; a publicação utiliza o GitHub CLI. Uma versão já publicada não é sobrescrita: para outra entrega, atualize a versão e acrescente suas notas em `docs/ENTREGA-WINDOWS-<versão>.md`.
+
 ## Evidências desta entrega
 
-Veja [artifacts/desktop-2.6.0](../artifacts/desktop-2.6.0): compilação, regressão do ERP, testes de início/encerramento, configuração cifrada, isolamento da página, impressão e capturas da tela. Nenhuma credencial enviada no chat ou banco empresarial foi utilizado na validação.
+Veja [artifacts/desktop-2.6.0/windows](../artifacts/desktop-2.6.0/windows): dez cenários da janela, seis verificações do aplicativo instalado e comparação por hash de 2.236 arquivos do servidor. A [execução Windows](https://github.com/pedrowenz-a17y/almox/actions/runs/42442820123) concluiu os testes e a publicação. A pasta acima mantém também a regressão inicial do ERP em PostgreSQL isolado e as evidências da compilação Linux. Nenhuma credencial enviada no chat ou banco empresarial foi utilizado na validação.
 
 ![Primeira configuração do aplicativo](../artifacts/desktop-2.6.0/configuracao-desktop.png)

@@ -1,0 +1,13 @@
+{
+  "scope": "Instalação NSIS real, executável instalado, runtime, DPAPI, reabertura e desinstalação em runner Windows descartável. Banco e autenticação fictícios; não comprova homologação no PC da empresa.",
+  "platform": "win32",
+  "passed": 6,
+  "checks": [
+    "instalador NSIS instala o aplicativo Windows sem Node.js externo",
+    "runtime empacotado carrega os binários nativos Windows do Prisma e do Sharp",
+    "executável instalado abre a configuração com proteção nativa Windows disponível",
+    "instalação inicia servidor, abre login e salva configuração cifrada por DPAPI",
+    "reabrir executável instalado recupera configuração DPAPI e inicia novamente sem CMD",
+    "desinstalador remove o aplicativo e preserva a configuração da conta"
+  ]
+}

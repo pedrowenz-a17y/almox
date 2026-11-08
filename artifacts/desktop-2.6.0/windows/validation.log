@@ -1,0 +1,16 @@
+2026-11-08T03:32:00.3764113Z PASS primeira abertura mostra configuração com preload limitado e sem Node no renderer
+2026-11-08T03:32:00.4376114Z PASS configuração recusa HTTP externo
+2026-11-08T03:32:01.4026068Z PASS ERP abre em janela com sandbox e sem preload privilegiado
+2026-11-08T03:32:01.5119526Z PASS janela de etiqueta preserva impressão e isolamento de Node
+2026-11-08T03:32:01.5249070Z PASS navegação principal não abandona a origem autorizada
+2026-11-08T03:32:02.2065797Z PASS reabertura usa conexão salva sem configuração nem CMD
+2026-11-08T03:32:09.4401592Z PASS importação inicia o servidor real automaticamente em porta livre e abre o login UCA
+2026-11-08T03:32:09.4413144Z PASS arquivo de conexão não armazena credenciais em texto simples
+2026-11-08T03:32:09.5081495Z PASS build usa Supabase e APP_URL definidos na instalação, conferidos por provedor HTTP fictício
+2026-11-08T03:32:09.7692626Z PASS fechar o aplicativo encerra o servidor local
+2026-11-08T03:32:44.5885949Z PASS instalador NSIS instala o aplicativo Windows sem Node.js externo
+2026-11-08T03:32:46.8577038Z PASS runtime empacotado carrega os binários nativos Windows do Prisma e do Sharp
+2026-11-08T03:32:47.3250976Z PASS executável instalado abre a configuração com proteção nativa Windows disponível
+2026-11-08T03:32:49.4032428Z PASS instalação inicia servidor, abre login e salva configuração cifrada por DPAPI
+2026-11-08T03:32:51.0077179Z PASS reabrir executável instalado recupera configuração DPAPI e inicia novamente sem CMD
+2026-11-08T03:32:53.0729800Z PASS desinstalador remove o aplicativo e preserva a configuração da conta

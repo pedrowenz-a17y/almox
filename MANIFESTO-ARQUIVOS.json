@@ -1,7 +1,7 @@
 {
   "version": "2.6.0",
-  "revision": "windows-native-validation-and-release-workflow",
-  "generatedAt": "2026-11-08T03:18:27.966474+00:00",
+  "revision": "windows-tested-release",
+  "generatedAt": "2026-11-08T03:36:59.918941+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -140,13 +140,18 @@
     },
     {
       "path": "artifacts/desktop-2.6.0/README.md",
-      "bytes": 1484,
-      "sha256": "b83064287f4dd7c26adefc5a676b0ec115f0c4677f3c566a682332a112024ee3"
+      "bytes": 2110,
+      "sha256": "899aaab6383e4bc118c9a2e460ad0f600bdc848a835d59f7efa1036e16a18726"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/SHA256SUMS-linux.txt",
+      "bytes": 104,
+      "sha256": "696f6ae7e76d3fbf7de76be1a85e3d0c151d795190993c820764d4aa4ff9528c"
     },
     {
       "path": "artifacts/desktop-2.6.0/SHA256SUMS.txt",
       "bytes": 104,
-      "sha256": "696f6ae7e76d3fbf7de76be1a85e3d0c151d795190993c820764d4aa4ff9528c"
+      "sha256": "2dadba5e4e96bbf1f304289b86d7b55cf0f64d8c3b1b236ff235b170d6690108"
     },
     {
       "path": "artifacts/desktop-2.6.0/build.log",
@@ -199,9 +204,14 @@
       "sha256": "c2b753e6ece17dcf595bb0ec36e99ac4f87bdb2e49a698ae3d68e0107c9541de"
     },
     {
-      "path": "artifacts/desktop-2.6.0/package-checks.json",
+      "path": "artifacts/desktop-2.6.0/package-checks-linux.json",
       "bytes": 651,
       "sha256": "f5e8834c290540a169f9516ec5bb746fa3ab641cb034aa13176f7912692f6c77"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/package-checks.json",
+      "bytes": 680,
+      "sha256": "9577f6f21e10dc0201c6634a35c1201dbeda2f189c6543159c8225ddca69d0e9"
     },
     {
       "path": "artifacts/desktop-2.6.0/prepare-server.log",
@@ -217,6 +227,36 @@
       "path": "artifacts/desktop-2.6.0/typecheck.log",
       "bytes": 44,
       "sha256": "e177b3379591cb713a8bc8c692c7fc35d530d669f3878ab6f9c46ad3f36d75f1"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/windows/SHA256SUMS.txt",
+      "bytes": 104,
+      "sha256": "2dadba5e4e96bbf1f304289b86d7b55cf0f64d8c3b1b236ff235b170d6690108"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/windows/electron-checks.json",
+      "bytes": 908,
+      "sha256": "d5e8e58b7ba3bbe2475b41436010181894305e30daddf85453f16bedb8569447"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/windows/installed-checks.json",
+      "bytes": 788,
+      "sha256": "cfa4a74433a31fb6beb786927f24d4ae143d74588d0dff6dede777b69ce12634"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/windows/package-checks.json",
+      "bytes": 680,
+      "sha256": "9577f6f21e10dc0201c6634a35c1201dbeda2f189c6543159c8225ddca69d0e9"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/windows/run.json",
+      "bytes": 271,
+      "sha256": "560c0dc187fca755f2832f4dab1e7e331b6f6a8c5a41d1fc24554ff74b84788e"
+    },
+    {
+      "path": "artifacts/desktop-2.6.0/windows/validation.log",
+      "bytes": 1651,
+      "sha256": "5c91960a8ae02f4ccad93a434e2e201acfb1721d91809b9df2eeb4b00cc1980a"
     },
     {
       "path": "artifacts/identity-2.3.1/assistant-regression/assistente-desktop.png",
@@ -1180,8 +1220,8 @@
     },
     {
       "path": "docs/APLICATIVO-WINDOWS.md",
-      "bytes": 6060,
-      "sha256": "6692cebd23e0a6639a6099df34b4ea88aa6166cc6267f2ca2a4f226baded992e"
+      "bytes": 7443,
+      "sha256": "c145ebf70a9c7f9d206769cdf431882567ffb18ab00cc82320f9ed395c3144ab"
     },
     {
       "path": "docs/ARCHITECTURE.md",
