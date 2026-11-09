@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "versionCode": 1,
+  "applicationId": "br.uca.almox.mobile",
+  "compiledCommit": "619c1299892f291797351438db6dfffd84d26e17",
+  "buildRun": "https://github.com/pedrowenz-a17y/almox/actions/runs/42719602197",
+  "buildConclusion": "success",
+  "policyTests": {
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0
+  },
+  "emulatorTests": {
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "androidApi": 35,
+    "cameraStartedAndStopped": true
+  },
+  "webTests": {
+    "passed": 216,
+    "failed": 0,
+    "database": "isolated"
+  },
+  "webProductionBuild": true,
+  "androidLint": {
+    "errors": 0,
+    "warnings": 9
+  },
+  "minAndroidApi": 26,
+  "targetAndroidApi": 36,
+  "signedApkBytes": 2664458,
+  "signedApkSha256": "e2cfc744e8a49dc1cb950a9455e1884da1a65e4fb2ee1d33cc4a9762fb6a852d",
+  "unsignedApkSha256": "ecf9a7340b4cab05223066c18c7552bb5cee3f8ada4f502d771f1093fd1b8d96",
+  "certificateSha256": "b7c3b748cc3c0587b34187a2152379cc2deca02830c89d482e09501a7a45a8a8",
+  "signatureSchemes": [
+    "v2",
+    "v3"
+  ],
+  "identicalZipEntriesCompared": 426,
+  "privateEnvFiles": 0,
+  "realProductionLoginVerified": false,
+  "signedReleaseInstallation": "pending emulator validation"
+}
