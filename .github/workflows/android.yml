@@ -35,13 +35,12 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back emulated -camera-front none
           script: |
-            cd mobile
-            ./gradlew --no-daemon connectedDebugAndroidTest
-            adb shell am force-stop br.uca.almox.mobile.test
+            ./mobile/gradlew -p mobile --no-daemon connectedDebugAndroidTest
+            adb shell pm clear br.uca.almox.mobile.test
             adb shell am start -n br.uca.almox.mobile.test/br.uca.almox.mobile.MainActivity
             sleep 3
             adb shell screencap -p /sdcard/almox-android.png
-            adb pull /sdcard/almox-android.png app/build/almox-android.png
+            adb pull /sdcard/almox-android.png mobile/app/build/almox-android.png
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
