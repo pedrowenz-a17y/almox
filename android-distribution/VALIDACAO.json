@@ -40,5 +40,17 @@
   "identicalZipEntriesCompared": 426,
   "privateEnvFiles": 0,
   "realProductionLoginVerified": false,
-  "signedReleaseInstallation": "pending emulator validation"
+  "signedReleaseInstallation": {
+    "conclusion": "success",
+    "scope": "Instalação e abertura do APK release assinado; sem login ou dados reais.",
+    "androidApi": 35,
+    "installed": true,
+    "firstOpen": true,
+    "reopened": true,
+    "nativeConnectionScreen": true,
+    "mainThreadFatalErrors": 0,
+    "leakedDialogs": 0
+  },
+  "installationRun": "https://github.com/pedrowenz-a17y/almox/actions/runs/42720899419",
+  "installationCandidateCommit": "9de45047d6a9cb2db2bdf35db81324af5db78107"
 }

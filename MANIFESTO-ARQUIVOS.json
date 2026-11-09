@@ -1,7 +1,7 @@
 {
   "version": "2.7.0",
   "revision": "android-1.0.0-validated",
-  "generatedAt": "2026-11-09T23:32:45.889273+00:00",
+  "generatedAt": "2026-11-09T23:33:46.776013+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -67,6 +67,31 @@
       "path": "README.md",
       "bytes": 23658,
       "sha256": "85dc9646acf1f3eece89f96fd907d53f0eb43370c9f16d85aaf91dca196f42e1"
+    },
+    {
+      "path": "android-distribution/Almox-ERP-Android-1.0.0.apk",
+      "bytes": 2664458,
+      "sha256": "e2cfc744e8a49dc1cb950a9455e1884da1a65e4fb2ee1d33cc4a9762fb6a852d"
+    },
+    {
+      "path": "android-distribution/README.md",
+      "bytes": 1327,
+      "sha256": "21ae8bf7eca424a4c0434d6da0f42325b3e17012329a64b9029e72eac4a1b288"
+    },
+    {
+      "path": "android-distribution/SHA256SUMS.txt",
+      "bytes": 94,
+      "sha256": "a1eb1291ff7745889e30934e6940750283061dfd6817828f885d1e5eb2ef26df"
+    },
+    {
+      "path": "android-distribution/VALIDACAO.json",
+      "bytes": 1653,
+      "sha256": "24e23adcfd47908b2e464a705c4ee6946707b36f211020487c8592fa58a83eff"
+    },
+    {
+      "path": "android-distribution/signing-certificate.pem",
+      "bytes": 1529,
+      "sha256": "4b03ac346e1f21353b99ed1017e8a2fc6e01b38885b00eedb7bc9d97a590e50e"
     },
     {
       "path": "artifacts/HISTORICO.md",
