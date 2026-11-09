@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-11-09",
+  "origin": "https://almox-e51d362d7bb7b9030e673ef18c99f.vercel.app",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Sem conexão · Almox"
+    },
+    {
+      "path": "/login",
+      "status": 404
+    },
+    {
+      "path": "/api/assistant",
+      "status": 404
+    }
+  ],
+  "productionLoginVerified": false,
+  "dashboardAccess": "CLI sem autenticação; nenhuma alteração no painel da Vercel nesta sessão.",
+  "scope": "Somente requisições HTTP públicas; não foram usados dados ou credenciais reais."
+}

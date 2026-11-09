@@ -1,0 +1,18 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V3.0 Signer: certificate DN: CN=Almox ERP, OU=Projeto TCC, O=Almox ERP, C=BR
+V3.0 Signer: certificate SHA-256 digest: b7c3b748cc3c0587b34187a2152379cc2deca02830c89d482e09501a7a45a8a8
+V3.0 Signer: certificate SHA-1 digest: f58290c35c810b4639ed665dd20ea238f9fcbaa5
+V3.0 Signer: certificate MD5 digest: 6d56f994111c74f015db86eb8e262059
+V3.0 Signer: key algorithm: RSA
+V3.0 Signer: key size (bits): 3072
+V3.0 Signer: public key SHA-256 digest: c8bc238575dbe90f22f107a354b12ce3710bbac6c6501984d76a08cade0ac445
+V3.0 Signer: public key SHA-1 digest: 6e02d59acbff772917cfe683cd9ace0c6508cc4f
+V3.0 Signer: public key MD5 digest: 517d4e6097b3a2e4b4d6161c093e6a08

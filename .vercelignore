@@ -4,6 +4,7 @@
 node_modules
 desktop
 mobile
+android-distribution
 artifacts
 docs
 tests

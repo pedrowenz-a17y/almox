@@ -1,0 +1,19 @@
+{
+  "applicationId": "br.uca.almox.mobile",
+  "version": "1.0.0",
+  "minAndroidApi": 26,
+  "targetAndroidApi": 36,
+  "bytes": 2655622,
+  "sha256": "ecf9a7340b4cab05223066c18c7552bb5cee3f8ada4f502d771f1093fd1b8d96",
+  "permissions": [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.CAMERA",
+    "br.uca.almox.mobile.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "debuggable": false,
+  "cleartextTraffic": false,
+  "backup": false,
+  "privateEnvFiles": 0,
+  "scope": "APK release e manifesto inspecionados. A assinatura é feita separadamente, fora do CI."
+}
