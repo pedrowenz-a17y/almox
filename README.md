@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.6.0
+# Almox ERP · U.C.A. — versão 2.7.0
+
+**Versão 2.7.0:** aplicativo Android com janela própria, câmera para QR, compartilhamento dos dados da unidade, exportação de relatórios e impressão. O servidor fica na nuvem; o computador pode ficar desligado. [Instalar o Android](docs/APLICATIVO-ANDROID.md) · [Publicar o servidor na Vercel](docs/PUBLICAR-VERCEL.md). O APK não contém o `.env` nem executa o servidor no celular.
 
 **Versão 2.6.0:** aplicativo para Windows x64 com instalador, atalhos, janela própria e servidor local que inicia e encerra junto com o aplicativo. Também conecta ao ERP hospedado. [Instalar, configurar e gerar o executável](docs/APLICATIVO-WINDOWS.md).
 
@@ -26,7 +28,7 @@ A revisão anterior de navegação, QR e reposição está registrada em [MELHOR
 
 ERP de almoxarifado em português para controlar materiais por localização, QR Codes, entradas, saídas, transferências, inventários, compras e materiais de O.S./O.P. A interface consulta dados do PostgreSQL; não injeta demonstrações nem simula operações.
 
-Esta versão utiliza **Supabase PostgreSQL e Supabase Auth**, com Next.js implantável na Vercel ou em servidor Node.js. O ZIP do repositório contém código-fonte e migrations; o instalador Windows é distribuído separadamente. Para compartilhar o ERP entre funcionários, configure os serviços e utilize a URL HTTPS da implantação ou a conexão do aplicativo desktop com esse endereço.
+Esta versão utiliza **Supabase PostgreSQL e Supabase Auth**, com Next.js implantável na Vercel ou em servidor Node.js. O ZIP do repositório contém código-fonte e migrations; os instaladores Windows e Android são distribuídos separadamente. Para compartilhar o ERP entre funcionários, configure os serviços e utilize a mesma implantação HTTPS no navegador e nos aplicativos.
 
 **Não existe login ou senha padrão nesta versão.** O administrador precisa de uma identidade autorizada no Supabase Auth e de um vínculo explícito com a unidade do ERP. Credenciais de demonstração de versões anteriores não autenticam aqui. O procedimento de primeiro acesso está abaixo.
 

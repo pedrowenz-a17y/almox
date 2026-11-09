@@ -1,0 +1,10 @@
+{
+  "scope": "Instalação e abertura do APK release assinado; sem login ou dados reais.",
+  "androidApi": 35,
+  "installed": true,
+  "firstOpen": true,
+  "reopened": true,
+  "nativeConnectionScreen": true,
+  "mainThreadFatalErrors": 0,
+  "leakedDialogs": 0
+}

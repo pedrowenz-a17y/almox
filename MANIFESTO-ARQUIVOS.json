@@ -1,7 +1,7 @@
 {
   "version": "2.7.0",
-  "revision": "android-client-and-vercel-preparation",
-  "generatedAt": "2026-11-08T04:21:14.638539+00:00",
+  "revision": "android-1.0.0-validated",
+  "generatedAt": "2026-11-09T23:32:45.889273+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -19,9 +19,14 @@
       "sha256": "6f17b984126b58f8fb781caf508e056e592aa6740c232120d9cb456272002f30"
     },
     {
+      "path": ".github/workflows/android-install.yml",
+      "bytes": 3704,
+      "sha256": "f92ee9ecbea8b731013cbdbfbd2fd4410597a982da49730acda8d8e2eb1ab78b"
+    },
+    {
       "path": ".github/workflows/android.yml",
-      "bytes": 2631,
-      "sha256": "19eb73d658e3ccb1377408d3f714a54ebc718ad2c63a2596dbd5b3b43f11cb52"
+      "bytes": 2704,
+      "sha256": "3d9dd2ae4bb5bdea5d47f40269c7847700912439a94c6364a759f513390eb114"
     },
     {
       "path": ".github/workflows/desktop-windows.yml",
@@ -40,8 +45,8 @@
     },
     {
       "path": ".vercelignore",
-      "bytes": 168,
-      "sha256": "2a2651d3371b600197a0cd3b4cc2f9e65ae90b431f06da798e631fd0bc94acfb"
+      "bytes": 189,
+      "sha256": "2d46a097911cf3b59c0ef18f7c01feebf244e97c57547d881b655169322cc9f8"
     },
     {
       "path": "AGENTS.md",
@@ -60,13 +65,93 @@
     },
     {
       "path": "README.md",
-      "bytes": 23275,
-      "sha256": "ee344dccbfe7ce2fba63cdea77b49e1f2016478f25ed38f7c2ca0ff427eb175b"
+      "bytes": 23658,
+      "sha256": "85dc9646acf1f3eece89f96fd907d53f0eb43370c9f16d85aaf91dca196f42e1"
     },
     {
       "path": "artifacts/HISTORICO.md",
       "bytes": 800,
       "sha256": "38c14f9a6f929022c35dfc3760fbeef8d7daba3a9034d25b638d81c70b4a5e42"
+    },
+    {
+      "path": "artifacts/android-1.0.0/README.md",
+      "bytes": 3638,
+      "sha256": "20c9f89aff9d283ee72c06f2e62d5f7ec20889249419e006e23b196a313995da"
+    },
+    {
+      "path": "artifacts/android-1.0.0/VALIDACAO.json",
+      "bytes": 1653,
+      "sha256": "24e23adcfd47908b2e464a705c4ee6946707b36f211020487c8592fa58a83eff"
+    },
+    {
+      "path": "artifacts/android-1.0.0/almox-android.png",
+      "bytes": 146401,
+      "sha256": "2f495702519983eaa74f15877d0604d30ec91b08496fff4f5dbbf8aee3824ea1"
+    },
+    {
+      "path": "artifacts/android-1.0.0/almox-release.png",
+      "bytes": 147267,
+      "sha256": "a6ef68b946efd862231705a2152f70956658a6f2b8138e9d1ae7816bc2a3d2ef"
+    },
+    {
+      "path": "artifacts/android-1.0.0/apk-checks.json",
+      "bytes": 619,
+      "sha256": "5b413fd0c2e033e687cd748000979edc2fa87ee23207fd861b3fcecbcd6cbc61"
+    },
+    {
+      "path": "artifacts/android-1.0.0/build.log",
+      "bytes": 2520,
+      "sha256": "5789bfcb5e6025485c220652c5ab64f0d66bce75f8c5852e7063d903771d8503"
+    },
+    {
+      "path": "artifacts/android-1.0.0/first-open.xml",
+      "bytes": 8287,
+      "sha256": "43a3d2637873fd475b56a775fb9cc7727cb4e5943c1ca15761b07944d4ef96c0"
+    },
+    {
+      "path": "artifacts/android-1.0.0/installation-checks.json",
+      "bytes": 260,
+      "sha256": "785bcc7a2d8fca7f5a9c9a864ef9ecc5f515d11ee2d6128130ba558b3e3bf53a"
+    },
+    {
+      "path": "artifacts/android-1.0.0/instrumented-tests.xml",
+      "bytes": 769,
+      "sha256": "ebe366164aed980826dfb0a35acde0c574ec61df70b0098fbebc5351a490876c"
+    },
+    {
+      "path": "artifacts/android-1.0.0/lint-release.txt",
+      "bytes": 4469,
+      "sha256": "b595fcd5415372012a114b5d4ec09b896d38e9187a7bd0fa92b8b0c37e773b0d"
+    },
+    {
+      "path": "artifacts/android-1.0.0/manifest-release.xml",
+      "bytes": 3687,
+      "sha256": "e47b5bb538650eb624d77c4230baeb2627d861bb4bf5ff98a0e20a0617ada501"
+    },
+    {
+      "path": "artifacts/android-1.0.0/reopened.xml",
+      "bytes": 8287,
+      "sha256": "43a3d2637873fd475b56a775fb9cc7727cb4e5943c1ca15761b07944d4ef96c0"
+    },
+    {
+      "path": "artifacts/android-1.0.0/signature.txt",
+      "bytes": 1057,
+      "sha256": "9e88cee5e291c26b49980e335e76857dd71449ea46f2589ee177e17f9970291b"
+    },
+    {
+      "path": "artifacts/android-1.0.0/typecheck.log",
+      "bytes": 45,
+      "sha256": "a7931154548b4a37ad383e8c93cfa8772fc251b777fb321779dfece4fcf9f966"
+    },
+    {
+      "path": "artifacts/android-1.0.0/vercel-check.json",
+      "bytes": 571,
+      "sha256": "9754bfc72b13ba7c4acdce8f2c6541ab478de69aac1552e2772c2e8b35c1d8ec"
+    },
+    {
+      "path": "artifacts/android-1.0.0/web-tests.log",
+      "bytes": 20749,
+      "sha256": "b5db6bf5c1b023fc6ef77c1b64e1caddf3c5ecce9644b3b7a1bfcd9f2c58e5f5"
     },
     {
       "path": "artifacts/assistant-2.3.0/assistente-desktop.png",
@@ -1234,6 +1319,11 @@
       "sha256": "034d314af3655b700ede0427a0a40d840742a8aeb768463ff2111586fede373a"
     },
     {
+      "path": "docs/APLICATIVO-ANDROID.md",
+      "bytes": 5548,
+      "sha256": "66ddccec9a53998791432a9f5eafbec32fbe652810c15ca75d9fab18bed8e623"
+    },
+    {
       "path": "docs/APLICATIVO-WINDOWS.md",
       "bytes": 7443,
       "sha256": "c145ebf70a9c7f9d206769cdf431882567ffb18ab00cc82320f9ed395c3144ab"
@@ -1314,6 +1404,11 @@
       "sha256": "50d1c4851ffd220fe237f5b9bf43469a5fee1f0612f02275fbc0a9e619fc7b10"
     },
     {
+      "path": "docs/PUBLICAR-VERCEL.md",
+      "bytes": 5027,
+      "sha256": "3854857f10fb44836eda23d1db03310a297727e47de622de1de4ec15821b9eb9"
+    },
+    {
       "path": "docs/REVISAO-2.1.md",
       "bytes": 8707,
       "sha256": "adb7459693f684bf5d7159b51f69e2aec167758e01fe8183155ff8d66a4e17c3"
@@ -1355,8 +1450,8 @@
     },
     {
       "path": "mobile/app/src/main/java/br/uca/almox/mobile/MainActivity.java",
-      "bytes": 19505,
-      "sha256": "25768d12e89edee3bc1f74f4b17849ac71a61f48b351ba2ab9355561988381e3"
+      "bytes": 20062,
+      "sha256": "492fa2ccabde97dfed248d5bc4e66d0114f59bbd9aee3ffd83f47ebc0c98f76d"
     },
     {
       "path": "mobile/app/src/main/java/br/uca/almox/mobile/NativeFiles.java",
@@ -1439,6 +1534,11 @@
       "sha256": "4b03ac346e1f21353b99ed1017e8a2fc6e01b38885b00eedb7bc9d97a590e50e"
     },
     {
+      "path": "mobile/signing-certificate.sha256",
+      "bytes": 65,
+      "sha256": "dd824c274ac72c2a05406c0162ea09e71188ccb137094e95b65c0aab95a65b8d"
+    },
+    {
       "path": "mobile/tools/SignApk.java",
       "bytes": 1993,
       "sha256": "f1c079a3180f4989ce8d70a5dc67813d6190b42f094008a3f5b389a783360b4b"
@@ -1447,6 +1547,11 @@
       "path": "mobile/tools/verify-apk.py",
       "bytes": 2225,
       "sha256": "c6508e0c449b6d6836adea8c49e402ee38013ba78df55cdca32ed86597af58be"
+    },
+    {
+      "path": "mobile/tools/verify-installed.py",
+      "bytes": 1288,
+      "sha256": "8abd2ff98f9d457fcaf2b6a4c07674e787e7407f8ce3ef48b78bb52c66d0cf13"
     },
     {
       "path": "next-env.d.ts",

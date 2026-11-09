@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="br.uca.almox.mobile.MobileAppTest" tests="3" failures="0" errors="0" skipped="0" time="11.121" timestamp="2026-11-09T23:23:18" hostname="localhost">
+  <properties>
+    <property name="device" value="emulator-5554 - 15" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="cameraCanStartAndStopOnTrustedHttpsOrigin" classname="br.uca.almox.mobile.MobileAppTest" time="4.259" />
+  <testcase name="webViewKeepsFilesAndMixedContentBlocked" classname="br.uca.almox.mobile.MobileAppTest" time="3.396" />
+  <testcase name="firstScreenHasUcaConnectionAndRejectsHttp" classname="br.uca.almox.mobile.MobileAppTest" time="2.508" />
+</testsuite>
