@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private ValueCallback<Uri[]> fileCallback;
     private NativeFiles nativeFiles;
     private AlertDialog popup;
+    private AlertDialog notice;
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configure(String error) {
+        if (notice != null) notice.dismiss();
         if (browser != null) { browser.destroy(); browser = null; }
         content.removeAllViews(); progress.setVisibility(View.GONE);
         ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true);
@@ -191,10 +193,10 @@ public class MainActivity extends AppCompatActivity {
                 if (request.isForMainFrame()) externalLink(request.getUrl()); return true;
             }
             @Override public void onReceivedSslError(WebView web, SslErrorHandler handler, SslError error) {
-                handler.cancel(); if (!child) connectionError("O certificado do servidor não pôde ser validado. Confira o endereço e a data do celular.");
+                handler.cancel(); if (!child && web == browser) connectionError("O certificado do servidor não pôde ser validado. Confira o endereço e a data do celular.");
             }
             @Override public void onReceivedError(WebView web, WebResourceRequest request, WebResourceError error) {
-                if (request.isForMainFrame() && !child) connectionError("Sem acesso ao servidor. Confira a internet e tente novamente.");
+                if (request.isForMainFrame() && !child && web == browser) connectionError("Sem acesso ao servidor. Confira a internet e tente novamente.");
             }
             @Override public void onPageFinished(WebView web, String url) {
                 if (ConnectionPolicy.sameOrigin(url, origin) || child && "about:blank".equals(url)) nativeFiles.installHelpers(web);
@@ -235,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void externalLink(Uri uri) {
         if (!"https".equals(uri.getScheme())) return;
-        new AlertDialog.Builder(this).setTitle("Abrir no navegador?").setMessage(uri.getHost())
+        showNotice(new AlertDialog.Builder(this).setTitle("Abrir no navegador?").setMessage(uri.getHost())
             .setPositiveButton("Abrir", (dialog, which) -> { try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); } catch (Exception ignored) { toast("Nenhum navegador disponível."); } })
-            .setNegativeButton("Cancelar", null).show();
+            .setNegativeButton("Cancelar", null).create());
     }
     private void showMenu(View anchor) {
         PopupMenu menu = new PopupMenu(this, anchor); menu.getMenu().add(0, 1, 0, "Atualizar"); menu.getMenu().add(0, 2, 1, "Conexão");
@@ -247,20 +249,27 @@ public class MainActivity extends AppCompatActivity {
                 case 1: if (browser != null) browser.reload(); break;
                 case 2: configure(""); break;
                 case 3: if (browser != null) print(browser); break;
-                case 4: new AlertDialog.Builder(this).setTitle("Almox ERP " + BuildConfig.VERSION_NAME)
+                case 4: showNotice(new AlertDialog.Builder(this).setTitle("Almox ERP " + BuildConfig.VERSION_NAME)
                     .setMessage("U.C.A. Implementos Agrícolas\nDados compartilhados pela mesma unidade do ERP. O servidor precisa estar disponível na nuvem.")
-                    .setPositiveButton("Fechar", null).show(); break;
+                    .setPositiveButton("Fechar", null).create()); break;
                 default: return false;
             }
             return true;
         }); menu.show();
     }
+    private void showNotice(AlertDialog dialog) {
+        if (isFinishing() || isDestroyed()) return;
+        if (notice != null) notice.dismiss();
+        notice = dialog;
+        dialog.setOnDismissListener(ignored -> { if (notice == dialog) notice = null; });
+        dialog.show();
+    }
     private void connectionError(String message) {
-        if (isFinishing() || browser == null) return;
+        if (isFinishing() || isDestroyed() || browser == null || notice != null) return;
         progress.setVisibility(View.GONE);
-        new AlertDialog.Builder(this).setTitle("Conexão com o Almox").setMessage(message)
+        showNotice(new AlertDialog.Builder(this).setTitle("Conexão com o Almox").setMessage(message)
             .setPositiveButton("Tentar novamente", (dialog, which) -> { if (browser != null) browser.loadUrl(origin + "/login"); })
-            .setNegativeButton("Conexão", (dialog, which) -> configure(message)).show();
+            .setNegativeButton("Conexão", (dialog, which) -> configure(message)).create());
     }
     void print(WebView view) {
         PrintManager manager = (PrintManager) getSystemService(PRINT_SERVICE);
@@ -283,6 +292,8 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onResume() { super.onResume(); if (browser != null) browser.onResume(); }
     @Override protected void onDestroy() {
         if (cameraRequest != null) cameraRequest.deny(); if (fileCallback != null) fileCallback.onReceiveValue(null);
-        if (browser != null) browser.destroy(); if (popup != null) popup.dismiss(); worker.shutdownNow(); super.onDestroy();
+        if (notice != null) notice.dismiss();
+        if (browser != null) { browser.destroy(); browser = null; }
+        if (popup != null) popup.dismiss(); worker.shutdownNow(); super.onDestroy();
     }
 }

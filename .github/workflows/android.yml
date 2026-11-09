@@ -36,6 +36,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back emulated -camera-front none
           script: |
             ./mobile/gradlew -p mobile --no-daemon connectedDebugAndroidTest
+            adb install -r mobile/app/build/outputs/apk/debug/app-debug.apk
             adb shell pm clear br.uca.almox.mobile.test
             adb shell am start -n br.uca.almox.mobile.test/br.uca.almox.mobile.MainActivity
             sleep 3
