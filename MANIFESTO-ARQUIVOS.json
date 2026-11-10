@@ -1,7 +1,7 @@
 {
-  "version": "2.7.1",
+  "version": "2.7.2",
   "revision": "browser-installation-and-security",
-  "generatedAt": "2026-11-10T12:10:29.251078+00:00",
+  "generatedAt": "2026-11-10T23:00:41.875543+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 24069,
-      "sha256": "2206635fc7f612e2fb97996b9b247c7fc8e4805d25da3eea4843bc9d38ffe2bb"
+      "bytes": 24496,
+      "sha256": "3bab175328d7bb6774e0fca59c0ed9324feb7d053e0fcaf65f246cbdecc8fe00"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -357,6 +357,41 @@
       "path": "artifacts/desktop-2.6.0/windows/validation.log",
       "bytes": 1651,
       "sha256": "5c91960a8ae02f4ccad93a434e2e201acfb1721d91809b9df2eeb4b00cc1980a"
+    },
+    {
+      "path": "artifacts/download-installation/README.md",
+      "bytes": 1813,
+      "sha256": "8e27b26d548dc0cd799e241937c6a6930d1c4be0553751b926afd47bca143cee"
+    },
+    {
+      "path": "artifacts/download-installation/browser-checks.json",
+      "bytes": 1498,
+      "sha256": "ab4141f98f5103eb2cfd1243f8dd4da13ce5d1e05a2a93ea682d258d197148c1"
+    },
+    {
+      "path": "artifacts/download-installation/build.log",
+      "bytes": 2578,
+      "sha256": "edefb4c9572ef6603214590ea5b8870b1e1938e024a6db4999c6b496ddd91033"
+    },
+    {
+      "path": "artifacts/download-installation/installability.json",
+      "bytes": 33,
+      "sha256": "682cbbd9bf57d1d6d20c036c1fa459272c42a7a4c608345b3cf236ebfeaff7c4"
+    },
+    {
+      "path": "artifacts/download-installation/installation-1440.png",
+      "bytes": 174902,
+      "sha256": "9d5e4caa8d482cdc628ddfa25b4989a816b6f44cb076399bd468c801ab996cfa"
+    },
+    {
+      "path": "artifacts/download-installation/installation-390.png",
+      "bytes": 168034,
+      "sha256": "12d2952ab5782bd326c5d21bb80c1999dd43e5cc35943cad3d1935a318ec3aa5"
+    },
+    {
+      "path": "artifacts/download-installation/official-downloads.json",
+      "bytes": 640,
+      "sha256": "6548ec338ec33599e0c648902cd3290a56a9c25cf9e738a919686b99b8161f9a"
     },
     {
       "path": "artifacts/identity-2.3.1/assistant-regression/assistente-desktop.png",
@@ -1380,13 +1415,13 @@
     },
     {
       "path": "docs/APLICATIVO-ANDROID.md",
-      "bytes": 5972,
-      "sha256": "490110791bdbabd67378ed8b390204065ff02805f7f306922be69c3410fd5f7d"
+      "bytes": 6104,
+      "sha256": "7fe2dfaa707f1c68b594382f949cae24b114f4642d3c40f3f0b7b818fe7859d5"
     },
     {
       "path": "docs/APLICATIVO-WINDOWS.md",
-      "bytes": 7817,
-      "sha256": "0a7bc35880f965ec81d544011b9b4d658d3fb191a260dcea7f442c097df1e4ba"
+      "bytes": 7918,
+      "sha256": "11cd7b34449cf9693dde53cfdbc7d27028641f5ba2186ff62faf6a566e060ee5"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -1435,8 +1470,8 @@
     },
     {
       "path": "docs/INSTALACAO-E-ASSINATURA.md",
-      "bytes": 4957,
-      "sha256": "c1872a04f0bae17a5ecb1fe89e641ea073cbf44dd3d19ed4256611af80014a97"
+      "bytes": 6049,
+      "sha256": "12b084e109f282522ec4d3fda55a96ab139f96a48149835081565f769936de50"
     },
     {
       "path": "docs/INTERACOES-2.2.md",
@@ -1631,12 +1666,12 @@
     {
       "path": "package-lock.json",
       "bytes": 302110,
-      "sha256": "c0a451d1f1420aac87535be3e193fff9928e261e65540763103a4dffe4bb25f8"
+      "sha256": "a58fa51b6d9f7aa9ccb39c63792d8e5c4098b0a8ec72ed9e583d058f15c32873"
     },
     {
       "path": "package.json",
       "bytes": 2449,
-      "sha256": "908e311b4822473dadb11db48a1dca3ac3d7464126ce7c27fc49f43796d15b0c"
+      "sha256": "7ef9b8dcc9449ca9c83eedef07f250334e53f4d79faf096eda7ba5eb8bba063f"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1825,8 +1860,8 @@
     },
     {
       "path": "scripts/verify-installation.mjs",
-      "bytes": 7448,
-      "sha256": "af83ecd83e5eaf24bf67dfec5e9563ba369ba8996060c70f9ce7b2b28d5f1925"
+      "bytes": 9869,
+      "sha256": "e7c3660507d0870d0b606b9081b84f905008cd9a7b700b972b915537e5af806b"
     },
     {
       "path": "scripts/verify-operations.mjs",
@@ -2089,14 +2124,19 @@
       "sha256": "ccf5ad7e5f63d30555f4270a364aa6f936734d2dffb0ee3809e111bba2fc728d"
     },
     {
+      "path": "src/app/instalar/connection-address.tsx",
+      "bytes": 1427,
+      "sha256": "c9bed29a53baa14e2066fd46b3bf11d9876ea06534acbcc34dab6454f5b9fff9"
+    },
+    {
       "path": "src/app/instalar/installation.module.css",
-      "bytes": 2220,
-      "sha256": "3d39d0cd8b4e27b4954adfd4a12a76f9baffaf71df30b6ef05e722ea227b2557"
+      "bytes": 3779,
+      "sha256": "9ec11d68cd9b20d4798edfb427a375d016853807ed7652718da7380e5a97d501"
     },
     {
       "path": "src/app/instalar/page.tsx",
-      "bytes": 3332,
-      "sha256": "d6d35becf423d6517a96a425bf22882208a65dc9ea08dd054bca394d4bb2ad35"
+      "bytes": 4874,
+      "sha256": "fa28a444f2c5e5b03bb719b6bdd5574526e42ef9921764feec8bd8112babfc34"
     },
     {
       "path": "src/app/layout.tsx",

@@ -1,6 +1,6 @@
 # Almox ERP para Android · 1.0.0
 
-Para instalar a versão hospedada pelo Chrome, use [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). Essa opção tem ícone e janela própria e utiliza os recursos de câmera do navegador. O APK 1.0.0 descrito abaixo continua assinado com o certificado próprio do projeto e pode receber avisos ao ser baixado fora da loja. [Assinaturas e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
+Baixe o APK pelo botão **Baixar para Android** em [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). Na primeira abertura, substitua o endereço antigo preenchido pelo endereço atual mostrado na página e conecte. Para a versão hospedada pelo Chrome, abra **Outra opção: instalar pelo navegador** nessa mesma página. O APK 1.0.0 descrito abaixo continua assinado com o certificado próprio do projeto e pode receber avisos ao ser baixado fora da loja. [Assinaturas e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
 
 Aplicativo instalável para Android 8.0 ou superior, com Android System WebView atualizado. O servidor ERP é a versão 2.7.0; a versão do instalador Android é independente.
 

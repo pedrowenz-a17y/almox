@@ -1,6 +1,6 @@
 # Almox ERP para Windows — 2.6.0
 
-Para instalar a versão hospedada pelo navegador, use [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar) no Edge ou Chrome. Ela tem ícone e janela própria e não precisa do servidor local. O instalador EXE 2.6.0 descrito abaixo continua sem certificado Authenticode. [Assinaturas, avisos e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
+Baixe o instalador pelo botão **Baixar para Windows** em [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). A página também mostra o endereço para conectar o aplicativo ao ERP hospedado. Para a versão pelo navegador, abra **Outra opção: instalar pelo navegador** nessa mesma página. O instalador EXE 2.6.0 descrito abaixo continua sem certificado Authenticode. [Assinaturas, avisos e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
 
 O aplicativo tem instalador `.exe`, ícone U.C.A., atalhos na área de trabalho/menu Iniciar e janela própria. O computador que recebe o instalador não precisa instalar Node.js ou abrir CMD. O aplicativo inclui seu runtime e o servidor do ERP. Requer Windows 10/11 atualizado, arquitetura x64.
 

@@ -6,7 +6,7 @@ import { chromium } from '@playwright/test';
 import { qaConfig } from './qa-config.mjs';
 
 const { baseURL } = qaConfig();
-const output = path.resolve('artifacts/security-installation');
+const output = path.resolve('artifacts/download-installation');
 await fs.mkdir(output, { recursive: true });
 const browser = await chromium.launch({ executablePath: '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1050 } });
@@ -30,17 +30,41 @@ async function prompt(outcome) {
   }, outcome);
 }
 try {
-  await check('Página de instalação pública e responsiva, sem download de APK/EXE', async () => {
+  await check('Página responsiva oferece os arquivos oficiais APK e EXE', async () => {
     assert.equal((await page.goto(baseURL + '/instalar')).status(), 200);
     await page.getByRole('heading', { name: /O trabalho continua/ }).waitFor();
     await page.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
-    const links = await page.locator('a').evaluateAll(items => items.map(item => item.getAttribute('href')));
-    assert.ok(links.every(link => !/\.(?:apk|exe)(?:$|\?)/i.test(link || '')));
+    assert.equal(await page.getByRole('link', { name: 'Baixar para Android' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-v1.0.0/android-distribution/Almox-ERP-Android-1.0.0.apk');
+    assert.equal(await page.getByRole('link', { name: 'Baixar para Windows' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/Almox-ERP-2.6.0-Windows-x64-Setup.exe');
+    await page.waitForFunction(() => document.querySelector('input[aria-label="Endereço do ERP"]')?.value === location.origin);
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 1050 });
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       if (width !== 320) await page.screenshot({ path: path.join(output, `installation-${width}.png`), fullPage: true });
     }
+  });
+  await check('Botões iniciam download dos arquivos, sem executar o instalador', async () => {
+    for (const [name, filename] of [['Baixar para Android', 'Almox-ERP-Android-1.0.0.apk'], ['Baixar para Windows', 'Almox-ERP-2.6.0-Windows-x64-Setup.exe']]) {
+      const link = page.getByRole('link', { name });
+      const href = await link.getAttribute('href');
+      await page.route(href, route => route.fulfill({ status: 200, contentType: 'application/octet-stream', headers: filename.endsWith('.exe') ? { 'Content-Disposition': `attachment; filename="${filename}"` } : {}, body: 'Fixture de download; nao e um instalador.' }));
+      const received = page.waitForEvent('download');
+      await link.click();
+      const download = await received;
+      assert.equal(download.suggestedFilename(), filename);
+      assert.equal(await download.failure(), null);
+      await download.delete();
+      await page.unroute(href);
+    }
+  });
+  await check('Endereço de conexão copia apenas a origem e permite alternativa quando clipboard é bloqueado', async () => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: baseURL });
+    await page.getByRole('button', { name: 'Copiar endereço' }).click();
+    await page.getByRole('status').filter({ hasText: 'Endereço copiado.' }).waitFor();
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), baseURL);
+    await page.evaluate(() => Object.defineProperty(navigator.clipboard, 'writeText', { configurable: true, value: async () => { throw new DOMException('Synthetic refusal', 'NotAllowedError'); } }));
+    await page.getByRole('button', { name: 'Copiar endereço' }).click();
+    await page.getByRole('status').filter({ hasText: 'Selecione o endereço acima' }).waitFor();
   });
   await check('Manifesto instalável e service worker com atualização sem cache', async () => {
     const manifest = await (await page.request.get(baseURL + '/manifest.webmanifest')).json();
@@ -74,6 +98,7 @@ try {
     }
   });
   await check('Instalação só abre o consentimento do navegador após clique', async () => {
+    await page.getByText('Outra opção: instalar pelo navegador', { exact: true }).click();
     await prompt('accepted');
     const button = page.getByRole('button', { name: 'Instalar Almox no dispositivo' });
     await button.waitFor();
@@ -92,6 +117,7 @@ try {
       await page.reload();
       await page.getByRole('heading', { name: /O trabalho continua/ }).waitFor();
       await page.waitForLoadState('networkidle');
+      await page.getByText('Outra opção: instalar pelo navegador', { exact: true }).click();
       await prompt(outcome);
       await page.getByRole('button', { name: 'Instalar Almox no dispositivo' }).click();
       await page.getByRole('status').filter({ hasText: outcome === 'dismissed' ? 'Você pode instalar depois' : 'Não foi possível abrir a instalação' }).waitFor();
@@ -124,7 +150,7 @@ try {
 } finally {
   await browser.close();
 }
-const report = { scope: 'Navegador Chromium em ambiente isolado, sem login ou dados reais. Eventos de consentimento simulados; não instala no Android/Windows físico.', tests: results.length, passed: results.filter(result => result.passed).length, results };
+const report = { scope: 'Chromium isolado, sem login ou dados reais. Downloads exercitados com resposta fictícia; URLs oficiais conferidas separadamente. Consentimento do navegador simulado; não executa instaladores nem instala no Android/Windows físico.', tests: results.length, passed: results.filter(result => result.passed).length, results };
 await fs.writeFile(path.join(output, 'browser-checks.json'), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report, null, 2));
 if (results.some(result => !result.passed)) process.exitCode = 1;

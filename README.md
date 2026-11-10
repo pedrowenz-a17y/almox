@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.7.1
+# Almox ERP · U.C.A. — versão 2.7.2
+
+**Versão 2.7.2:** página de instalação com downloads oficiais do APK Android e EXE Windows, instruções por dispositivo e endereço de conexão com botão de copiar. Compartilhe [`/instalar`](https://almox-blush.vercel.app/instalar). Os arquivos nativos são os instaladores já publicados; seus avisos de origem/editor permanecem conforme a plataforma. A instalação pelo navegador continua como opção nessa página.
 
 **Versão 2.7.1:** instalação pelo navegador em Android e Windows, com uma página para compartilhar em [`/instalar`](https://almox-blush.vercel.app/instalar), tratamento de cancelamento do instalador e atualização de segurança do processador de imagens. [Instalação e assinatura dos arquivos](docs/INSTALACAO-E-ASSINATURA.md). Os instaladores nativos anteriores continuam sendo versões independentes.
 

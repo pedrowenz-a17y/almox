@@ -1,0 +1,18 @@
+[
+  {
+    "platform": "Android",
+    "status": 200,
+    "url": "https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-v1.0.0/android-distribution/Almox-ERP-Android-1.0.0.apk",
+    "contentType": "application/octet-stream",
+    "contentDisposition": null,
+    "contentLength": "2664458"
+  },
+  {
+    "platform": "Windows",
+    "status": 200,
+    "url": "https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/Almox-ERP-2.6.0-Windows-x64-Setup.exe",
+    "contentType": "application/octet-stream",
+    "contentDisposition": "attachment; filename=Almox-ERP-2.6.0-Windows-x64-Setup.exe",
+    "contentLength": "181697301"
+  }
+]

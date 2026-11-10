@@ -1,13 +1,21 @@
-# Instalação e assinatura · Almox ERP 2.7.1
+# Instalação e assinatura · Almox ERP 2.7.2
+
+## Baixar os arquivos Android e Windows
+
+Compartilhe **https://almox-blush.vercel.app/instalar**. A página mantém a identidade U.C.A. e apresenta **Baixar para Android** (APK 1.0.0) e **Baixar para Windows** (EXE 2.6.0), com versões, tamanhos aproximados e requisitos. Os links apontam para os arquivos oficiais já publicados no GitHub; não passam os binários grandes pelo servidor Vercel.
+
+O clique inicia o download. A pessoa abre o arquivo recebido e confirma a instalação no sistema operacional. Não há instalação silenciosa, permissão automática ou remoção dos avisos de origem. A página mostra o endereço da própria instalação do ERP e permite copiá-lo para o campo **Endereço do ERP** dos aplicativos. O APK publicado anteriormente vem com um domínio antigo; é necessário substituí-lo pelo endereço atual indicado na página.
+
+Os arquivos nativos não foram recompilados nem receberam nova assinatura nessa revisão. O que mudou foi a página de distribuição. As evidências da navegação e dos links estão em [download-installation](../artifacts/download-installation/README.md).
 
 ## Instalar a versão hospedada
 
-Compartilhe **https://almox-blush.vercel.app/instalar**. A página apresenta a instalação da aplicação web (PWA), com ícone e janela própria, no Android e Windows. O botão de instalar aparece quando o navegador fornece essa opção; há instruções para o menu quando ela não está disponível. Em um navegador sem suporte, o site continua utilizável pela aba.
+Na mesma página, abra **Outra opção: instalar pelo navegador** para instalar a aplicação web (PWA), com ícone e janela própria, no Android e Windows. O botão de instalar aparece quando o navegador fornece essa opção; há instruções para o menu quando ela não está disponível. Em um navegador sem suporte, o site continua utilizável pela aba.
 
 - **Android:** abra no Chrome → menu ⋮ → Adicionar à tela inicial/Instalar aplicativo.
 - **Windows:** abra no Edge → menu ⋯ → Aplicativos → Instalar este site como aplicativo. No Chrome, procure a instalação na barra de endereço ou no menu de salvar e compartilhar.
 
-Essa instalação é fornecida pelo navegador a partir do endereço HTTPS. Não distribui os arquivos APK e EXE do projeto. Mantém as proteções do sistema e os avisos/consentimentos normais do navegador. Não é publicação na Google Play ou Microsoft Store.
+Essa opção é fornecida pelo navegador a partir do endereço HTTPS, em vez de usar os arquivos APK e EXE. Mantém as proteções do sistema e os avisos/consentimentos normais do navegador. Não é publicação na Google Play ou Microsoft Store.
 
 Cada pessoa entra com a própria conta e suas permissões. Os dados continuam no mesmo servidor e na mesma unidade; o PC pode ficar desligado quando o ERP está hospedado na nuvem. É necessária internet para consultar ou movimentar estoque. Instalar a interface não comprova que as conexões de banco e o login estejam configurados.
 

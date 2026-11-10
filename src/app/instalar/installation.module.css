@@ -13,13 +13,25 @@
 .description { max-width: 660px; margin: 0 auto 12px; font-size: 17px; line-height: 1.7; color: #626674; }
 .hint { font-size: 13px; color: #6e7280; margin-top: 18px; }
 .cards { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-.card { border: 1px solid #e5e5eb; background: white; border-radius: 20px; padding: 30px; }
+.card { min-width: 0; border: 1px solid #e5e5eb; background: white; border-radius: 20px; padding: 30px; scroll-margin-top: 24px; }
 .card > svg { color: #ed0b3c; }
 .card h2 { font-size: 23px; margin: 18px 0; letter-spacing: -.5px; }
 .card ol { padding-left: 21px; margin-bottom: 0; color: #616573; }
-.card li { padding-left: 5px; margin: 14px 0; line-height: 1.75; }
+.card li { padding-left: 5px; margin: 14px 0; line-height: 1.75; overflow-wrap: anywhere; }
 .card li::marker { color: #d30a35; font-weight: 800; }
 .card strong { color: #31343d; }
+.fileInfo { color: #717583; font-size: 13px; line-height: 1.7; margin-bottom: 22px; }
+.download { display: flex; justify-content: center; align-items: center; gap: 10px; background: #ed0b3c; color: white; padding: 15px 18px; border-radius: 12px; font-weight: 700; transition: background .18s, transform .18s; }
+.download:hover { background: #cf0933; transform: translateY(-2px); }
+.connection { max-width: 960px; margin: 26px auto 0; padding: 28px 30px; border: 1px solid #f1ced6; border-radius: 20px; background: #fff7f8; }
+.connection h2 { font-size: 21px; letter-spacing: -.5px; margin: 0 0 10px; }
+.connection p { color: #626674; line-height: 1.8; }
+.addressRow { display: flex; gap: 12px; margin-top: 18px; }
+.addressRow input { min-width: 0; flex: 1; border: 1px solid #dedee6; border-radius: 10px; background: white; color: #31343d; padding: 12px; }
+.addressRow button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #e8bac5; border-radius: 10px; background: white; color: #b2092e; padding: 12px 16px; font-weight: 700; }
+.connection .copyStatus { margin-bottom: 0; font-size: 13px; }
+.browserOption { margin-top: 28px; border-top: 1px solid #e5e5eb; padding-top: 20px; }
+.browserOption summary { cursor: pointer; color: #31343d; font-weight: 700; }
 .note { max-width: 900px; margin: 34px auto 0; padding: 0 10px; color: #626674; line-height: 1.8; }
 .note h2 { color: #222328; font-size: 20px; margin-bottom: 8px; }
 .note .enter { margin-top: 10px; }
@@ -31,4 +43,7 @@
   .intro h1 { letter-spacing: -1.4px; }
   .cards { grid-template-columns: 1fr; }
   .card { padding: 25px; }
+  .connection { padding: 24px; }
+  .addressRow { flex-direction: column; }
 }
+@media (prefers-reduced-motion: reduce) { .download { transition: none; } .download:hover { transform: none; } }
