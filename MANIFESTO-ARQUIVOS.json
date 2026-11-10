@@ -1,7 +1,7 @@
 {
   "version": "2.7.0",
   "revision": "android-1.0.0-validated",
-  "generatedAt": "2026-11-09T23:32:45.889273+00:00",
+  "generatedAt": "2026-11-10T02:03:47.657882+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -2225,8 +2225,8 @@
     },
     {
       "path": "src/lib/http.ts",
-      "bytes": 3664,
-      "sha256": "f0fbb3a1818cdc4d0222a26e650fecc7977b3365dbaf29ba3eedfa489a2d5d70"
+      "bytes": 3777,
+      "sha256": "e759e35dcd65a44445e50ff9f39632f0be1bbf75bc00f4d9d2956ce8227d3ad8"
     },
     {
       "path": "src/lib/local-assistant-language.ts",
@@ -2412,6 +2412,11 @@
       "path": "tests/domain.integration.test.ts",
       "bytes": 41968,
       "sha256": "ca1cc0789853bb18c95d27c75ce79d9fdc6adb5d7eb1b26754cd77c2904b7b62"
+    },
+    {
+      "path": "tests/http-database-log.test.ts",
+      "bytes": 1208,
+      "sha256": "235bd1a6c0045c2da4b6e1eae73c15ddb510374a320ecde57ab83710d22b00c0"
     },
     {
       "path": "tests/inventory-schedules.integration.test.ts",

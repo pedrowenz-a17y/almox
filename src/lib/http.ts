@@ -27,8 +27,12 @@ function errorResponse(error: unknown): Response {
     if (error.code === 'P2003') return NextResponse.json({ error: 'Este registro possui vínculos ou uma referência não existe.' }, { status: 409 });
     if (error.code === 'P2034') return NextResponse.json({ error: 'O registro foi alterado por outra operação. Atualize e tente novamente.' }, { status: 409 });
   }
-  // Provider/driver messages may contain URLs, SQL and credentials. Only classify the error.
-  console.error('API request failed', { type: error instanceof Prisma.PrismaClientKnownRequestError ? 'database' : 'internal' });
+  // Provider/driver messages and metadata may contain credentials. Log only a bounded code.
+  const database = error instanceof Prisma.PrismaClientKnownRequestError;
+  console.error('API request failed', {
+    type: database ? 'database' : 'internal',
+    ...(database && /^P\d{4}$/.test(error.code) ? { code: error.code } : {}),
+  });
   return NextResponse.json({ error: 'Não foi possível concluir a operação. Tente novamente.' }, { status: 500 });
 }
 export function api(handler: Handler) {
