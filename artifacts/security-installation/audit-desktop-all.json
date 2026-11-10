@@ -1,0 +1,86 @@
+{
+  "scope": "desktop-all",
+  "counts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 6,
+    "high": 0,
+    "critical": 0,
+    "total": 6
+  },
+  "packages": [
+    {
+      "name": "@electron/universal",
+      "severity": "moderate",
+      "isDirect": false,
+      "range": "1.5.0 || 2.0.0 - 3.0.3",
+      "fixAvailable": {
+        "name": "electron-builder",
+        "version": "25.1.0",
+        "isSemVerMajor": true
+      },
+      "advisories": []
+    },
+    {
+      "name": "app-builder-lib",
+      "severity": "moderate",
+      "isDirect": false,
+      "range": ">=24.13.4-alpha.0",
+      "fixAvailable": {
+        "name": "electron-builder",
+        "version": "25.1.0",
+        "isSemVerMajor": true
+      },
+      "advisories": []
+    },
+    {
+      "name": "dmg-builder",
+      "severity": "moderate",
+      "isDirect": false,
+      "range": "24.13.4-alpha.0 - 25.0.6 || >=25.1.2",
+      "fixAvailable": {
+        "name": "electron-builder",
+        "version": "25.1.0",
+        "isSemVerMajor": true
+      },
+      "advisories": []
+    },
+    {
+      "name": "electron-builder",
+      "severity": "moderate",
+      "isDirect": true,
+      "range": "19.25.0 || 24.13.4-alpha.0 - 25.0.6 || >=25.1.2",
+      "fixAvailable": {
+        "name": "electron-builder",
+        "version": "25.1.0",
+        "isSemVerMajor": true
+      },
+      "advisories": []
+    },
+    {
+      "name": "electron-builder-squirrel-windows",
+      "severity": "moderate",
+      "isDirect": false,
+      "range": "24.13.4-alpha.0 - 25.0.6 || >=25.1.2",
+      "fixAvailable": true,
+      "advisories": []
+    },
+    {
+      "name": "minimatch",
+      "severity": "moderate",
+      "isDirect": false,
+      "range": "7.0.0 - 11.0.0",
+      "fixAvailable": {
+        "name": "electron-builder",
+        "version": "25.1.0",
+        "isSemVerMajor": true
+      },
+      "advisories": [
+        {
+          "title": "minimatch has potential denial of service via globparts amplification",
+          "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249"
+        }
+      ]
+    }
+  ]
+}

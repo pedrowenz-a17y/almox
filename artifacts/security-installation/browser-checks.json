@@ -1,0 +1,39 @@
+{
+  "scope": "Navegador Chromium em ambiente isolado, sem login ou dados reais. Eventos de consentimento simulados; não instala no Android/Windows físico.",
+  "tests": 8,
+  "passed": 8,
+  "results": [
+    {
+      "name": "Página de instalação pública e responsiva, sem download de APK/EXE",
+      "passed": true
+    },
+    {
+      "name": "Manifesto instalável e service worker com atualização sem cache",
+      "passed": true
+    },
+    {
+      "name": "Perfil normal do Chromium atende aos critérios de instalação",
+      "passed": true
+    },
+    {
+      "name": "Instalação só abre o consentimento do navegador após clique",
+      "passed": true
+    },
+    {
+      "name": "Cancelar ou recusar instalação mantém orientação e não causa erro JavaScript",
+      "passed": true
+    },
+    {
+      "name": "Login oferece acesso à instalação; páginas/API não entram no cache",
+      "passed": true
+    },
+    {
+      "name": "Sem internet mostra aviso, sem recuperar dados de estoque do cache",
+      "passed": true
+    },
+    {
+      "name": "Sem exceções JavaScript nas telas de instalação",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+▶ configuração e redirecionamento de autenticação
+  ✔ origens explícitas e o deployment Vercel atual são permitidos, sem wildcard (2.58031ms)
+  ✔ configuração inválida não amplia a origem autorizada (0.888307ms)
+  ✔ produção sem origem configurada falha de forma explícita (0.456703ms)
+  ✔ Vercel usa o domínio de produção do próprio projeto sem confiar no Host da requisição (0.497708ms)
+  ✔ redirecionamentos externos, barras invertidas e loops de login são recusados (0.775378ms)
+  ✔ chaves administrativas são recusadas na variável pública (0.508375ms)
+  ✔ indisponibilidade do provedor é distinta de credenciais inválidas (4.928897ms)
+✔ configuração e redirecionamento de autenticação (20.445258ms)
+✔ HTTP logs preserve database codes without provider messages, SQL or metadata (9.672032ms)
+▶ autenticação e fronteiras de acesso
+  ✔ sem costs:read custos ficam ocultos também em relações e auditoria (2.426676ms)
+  ✔ campos de credenciais não são retornados nem para perfil autorizado a custos (0.970614ms)
+✔ autenticação e fronteiras de acesso (5.33792ms)
+▶ proteção de origem das mutações
+  ✔ origem correta pode enviar mutação (2.687739ms)
+  ✔ origem ausente, de outro domínio ou cross-site não pode enviar mutação (2.233275ms)
+✔ proteção de origem das mutações (5.74604ms)
+ℹ tests 12
+ℹ suites 3
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 787.040069

@@ -1,7 +1,7 @@
 {
-  "version": "2.7.0",
-  "revision": "android-1.0.0-validated",
-  "generatedAt": "2026-11-10T02:03:47.657882+00:00",
+  "version": "2.7.1",
+  "revision": "browser-installation-and-security",
+  "generatedAt": "2026-11-10T12:10:29.251078+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 23658,
-      "sha256": "85dc9646acf1f3eece89f96fd907d53f0eb43370c9f16d85aaf91dca196f42e1"
+      "bytes": 24069,
+      "sha256": "2206635fc7f612e2fb97996b9b247c7fc8e4805d25da3eea4843bc9d38ffe2bb"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -944,6 +944,66 @@
       "sha256": "236b8b6ddec17322a504fd034278d470dabd4c4cea67d4224aeed8642e167e01"
     },
     {
+      "path": "artifacts/security-installation/README.md",
+      "bytes": 2385,
+      "sha256": "0ffab56b190e28bc12161a42c736b847f1027da41696fd5619c656dc459283be"
+    },
+    {
+      "path": "artifacts/security-installation/audit-desktop-all.json",
+      "bytes": 2063,
+      "sha256": "282e91e0a24f229ac6ca6f0d277c4c7fe8a272d01035af406e947e332fd7a4b3"
+    },
+    {
+      "path": "artifacts/security-installation/audit-web-all.json",
+      "bytes": 1710,
+      "sha256": "844b51869d030fa0616059d03fc2ac21350d50a044a8027757c4c7abfe176ef9"
+    },
+    {
+      "path": "artifacts/security-installation/audit-web-production.json",
+      "bytes": 166,
+      "sha256": "6c029930ceada0d561f353107cdbdc3b4d62b6035b34f42b360838d9ee17a6b0"
+    },
+    {
+      "path": "artifacts/security-installation/browser-checks.json",
+      "bytes": 1156,
+      "sha256": "ede1c39936771c098c09f6958838c322da1475652b41ca33f61f262ba26b7f64"
+    },
+    {
+      "path": "artifacts/security-installation/build.log",
+      "bytes": 2575,
+      "sha256": "557be2f620266c1fb0371300dd6b1cad9a0a0b2b09869cdba0025c78c503fbcb"
+    },
+    {
+      "path": "artifacts/security-installation/installability.json",
+      "bytes": 33,
+      "sha256": "682cbbd9bf57d1d6d20c036c1fa459272c42a7a4c608345b3cf236ebfeaff7c4"
+    },
+    {
+      "path": "artifacts/security-installation/installation-1440.png",
+      "bytes": 124238,
+      "sha256": "2a985cb15f598f6c1cbc55d57d457566ce616b24e8a75f702785687e2ebd3ca1"
+    },
+    {
+      "path": "artifacts/security-installation/installation-390.png",
+      "bytes": 115490,
+      "sha256": "6d5be69cf6cf6854956fc3dc4e4004ccce4bac47a891ad836eed839d773a7e00"
+    },
+    {
+      "path": "artifacts/security-installation/lock-check.log",
+      "bytes": 21,
+      "sha256": "21a271d55097f5b18ca31bf5144ec1d6cb2f946c71c9ad728879cabc13e9eefd"
+    },
+    {
+      "path": "artifacts/security-installation/native-file-checks.json",
+      "bytes": 1025,
+      "sha256": "52d1f70dfb48addb0915f0f1f959d4bf87933f74ef01a8c63736bfa27e8f4092"
+    },
+    {
+      "path": "artifacts/security-installation/security-tests.log",
+      "bytes": 1487,
+      "sha256": "ba917cff184f4829d10d73888867686d839bb1311c26effac9b1113a5f1b8c8f"
+    },
+    {
       "path": "artifacts/uca-aceite-mobile.png",
       "bytes": 72905,
       "sha256": "dc73d1df538952df7a1d182948845fa9ef10d43f5ae8a928dfeb5abca21f84fd"
@@ -1320,13 +1380,13 @@
     },
     {
       "path": "docs/APLICATIVO-ANDROID.md",
-      "bytes": 5548,
-      "sha256": "66ddccec9a53998791432a9f5eafbec32fbe652810c15ca75d9fab18bed8e623"
+      "bytes": 5972,
+      "sha256": "490110791bdbabd67378ed8b390204065ff02805f7f306922be69c3410fd5f7d"
     },
     {
       "path": "docs/APLICATIVO-WINDOWS.md",
-      "bytes": 7443,
-      "sha256": "c145ebf70a9c7f9d206769cdf431882567ffb18ab00cc82320f9ed395c3144ab"
+      "bytes": 7817,
+      "sha256": "0a7bc35880f965ec81d544011b9b4d658d3fb191a260dcea7f442c097df1e4ba"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -1372,6 +1432,11 @@
       "path": "docs/IDENTIDADE-UCA.md",
       "bytes": 2031,
       "sha256": "f810e37d994a085ecd4013630bcb1e72fc801e572a9d366f68fdf1114bb3e838"
+    },
+    {
+      "path": "docs/INSTALACAO-E-ASSINATURA.md",
+      "bytes": 4957,
+      "sha256": "c1872a04f0bae17a5ecb1fe89e641ea073cbf44dd3d19ed4256611af80014a97"
     },
     {
       "path": "docs/INTERACOES-2.2.md",
@@ -1560,18 +1625,18 @@
     },
     {
       "path": "next.config.ts",
-      "bytes": 663,
-      "sha256": "075c118ef43408c27b037dbec7174a30e7ed5fd3dac6935ca2b394e543b316f1"
+      "bytes": 916,
+      "sha256": "562f0bdd965f987bb5be109c483e9bcdea3653bad9bc00088470e0f228dcdd34"
     },
     {
       "path": "package-lock.json",
-      "bytes": 319900,
-      "sha256": "458e7a440de4e2ba9b09e4528c8276090ca489d17cb32d183c5476a48a6341a6"
+      "bytes": 302110,
+      "sha256": "c0a451d1f1420aac87535be3e193fff9928e261e65540763103a4dffe4bb25f8"
     },
     {
       "path": "package.json",
-      "bytes": 2450,
-      "sha256": "ba3f12ec8306b0fa99a753ff4bceb24e46a0e370fd1956157446ec4d24eff126"
+      "bytes": 2449,
+      "sha256": "908e311b4822473dadb11db48a1dca3ac3d7464126ce7c27fc49f43796d15b0c"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1676,7 +1741,7 @@
     {
       "path": "public/manifest.webmanifest",
       "bytes": 700,
-      "sha256": "e7aa96a969369573845022cd3964b3ae9a7d32af83a7106b26931f66530b63da"
+      "sha256": "34f65af058733606e0f63ecf673cef19ebfb3c8b82d71977fe32f0387330b3d9"
     },
     {
       "path": "public/offline.html",
@@ -1686,7 +1751,7 @@
     {
       "path": "public/sw.js",
       "bytes": 1427,
-      "sha256": "37a599c2ed2e368c3ebe6f644edd73468498f4a34dc747b3a203c26ef9a71a75"
+      "sha256": "c44032d88db4069729b1c98799355e402e367f6b4b36229c9799b9c955952e5d"
     },
     {
       "path": "scripts/check-config.mjs",
@@ -1757,6 +1822,11 @@
       "path": "scripts/verify-browser.mjs",
       "bytes": 6231,
       "sha256": "ef5daea35a1e6ec10a3468ca43b4961ed3d29416dc5e7db2076de8200b45ce82"
+    },
+    {
+      "path": "scripts/verify-installation.mjs",
+      "bytes": 7448,
+      "sha256": "af83ecd83e5eaf24bf67dfec5e9563ba369ba8996060c70f9ce7b2b28d5f1925"
     },
     {
       "path": "scripts/verify-operations.mjs",
@@ -2019,6 +2089,16 @@
       "sha256": "ccf5ad7e5f63d30555f4270a364aa6f936734d2dffb0ee3809e111bba2fc728d"
     },
     {
+      "path": "src/app/instalar/installation.module.css",
+      "bytes": 2220,
+      "sha256": "3d39d0cd8b4e27b4954adfd4a12a76f9baffaf71df30b6ef05e722ea227b2557"
+    },
+    {
+      "path": "src/app/instalar/page.tsx",
+      "bytes": 3332,
+      "sha256": "d6d35becf423d6517a96a425bf22882208a65dc9ea08dd054bca394d4bb2ad35"
+    },
+    {
       "path": "src/app/layout.tsx",
       "bytes": 952,
       "sha256": "cfe2f621bf244dd85c1916edeb014ee9a7aecac55ae38a606ce9be63bde9ce9b"
@@ -2070,8 +2150,8 @@
     },
     {
       "path": "src/components/auth-shell.tsx",
-      "bytes": 4918,
-      "sha256": "e5200f2dd5bfd34efd869a2f10a13dce081d151e105f2c56e504750718c489cb"
+      "bytes": 5036,
+      "sha256": "3620faeb90e61aa70a8ff203fcc745fb8138fd45a61e71c90a924664d4f592fc"
     },
     {
       "path": "src/components/catalog-form.tsx",
@@ -2140,8 +2220,8 @@
     },
     {
       "path": "src/components/pwa.tsx",
-      "bytes": 2781,
-      "sha256": "1d46cdce09090c96a3e3fa14966a4b8a6e7769e70e7727321f87a298cefdfd36"
+      "bytes": 4327,
+      "sha256": "1892196d12417163e678cd4c79fb688563678bd1bb53ac8bb4519a13201708a6"
     },
     {
       "path": "src/components/quick-lookup.tsx",

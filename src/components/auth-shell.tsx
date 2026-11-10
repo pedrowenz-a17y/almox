@@ -128,6 +128,8 @@ export default function AuthShell({
           </div>
           <p className="login-help">
             Precisa de acesso? Fale com o administrador da sua unidade.
+            <br />
+            <Link href="/instalar" className="text-link">Instalar o Almox neste dispositivo</Link>
           </p>
           <div className="welcome-form-signature">
             <Wrench size={14} />

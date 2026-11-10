@@ -1,5 +1,5 @@
 /* Only public immutable assets are cached. Authenticated pages/API never enter a cache. */
-const CACHE = "almox-public-v2-uca";
+const CACHE = "almox-public-v3-uca";
 const PUBLIC = ["/offline.html", "/icon.svg", "/icon-192.png", "/icon-512.png", "/manifest.webmanifest"];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PUBLIC)).then(() => self.skipWaiting()));

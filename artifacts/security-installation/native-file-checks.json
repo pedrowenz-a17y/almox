@@ -1,0 +1,22 @@
+{
+  "android": {
+    "version": "1.0.0",
+    "sha256": "e2cfc744e8a49dc1cb950a9455e1884da1a65e4fb2ee1d33cc4a9762fb6a852d",
+    "expectedReleaseHash": true,
+    "signatureVerifiedV2V3": true,
+    "certificateSha256": "b7c3b748cc3c0587b34187a2152379cc2deca02830c89d482e09501a7a45a8a8",
+    "privateEnvOrKeyFiles": 0,
+    "scope": "APK local da entrega anterior; assinatura conferida com biblioteca oficial apksig e certificado esperado. Não inspeciona a cópia encaminhada por terceiros."
+  },
+  "windows": {
+    "version": "2.6.0",
+    "installer": "Almox-ERP-2.6.0-Windows-x64-Setup.exe",
+    "peHeaderInspected": true,
+    "authenticodeCertificateTablePresent": false,
+    "publishedSha256": "e595c39e6b82becd54592d4e4e3941cd1e5bb571b0750d20371dda639872d4c6",
+    "scope": "Cabeçalho PE do arquivo oficial e checksum publicado; o binário completo não foi baixado nem executado nesta verificação."
+  },
+  "antivirusScanPerformed": false,
+  "nativeFilesResignedOrReplaced": false,
+  "storePublicationPerformed": false
+}
