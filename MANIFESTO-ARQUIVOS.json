@@ -1,7 +1,7 @@
 {
   "version": "2.7.2",
   "revision": "browser-installation-and-security",
-  "generatedAt": "2026-11-10T23:00:41.875543+00:00",
+  "generatedAt": "2026-11-11T11:20:41.252163+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 24496,
-      "sha256": "3bab175328d7bb6774e0fca59c0ed9324feb7d053e0fcaf65f246cbdecc8fe00"
+      "bytes": 24781,
+      "sha256": "efff1707c950e6cc02fa40013ba0603f468fb73fefa8051a44542103cddcdcfa"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -1514,6 +1514,11 @@
       "sha256": "adb7459693f684bf5d7159b51f69e2aec167758e01fe8183155ff8d66a4e17c3"
     },
     {
+      "path": "docs/SENHA-ADMINISTRATIVA.md",
+      "bytes": 3071,
+      "sha256": "3818544e38122f91dfb126f72278628c648cdca30664ede6f7b227ce55e17d04"
+    },
+    {
       "path": "docs/VALIDATION-LEGACY.md",
       "bytes": 8334,
       "sha256": "dc5d42e315f3c7f0f55a91c3f221de8bd8964360f04d52b2ea29bf898e6b5643"
@@ -1670,8 +1675,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 2449,
-      "sha256": "7ef9b8dcc9449ca9c83eedef07f250334e53f4d79faf096eda7ba5eb8bba063f"
+      "bytes": 2626,
+      "sha256": "c445ca938e571d7aa65f28272318cd4ee48f6c627184bbebe6eb15aab36e9655"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1839,9 +1844,19 @@
       "sha256": "0dce368cc96080b014e4e5c4b9ee774685683b2bb76e682e9fb4b21cca904983"
     },
     {
+      "path": "scripts/set-user-password.mjs",
+      "bytes": 3490,
+      "sha256": "6200f8203175b275a2c05d0b47458a7445e4422f325305de673488fe6df4023d"
+    },
+    {
       "path": "scripts/start.mjs",
       "bytes": 743,
       "sha256": "51004fac2dc44b8c4402ca22d90173bceea93e313812c3665a596de9dcce26f5"
+    },
+    {
+      "path": "scripts/user-password-core.mjs",
+      "bytes": 2136,
+      "sha256": "c3ce12a5735f43036f7a20fb04ef5f48068fdf3ff4bbf2090203ce700bd99a32"
     },
     {
       "path": "scripts/verify-api.mjs",
@@ -2597,6 +2612,11 @@
       "path": "tests/user-access.integration.test.ts",
       "bytes": 7405,
       "sha256": "f935b7505e99323ee41739fe5a92304b927d57e00a601e18933a2ec618e40650"
+    },
+    {
+      "path": "tests/user-password.test.mjs",
+      "bytes": 2695,
+      "sha256": "2cd8957a62820a8950f8188a27c5a994b8e1c32d8ea3de230272fb5a6b2ae8b9"
     },
     {
       "path": "tests/validation-limits.test.ts",

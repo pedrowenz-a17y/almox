@@ -20,6 +20,8 @@
     "config:check": "node scripts/check-config.mjs",
     "doctor": "node scripts/doctor.mjs",
     "admin:provision": "tsx scripts/provision-admin.ts",
+    "user:password": "node --env-file-if-exists=.env scripts/set-user-password.mjs",
+    "test:user-password": "node --test --test-isolation=none tests/user-password.test.mjs",
     "migration:snapshot": "node scripts/migration-snapshot.mjs",
     "migration:compare": "node scripts/migration-compare.mjs",
     "migration:map": "node scripts/migration-map-units.mjs",

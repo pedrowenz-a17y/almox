@@ -143,6 +143,8 @@ npm run dev
 
 Em **Usuários**, o administrador convida pessoas ou vincula identidade Supabase existente, escolhendo o perfil da unidade atual. A mesma pessoa pode ter perfis diferentes em unidades diferentes. Desativar o acesso nessa tela afeta o vínculo da unidade.
 
+Para uma definição administrativa pontual de senha de conta existente, sem solicitar e-mail de recuperação, use o [utilitário protegido de senha](docs/SENHA-ADMINISTRATIVA.md). Ele exige configuração administrativa local, verifica UUID/e-mail e não altera perfis ou unidades.
+
 Se aparecer **“Origem da solicitação não autorizada”**, confira se o endereço do navegador corresponde exatamente a `APP_URL` ou a uma origem de `APP_ALLOWED_ORIGINS`. `localhost`, `127.0.0.1`, IP da rede e domínio público são distintos. Corrija a configuração e reinicie/reimplante; não desative a proteção.
 
 ## Convites e recuperação
