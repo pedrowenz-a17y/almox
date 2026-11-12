@@ -1,0 +1,173 @@
+/* Shared surfaces. Brand photography and QR codes retain their original colors. */
+:root {
+  --surface: #fff;
+  --surface-muted: #f7f8fa;
+  --surface-hover: #fff5f7;
+  --input-bg: #fbfbfd;
+  --theme-link: #b90d2c;
+  --theme-subtle: #626876;
+  --theme-connection: #fff7f8;
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 7px 11px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { background: var(--surface-muted); }
+.theme-toggle.compact { width: 38px; padding: 0; }
+.auth-preferences {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.auth-preferences .welcome-motion-link { margin-top: 0; }
+
+@media screen {
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #121419;
+    --surface: #1c1f26;
+    --surface-muted: #252933;
+    --surface-hover: #30242d;
+    --input-bg: #171a20;
+    --text: #f0f1f5;
+    --muted: #b0b5c3;
+    --theme-subtle: #b0b5c3;
+    --border: #3b414d;
+    --white: var(--surface);
+    --uca-red-soft: #38212c;
+    --theme-link: #ff8ba2;
+    --theme-connection: #29212b;
+    --red: #ff9ca8;
+  }
+  :root[data-theme="dark"] :is(
+    .topbar, .panel, .app-shell .stat-card, .stats-grid, .today-chip,
+    .modal, .modal-heading, .search-results, .search-results > a,
+    .search-results > button, .lookup-desk, .lookup-results, .alert-row,
+    .quick-actions > button, .quick-actions > a, .popular-list > button,
+    .replenishment-selection, .ai-suggestions button, .ai-message,
+    .ai-links a, .ai-followups button, .mobile-bottom-nav,
+    .welcome-shell, .welcome-shell .login-form-wrap, .login-form-wrap,
+    .motion-toggle, .secondary
+  ) { background: var(--surface); color: var(--text); border-color: var(--border); }
+
+  :root[data-theme="dark"] :is(
+    .table-search, input, select, textarea,
+    .welcome-shell .login-form input
+  ) { background: var(--input-bg); color: var(--text); border-color: var(--border); }
+  :root[data-theme="dark"] .global-search input { background: transparent; }
+  :root[data-theme="dark"] .unit-selector select { background: #2d2e34; }
+  :root[data-theme="dark"] :is(input, textarea)::placeholder { color: #a3aabb; }
+  :root[data-theme="dark"] .welcome-shell .login-form input:focus {
+    background: var(--input-bg);
+    border-color: var(--theme-link);
+  }
+  :root[data-theme="dark"] input:-webkit-autofill {
+    -webkit-text-fill-color: var(--text);
+    box-shadow: 0 0 0 1000px var(--input-bg) inset;
+  }
+  :root[data-theme="dark"] :is(
+    th, table th, .code-tag, .search-hint, .field-info, .segmented,
+    .review-balance, .upload-row, .audit-json, .ai-conversation,
+    .alert-product-icon, .product-avatar, .location-avatar, .small-link,
+    .location-detail-banner, .location-large-icon, .quick-action,
+    .replenishment-brief, .tabs button span, .user-cell i
+  ) { background: var(--surface-muted); color: var(--text); border-color: var(--border); }
+  :root[data-theme="dark"] :is(
+    .app-shell table tbody tr:hover, .app-shell .lookup-material:hover,
+    .app-shell .material-locations > a:hover, .secondary:hover,
+    .search-results > a:hover, .search-results > button:hover,
+    .alert-row:hover, .product-locations > a:hover, .icon-button:hover,
+    .panel-bottom-link:hover, .operation-grid button:hover,
+    .app-shell .shift-desk > a:hover, .ai-suggestions button:hover,
+    .replenishment-selection.has-selection, .ai-user
+  ) { background: var(--surface-hover); border-color: var(--border); }
+  :root[data-theme="dark"] :is(
+    label, td, td strong, .product-cell strong, .small-link strong,
+    .topbar-breadcrumb strong, .chart-summary strong, .detail-grid strong,
+    .product-locations > a > strong, .review-balance strong,
+    .welcome-shell .login-form h2, .welcome-shell .login-form label,
+    .app-shell .stat-card .stat-label
+  ) { color: var(--text); }
+  :root[data-theme="dark"] :is(
+    td small, .product-cell small, .table-footer, .stat-top > span:first-child,
+    .chart-y, .chart-day > span, .chart-caption,
+    .chart-summary > div > span:last-child, .summary-strip,
+    .location-card p, .location-card small, .location-card-bottom,
+    .movement-location, .breadcrumbs, .location-detail-banner p,
+    .role-cards p, .settings-section p, .modal-heading p,
+    .optional, .review-product small, .review-product p,
+    .review-balance > small, .review-balance > div > span,
+    .upload-row small, .detail-stock > span, .product-detail-top p,
+    .detail-grid small, .loading-state, .empty-state,
+    .popular-list small, .popular-list .rank, .app-footer,
+    .app-shell .today-chip, .replenishment-brief p,
+    .welcome-shell .login-form > p, .welcome-team-label,
+    .welcome-shell .login-secure, .welcome-shell .login-secure small,
+    .welcome-shell .login-help, .welcome-form-signature,
+    .welcome-shell .password-field button, .welcome-motion-link,
+    .icon-button, .tabs button
+  ) { color: var(--muted); }
+  :root[data-theme="dark"] :is(
+    .text-button, .text-link, .panel-bottom-link, .back-link:hover, .breadcrumbs > a,
+    .tabs button.active, .segmented > button.selected,
+    .text-button:hover, .text-link:hover, .ai-loading, .ai-mode,
+    .ai-trigger, .lookup-material-icon, .location-card > svg,
+    .role-cards svg, .operation-grid svg
+  ) { color: var(--theme-link); }
+  :root[data-theme="dark"] .segmented > button.selected { background: var(--surface); }
+  :root[data-theme="dark"] :is(.ai-trigger, .welcome-shell .login-lock) {
+    background: var(--teal-soft); color: var(--theme-link);
+  }
+  :root[data-theme="dark"] :is(.notice.error, .scanner-error, .labels-error) {
+    background: #352128; color: #ffb0bb; border-color: #77404c;
+  }
+  :root[data-theme="dark"] .notice.warning {
+    background: #332b1d; color: #f1cf91; border-color: #6c5936;
+  }
+  :root[data-theme="dark"] .notice.info {
+    background: #1c2d35; color: #b1d6e8; border-color: #3c6274;
+  }
+  :root[data-theme="dark"] .badge { background: #303642; color: #e0e4ee; }
+  :root[data-theme="dark"] .badge.success { background: #1b372e; color: #9de4bc; }
+  :root[data-theme="dark"] :is(.badge.warning, .badge.orange, .count-pill, .stat-icon.amber) {
+    background: #392e1c; color: #f2cd8a;
+  }
+  :root[data-theme="dark"] :is(.badge.danger, .stat-icon.red) { background: #3b222c; color: #ffb0c0; }
+  :root[data-theme="dark"] :is(.badge.info, .stat-icon.blue) { background: #233247; color: #b9d4ff; }
+  :root[data-theme="dark"] .badge.purple { background: #332848; color: #d6b9fa; }
+  :root[data-theme="dark"] .text-danger { color: #ffb0bb; }
+  :root[data-theme="dark"] .required { color: #ffb0bb; }
+  :root[data-theme="dark"] :is(.text-warning, .stat-caption.attention) { color: #f2cd8a; }
+  :root[data-theme="dark"] :is(.text-success, .all-good) { color: #9de4bc; }
+  :root[data-theme="dark"] .stat-card.red .stat-caption.attention { color: #ffb0c0; }
+  :root[data-theme="dark"] .app-shell .shift-desk { border-color: var(--border); }
+  :root[data-theme="dark"] .chart-grid-lines > i { border-color: var(--border); }
+  :root[data-theme="dark"] .bottom-scan > span { border-color: var(--surface); }
+  :root[data-theme="dark"] .mobile-bottom-nav > a.active { color: var(--theme-link); }
+  :root[data-theme="dark"] .modal-backdrop { background: #000a; }
+  :root[data-theme="dark"] .product-qr { background: #fff; color-scheme: light; }
+  :root[data-theme="dark"] .pwa-install { background: var(--surface); color: var(--theme-link); border-color: var(--border); }
+}
+@media (max-width: 390px) {
+  .app-shell .topbar-actions { gap: 4px; }
+  .topbar-actions .theme-toggle.compact { width: 34px; min-height: 36px; }
+  .topbar-breadcrumb > strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+@media print {
+  html { color-scheme: light; }
+  .theme-toggle, .auth-preferences { display: none; }
+}

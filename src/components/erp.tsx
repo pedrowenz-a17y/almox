@@ -13,6 +13,7 @@ import { navigateWorkspace } from "@/lib/workspace-navigation";
 import type { PurchaseDraft } from "@/lib/purchase-draft";
 import Assistant from "@/components/assistant";
 import { MotionToggle } from "@/components/motion-preferences";
+import { ThemeToggle } from "@/components/theme-preferences";
 import { ApiError } from "@/lib/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -2113,6 +2114,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
               disabled={!user || switchingUnit}
             />
             <MotionToggle compact />
+            <ThemeToggle compact />
             <button
               className="icon-button refresh-data"
               aria-label="Atualizar dados"

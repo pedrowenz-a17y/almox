@@ -1,7 +1,7 @@
 {
-  "version": "2.7.2",
-  "revision": "browser-installation-and-security",
-  "generatedAt": "2026-11-11T11:20:41.252163+00:00",
+  "version": "2.7.3",
+  "revision": "functional-audit-and-dark-theme",
+  "generatedAt": "2026-11-12T11:50:48.691673+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 24781,
-      "sha256": "efff1707c950e6cc02fa40013ba0603f468fb73fefa8051a44542103cddcdcfa"
+      "bytes": 25181,
+      "sha256": "86f6d677e86a764e93915a8d9150b3a273cec843a3e8f93969a3429322da57be"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -1039,6 +1039,111 @@
       "sha256": "ba917cff184f4829d10d73888867686d839bb1311c26effac9b1113a5f1b8c8f"
     },
     {
+      "path": "artifacts/theme-audit/README.md",
+      "bytes": 2060,
+      "sha256": "a9894f16a1f56d6c793e5287a187a9e878574eae11ec7046978a61965d834cec"
+    },
+    {
+      "path": "artifacts/theme-audit/assistente-dark-desktop.png",
+      "bytes": 170116,
+      "sha256": "f9033f16fa48b3b5e4cf8ce84e970773359aeb452e2eff112d6f9b22ca5214a0"
+    },
+    {
+      "path": "artifacts/theme-audit/browser.log",
+      "bytes": 981,
+      "sha256": "c7a95b3bbc8c5d5fd4f8ef1ca5d4903a4489a1078b7bc942752cbb0cafb13c99"
+    },
+    {
+      "path": "artifacts/theme-audit/build.log",
+      "bytes": 2576,
+      "sha256": "ec459ae0243bdf34e92bece9d1e521d7bd094e9c0b0cee589e212551b767103f"
+    },
+    {
+      "path": "artifacts/theme-audit/checks.json",
+      "bytes": 1764,
+      "sha256": "c972637f8017ae640972fa115f49f1207c30691841afdfc803ff3c49bb9f9b55"
+    },
+    {
+      "path": "artifacts/theme-audit/dashboard-dark-320.png",
+      "bytes": 176513,
+      "sha256": "c1b1ed55720245e5dd4091aadacd44c955eb8626e6b10b68e0ce722153e4ac0a"
+    },
+    {
+      "path": "artifacts/theme-audit/dashboard-dark-390.png",
+      "bytes": 188602,
+      "sha256": "a6fa6311e039680dc096d76b2c778a01f6674e0501090c97a3717a839ef114bb"
+    },
+    {
+      "path": "artifacts/theme-audit/dashboard-dark-desktop.png",
+      "bytes": 265222,
+      "sha256": "76c6c79d0ba885aade9b68228e48e52f329f2794de5c1445f1b47ef41eca98a5"
+    },
+    {
+      "path": "artifacts/theme-audit/dashboard-light-desktop.png",
+      "bytes": 260260,
+      "sha256": "d3e8f1bf61d15332bd84250ffe10428c181fb75fe08aadc9d916932b5c062ff5"
+    },
+    {
+      "path": "artifacts/theme-audit/etiquetas-dark-desktop.png",
+      "bytes": 120802,
+      "sha256": "93f908173f250a39c086fcfb74642d25a240f646dfc0df2fd76b76384d0995da"
+    },
+    {
+      "path": "artifacts/theme-audit/formulario-dark-desktop.png",
+      "bytes": 143480,
+      "sha256": "96837fd51532ee78beec84720be2af6b761522a3d7e55a4478e080f4a575c723"
+    },
+    {
+      "path": "artifacts/theme-audit/instalar-dark-mobile.png",
+      "bytes": 171379,
+      "sha256": "b2530d8912b52304803c055cd62f91edf687b44c6930d36e676088dc883c86ed"
+    },
+    {
+      "path": "artifacts/theme-audit/lint.log",
+      "bytes": 35,
+      "sha256": "b75d713d8218905f3cae8a4047dbbce6d4d7fa84a109783164497943f70deed3"
+    },
+    {
+      "path": "artifacts/theme-audit/login-dark-1440.png",
+      "bytes": 541781,
+      "sha256": "623152fa351ffd03d9a5d6e9f05bbdad903dfaf0188de9a7440eef8eda68f32e"
+    },
+    {
+      "path": "artifacts/theme-audit/login-dark-320.png",
+      "bytes": 46990,
+      "sha256": "2a863a69a37ceac71b0f2a8d808795810150a08cba2a3eb74cb457c20c658ad8"
+    },
+    {
+      "path": "artifacts/theme-audit/login-dark-390.png",
+      "bytes": 49357,
+      "sha256": "003a1532336c9766ae96d73117adad1e294003724303aa205f553b7f8262c152"
+    },
+    {
+      "path": "artifacts/theme-audit/produtos-dark-desktop.png",
+      "bytes": 128878,
+      "sha256": "55acab6df3b954599392676fbd73c6e1b18cbce5464c26a510c21bcbe9219c28"
+    },
+    {
+      "path": "artifacts/theme-audit/public-audit.json",
+      "bytes": 752,
+      "sha256": "b650e258f34e2f46c223dc6cee7f98e1ebfb97dc8a81fbf5afa27e9bab8c2a91"
+    },
+    {
+      "path": "artifacts/theme-audit/recuperacao-dark-mobile.png",
+      "bytes": 216448,
+      "sha256": "019ef84960fbc64b2472a65d881a1a381857008f88ca1c6cb16df2cea3d44581"
+    },
+    {
+      "path": "artifacts/theme-audit/scanner-dark-desktop.png",
+      "bytes": 257133,
+      "sha256": "f9f63cc5513c46186d2b7a5cb55bcfa0fdd32959b9961cc54470df2ca306185c"
+    },
+    {
+      "path": "artifacts/theme-audit/typecheck.log",
+      "bytes": 44,
+      "sha256": "fd92c113e7515b313db62d5f4c674b075860530c3d65cce835ea74717366aeef"
+    },
+    {
       "path": "artifacts/uca-aceite-mobile.png",
       "bytes": 72905,
       "sha256": "dc73d1df538952df7a1d182948845fa9ef10d43f5ae8a928dfeb5abca21f84fd"
@@ -1434,6 +1539,11 @@
       "sha256": "58208c131a06dfd6b3fcf4ba1eaf409a84136d8b5a36f314484ee9c7204113e2"
     },
     {
+      "path": "docs/AUDITORIA-ERP-2026-11-12.md",
+      "bytes": 13552,
+      "sha256": "b6041cce7cccb62d2e9496d7cb5ea2b6042bdc2c205519d6a52e607f7b5d62c1"
+    },
+    {
       "path": "docs/AUDIT_2026-10.md",
       "bytes": 4204,
       "sha256": "22e75634d24ceb15b70056190d690e5d21ec178ba89aff6e4aeec3e807897078"
@@ -1671,12 +1781,12 @@
     {
       "path": "package-lock.json",
       "bytes": 302110,
-      "sha256": "a58fa51b6d9f7aa9ccb39c63792d8e5c4098b0a8ec72ed9e583d058f15c32873"
+      "sha256": "912a95f442cfc7d5e01e8b33c5426cae39d48b0efb2e5c71c95b0be69ebebfb5"
     },
     {
       "path": "package.json",
-      "bytes": 2626,
-      "sha256": "c445ca938e571d7aa65f28272318cd4ee48f6c627184bbebe6eb15aab36e9655"
+      "bytes": 2679,
+      "sha256": "f3e7bb7adff72ee096666c9d33cb662ca028f48f9dd37a11c8ad18ec6a4ba2ce"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1814,6 +1924,11 @@
       "sha256": "78267750afd70145427b58b356e535c8e6c07a994479ff8d7cbe40eb282c5d54"
     },
     {
+      "path": "scripts/fixtures/theme-data.mjs",
+      "bytes": 2115,
+      "sha256": "7b568a9a644434c4cc35ea953e49d3e367839dcad70ae953c4eda2c93f277286"
+    },
+    {
       "path": "scripts/local-db.mjs",
       "bytes": 290,
       "sha256": "f7874075b94de902e0b10bde03c49a58d95e4d508871abc37dbe325620135c40"
@@ -1897,6 +2012,11 @@
       "path": "scripts/verify-reports.mjs",
       "bytes": 11765,
       "sha256": "6e4f2dba05b46eba21f36589929af37661acead61a2ded430d9d63e11524558b"
+    },
+    {
+      "path": "scripts/verify-theme.mjs",
+      "bytes": 17379,
+      "sha256": "8df7d8684ec5b0fd31fda6fb05513249ecd74b0c70d8281a6da16fa970f4ef62"
     },
     {
       "path": "src/app/(workspace)/[[...slug]]/page.tsx",
@@ -2145,18 +2265,18 @@
     },
     {
       "path": "src/app/instalar/installation.module.css",
-      "bytes": 3779,
-      "sha256": "9ec11d68cd9b20d4798edfb427a375d016853807ed7652718da7380e5a97d501"
+      "bytes": 4098,
+      "sha256": "edb2aa321ca0dda2017739d81aebb9587af8d5f5041b8de5ef1df74d10fef5b8"
     },
     {
       "path": "src/app/instalar/page.tsx",
-      "bytes": 4874,
-      "sha256": "fa28a444f2c5e5b03bb719b6bdd5574526e42ef9921764feec8bd8112babfc34"
+      "bytes": 5034,
+      "sha256": "1e5d03a0ec2f7d8c9b1056aade7d0a73b69aa7c72ab7fab022677ce922f7a155"
     },
     {
       "path": "src/app/layout.tsx",
-      "bytes": 952,
-      "sha256": "cfe2f621bf244dd85c1916edeb014ee9a7aecac55ae38a606ce9be63bde9ce9b"
+      "bytes": 1329,
+      "sha256": "356bad7710f3a9f9b6859e87331d7d8e86dd48146baf5109c3ca5800b69a1668"
     },
     {
       "path": "src/app/login-screen.css",
@@ -2177,6 +2297,11 @@
       "path": "src/app/recuperar-senha/page.tsx",
       "bytes": 2681,
       "sha256": "4af2e358d0c4020f892322094c2fdaa604cee635fe5578f4a240e4daa1e3f9bb"
+    },
+    {
+      "path": "src/app/theme.css",
+      "bytes": 8053,
+      "sha256": "b532019b3112a7697ec460d0c9fe705139c984e51c4f982fb00bc392fdfc7af2"
     },
     {
       "path": "src/app/uca.css",
@@ -2205,8 +2330,8 @@
     },
     {
       "path": "src/components/auth-shell.tsx",
-      "bytes": 5036,
-      "sha256": "3620faeb90e61aa70a8ff203fcc745fb8138fd45a61e71c90a924664d4f592fc"
+      "bytes": 5204,
+      "sha256": "b2b9d07d34299afdf705a101827e7a9c2d3665bbf43d6cc9373f70ff9bd6077d"
     },
     {
       "path": "src/components/catalog-form.tsx",
@@ -2220,8 +2345,8 @@
     },
     {
       "path": "src/components/erp.tsx",
-      "bytes": 93420,
-      "sha256": "f6e3c28ca11517905f520d0b6c600332ea7ef104b57614d6c8f4110b3ec97efb"
+      "bytes": 93518,
+      "sha256": "0cb7bedf4d2806ac8d101f977e2dfce435a346d4d6a9b8413d6c9a422d650cf8"
     },
     {
       "path": "src/components/inventory-form.tsx",
@@ -2235,8 +2360,8 @@
     },
     {
       "path": "src/components/labels.tsx",
-      "bytes": 16378,
-      "sha256": "9abb9e0166fadac3820ce3dd2198fa76b2aa55b3413d87a589adc5a3160fd12c"
+      "bytes": 16564,
+      "sha256": "28cdc62fe045a85305226b5b837c937b9746587b1103a1be2a59b79ec90ffcd7"
     },
     {
       "path": "src/components/motion-preferences.tsx",
@@ -2300,8 +2425,13 @@
     },
     {
       "path": "src/components/scanner.tsx",
-      "bytes": 10338,
-      "sha256": "b7fc84abc70e2b44c02b552b01eeb16de74c7020d33e94ff5b7d3b1fa942be15"
+      "bytes": 10402,
+      "sha256": "5d3482135aebe6790bdeda8e28b69061393b941d82e2d05445c95a5b21505037"
+    },
+    {
+      "path": "src/components/theme-preferences.tsx",
+      "bytes": 2273,
+      "sha256": "3e3c670718314a2a53e9537f8524ba0ff6bf4900ea8a0353ea4a72198260f267"
     },
     {
       "path": "src/components/ui.tsx",

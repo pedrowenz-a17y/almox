@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Download, Monitor, Smartphone } from "lucide-react";
 import { Pwa } from "@/components/pwa";
+import { ThemeToggle } from "@/components/theme-preferences";
 import ConnectionAddress from "./connection-address";
 import styles from "./installation.module.css";
 
@@ -19,7 +20,10 @@ export default function Installation() {
           <Image src="/brand/uca-oficial.png" width={105} height={68} alt="U.C.A. Implementos Agrícolas" />
           <span>Almox <strong>ERP</strong></span>
         </Link>
-        <Link href="/login" className={styles.enter}>Entrar <ArrowRight size={17} /></Link>
+        <div className={styles.headerActions}>
+          <ThemeToggle compact />
+          <Link href="/login" className={styles.enter}>Entrar <ArrowRight size={17} /></Link>
+        </div>
       </header>
       <section className={styles.intro} aria-labelledby="install-title">
         <p className={styles.eyebrow}>SEU ALMOXARIFADO, SEMPRE POR PERTO</p>

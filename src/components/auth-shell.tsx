@@ -7,6 +7,7 @@ import { Pwa } from "@/components/pwa";
 import { useMotion } from "@/components/motion-preferences";
 import { WelcomePhoto } from "@/components/welcome-photo";
 import { WelcomeEffects } from "@/components/welcome-effects";
+import { ThemeToggle } from "@/components/theme-preferences";
 
 export default function AuthShell({
   title,
@@ -135,14 +136,17 @@ export default function AuthShell({
             <Wrench size={14} />
             <span>Organização para quem coloca a mão na massa.</span>
           </div>
-          <button
-            type="button"
-            className="welcome-motion-link"
-            onClick={toggle}
-            aria-pressed={!enabled}
-          >
-            {enabled ? "Reduzir movimento" : "Ativar movimento"}
-          </button>
+          <div className="auth-preferences">
+            <button
+              type="button"
+              className="welcome-motion-link"
+              onClick={toggle}
+              aria-pressed={!enabled}
+            >
+              {enabled ? "Reduzir movimento" : "Ativar movimento"}
+            </button>
+            <ThemeToggle />
+          </div>
         </div>
       </section>
       <Pwa />

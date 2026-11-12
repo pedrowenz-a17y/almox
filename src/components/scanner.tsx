@@ -249,9 +249,9 @@ export function Scanner({
       )}
       <style jsx>{`
         .scanner-card {
-          border: 1px solid #dce5e2;
+          border: 1px solid var(--border);
           border-radius: 16px;
-          background: white;
+          background: var(--surface);
           padding: 24px;
           max-width: 640px;
           margin: auto;
@@ -268,14 +268,14 @@ export function Scanner({
         }
         .scanner-heading p {
           margin: 0;
-          color: #64736c;
+          color: var(--muted);
           font-size: 14px;
         }
         .scanner-viewport {
           width: 100%;
           max-width: 420px;
           margin: 20px auto;
-          background: #eef4f1;
+          background: var(--surface-muted);
           border-radius: 12px;
           overflow: hidden;
         }
@@ -287,7 +287,7 @@ export function Scanner({
         .scanner-viewport:empty:before {
           content: "A câmera será ativada com sua permissão";
           font-size: 13px;
-          color: #64736c;
+          color: var(--muted);
           padding: 24px;
           text-align: center;
         }
@@ -297,7 +297,7 @@ export function Scanner({
           align-items: center;
           flex-wrap: wrap;
           font-size: 13px;
-          color: #64736c;
+          color: var(--muted);
         }
         .scanner-manual {
           margin-top: 24px;
@@ -315,7 +315,7 @@ export function Scanner({
         .scanner-manual input {
           min-width: 0;
           flex: 1;
-          border: 1px solid #cbd5cf;
+          border: 1px solid var(--border);
           border-radius: 8px;
           padding: 12px;
           font-size: 16px;
@@ -338,7 +338,7 @@ export function Scanner({
           padding: 10px 16px;
           font-weight: 600;
           cursor: pointer;
-          border: 1px solid #dce5e2;
+          border: 1px solid var(--border);
           white-space: nowrap;
         }
         .scanner-card .btn-primary {
@@ -347,7 +347,7 @@ export function Scanner({
           color: white;
         }
         .scanner-card .btn-secondary {
-          background: white;
+          background: var(--surface);
           color: var(--text);
         }
         @media (max-width: 480px) {

@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-11-12T11:50:19.463811+00:00",
+  "origin": "https://almox-blush.vercel.app",
+  "login": {
+    "httpStatus": 200
+  },
+  "installation": {
+    "httpStatus": 200,
+    "headersObserved": [
+      "X-Content-Type-Options: nosniff",
+      "X-Frame-Options: DENY",
+      "Referrer-Policy: same-origin",
+      "Permissions-Policy: camera=(self), microphone=(), geolocation=()",
+      "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload"
+    ]
+  },
+  "health": {
+    "httpStatus": 200,
+    "body": {
+      "status": "ok"
+    },
+    "meaning": "SELECT 1 reached PostgreSQL at the time checked; not a complete schema or login validation."
+  },
+  "privateAccess": false,
+  "databaseWrites": false,
+  "emailsSent": false
+}

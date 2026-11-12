@@ -1,0 +1,18 @@
+
+> almox-erp@2.7.3 verify:theme
+> node scripts/verify-theme.mjs
+
+PASS Tema escuro padrão no login, contraste e ajuste em desktop e celular
+PASS Preferência clara persiste ao recarregar e navegar para instalação
+PASS Preferência sincronizada entre abas
+PASS Recuperação de acesso permite trocar tema sem enviar e-mail
+PASS Tema claro aplicado antes da hidratação
+PASS Armazenamento indisponível permite alternar o tema na sessão
+PASS Painel real com dados fictícios: contraste, fotografia preservada e temas
+PASS Tabela de estoque, etiquetas de estado e formulário legíveis no tema escuro
+PASS Assistente e aviso de falha permanecem legíveis
+PASS Etiquetas adaptadas ao tema preservam o fundo branco do QR
+PASS Leitor de QR e campo manual legíveis sem acesso a câmera real
+PASS Barra de ações e navegação cabem em 390 e 320 pixels
+PASS Impressão usa fundo claro e oculta a troca de tema
+PASS Sem erros JavaScript ou operações de escrita durante a inspeção

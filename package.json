@@ -1,6 +1,6 @@
 {
   "name": "almox-erp",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
@@ -31,7 +31,8 @@
     "desktop:install": "npm --prefix desktop ci",
     "desktop:test": "npm --prefix desktop test",
     "desktop:prepare": "npm --prefix desktop run prepare:server",
-    "desktop:dist": "node desktop/scripts/build.cjs"
+    "desktop:dist": "node desktop/scripts/build.cjs",
+    "verify:theme": "node scripts/verify-theme.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.1",

@@ -309,8 +309,8 @@ export function Labels({
       </p>
       <style jsx>{`
         .labels-module {
-          background: white;
-          border: 1px solid #e0e7e3;
+          background: var(--surface);
+          border: 1px solid var(--border);
           border-radius: 16px;
           padding: 24px;
         }
@@ -326,7 +326,7 @@ export function Labels({
         }
         .labels-tools p,
         .labels-footnote {
-          color: #687b70;
+          color: var(--muted);
           font-size: 13px;
         }
         .labels-tools p {
@@ -346,14 +346,14 @@ export function Labels({
         .labels-filters select {
           display: block;
           width: 100%;
-          border: 1px solid #d4dfd8;
+          border: 1px solid var(--border);
           border-radius: 8px;
           margin-top: 7px;
           padding: 11px;
           font: inherit;
           font-size: 14px;
           min-height: 44px;
-          background: white;
+          background: var(--surface);
         }
         .labels-selection {
           display: flex;
@@ -369,13 +369,13 @@ export function Labels({
           align-items: center;
         }
         .labels-selection span {
-          color: #687b70;
+          color: var(--muted);
         }
         .labels-selection button,
         .label-preview button {
           border: 0;
           background: transparent;
-          color: #147d64;
+          color: var(--theme-link);
           font-weight: 600;
           cursor: pointer;
           min-height: 44px;
@@ -386,7 +386,7 @@ export function Labels({
           gap: 16px;
         }
         .label-preview {
-          border: 1px solid #dfe7e2;
+          border: 1px solid var(--border);
           border-radius: 12px;
           padding: 16px;
           text-align: center;
@@ -395,9 +395,9 @@ export function Labels({
           flex-direction: column;
         }
         .label-preview.selected {
-          border-color: #147d64;
-          background: #f7fcfa;
-          box-shadow: 0 0 0 1px #147d64;
+          border-color: var(--theme-link);
+          background: var(--teal-soft);
+          box-shadow: 0 0 0 1px var(--teal);
         }
         .label-check {
           display: flex;
@@ -412,17 +412,20 @@ export function Labels({
         .labels-selection input {
           width: 18px;
           height: 18px;
-          accent-color: #147d64;
+          accent-color: var(--theme-link);
           flex-shrink: 0;
         }
         .label-preview img {
           margin: 8px 0;
+          background: white;
+          padding: 6px;
+          border-radius: 4px;
           max-width: 100%;
           height: auto;
         }
         .label-preview p {
           font-size: 12px;
-          color: #687b70;
+          color: var(--muted);
           margin: 0 0 8px;
           overflow-wrap: anywhere;
         }
@@ -437,7 +440,7 @@ export function Labels({
         .labels-empty {
           padding: 24px;
           text-align: center;
-          color: #687b70;
+          color: var(--muted);
         }
         .labels-error {
           color: #a52b2b;
@@ -459,7 +462,7 @@ export function Labels({
           white-space: nowrap;
         }
         .btn-primary {
-          background: #147d64;
+          background: var(--teal);
           color: white;
         }
         .btn:disabled {

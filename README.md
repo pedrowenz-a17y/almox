@@ -277,3 +277,7 @@ O app usa imagem Next standalone, usuário sem privilégios e loopback por padr�
 - Unidades adicionais/perfis personalizados exigem configuração administrativa; não há editor visual completo de organizações/unidades/RBAC.
 
 Nenhum dado real foi migrado somente por existir neste pacote. O uso operacional depende da configuração e validação documentadas pelos responsáveis pelos dados e acessos.
+
+### Auditoria funcional e modo escuro — 2.7.3
+
+O ERP abre em modo escuro e permite alternar para o claro pelo botão de sol/lua. A preferência fica salva no dispositivo. Veja a [auditoria funcional e as propostas de funções e cargos](docs/AUDITORIA-ERP-2026-11-12.md), com prioridades para o problema da empresa e limites do escopo atual. Os perfis sugeridos ainda não foram criados no banco.

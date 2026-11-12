@@ -1,0 +1,63 @@
+{
+  "scope": "Local production public pages and real workspace components with synthetic API responses; no live authentication or database writes.",
+  "checks": [
+    {
+      "name": "Tema escuro padrão no login, contraste e ajuste em desktop e celular",
+      "passed": true
+    },
+    {
+      "name": "Preferência clara persiste ao recarregar e navegar para instalação",
+      "passed": true
+    },
+    {
+      "name": "Preferência sincronizada entre abas",
+      "passed": true
+    },
+    {
+      "name": "Recuperação de acesso permite trocar tema sem enviar e-mail",
+      "passed": true
+    },
+    {
+      "name": "Tema claro aplicado antes da hidratação",
+      "passed": true
+    },
+    {
+      "name": "Armazenamento indisponível permite alternar o tema na sessão",
+      "passed": true
+    },
+    {
+      "name": "Painel real com dados fictícios: contraste, fotografia preservada e temas",
+      "passed": true
+    },
+    {
+      "name": "Tabela de estoque, etiquetas de estado e formulário legíveis no tema escuro",
+      "passed": true
+    },
+    {
+      "name": "Assistente e aviso de falha permanecem legíveis",
+      "passed": true
+    },
+    {
+      "name": "Etiquetas adaptadas ao tema preservam o fundo branco do QR",
+      "passed": true
+    },
+    {
+      "name": "Leitor de QR e campo manual legíveis sem acesso a câmera real",
+      "passed": true
+    },
+    {
+      "name": "Barra de ações e navegação cabem em 390 e 320 pixels",
+      "passed": true
+    },
+    {
+      "name": "Impressão usa fundo claro e oculta a troca de tema",
+      "passed": true
+    },
+    {
+      "name": "Sem erros JavaScript ou operações de escrita durante a inspeção",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "unexpected": []
+}

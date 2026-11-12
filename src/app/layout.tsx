@@ -7,7 +7,9 @@ import "./welcome-interactions.css";
 import "./assistant.css";
 import "./operational.css";
 import "./login-screen.css";
+import "./theme.css";
 import { MotionProvider } from "@/components/motion-preferences";
+import { ThemeProvider } from "@/components/theme-preferences";
 
 export const metadata: Metadata = {
   title: "Almox ERP · U.C.A.",
@@ -25,9 +27,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: '(function(){try{document.documentElement.dataset.theme=localStorage.getItem("almox-theme")==="light"?"light":"dark"}catch(e){}})()' }} />
+      </head>
       <body>
-        <MotionProvider>{children}</MotionProvider>
+        <ThemeProvider><MotionProvider>{children}</MotionProvider></ThemeProvider>
       </body>
     </html>
   );
