@@ -1,4 +1,5 @@
 "use client";
+import { canMoveStock } from "@/lib/access-profiles";
 import { useMemo, useState } from "react";
 import {
   ArrowDownLeft,
@@ -35,13 +36,15 @@ export default function MovementForm({
   onClose: () => void;
   onDone: () => Promise<void>;
 }) {
-  const [type, setType] = useState(initialType);
+  const allowedTypes = ["ENTRY", "EXIT", "TRANSFER"].filter(value => canMoveStock(data.permissions ?? [], value));
+  const initialAllowedType = allowedTypes.includes(initialType) ? initialType : allowedTypes[0] || "";
+  const [type, setType] = useState(initialAllowedType);
   const [productId, setProduct] = useState(initialProduct || "");
   const [sourceId, setSource] = useState(
-    initialType !== "ENTRY" ? initialLocation || "" : "",
+    initialAllowedType !== "ENTRY" ? initialLocation || "" : "",
   );
   const [destinationId, setDestination] = useState(
-    initialType === "ENTRY" ? initialLocation || "" : "",
+    initialAllowedType === "ENTRY" ? initialLocation || "" : "",
   );
   const [quantity, setQuantity] = useState("");
   const [note, setNote] = useState("");
@@ -83,6 +86,7 @@ export default function MovementForm({
     [data, sourceId, type],
   );
   function validate() {
+    if (!canMoveStock(data.permissions ?? [], type)) return "Seu perfil não permite este tipo de movimentação.";
     if (!navigator.onLine)
       return "Sem conexão. Não é possível registrar movimentações no momento.";
     if (type === "EXIT") {
@@ -199,7 +203,7 @@ export default function MovementForm({
           {!review ? (
             <>
               <div className="segmented">
-                {["ENTRY", "EXIT", "TRANSFER"].map((value) => (
+                {allowedTypes.map((value) => (
                   <button
                     type="button"
                     key={value}

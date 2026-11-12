@@ -12,6 +12,7 @@ import {
   payloadHash,
   quantitySchema,
   requirePermission,
+  requireAnyPermission,
   serializable,
   type StockActor,
   writeBalance,
@@ -69,7 +70,7 @@ export const countInclude = {
 } satisfies Prisma.InventoryCountInclude;
 
 export async function getInventoryCount(actor: StockActor, rawId: string) {
-  requirePermission(actor, "inventory:count");
+  requireAnyPermission(actor, ["inventory:count", "inventory:read"]);
   const id = z.string().uuid().parse(rawId);
   const count = await prisma.inventoryCount.findFirst({
     where: { id, unitId: actor.unitId },

@@ -1,4 +1,5 @@
 "use client";
+import { canViewPurchasePrices } from "@/lib/access-profiles";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Plus, RefreshCw, Trash2 } from "lucide-react";
 import { api, DataSet, dateTime, locationPath, money, qty } from "@/lib/client";
@@ -258,7 +259,7 @@ export default function Purchases({
                     <th>Material</th>
                     <th className="numeric">Pedido</th>
                     <th className="numeric">Recebido</th>
-                    {can("costs:read") && (
+                    {canViewPurchasePrices(permissions) && (
                       <th className="numeric">Custo unitário informado</th>
                     )}
                   </tr>
@@ -274,7 +275,7 @@ export default function Purchases({
                       </td>
                       <td className="numeric">{qty(item.orderedQuantity)}</td>
                       <td className="numeric">{qty(item.receivedQuantity)}</td>
-                      {can("costs:read") && (
+                      {canViewPurchasePrices(permissions) && (
                         <td className="numeric">
                           {item.unitCost == null
                             ? "Não informado"
@@ -462,7 +463,7 @@ export default function Purchases({
         <CreatePurchase
           data={data}
           initialDraft={initialDraft}
-          canCost={can("costs:read")}
+          canCost={canViewPurchasePrices(permissions)}
           onClose={() => {
             setCreating(false);
             onDismissDraft?.();
@@ -480,7 +481,7 @@ export default function Purchases({
           mode={action}
           purchase={selected}
           data={data}
-          canCost={can("costs:read")}
+          canCost={canViewPurchasePrices(permissions)}
           onClose={() => setAction(null)}
           onDone={(purchase) =>
             changed(

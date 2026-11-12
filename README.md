@@ -285,3 +285,7 @@ O ERP abre em modo escuro e permite alternar para o claro pelo botão de sol/lua
 ### Evolução por etapas — 2.7.4
 
 A primeira etapa bloqueia a aprovação da própria contagem de estoque, inclusive para administradores. A tela explica a necessidade de outro revisor autorizado na mesma unidade. Veja o [plano por etapas e a regra completa](docs/EVOLUCAO-POR-ETAPAS.md). Não requer migração de banco e preserva aprovações anteriores.
+
+### Perfis por responsabilidade — 2.8.0
+
+Na página **Usuários**, o administrador pode clicar em **Disponibilizar perfis padrão** para preparar Almoxarife, Conferente, Comprador, Analista de custos e Auditor. A preparação preserva os perfis e acessos existentes; atribuir um perfil continua sendo uma ação separada por unidade. Veja a [matriz de acesso e o procedimento](docs/PERFIS-DE-ACESSO-2.8.md). Não requer executar SQL nem aplicar nova migração.

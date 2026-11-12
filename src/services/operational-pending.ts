@@ -1,3 +1,4 @@
+import { canViewInventory } from "@/lib/access-profiles";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -40,7 +41,7 @@ const querySchema = z.object({
 /** Counts and the selected page share one database snapshot; quantities never pass through JS numbers. */
 export async function listOperationalPending(actor: StockActor, rawQuery: Record<string, unknown> = {}): Promise<PendingPage> {
   const orders = actor.permissions.includes("orders:read");
-  const inventory = actor.permissions.includes("inventory:count");
+  const inventory = canViewInventory(actor.permissions);
   if (!orders && !inventory) throw new AppError("Seu perfil não permite consultar pendências operacionais.", 403);
   const { type, page, pageSize } = querySchema.parse(rawQuery);
   const unitId = actor.unitId;

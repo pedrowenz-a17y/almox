@@ -1,4 +1,6 @@
 "use client";
+import { roleLabel } from "@/lib/access-profiles";
+import { RolePermissions } from "@/components/access-profiles";
 import { useState } from "react";
 import { Save, Upload } from "lucide-react";
 import { api, DataSet, Role, locationPath } from "@/lib/client";
@@ -50,6 +52,8 @@ export default function CatalogForm({
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState(String(record?.roleId || ""));
+  const selectedRole = roles.find(role => role.id === selectedRoleId);
   const [imageUrl, setImageUrl] = useState(String(record?.imageUrl || ""));
   const [warehouseId, setWarehouseId] = useState(
     String(record?.warehouseId || data.warehouses[0]?.id || ""),
@@ -183,7 +187,7 @@ export default function CatalogForm({
         label: "Perfil nesta unidade",
         type: "select",
         required: true,
-        options: roles.map((role) => ({ value: role.id, label: role.name })),
+        options: roles.map((role) => ({ value: role.id, label: roleLabel(role) })),
         wide: true,
       },
     ],
@@ -292,6 +296,7 @@ export default function CatalogForm({
                   onChange={
                     field.key === "warehouseId"
                       ? (e) => setWarehouseId(e.target.value)
+                      : field.key === "roleId" ? (e) => setSelectedRoleId(e.target.value)
                       : undefined
                   }
                 >
@@ -338,6 +343,7 @@ export default function CatalogForm({
             </label>
           ))}
         </div>
+        {entity === "users" && selectedRole && <RolePermissions role={selectedRole} />}
         {entity === "products" && (
           <div className="upload-row">
             {imageUrl && (

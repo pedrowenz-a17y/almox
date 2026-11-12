@@ -1,3 +1,4 @@
+import { canViewReports, canViewInventory } from "@/lib/access-profiles";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { AssistantLink, AssistantReply } from "@/lib/assistant-contract";
@@ -33,11 +34,11 @@ function allowedLinks(actor: StockActor, links: AssistantLink[]) {
     if (["/compras", "/reposicao"].includes(link.href))
       return can("purchases:read");
     if (["/inventario", "/conferencias"].includes(link.href))
-      return can("inventory:count");
+      return canViewInventory(actor.permissions);
     if (link.href === "/pendencias")
-      return can("orders:read") || can("inventory:count");
+      return can("orders:read") || canViewInventory(actor.permissions);
     if (link.href === "/conciliacao")
-      return can("costs:read") || can("reports:read");
+      return can("costs:read") || canViewReports(actor.permissions);
     return /^\/(?:consulta|estoque|qrcodes|produto\/[0-9a-f-]{36})$/.test(
       link.href,
     );
@@ -301,12 +302,12 @@ export async function askLocalAssistant(
             ? "SCHEDULE"
             : "COUNT"
           : "ALL";
-    if (!(can("orders:read") || can("inventory:count")))
+    if (!(can("orders:read") || canViewInventory(actor.permissions)))
       return reply(
         "Seu perfil não permite consultar essas pendências. Posso explicar o procedimento, mas os registros precisam ser vistos por uma pessoa autorizada.\n\n" +
           guide.answer,
       );
-    if (plan.intent === "inventory" && !can("inventory:count"))
+    if (plan.intent === "inventory" && !canViewInventory(actor.permissions))
       return reply(
         "Seu perfil não permite consultar conferências. Peça acesso ao responsável; não consultei os inventários.",
       );
@@ -328,7 +329,7 @@ export async function askLocalAssistant(
     ).filter((t) =>
       type === "ALL"
         ? t === "COUNT" || t === "SCHEDULE"
-          ? can("inventory:count")
+          ? canViewInventory(actor.permissions)
           : can("orders:read")
         : t === type,
     );

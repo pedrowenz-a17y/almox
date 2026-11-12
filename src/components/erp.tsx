@@ -11,6 +11,7 @@ import Link from "@/components/workspace-link";
 import dynamic from "next/dynamic";
 import { navigateWorkspace } from "@/lib/workspace-navigation";
 import type { PurchaseDraft } from "@/lib/purchase-draft";
+import { canMoveAnyStock, canMoveStock, canWriteCatalog, canViewReports, canViewInventory, profileTitle } from "@/lib/access-profiles";
 import Assistant from "@/components/assistant";
 import { MotionToggle } from "@/components/motion-preferences";
 import { ThemeToggle } from "@/components/theme-preferences";
@@ -71,6 +72,7 @@ import {
   dateTime,
 } from "@/lib/client";
 import type { CatalogEntity } from "@/components/catalog-form";
+const AccessProfiles = dynamic(() => import("@/components/access-profiles"), { loading: () => <Loading /> });
 const CatalogForm = dynamic(() => import("@/components/catalog-form"), {
   loading: () => <Loading />,
 });
@@ -151,7 +153,7 @@ const navigation = [
     path: "/conferencias",
     label: "Conferências periódicas",
     icon: FileClock,
-    permission: "inventory:count",
+    permission: "inventory:read",
   },
   {
     path: "/conciliacao",
@@ -243,6 +245,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   );
   const permissions = user?.permissions || data?.permissions || [];
   const can = (key: string) => permissions.includes(key);
+  const canNavigate = (key: string) => key === "reports:read" ? canViewReports(permissions) : key === "inventory:read" ? canViewInventory(permissions) : can(key);
   const countApprovalBlocked =
     !user || !countDetails?.userId || countDetails.userId === user.id;
   const refresh = useCallback(async () => {
@@ -553,7 +556,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     setEditor({ entity, record: record as Record<string, unknown> });
   const actions = (entity: CatalogEntity, record: object) => (
     <div className="row-actions">
-      {(entity === "users" ? can("users:manage") : can("catalog:write")) && (
+      {canWriteCatalog(permissions, entity) && (
         <button
           title="Editar cadastro"
           aria-label="Editar cadastro"
@@ -563,7 +566,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           <Pencil size={16} />
         </button>
       )}
-      {can("records:delete") && (
+      {can("records:delete") && canWriteCatalog(permissions, entity) && (
         <button
           title="Excluir ou arquivar"
           aria-label="Excluir ou arquivar"
@@ -578,7 +581,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     </div>
   );
   const addButton = (entity: CatalogEntity) =>
-    (entity === "users" ? can("users:manage") : can("catalog:write")) && (
+    canWriteCatalog(permissions, entity) && (
       <button className="button primary" onClick={() => setEditor({ entity })}>
         <Plus size={18} />{" "}
         {entity === "locations"
@@ -741,7 +744,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         <Loading />
       );
     const required = navigation.find((item) => item.path === route)?.permission;
-    if (required && !can(required)) return <Denied />;
+    if (required && !canNavigate(required)) return <Denied />;
     if (route === "/pendencias")
       return (
         <OperationalPending
@@ -767,7 +770,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           }
         />
       );
-    if (route === "/conciliacao" && !can("reports:read") && !can("costs:read"))
+    if (route === "/conciliacao" && !canViewReports(permissions) && !can("costs:read"))
       return <Denied />;
     if (route === "/conciliacao")
       return <Reconciliation key={user?.unitId} permissions={permissions} />;
@@ -817,7 +820,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         <ProductOverview
           product={product}
           data={data}
-          canMove={can("stock:move")}
+          canMove={canMoveStock(permissions, "ENTRY")}
           onMove={() => setMovement({ type: "ENTRY", product: product.id })}
           onEdit={
             can("catalog:write")
@@ -863,7 +866,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           user={user}
           onScan={() => setScan(true)}
           onMove={(type) => setMovement({ type })}
-          canMove={can("stock:move")}
+          canMove={canMoveAnyStock(permissions)}
           onProduct={setProductDetails}
         />
       );
@@ -878,7 +881,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             </div>
             {route === "/produtos"
               ? addButton(tab === "categories" ? "categories" : "products")
-              : can("stock:move") && (
+              : canMoveAnyStock(permissions) && (
                   <button
                     className="button primary"
                     onClick={() => setMovement({ type: "ENTRY" })}
@@ -1230,9 +1233,9 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             </Link>
           </div>
           <div className="quick-actions">
-            {can("stock:move") && (
+            {canMoveAnyStock(permissions) && (
               <>
-                <button
+                {canMoveStock(permissions, "ENTRY") && (<button
                   onClick={() => setMovement({ type: "ENTRY", location: id })}
                 >
                   <span className="action-icon teal">
@@ -1240,8 +1243,8 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                   </span>
                   <strong>Entrada</strong>
                   <ArrowRight size={18} />
-                </button>
-                <button
+                </button>)}
+                {canMoveStock(permissions, "EXIT") && (<button
                   onClick={() => setMovement({ type: "EXIT", location: id })}
                 >
                   <span className="action-icon orange">
@@ -1249,7 +1252,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                   </span>
                   <strong>Retirar material</strong>
                   <ArrowRight size={18} />
-                </button>
+                </button>)}
                 <button
                   onClick={() =>
                     setMovement({ type: "TRANSFER", location: id })
@@ -1317,7 +1320,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                           {p?.unit}
                         </td>
                         <td>
-                          {can("stock:move") && (
+                          {canMoveStock(permissions, "EXIT") && (
                             <button
                               className="button secondary small"
                               onClick={() =>
@@ -1401,7 +1404,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
               <h1>Movimentações</h1>
               <p>{descriptions[route]}</p>
             </div>
-            {can("stock:move") && (
+            {canMoveAnyStock(permissions) && (
               <button
                 className="button primary"
                 onClick={() => setMovement({ type: "ENTRY" })}
@@ -1661,7 +1664,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         </>
       );
     if (route === "/relatorios")
-      return can("reports:read") ? <Reports data={data} /> : <Denied />;
+      return canViewReports(permissions) ? <Reports data={data} /> : <Denied />;
     if (route === "/usuarios")
       return can("users:manage") ? (
         <>
@@ -1699,7 +1702,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                             u.role?.name === "ADMINISTRADOR" ? "purple" : "info"
                           }
                         >
-                          {u.role?.name}
+                          {profileTitle(u.role?.name || "Perfil")}
                         </Badge>
                       </td>
                       <td>
@@ -1714,27 +1717,13 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
               </table>
             </div>
           </section>
-          <div className="role-cards">
-            {roles.map((r) => (
-              <section className="panel" key={r.id}>
-                <ShieldCheck size={21} />
-                <h3>{r.name}</h3>
-                <p>
-                  {r.name === "ADMINISTRADOR"
-                    ? "Acesso completo, usuários, custos e regras do sistema."
-                    : r.name === "SUPERVISOR"
-                      ? "Catálogo, movimentações, relatórios e aprovação de inventários."
-                      : "Consulta, leitura de QR, movimentações e contagens de inventário."}
-                </p>
-              </section>
-            ))}
-          </div>
+          <AccessProfiles roles={roles} onPrepared={refresh} />
         </>
       ) : (
         <Denied />
       );
     if (route === "/auditoria")
-      return can("reports:read") || can("users:manage") ? (
+      return canViewReports(permissions) || can("users:manage") ? (
         <>
           <div className="page-heading">
             <div>
@@ -1839,12 +1828,12 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             <ArrowRight size={24} />
           </button>
           <div className="operation-grid">
-            {can("stock:move") &&
+            {canMoveAnyStock(permissions) &&
               [
                 ["ENTRY", "Entrada de material", ArrowDownLeft],
                 ["EXIT", "Retirar material", ArrowUpRight],
                 ["TRANSFER", "Transferência", ArrowRightLeft],
-              ].map(([type, label, Icon]) => {
+              ].filter(([type]) => canMoveStock(permissions, type as string)).map(([type, label, Icon]) => {
                 const Symbol = Icon as typeof ArrowRight;
                 return (
                   <button
@@ -1864,7 +1853,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
               <Search size={28} />
               <strong>Consultar produto</strong>
             </button>
-            {can("stock:move") && (
+            {canMoveStock(permissions, "TRANSFER") && (
               <button
                 className="panel"
                 onClick={() => setMovement({ type: "TRANSFER", qr: true })}
@@ -1942,12 +1931,12 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           {navigation
             .filter(
               (n) =>
-                (!n.permission || can(n.permission)) &&
+                (!n.permission || canNavigate(n.permission)) &&
                 (n.path !== "/pendencias" ||
                   can("orders:read") ||
-                  can("inventory:count")) &&
+                  canViewInventory(permissions)) &&
                 (n.path !== "/conciliacao" ||
-                  can("reports:read") ||
+                  canViewReports(permissions) ||
                   can("costs:read")),
             )
             .map((n) => (
@@ -1976,7 +1965,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
               Usuários
             </Link>
           )}
-          {(can("reports:read") || can("users:manage")) && (
+          {(canViewReports(permissions) || can("users:manage")) && (
             <Link
               href="/auditoria"
               className={`nav-link ${route === "/auditoria" ? "active" : ""}`}
@@ -2012,7 +2001,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             <span>
               <strong>{user?.name || "Carregando…"}</strong>
               <small>
-                {user?.role?.name?.toLocaleLowerCase("pt-BR") || "Usuário"}
+                {profileTitle(user?.role?.name || "Usuário").toLocaleLowerCase("pt-BR")}
               </small>
             </span>
             <button
@@ -2573,7 +2562,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                   Editar cadastro
                 </button>
               )}
-              {can("stock:move") && (
+              {canMoveAnyStock(permissions) && (
                 <button
                   className="button primary"
                   onClick={() => {

@@ -18,7 +18,7 @@ function visible(m: ManagedMembership) { return { id: m.userId, name: m.user.nam
 function authorize(actor: SessionUser) {
   if (!actor.unitId || !actor.permissions.includes('users:manage')) throw new AppError('Seu perfil não permite gerenciar usuários nesta unidade.', 403);
 }
-async function activeActor(tx: Prisma.TransactionClient, actor: SessionUser) {
+export async function assertActiveAccessManager(tx: Prisma.TransactionClient, actor: SessionUser) {
   const membership = await tx.unitMembership.findUnique({ where: { userId_unitId: { userId: actor.id, unitId: actor.unitId } }, include: { user: true, unit: { include: { organization: true } }, role: { include: { permissions: { include: { permission: true } } } } } });
   if (!membership?.active || !membership.user.active || !membership.unit.active || !membership.unit.organization.active || !membership.role.permissions.some(p => p.permission.key === 'users:manage')) throw new AppError('Seu acesso administrativo à unidade foi alterado. Entre novamente.', 403);
 }
@@ -48,7 +48,7 @@ export async function saveUserAccess(actor: SessionUser, input: unknown, id?: st
     if (!Object.keys(data).length) throw new AppError('Informe o perfil ou a situação de acesso à unidade.');
     if (data.active === false && !actor.permissions.includes('records:delete')) throw new AppError('Seu perfil não pode desativar acessos.', 403);
     return transaction(async tx => {
-      await activeActor(tx, actor);
+      await assertActiveAccessManager(tx, actor);
       const previous = await tx.unitMembership.findUnique({ where: { userId_unitId: { userId: id, unitId: actor.unitId } }, include: { ...membershipInclude, role: { include: { permissions: { include: { permission: true } } } } } });
       if (!previous) throw new AppError('Usuário não encontrado nesta unidade.', 404);
       if (id === actor.id && (data.active === false || (data.roleId && data.roleId !== previous.roleId))) throw new AppError('Você não pode desativar ou alterar seu próprio perfil de acesso.');
@@ -84,7 +84,7 @@ export async function saveUserAccess(actor: SessionUser, input: unknown, id?: st
   }
   try {
     const result = await transaction(async tx => {
-      await activeActor(tx, actor);
+      await assertActiveAccessManager(tx, actor);
       const byEmail = await tx.user.findUnique({ where: { email: data.email } });
       const byIdentity = await tx.user.findUnique({ where: { authUserId } });
       if ((byEmail?.authUserId && byEmail.authUserId !== authUserId) || (byIdentity && byEmail && byIdentity.id !== byEmail.id) || (byIdentity && byIdentity.email !== data.email)) throw new AppError('A identidade já possui um vínculo diferente. O provisionamento deve ser revisado.', 409);

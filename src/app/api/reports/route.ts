@@ -1,7 +1,7 @@
 import ExcelJS from "exceljs";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { requireUser } from "@/lib/auth";
+import { requireAnyUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { api, AppError, json } from "@/lib/http";
 
@@ -92,7 +92,7 @@ function csvCell(value: string | number) {
 }
 
 export const GET = api(async (request) => {
-  const user = await requireUser("reports:read");
+  const user = await requireAnyUser(["reports:read", "reports:view"]);
   const params = input.parse(
     Object.fromEntries(
       [...request.nextUrl.searchParams].filter(([, value]) => value !== ""),

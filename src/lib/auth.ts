@@ -47,6 +47,12 @@ export async function requireUser(permission?: string) {
   if (permission && !user.permissions.includes(permission)) throw new AppError('Seu perfil não tem permissão para esta ação.', 403, 'PERMISSION_DENIED');
   return user;
 }
+export async function requireAnyUser(permissions: readonly string[]) {
+  const user = await requireUser();
+  if (!permissions.some(permission => user.permissions.includes(permission)))
+    throw new AppError('Seu perfil não tem permissão para esta ação.', 403, 'PERMISSION_DENIED');
+  return user;
+}
 
 export async function destroySession() {
   const supabase = await supabaseServer();

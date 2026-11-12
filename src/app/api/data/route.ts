@@ -1,3 +1,4 @@
+import { canViewReports } from "@/lib/access-profiles";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { requireUser, redactCosts } from "@/lib/auth";
@@ -81,7 +82,7 @@ export const GET = api(async () => {
               orderBy: { user: { name: "asc" } },
             })
           : Promise.resolve(undefined),
-        actor.permissions.includes("reports:read")
+        canViewReports(actor.permissions)
           ? tx.auditLog.findMany({
               where: { unitId: actor.unitId },
               take: 1000,

@@ -1,7 +1,7 @@
 export interface Role {
   id: string;
   name: string;
-  permissions?: unknown[];
+  permissions?: { permission: { key: string } }[];
 }
 export interface UnitMembership {
   unitId: string;

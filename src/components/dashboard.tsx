@@ -1,4 +1,5 @@
 "use client";
+import { canMoveStock } from "@/lib/access-profiles";
 import { useState } from "react";
 import Link from "@/components/workspace-link";
 import {
@@ -397,7 +398,7 @@ export default function Dashboard({
       <div className="quick-actions">
         {canMove && (
           <>
-            <button onClick={() => onMove("ENTRY")}>
+            {canMoveStock(user?.permissions ?? data.permissions ?? [], "ENTRY") && (<button onClick={() => onMove("ENTRY")}>
               <span className="action-icon teal">
                 <ArrowDownLeft size={23} />
               </span>
@@ -406,8 +407,8 @@ export default function Dashboard({
                 <small>Receber materiais</small>
               </span>
               <ArrowRight size={17} />
-            </button>
-            <button onClick={() => onMove("EXIT")}>
+            </button>)}
+            {canMoveStock(user?.permissions ?? data.permissions ?? [], "EXIT") && (<button onClick={() => onMove("EXIT")}>
               <span className="action-icon orange">
                 <ArrowUpRight size={23} />
               </span>
@@ -416,8 +417,8 @@ export default function Dashboard({
                 <small>Retirar materiais</small>
               </span>
               <ArrowRight size={17} />
-            </button>
-            <button onClick={() => onMove("TRANSFER")}>
+            </button>)}
+            {canMoveStock(user?.permissions ?? data.permissions ?? [], "TRANSFER") && (<button onClick={() => onMove("TRANSFER")}>
               <span className="action-icon blue">
                 <ArrowRightLeft size={23} />
               </span>
@@ -426,7 +427,7 @@ export default function Dashboard({
                 <small>Entre localizações</small>
               </span>
               <ArrowRight size={17} />
-            </button>
+            </button>)}
           </>
         )}
         <Link href="/inventario">

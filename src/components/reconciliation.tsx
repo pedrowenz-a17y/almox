@@ -1,4 +1,5 @@
 "use client";
+import { canViewReports, canSaveReconciliation } from "@/lib/access-profiles";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, FileCheck2, RefreshCw, Search } from "lucide-react";
@@ -52,7 +53,8 @@ export default function Reconciliation({
   permissions: string[];
 }) {
   const costsAllowed = permissions.includes("costs:read");
-  const reportsAllowed = permissions.includes("reports:read");
+  const reportsAllowed = canViewReports(permissions);
+  const canSave = canSaveReconciliation(permissions);
   const [tab, setTab] = useState<"costs" | "reconcile">(
     reportsAllowed ? "reconcile" : "costs",
   );
@@ -205,7 +207,7 @@ export default function Reconciliation({
     }
   }
   async function save() {
-    if (!comparison || savedId || !key) return;
+    if (!canSave || !comparison || savedId || !key) return;
     setBusy(true);
     setError("");
     try {
@@ -696,7 +698,7 @@ export default function Reconciliation({
                   </tbody>
                 </table>
               </div>
-              {!savedId && (
+              {!savedId && canSave && (
                 <div className="form-actions">
                   <button
                     className="button primary"

@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma as db } from "@/lib/db";
 import { AppError } from "@/lib/http";
+import { canMoveStock } from "@/lib/access-profiles";
 
 export type StockActor = {
   id: string;
@@ -108,8 +109,11 @@ export const movementSchema = z
   });
 
 export function requirePermission(actor: StockActor, permission: string) {
+  requireAnyPermission(actor, [permission]);
+}
+export function requireAnyPermission(actor: StockActor, permissions: readonly string[]) {
   if (!actor.unitId) throw new AppError("Selecione uma unidade autorizada.", 403);
-  if (!actor.permissions.includes(permission)) {
+  if (!permissions.some(permission => actor.permissions.includes(permission))) {
     throw new AppError(
       "Seu perfil não possui permissão para esta operação.",
       403,
@@ -300,8 +304,10 @@ export async function findIdempotentResource(
 
 /** The sole public entry point for receipts, withdrawals and transfers. */
 export async function createMovement(actor: StockActor, rawInput: unknown) {
-  requirePermission(actor, "stock:move");
+  requireAnyPermission(actor, ["stock:move", "stock:entry", "stock:exit", "stock:transfer"]);
   const parsed = movementSchema.parse(rawInput);
+  if (!canMoveStock(actor.permissions, parsed.type))
+    throw new AppError("Seu perfil não permite este tipo de movimentação.", 403);
   if (parsed.type === "EXIT" && parsed.purpose === "LOSS")
     requirePermission(actor, "inventory:adjust");
   const input = {

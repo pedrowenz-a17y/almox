@@ -1,3 +1,4 @@
+import { canViewReports, canViewInventory } from "@/lib/access-profiles";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { StockActor } from "@/services/stock";
@@ -59,7 +60,7 @@ async function collectContext(actor: StockActor, db: Prisma.TransactionClient) {
       })
     : undefined;
   const counts =
-    can("inventory:count") || can("inventory:adjust") || can("reports:read")
+    canViewInventory(actor.permissions) || can("inventory:adjust") || canViewReports(actor.permissions)
       ? await db.inventoryCount.groupBy({
           by: ["status"],
           where: { unitId: actor.unitId },

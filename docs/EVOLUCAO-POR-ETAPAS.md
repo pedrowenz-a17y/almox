@@ -5,8 +5,8 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | Etapa | Entrega | Situação |
 | --- | --- | --- |
 | 1 | Aprovação independente das contagens de estoque | Implementada na versão 2.7.4; validação desta entrega em `artifacts/independent-inventory` |
-| 2 | Perfis de acesso por responsabilidade | Próxima etapa: separar permissões e testar os limites antes de disponibilizar novos perfis |
-| 3 | Responsável por turno e responsável/prazo nas pendências | Planejada; precisa de um fluxo de atribuição e passagem de turno definido e de migração validada |
+| 2 | Perfis de acesso por responsabilidade | Implementada na versão 2.8.0; modelos disponíveis para preparação pelo administrador na tela de Usuários |
+| 3 | Responsável por turno e responsável/prazo nas pendências | Próxima etapa; precisa de um fluxo de atribuição e passagem de turno definido e de migração validada |
 | 4 | Convites, primeiro acesso e recuperação | Planejada; melhorias na interface devem acompanhar a configuração do domínio e do provedor de e-mail |
 | 5 | Conciliação homologada com o ERP oficial | O CSV já existe; automatizar depende dos dados, do ERP e das regras disponibilizadas pela empresa |
 
@@ -41,3 +41,7 @@ npm run verify:inventory-approval
 ```
 
 Consulte as [evidências desta etapa](../artifacts/independent-inventory) e a [auditoria funcional original](AUDITORIA-ERP-2026-11-12.md).
+
+## Etapa 2 — perfis por responsabilidade
+
+A versão 2.8.0 adiciona os modelos Almoxarife, Conferente, Comprador, Analista de custos e Auditor, com limites no servidor e orientação na tela. O administrador pode disponibilizar os modelos pelo botão na página de Usuários, sem SQL e sem alterar automaticamente os acessos existentes. Veja o [procedimento, a matriz de permissões e a validação](PERFIS-DE-ACESSO-2.8.md).

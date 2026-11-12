@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { type SessionUser } from "@/lib/auth";
 import { saveUserAccess, archiveUserAccess, listUserAccess, getUserAccess } from "@/services/user-access";
 import { AppError } from "@/lib/http";
+import { canWriteCatalog } from "@/lib/access-profiles";
 
 const name = z.string().trim().min(2, "Informe ao menos 2 caracteres").max(160);
 const shortText = z.string().trim().max(255);
@@ -263,7 +264,8 @@ export async function saveCatalog(
   z.string().uuid().parse(actor.unitId);
   const entity = parseEntity(entityValue);
   if (entity === "users") return saveUserAccess(actor, input, id);
-  requirePermission(actor, "catalog:write");
+  if (!canWriteCatalog(actor.permissions, entity))
+    throw new AppError("Seu perfil não permite editar este cadastro.", 403);
   if (id) z.string().uuid().parse(id);
   if (
     input &&
@@ -458,7 +460,8 @@ export async function archiveCatalog(
   const entity = parseEntity(entityValue);
   if (entity === "users") return archiveUserAccess(actor, id);
   requirePermission(actor, "records:delete");
-  requirePermission(actor, "catalog:write");
+  if (!canWriteCatalog(actor.permissions, entity))
+    throw new AppError("Seu perfil não permite editar este cadastro.", 403);
   z.string().uuid().parse(id);
   // Reuse full validation and audit; history and foreign keys remain intact.
   return saveCatalog(actor, entity, { active: false }, id);

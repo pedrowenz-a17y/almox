@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { canActOnOrder } from "@/lib/access-profiles";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
@@ -132,9 +133,8 @@ export async function createOrder(actor: StockActor, rawInput: unknown) {
 export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unknown) {
   const id = z.string().uuid().parse(rawId);
   const { idempotencyKey, ...input } = orderActionSchema.parse(rawInput);
-  const permission = input.action === "INVOICE" ? "orders:invoice"
-    : ["APPLY", "RETURN", "REQUEST_RETURN", "CANCEL_RETURN"].includes(input.action) ? "orders:apply" : "orders:write";
-  requirePermission(actor, permission);
+  if (!actor.unitId || !canActOnOrder(actor.permissions, input.action))
+    throw new AppError("Seu perfil não permite esta ação na ordem.", 403);
   const hash = payloadHash(actor, "order:action", { id, ...input });
   const result = await serializable(async (tx) => {
     const previous = await findIdempotentResource(tx, actor, idempotencyKey, hash, "orderAction");

@@ -9,14 +9,17 @@ import QRCode from 'qrcode';
 import { qaConfig } from './qa-config.mjs';
 import { user, data } from './fixtures/theme-data.mjs';
 import { verifyInventoryApproval } from './fixtures/inventory-approval-checks.mjs';
+import { verifyAccessProfiles } from './fixtures/access-profile-checks.mjs';
 
 const { baseURL } = qaConfig();
 const root = process.cwd();
-const independentApproval = process.argv.includes('--inventory-approval');
-const output = path.join(root, independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
+const accessProfiles = process.argv.includes('--access-profiles');
+const independentApproval = accessProfiles || process.argv.includes('--inventory-approval');
+const output = path.join(root, accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'almox-theme-'));
 const require = createRequire(import.meta.url);
 const { build } = createRequire(require.resolve('tsx/package.json'))('esbuild');
+const models = accessProfiles ? (await import('data:text/javascript;base64,' + Buffer.from((await build({ entryPoints: [path.join(root, 'src/lib/access-profiles.ts')], bundle: true, platform: 'node', format: 'esm', write: false })).outputFiles[0].text).toString('base64'))).ACCESS_PROFILES : [];
 const cssNames = ['globals', 'uca', 'workshop', 'welcome', 'welcome-interactions', 'assistant', 'operational', 'login-screen', 'theme'];
 const css = (await Promise.all(cssNames.map(name => fs.readFile(path.join(root, `src/app/${name}.css`), 'utf8')))).join('\n');
 const fakeNavigation = `import {useSyncExternalStore} from 'react';
@@ -194,6 +197,7 @@ try {
     await page.keyboard.press('Escape');
   });
   if (independentApproval) await verifyInventoryApproval({ page, fixtureURL, data, user, check, output, noOverflow });
+  if (accessProfiles) await verifyAccessProfiles({ page, fixtureURL, data, user, models, check, output, noOverflow });
   await check('Barra de ações e navegação cabem em 390 e 320 pixels', async () => {
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 }); await page.goto(fixtureURL + '/dashboard'); await page.locator('.stats-grid').waitFor();

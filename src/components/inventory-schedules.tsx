@@ -220,7 +220,7 @@ export default function InventorySchedules({
                                 Ver contagem pendente
                               </button>
                             )}
-                            {schedule.active &&
+                            {permissions.includes("inventory:count") && schedule.active &&
                               due &&
                               !schedule.pendingCount && (
                                 <button

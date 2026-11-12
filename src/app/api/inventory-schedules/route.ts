@@ -1,4 +1,4 @@
-import { requireUser } from "@/lib/auth";
+import { requireUser, requireAnyUser } from "@/lib/auth";
 import { api, json } from "@/lib/http";
 import {
   createInventorySchedule,
@@ -6,7 +6,7 @@ import {
 } from "@/services/inventory-schedules";
 
 export const GET = api(async () =>
-  json(await listInventorySchedules(await requireUser("inventory:count"))),
+  json(await listInventorySchedules(await requireAnyUser(["inventory:count", "inventory:read"]))),
 );
 export const POST = api(async (request) =>
   json(

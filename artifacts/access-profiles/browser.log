@@ -1,0 +1,33 @@
+
+> almox-erp@2.8.0 verify:access-profiles
+> node scripts/verify-theme.mjs --access-profiles
+
+PASS Tema escuro padrão no login, contraste e ajuste em desktop e celular
+PASS Preferência clara persiste ao recarregar e navegar para instalação
+PASS Preferência sincronizada entre abas
+PASS Recuperação de acesso permite trocar tema sem enviar e-mail
+PASS Tema claro aplicado antes da hidratação
+PASS Armazenamento indisponível permite alternar o tema na sessão
+PASS Painel real com dados fictícios: contraste, fotografia preservada e temas
+PASS Tabela de estoque, etiquetas de estado e formulário legíveis no tema escuro
+PASS Assistente e aviso de falha permanecem legíveis
+PASS Etiquetas adaptadas ao tema preservam o fundo branco do QR
+PASS Leitor de QR e campo manual legíveis sem acesso a câmera real
+PASS Autor com permissão de ajuste vê motivo do bloqueio e não envia aprovação
+PASS Contagem sem autoria identificada não habilita a aprovação na interface
+PASS Contagens históricas aprovadas continuam consultáveis sem nova ação de aprovação
+PASS Outra pessoa autorizada pode confirmar aprovação e a interface atualiza o estado
+PASS Recusa do servidor mantém o diálogo e explica o erro sem confirmar o ajuste
+PASS Ser outra pessoa não libera o botão para um perfil sem permissão de ajuste
+PASS Administrador disponibiliza modelos pela tela sem associar usuários
+PASS Seleção do perfil mostra permissões reais sem salvar acesso nem enviar convite
+PASS Auditor consulta conferências sem iniciar contagem ou preparar perfis
+PASS Auditor visualiza prévia de conciliação sem opção de salvar documento
+PASS Analista de custos pode salvar a conciliação sem ações de estoque
+PASS Comprador edita fornecedor sem botão de produto ou recebimento físico
+PASS Almoxarife usa permissões específicas para estoque, reserva e entrega sem faturar
+PASS Perfil personalizado é sinalizado e mantém suas permissões no formulário
+PASS Falha de autorização na preparação não libera os perfis na interface
+PASS Barra de ações e navegação cabem em 390 e 320 pixels
+PASS Impressão usa fundo claro e oculta a troca de tema
+PASS Sem erros JavaScript ou chamadas inesperadas; aprovações usam APIs fictícias

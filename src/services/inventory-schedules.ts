@@ -1,3 +1,4 @@
+import { requireAnyPermission } from "@/services/stock";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -65,7 +66,7 @@ async function assertAssignee(
 }
 
 export async function listInventorySchedules(actor: StockActor) {
-  requirePermission(actor, "inventory:count");
+  requireAnyPermission(actor, ["inventory:count", "inventory:read"]);
   const [items, total, memberships] = await Promise.all([
     prisma.inventorySchedule.findMany({
       where: { unitId: actor.unitId },

@@ -1,4 +1,17 @@
 /* Operational forms share the U.C.A. palette and leave room for readable labels. */
+.access-profiles { display: grid; gap: 18px; margin-top: 24px; }
+.access-profiles-heading { padding: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.access-profiles-heading > div { flex: 1 1 320px; }
+.access-profiles-heading p { color: var(--muted); margin-top: 7px; max-width: 76ch; }
+.access-profiles-heading > small { flex-basis: 100%; color: var(--muted); }
+.access-profiles .role-cards > .panel { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.access-profiles .role-cards .badge { align-self: flex-start; white-space: normal; }
+.role-permissions { color: var(--muted); font-size: 13px; }
+.role-permissions summary { cursor: pointer; font-weight: 600; padding-block: 8px; color: var(--text); }
+.role-permissions summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+.role-permissions ul { padding-left: 20px; margin: 8px 0; line-height: 1.8; }
+.role-permissions li { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .access-profiles-heading > .button { width: 100%; } }
 .button[aria-describedby="inventory-approval-help"]:disabled {
   cursor: not-allowed;
 }

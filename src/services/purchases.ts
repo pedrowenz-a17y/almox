@@ -1,11 +1,12 @@
 import { Prisma } from "@prisma/client";
+import { canViewPurchasePrices } from "@/lib/access-profiles";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
 import { paginationSchema } from "@/services/orders";
 import { assertActiveLocation, assertActiveProduct, documentMovement,
   findIdempotentResource, idempotencyKeySchema, payloadHash, quantitySchema,
-  requirePermission, serializable, type StockActor, type StockTransaction,
+  requirePermission, requireAnyPermission, serializable, type StockActor, type StockTransaction,
 } from "@/services/stock";
 
 const product = { select: { id: true, name: true, internalCode: true, unit: true } } as const;
@@ -47,7 +48,7 @@ export const receiptSchema = z.object({
 });
 
 function redactCosts<T>(actor: StockActor, value: T): T {
-  if (actor.permissions.includes("costs:read")) return value;
+  if (canViewPurchasePrices(actor.permissions)) return value;
   function scrub(input: unknown): unknown {
     if (Array.isArray(input)) return input.map(scrub);
     if (input && typeof input === "object" && !(input instanceof Date) && !Prisma.Decimal.isDecimal(input))
@@ -86,7 +87,7 @@ export async function createPurchase(actor: StockActor, rawInput: unknown) {
   requirePermission(actor, "purchases:write");
   const { idempotencyKey, ...parsed } = purchaseSchema.parse(rawInput);
   const input = { ...parsed, items: [...parsed.items].sort((a, b) => a.productId.localeCompare(b.productId)) };
-  if (input.items.some(item => item.unitCost != null)) requirePermission(actor, "costs:read");
+  if (input.items.some(item => item.unitCost != null)) requireAnyPermission(actor, ["costs:read", "purchases:prices"]);
   const hash = payloadHash(actor, "purchase:create", input);
   const result = await serializable(async (tx) => {
     const previous = await findIdempotentResource(tx, actor, idempotencyKey, hash, "purchase");
@@ -123,7 +124,7 @@ export async function receivePurchase(actor: StockActor, rawId: string, rawInput
   const id = z.string().uuid().parse(rawId);
   const { idempotencyKey, ...parsed } = receiptSchema.parse(rawInput);
   const input = { ...parsed, items: [...parsed.items].sort((a, b) => a.purchaseOrderItemId.localeCompare(b.purchaseOrderItemId)) };
-  if (input.items.some(item => item.unitCost != null)) requirePermission(actor, "costs:read");
+  if (input.items.some(item => item.unitCost != null)) requireAnyPermission(actor, ["costs:read", "purchases:prices"]);
   const hash = payloadHash(actor, "purchase:receive", { id, ...input });
   const result = await serializable(async (tx) => {
     const previous = await findIdempotentResource(tx, actor, idempotencyKey, hash, "receipt");

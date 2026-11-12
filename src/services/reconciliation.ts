@@ -1,3 +1,4 @@
+import { requireAnyPermission } from "@/services/stock";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -67,7 +68,7 @@ export async function readReconciliationBody(request: Request) {
 }
 
 function authorize(actor: StockActor, kind: string) {
-  requirePermission(actor, "reports:read");
+  requireAnyPermission(actor, ["reports:read", "reports:view"]);
   if (kind === "ORDER_COST") requirePermission(actor, "costs:read");
 }
 
@@ -291,6 +292,7 @@ export async function previewReconciliation(
 }
 
 export async function saveReconciliation(actor: StockActor, rawInput: unknown) {
+  requireAnyPermission(actor, ["reports:read", "reconciliation:write"]);
   const { idempotencyKey, ...input } = saveSchema.parse(rawInput);
   authorize(actor, input.kind);
   const hash = payloadHash(actor, "reconciliation:create", input);
@@ -347,7 +349,7 @@ export async function saveReconciliation(actor: StockActor, rawInput: unknown) {
 }
 
 export async function listReconciliations(actor: StockActor) {
-  requirePermission(actor, "reports:read");
+  requireAnyPermission(actor, ["reports:read", "reports:view"]);
   const costs = actor.permissions.includes("costs:read");
   return prisma.reconciliationBatch.findMany({
     where: { unitId: actor.unitId, ...(costs ? {} : { kind: "STOCK" }) },
@@ -364,7 +366,7 @@ export async function listReconciliations(actor: StockActor) {
 }
 
 export async function getReconciliation(actor: StockActor, rawId: string) {
-  requirePermission(actor, "reports:read");
+  requireAnyPermission(actor, ["reports:read", "reports:view"]);
   const id = z.string().uuid().parse(rawId);
   const batch = await prisma.reconciliationBatch.findFirst({
     where: {
@@ -382,7 +384,7 @@ export async function getReconciliation(actor: StockActor, rawId: string) {
 }
 
 export async function reconciliationSetup(actor: StockActor) {
-  requirePermission(actor, "reports:read");
+  requireAnyPermission(actor, ["reports:read", "reports:view"]);
   const unit = await prisma.operationalUnit.findUnique({
     where: { id: actor.unitId },
     select: { code: true, name: true },

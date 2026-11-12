@@ -1,4 +1,4 @@
-import { requireUser } from "@/lib/auth";
+import { requireAnyUser } from "@/lib/auth";
 import { api, json } from "@/lib/http";
 import {
   previewReconciliation,
@@ -6,7 +6,7 @@ import {
 } from "@/services/reconciliation";
 
 export const POST = api(async (request) => {
-  const actor = await requireUser("reports:read");
+  const actor = await requireAnyUser(["reports:read", "reports:view"]);
   return json(
     await previewReconciliation(actor, await readReconciliationBody(request)),
   );

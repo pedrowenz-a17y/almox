@@ -1,14 +1,10 @@
 import "dotenv/config";
+import { LEGACY_PERMISSION_KEYS, ALL_PERMISSION_KEYS, ACCESS_PROFILES } from "../src/lib/access-profiles";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 const db = new PrismaClient();
 class BootstrapError extends Error {}
-const permissions = [
-  "catalog:write", "stock:move", "inventory:count", "inventory:adjust",
-  "reports:read", "costs:read", "users:manage", "settings:manage", "records:delete",
-  "orders:read", "orders:write", "orders:apply", "orders:invoice",
-  "purchases:read", "purchases:write", "purchases:receive",
-] as const;
+const permissions = LEGACY_PERMISSION_KEYS;
 const roles: Record<string, readonly string[]> = {
   ADMINISTRADOR: permissions,
   SUPERVISOR: [
@@ -17,6 +13,7 @@ const roles: Record<string, readonly string[]> = {
     "purchases:read", "purchases:write", "purchases:receive",
   ],
   OPERADOR: ["stock:move", "inventory:count", "orders:read", "orders:apply", "purchases:read", "purchases:receive"],
+  ...Object.fromEntries(ACCESS_PROFILES.map(profile => [profile.name, profile.permissions])),
 };
 const institutions = [
   { code: "UCA", name: "U.C.A. Implementos Agrícolas" },
@@ -30,7 +27,7 @@ async function main() {
   const extendRoles = process.env.BOOTSTRAP_EXTEND_ROLE_PERMISSIONS === "true";
   const result = await db.$transaction(async (tx) => {
     await tx.$queryRaw(Prisma.sql`SELECT pg_advisory_xact_lock(728546210)::text`);
-    const storedPermissions = await Promise.all(permissions.map((key) =>
+    const storedPermissions = await Promise.all(ALL_PERMISSION_KEYS.map((key) =>
       tx.permission.upsert({ where: { key }, update: {}, create: { key } }),
     ));
     let existingRolesPreserved = 0;

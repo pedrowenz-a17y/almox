@@ -1,4 +1,5 @@
 "use client";
+import { canActOnOrder } from "@/lib/access-profiles";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Plus, RefreshCw } from "lucide-react";
 import { api, DataSet, dateTime, locationPath, qty } from "@/lib/client";
@@ -102,12 +103,6 @@ const eventLabels: Record<string, string> = {
   INVOICED: "Faturamento confirmado",
   CANCELLED: "Ordem cancelada",
 };
-const permissionFor = (action: OrderAction) =>
-  action === "INVOICE"
-    ? "orders:invoice"
-    : ["APPLY", "RETURN", "REQUEST_RETURN", "CANCEL_RETURN"].includes(action)
-      ? "orders:apply"
-      : "orders:write";
 
 export default function Orders({
   kind,
@@ -463,7 +458,7 @@ export default function Orders({
                           )
                             .filter(
                               (type) =>
-                                can(permissionFor(type)) &&
+                                canActOnOrder(permissions, type) &&
                                 canAct(type, material),
                             )
                             .map((type) => (
