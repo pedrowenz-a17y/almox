@@ -69,6 +69,12 @@ model User {
   assignedInventorySchedules InventorySchedule[]   @relation("ScheduleAssignee")
   createdInventorySchedules  InventorySchedule[]   @relation("ScheduleCreator")
   reconciliationBatches      ReconciliationBatch[]
+  responsibleShifts          WarehouseShift[] @relation("ShiftResponsible")
+  openedShifts               WarehouseShift[] @relation("ShiftOpener")
+  endedShifts                WarehouseShift[] @relation("ShiftCloser")
+  incomingShifts             WarehouseShift[] @relation("ShiftIncoming")
+  assignedPending            PendingAssignment[] @relation("PendingAssignee")
+  managedPending             PendingAssignment[] @relation("PendingManager")
 
   @@index([roleId])
 }
@@ -177,6 +183,7 @@ model Product {
 }
 
 model Warehouse {
+  shifts          WarehouseShift[]
   unitId          String?          @db.Uuid
   operationalUnit OperationalUnit? @relation(fields: [unitId], references: [id], onDelete: Restrict)
   id              String           @id @default(uuid()) @db.Uuid
@@ -433,6 +440,8 @@ model OperationalUnit {
   receiptItems          ReceiptItem[]
   inventorySchedules    InventorySchedule[]
   reconciliationBatches ReconciliationBatch[]
+  warehouseShifts       WarehouseShift[]
+  pendingAssignments    PendingAssignment[]
 
   @@index([organizationId])
 }
@@ -666,4 +675,52 @@ model ReconciliationBatch {
 
   @@unique([unitId, id])
   @@index([unitId, createdAt])
+}
+
+// An active shift is unique per warehouse (partial unique index in the migration).
+// The incoming person must accept with their own authenticated identity.
+model WarehouseShift {
+  id                  String @id @default(uuid()) @db.Uuid
+  unitId              String @db.Uuid
+  operationalUnit     OperationalUnit @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  warehouseId         String @db.Uuid
+  warehouse           Warehouse @relation(fields: [unitId, warehouseId], references: [unitId, id], onDelete: Restrict)
+  responsibleId       String @db.Uuid
+  responsible         User @relation("ShiftResponsible", fields: [responsibleId], references: [id], onDelete: Restrict)
+  openedById          String @db.Uuid
+  openedBy            User @relation("ShiftOpener", fields: [openedById], references: [id], onDelete: Restrict)
+  startedAt           DateTime @default(now())
+  endedAt             DateTime?
+  endedById           String? @db.Uuid
+  endedBy             User? @relation("ShiftCloser", fields: [endedById], references: [id], onDelete: Restrict)
+  handoverToId        String? @db.Uuid
+  handoverTo          User? @relation("ShiftIncoming", fields: [handoverToId], references: [id], onDelete: Restrict)
+  handoverNote        String @default("")
+  handoverRequestedAt DateTime?
+  closeNote           String @default("")
+  version             Int @default(1)
+
+  @@index([unitId, warehouseId, startedAt])
+  @@index([responsibleId])
+}
+
+// A new occurrence of the same pending item never inherits the previous deadline.
+model PendingAssignment {
+  id              String @id @default(uuid()) @db.Uuid
+  unitId          String @db.Uuid
+  operationalUnit OperationalUnit @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  itemKey         String
+  occurrenceKey   String
+  assigneeId      String @db.Uuid
+  assignee        User @relation("PendingAssignee", fields: [assigneeId], references: [id], onDelete: Restrict)
+  dueAt           DateTime
+  note            String
+  managedById     String @db.Uuid
+  managedBy       User @relation("PendingManager", fields: [managedById], references: [id], onDelete: Restrict)
+  version         Int @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([unitId, itemKey, occurrenceKey])
+  @@index([unitId, assigneeId, dueAt])
 }

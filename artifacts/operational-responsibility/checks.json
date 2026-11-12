@@ -1,0 +1,163 @@
+{
+  "scope": "Local production public pages and real workspace components with synthetic API responses; no live authentication or database writes.",
+  "checks": [
+    {
+      "name": "Tema escuro padrão no login, contraste e ajuste em desktop e celular",
+      "passed": true
+    },
+    {
+      "name": "Preferência clara persiste ao recarregar e navegar para instalação",
+      "passed": true
+    },
+    {
+      "name": "Preferência sincronizada entre abas",
+      "passed": true
+    },
+    {
+      "name": "Recuperação de acesso permite trocar tema sem enviar e-mail",
+      "passed": true
+    },
+    {
+      "name": "Tema claro aplicado antes da hidratação",
+      "passed": true
+    },
+    {
+      "name": "Armazenamento indisponível permite alternar o tema na sessão",
+      "passed": true
+    },
+    {
+      "name": "Painel real com dados fictícios: contraste, fotografia preservada e temas",
+      "passed": true
+    },
+    {
+      "name": "Tabela de estoque, etiquetas de estado e formulário legíveis no tema escuro",
+      "passed": true
+    },
+    {
+      "name": "Assistente e aviso de falha permanecem legíveis",
+      "passed": true
+    },
+    {
+      "name": "Etiquetas adaptadas ao tema preservam o fundo branco do QR",
+      "passed": true
+    },
+    {
+      "name": "Leitor de QR e campo manual legíveis sem acesso a câmera real",
+      "passed": true
+    },
+    {
+      "name": "Autor com permissão de ajuste vê motivo do bloqueio e não envia aprovação",
+      "passed": true
+    },
+    {
+      "name": "Contagem sem autoria identificada não habilita a aprovação na interface",
+      "passed": true
+    },
+    {
+      "name": "Contagens históricas aprovadas continuam consultáveis sem nova ação de aprovação",
+      "passed": true
+    },
+    {
+      "name": "Outra pessoa autorizada pode confirmar aprovação e a interface atualiza o estado",
+      "passed": true
+    },
+    {
+      "name": "Recusa do servidor mantém o diálogo e explica o erro sem confirmar o ajuste",
+      "passed": true
+    },
+    {
+      "name": "Ser outra pessoa não libera o botão para um perfil sem permissão de ajuste",
+      "passed": true
+    },
+    {
+      "name": "Administrador disponibiliza modelos pela tela sem associar usuários",
+      "passed": true
+    },
+    {
+      "name": "Seleção do perfil mostra permissões reais sem salvar acesso nem enviar convite",
+      "passed": true
+    },
+    {
+      "name": "Auditor consulta conferências sem iniciar contagem ou preparar perfis",
+      "passed": true
+    },
+    {
+      "name": "Auditor visualiza prévia de conciliação sem opção de salvar documento",
+      "passed": true
+    },
+    {
+      "name": "Analista de custos pode salvar a conciliação sem ações de estoque",
+      "passed": true
+    },
+    {
+      "name": "Comprador edita fornecedor sem botão de produto ou recebimento físico",
+      "passed": true
+    },
+    {
+      "name": "Almoxarife usa permissões específicas para estoque, reserva e entrega sem faturar",
+      "passed": true
+    },
+    {
+      "name": "Perfil personalizado é sinalizado e mantém suas permissões no formulário",
+      "passed": true
+    },
+    {
+      "name": "Falha de autorização na preparação não libera os perfis na interface",
+      "passed": true
+    },
+    {
+      "name": "Migração ausente preserva a lista e oferece SQL somente ao administrador",
+      "passed": true
+    },
+    {
+      "name": "Assumir turno mostra pessoa autenticada e horário, sem criar responsabilidade automática nas pendências",
+      "passed": true
+    },
+    {
+      "name": "Passagem mantém titular atual e exibe orientações enquanto aguarda aceite",
+      "passed": true
+    },
+    {
+      "name": "Pessoa indicada aceita com seu acesso e o histórico identifica os dois turnos",
+      "passed": true
+    },
+    {
+      "name": "Atribuição pede prazo escolhido pela equipe e atualiza a linha somente após confirmação",
+      "passed": true
+    },
+    {
+      "name": "Conflito de versão preserva o erro na tela e não indica sucesso",
+      "passed": true
+    },
+    {
+      "name": "Aprovação da contagem exclui o autor da lista de responsáveis",
+      "passed": true
+    },
+    {
+      "name": "Filtros de responsabilidade mostram atrasadas, minhas e sem responsável",
+      "passed": true
+    },
+    {
+      "name": "Auditor consulta turnos e prazos sem controles de alteração, nos temas claro e escuro",
+      "passed": true
+    },
+    {
+      "name": "Turno, filtros e formulário cabem em celulares de 390 e 320 pixels",
+      "passed": true
+    },
+    {
+      "name": "Barra de ações e navegação cabem em 390 e 320 pixels",
+      "passed": true
+    },
+    {
+      "name": "Impressão usa fundo claro e oculta a troca de tema",
+      "passed": true
+    },
+    {
+      "name": "Sem erros JavaScript ou chamadas inesperadas; aprovações usam APIs fictícias",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "unexpected": []
+}

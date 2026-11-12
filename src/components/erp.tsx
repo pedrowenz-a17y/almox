@@ -749,6 +749,9 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
       return (
         <OperationalPending
           key={`${user?.unitId}-${now}`}
+          warehouses={data.warehouses}
+          userId={user!.id}
+          canSetup={permissions.includes("users:manage")}
           onOpenOrder={(id, kind) =>
             navigateWorkspace(
               `/${kind === "SERVICE" ? "ordens-servico" : "ordens-producao"}?ordem=${encodeURIComponent(id)}`,

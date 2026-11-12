@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { canActOnOrder } from "@/lib/access-profiles";
+import { newlyOpenedPending } from "@/lib/pending-occurrences";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
@@ -104,8 +105,17 @@ async function remember(tx: StockTransaction, actor: StockActor, key: string, ha
 
 async function event(tx: StockTransaction, actor: StockActor, orderId: string, type: string,
   fields: { materialId?: string; quantity?: Prisma.Decimal; note?: string; reference?: string; metadata?: Prisma.InputJsonValue } = {}) {
+  // A material may close/reopen twice within one clock millisecond. Opening markers
+  // need deterministic order so a new occurrence cannot recover an old assignment.
+  const metadata = fields.metadata as { pendingOpened?: unknown[] } | undefined;
+  let createdAt: Date | undefined;
+  if (fields.materialId && metadata?.pendingOpened?.length) {
+    const latest = await tx.orderEvent.findFirst({ where: { unitId: actor.unitId, materialId: fields.materialId },
+      orderBy: { createdAt: "desc" }, select: { createdAt: true } });
+    createdAt = new Date(Math.max(Date.now(), (latest?.createdAt.getTime() ?? 0) + 1));
+  }
   const record = await tx.orderEvent.create({ data: { unitId: actor.unitId, orderId,
-    userId: actor.id, type, ...fields } });
+    userId: actor.id, type, ...fields, ...(createdAt ? { createdAt } : {}) } });
   await tx.auditLog.create({ data: { unitId: actor.unitId, userId: actor.id,
     action: `ORDER_${type}`, entity: "WorkOrder", entityId: orderId,
     after: { eventId: record.id, materialId: fields.materialId ?? null,
@@ -170,7 +180,8 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
       }, create: { unitId: actor.unitId, orderId: id, productId: input.productId,
         locationId: input.locationId, requestedQuantity: quantity },
       update: { requestedQuantity: { increment: quantity } } });
-      await event(tx, actor, id, "REQUESTED", { materialId: material.id, quantity, note: input.note });
+      await event(tx, actor, id, "REQUESTED", { materialId: material.id, quantity, note: input.note,
+        metadata: { pendingOpened: newlyOpenedPending(previousMaterial, material) } });
     } else if (input.action === "INVOICE") {
       if (order.materials.some(material => material.pendingReturnQuantity.gt(0)))
         throw new AppError("Confirme o recebimento das devoluções pendentes antes de faturar a ordem.", 409);
@@ -281,7 +292,7 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
       if (!["REQUEST_RETURN", "CANCEL_RETURN", "REDUCE_REQUEST"].includes(input.action))
         await touchBalance(tx, material.productId, material.locationId, actor.unitId);
       await event(tx, actor, id, type, { materialId: material.id, quantity, note: input.note,
-        metadata: { ...handoff, requestedBefore: material.requestedQuantity.toFixed(3),
+        metadata: { ...handoff, pendingOpened: newlyOpenedPending(material, changed), requestedBefore: material.requestedQuantity.toFixed(3),
           requestedAfter: changed.requestedQuantity.toFixed(3),
           pendingReturnBefore: material.pendingReturnQuantity.toFixed(3),
           pendingReturnAfter: changed.pendingReturnQuantity.toFixed(3), reservedBefore: material.reservedQuantity.toFixed(3),

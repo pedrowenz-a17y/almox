@@ -69,3 +69,63 @@
     padding: 0 20px 20px;
   }
 }
+
+/* Accountability: restrained cards, vivid U.C.A. accents and both themes. */
+.shift-panel { margin-bottom: 20px; }
+.shift-heading, .shift-controls, .shift-current, .shift-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.shift-heading { justify-content: space-between; margin-bottom: 20px; }
+.shift-heading h2 { margin: 5px 0 0; font-size: 20px; }
+.shift-controls label { display: grid; gap: 6px; font-size: 12px; color: var(--muted); }
+.shift-controls select { max-width: 390px; }
+.shift-current { padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-muted); }
+.shift-current > div { flex: 1; min-width: 180px; }
+.shift-current strong { font-size: 18px; }
+.shift-current p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+.shift-icon { display: grid; place-items: center; width: 44px; height: 44px; flex: 0 0 auto; border-radius: 12px; color: var(--theme-link); background: var(--uca-red-soft); }
+.shift-handover { display: flex; align-items: flex-start; gap: 12px; margin-top: 14px; }
+.shift-handover > svg { flex-shrink: 0; }
+.shift-handover p { margin: 8px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.shift-actions { margin-top: 16px; }
+.shift-guidance { font-size: 12px; line-height: 1.65; margin: 16px 0; }
+.shift-history { border-top: 1px solid var(--border); padding-top: 14px; }
+.shift-history summary { display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 13px; }
+.shift-history ol { list-style: none; padding: 0; display: grid; gap: 12px; }
+.shift-history li { display: grid; gap: 5px; border-left: 2px solid var(--theme-link); padding-left: 12px; font-size: 13px; overflow-wrap: anywhere; }
+.shift-history li span, .shift-history li small { color: var(--muted); }
+.responsibility-filters { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 18px; }
+.responsibility-filter { display: flex; gap: 12px; align-items: center; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); padding: 12px 16px; font: inherit; cursor: pointer; }
+.responsibility-filter.active { border-color: var(--theme-link); color: var(--theme-link); background: var(--uca-red-soft); }
+.responsibility-filter strong { font-size: 16px; }
+.pending-responsibility { min-width: 190px; max-width: 290px; }
+.pending-responsibility > .badge { margin-top: 6px; }
+.pending-responsibility > .button { margin-top: 10px; }
+.pending-responsibility details { font-size: 12px; color: var(--muted); margin-top: 7px; }
+.pending-responsibility details p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.responsibility-warning { color: var(--theme-link); }
+.operations-setup { margin-bottom: 18px; border-left: 3px solid var(--theme-link); }
+.operations-setup small { display: block; margin-top: 14px; color: var(--muted); }
+@media (max-width: 640px) {
+  .shift-heading, .shift-controls { align-items: stretch; }
+  .shift-controls { width: 100%; }
+  .shift-controls label { flex: 1; min-width: 0; }
+  .shift-controls select { width: 100%; max-width: 100%; }
+  .shift-current > .button { width: 100%; }
+  .shift-actions { display: grid; grid-template-columns: 1fr; }
+  .responsibility-filters { display: grid; grid-template-columns: 1fr 1fr; }
+  .responsibility-filter { justify-content: space-between; padding: 12px; font-size: 12px; }
+}
+.shift-panel, .operations-setup { padding: 22px; }
+.responsibility-form .form-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; padding-top: 6px; }
+.assignment-current { margin: 18px 24px 0; }
+@media (max-width: 640px) {
+  .shift-panel, .operations-setup { padding: 18px; }
+  .responsibility-form .form-actions > .button { flex: 1 1 100%; }
+  .table-wrap .pending-table, .pending-table tbody { display: block; width: 100%; min-width: 0; }
+  .pending-table thead { display: none; }
+  .pending-table tbody { display: grid; gap: 16px; padding: 0 16px 16px; }
+  .pending-table tr { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; }
+  .pending-table td { display: block; min-width: 0; max-width: none; padding: 12px 16px; white-space: normal; border: 0; overflow-wrap: anywhere; }
+  .pending-table td + td { border-top: 1px solid var(--border); }
+  .pending-table td::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 7px; }
+  .pending-table td .button { width: 100%; }
+}

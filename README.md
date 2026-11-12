@@ -1,4 +1,10 @@
-# Almox ERP · U.C.A. — versão 2.7.2
+# Almox ERP · U.C.A. — versão 2.9.0
+
+**Versão 2.9.0:** responsável por turno de almoxarifado, passagem com aceite autenticado, responsável/prazo nas pendências e filtros de acompanhamento. Requer aplicar a nova migração no banco; a consulta anterior continua disponível enquanto a preparação estiver pendente. [Ativar e usar a etapa 3](docs/TURNOS-E-PENDENCIAS-2.9.md).
+
+**Versão 2.8.0:** perfis por responsabilidade, com preparação dos modelos pela tela de Usuários e preservação de acessos existentes. [Perfis e permissões](docs/PERFIS-DE-ACESSO-2.8.md).
+
+**Versão 2.7.4:** aprovação independente das contagens de estoque. [Evolução por etapas](docs/EVOLUCAO-POR-ETAPAS.md).
 
 **Versão 2.7.2:** página de instalação com downloads oficiais do APK Android e EXE Windows, instruções por dispositivo e endereço de conexão com botão de copiar. Compartilhe [`/instalar`](https://almox-blush.vercel.app/instalar). Os arquivos nativos são os instaladores já publicados; seus avisos de origem/editor permanecem conforme a plataforma. A instalação pelo navegador continua como opção nessa página.
 

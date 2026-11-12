@@ -10,12 +10,14 @@ import { qaConfig } from './qa-config.mjs';
 import { user, data } from './fixtures/theme-data.mjs';
 import { verifyInventoryApproval } from './fixtures/inventory-approval-checks.mjs';
 import { verifyAccessProfiles } from './fixtures/access-profile-checks.mjs';
+import { verifyOperationalResponsibility } from './fixtures/operational-responsibility-checks.mjs';
 
 const { baseURL } = qaConfig();
 const root = process.cwd();
-const accessProfiles = process.argv.includes('--access-profiles');
+const operationalResponsibility = process.argv.includes('--operational-responsibility');
+const accessProfiles = operationalResponsibility || process.argv.includes('--access-profiles');
 const independentApproval = accessProfiles || process.argv.includes('--inventory-approval');
-const output = path.join(root, accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
+const output = path.join(root, operationalResponsibility ? 'artifacts/operational-responsibility' : accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'almox-theme-'));
 const require = createRequire(import.meta.url);
 const { build } = createRequire(require.resolve('tsx/package.json'))('esbuild');
@@ -69,7 +71,7 @@ const fixtureURL = `http://127.0.0.1:${server.address().port}`;
 await fs.mkdir(output, { recursive: true });
 const browser = await chromium.launch({ executablePath: '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
 const checks = [], errors = [], unexpected = [];
-const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block' });
+const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'pt-BR', timezoneId: 'America/Sao_Paulo', serviceWorkers: 'block' });
 context.on('page', page => page.on('pageerror', error => errors.push(error.message)));
 await context.route(fixtureURL + '/api/**', async route => {
   const req = route.request();
@@ -198,6 +200,7 @@ try {
   });
   if (independentApproval) await verifyInventoryApproval({ page, fixtureURL, data, user, check, output, noOverflow });
   if (accessProfiles) await verifyAccessProfiles({ page, fixtureURL, data, user, models, check, output, noOverflow });
+  if (operationalResponsibility) await verifyOperationalResponsibility({ page, fixtureURL, data, user, check, output, noOverflow });
   await check('Barra de ações e navegação cabem em 390 e 320 pixels', async () => {
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 }); await page.goto(fixtureURL + '/dashboard'); await page.locator('.stats-grid').waitFor();
