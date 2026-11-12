@@ -30,6 +30,7 @@ let fixture: {
   locations: string[];
   product: string;
   actor: StockActor;
+  reviewer: StockActor;
   otherActor: StockActor;
 };
 const key = randomUUID;
@@ -56,7 +57,7 @@ beforeEach(async () => {
     data: { name: `TEST-SCHEDULE-${suffix}` },
   });
   const users = await Promise.all(
-    ["A", "B"].map((letter) =>
+    ["A", "B", "C"].map((letter) =>
       db.user.create({
         data: {
           roleId: role.id,
@@ -85,6 +86,7 @@ beforeEach(async () => {
       }),
     ),
   );
+  await db.unitMembership.create({ data: { userId: users[2].id, unitId: units[0].id, roleId: role.id } });
   const locations = await Promise.all(
     units.map((unit, index) =>
       db.location.create({
@@ -118,6 +120,7 @@ beforeEach(async () => {
     locations: locations.map((location) => location.id),
     product: product.id,
     actor: actor(0),
+    reviewer: { ...actor(0), id: users[2].id },
     otherActor: actor(1),
   };
   await stock.createMovement(fixture.actor, {
@@ -192,6 +195,29 @@ async function count(
     ...options,
   });
 }
+
+test("tentativa de autoaprovação não ajusta o saldo nem conclui a conferência periódica", async () => {
+  const initial = await schedule();
+  const pending = await count(initial.id, {
+    items: [{ productId: fixture.product, expectedQuantity: "10", countedQuantity: "9" }],
+  });
+  const movements = await db.stockMovement.count({ where: { unitId: fixture.units[0] } });
+  const audit = await db.auditLog.count({ where: { unitId: fixture.units[0] } });
+  await assert.rejects(inventories.approveInventoryCount(fixture.actor, pending.id), (error: unknown) => {
+    assert.equal((error as { status?: number }).status, 403);
+    assert.equal((error as { code?: string }).code, "INVENTORY_SELF_APPROVAL");
+    return true;
+  });
+  const stored = await db.inventorySchedule.findUniqueOrThrow({ where: { id: initial.id } });
+  assert.equal(stored.lastCountId, null);
+  assert.equal(stored.nextDueAt.getTime(), initial.nextDueAt.getTime());
+  assert.equal((await db.inventoryCount.findUniqueOrThrow({ where: { id: pending.id } })).status, "PENDING");
+  assert.equal((await stock.availability(db, fixture.product, fixture.locations[0], fixture.units[0])).quantity.toFixed(3), "10.000");
+  assert.equal(await db.stockMovement.count({ where: { unitId: fixture.units[0] } }), movements);
+  assert.equal(await db.auditLog.count({ where: { unitId: fixture.units[0] } }), audit);
+  await inventories.approveInventoryCount(fixture.reviewer, pending.id);
+  assert.equal((await db.inventorySchedule.findUniqueOrThrow({ where: { id: initial.id } })).lastCountId, pending.id);
+});
 
 test("programação valida permissão, localização e responsável ativo da unidade", async () => {
   await assert.rejects(
@@ -274,7 +300,7 @@ test("contagem pendente não encerra ciclo e aprovação agenda apenas uma nova 
     status(403),
   );
   const approved = await inventories.approveInventoryCount(
-    fixture.actor,
+    fixture.reviewer,
     first.id,
   );
   const advanced = await db.inventorySchedule.findUniqueOrThrow({
@@ -285,7 +311,7 @@ test("contagem pendente não encerra ciclo e aprovação agenda apenas uma nova 
     advanced.nextDueAt.getTime(),
     approved.approvedAt!.getTime() + 7 * 86400000,
   );
-  await inventories.approveInventoryCount(fixture.actor, first.id);
+  await inventories.approveInventoryCount(fixture.reviewer, first.id);
   const final = await db.inventorySchedule.findUniqueOrThrow({
     where: { id: initial.id },
   });
@@ -340,7 +366,7 @@ test("encerrar contagem obsoleta mantém estoque e ciclo, libera recontagem e pr
     idempotencyKey: key(),
   });
   await assert.rejects(
-    inventories.approveInventoryCount(fixture.actor, pending.id),
+    inventories.approveInventoryCount(fixture.reviewer, pending.id),
     status(409),
   );
   await assert.rejects(
@@ -373,7 +399,7 @@ test("encerrar contagem obsoleta mantém estoque e ciclo, libera recontagem e pr
     1,
   );
   await assert.rejects(
-    inventories.approveInventoryCount(fixture.actor, pending.id),
+    inventories.approveInventoryCount(fixture.reviewer, pending.id),
     status(409),
   );
   const sameCycle = await db.inventorySchedule.findUniqueOrThrow({
@@ -395,7 +421,7 @@ test("encerrar contagem obsoleta mantém estoque e ciclo, libera recontagem e pr
       },
     ],
   });
-  await inventories.approveInventoryCount(fixture.actor, recount.id);
+  await inventories.approveInventoryCount(fixture.reviewer, recount.id);
   await assert.rejects(
     inventories.rejectInventoryCount(fixture.actor, recount.id, {
       note: "Não pode rejeitar contagem aprovada",
@@ -425,7 +451,7 @@ test("contagem antiga respeita reprogramação e antecipação exige confirmaç�
     null,
     "Contagem do ciclo antigo não pode bloquear o ciclo reprogramado",
   );
-  await inventories.approveInventoryCount(fixture.actor, pending.id);
+  await inventories.approveInventoryCount(fixture.reviewer, pending.id);
   const kept = await db.inventorySchedule.findUniqueOrThrow({
     where: { id: initial.id },
   });

@@ -293,6 +293,12 @@ export async function approveInventoryCount(actor: StockActor, rawId: string) {
         "Esta contagem foi encerrada sem ajuste. Registre uma nova contagem.",
         409,
       );
+    if (count.userId === actor.id)
+      throw new AppError(
+        "Você registrou esta contagem. A aprovação deve ser feita por outra pessoa com permissão de aprovação nesta unidade.",
+        403,
+        "INVENTORY_SELF_APPROVAL",
+      );
 
     await assertActiveLocation(tx, count.locationId, actor.unitId);
     const balances = await tx.inventoryBalance.findMany({

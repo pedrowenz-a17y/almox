@@ -8,10 +8,12 @@ import { chromium, expect } from '@playwright/test';
 import QRCode from 'qrcode';
 import { qaConfig } from './qa-config.mjs';
 import { user, data } from './fixtures/theme-data.mjs';
+import { verifyInventoryApproval } from './fixtures/inventory-approval-checks.mjs';
 
 const { baseURL } = qaConfig();
 const root = process.cwd();
-const output = path.join(root, 'artifacts/theme-audit');
+const independentApproval = process.argv.includes('--inventory-approval');
+const output = path.join(root, independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'almox-theme-'));
 const require = createRequire(import.meta.url);
 const { build } = createRequire(require.resolve('tsx/package.json'))('esbuild');
@@ -20,9 +22,10 @@ const css = (await Promise.all(cssNames.map(name => fs.readFile(path.join(root, 
 const fakeNavigation = `import {useSyncExternalStore} from 'react';
 const subscribe = fn => { addEventListener('popstate', fn); return () => removeEventListener('popstate', fn) };
 const go = p => { history.pushState(null, '', p); dispatchEvent(new Event('popstate')) };
+const router = {replace:go,push:go,refresh:()=>{}};
 export const usePathname = () => useSyncExternalStore(subscribe, () => location.pathname);
 export const useSearchParams = () => new URLSearchParams(location.search);
-export const useRouter = () => ({replace:go,push:go,refresh:()=>{}});`;
+export const useRouter = () => router;`;
 await build({
   stdin: {
     contents: `import React from 'react'; import {createRoot} from 'react-dom/client';
@@ -190,6 +193,7 @@ try {
     await page.screenshot({ animations: 'disabled', path: path.join(output, 'scanner-dark-desktop.png'), fullPage: true });
     await page.keyboard.press('Escape');
   });
+  if (independentApproval) await verifyInventoryApproval({ page, fixtureURL, data, user, check, output, noOverflow });
   await check('Barra de ações e navegação cabem em 390 e 320 pixels', async () => {
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 }); await page.goto(fixtureURL + '/dashboard'); await page.locator('.stats-grid').waitFor();
@@ -206,7 +210,7 @@ try {
     assert.equal(await page.locator('.theme-toggle').isVisible(), false);
     await page.emulateMedia({ media: 'screen' });
   });
-  await check('Sem erros JavaScript ou operações de escrita durante a inspeção', async () => {
+  await check(independentApproval ? 'Sem erros JavaScript ou chamadas inesperadas; aprovações usam APIs fictícias' : 'Sem erros JavaScript ou operações de escrita durante a inspeção', async () => {
     assert.deepEqual(errors, []); assert.deepEqual(unexpected, []);
   });
 } finally {

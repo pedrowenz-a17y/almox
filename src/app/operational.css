@@ -1,4 +1,7 @@
 /* Operational forms share the U.C.A. palette and leave room for readable labels. */
+.button[aria-describedby="inventory-approval-help"]:disabled {
+  cursor: not-allowed;
+}
 .reconciliation-form {
   padding: 0 22px 22px;
 }

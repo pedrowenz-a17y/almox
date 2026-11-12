@@ -2,6 +2,8 @@
 
 Revisão de 12/11/2026, sobre a versão 2.7.2 e a alteração visual 2.7.3.
 
+Atualização posterior: a versão 2.7.4 implementa a aprovação independente de contagens. O achado abaixo descreve a situação na data da auditoria; consulte a [etapa 1 concluída e o plano de evolução](EVOLUCAO-POR-ETAPAS.md).
+
 ## Conclusão para o TCC
 
 O Almox tem recursos compatíveis com o problema relatado pelo Grupo Capacle/U.C.A.: controlar a saída, identificar a ordem e os responsáveis, acompanhar pendências e comparar o estoque. A prioridade é validar esse processo com a empresa e medir as divergências. Acrescentar financeiro, folha de pagamento ou CRM agora aumentaria o escopo sem atacar a principal falha descrita.

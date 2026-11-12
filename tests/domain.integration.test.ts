@@ -22,8 +22,8 @@ let stock: typeof import("../src/services/stock");
 let orders: typeof import("../src/services/orders");
 let purchases: typeof import("../src/services/purchases");
 let inventories: typeof import("../src/services/inventory");
-let fixture: { organizationId: string; roleId: string; userId: string; unitIds: string[];
-  productIds: string[]; locationIds: string[]; supplierId: string; actor: StockActor; otherActor: StockActor };
+let fixture: { organizationId: string; roleId: string; userId: string; reviewerId: string; unitIds: string[];
+  productIds: string[]; locationIds: string[]; supplierId: string; actor: StockActor; reviewer: StockActor; otherActor: StockActor };
 const key = randomUUID;
 const permissions = ["stock:move", "inventory:count", "inventory:adjust", "orders:read", "orders:write",
   "orders:apply", "orders:invoice", "purchases:read", "purchases:write", "purchases:receive", "costs:read"];
@@ -61,10 +61,13 @@ beforeEach(async () => {
   const products = await Promise.all(units.map(unit => db.product.create({ data: { unitId: unit.id,
     internalCode: "ITEM-TEST", name: "Material exclusivo de teste", unit: "UN" } })));
   const supplier = await db.supplier.create({ data: { unitId: units[0].id, legalName: "Fornecedor de teste" } });
-  fixture = { organizationId: organization.id, roleId: role.id, userId: user.id,
+  const reviewer = await db.user.create({ data: { name: "Revisor independente de teste", email: `reviewer-${suffix}@example.invalid`, roleId: role.id,
+    memberships: { create: { unitId: units[0].id, roleId: role.id } } } });
+  fixture = { organizationId: organization.id, roleId: role.id, userId: user.id, reviewerId: reviewer.id,
     unitIds: units.map(unit => unit.id), productIds: products.map(product => product.id),
     locationIds: locations.map(location => location.id), supplierId: supplier.id,
     actor: { id: user.id, unitId: units[0].id, permissions },
+    reviewer: { id: reviewer.id, unitId: units[0].id, permissions },
     otherActor: { id: user.id, unitId: units[1].id, permissions } };
 });
 
@@ -92,7 +95,7 @@ afterEach(async () => {
     await tx.warehouse.deleteMany({ where });
     await tx.unitMembership.deleteMany({ where });
     await tx.operationalUnit.deleteMany({ where: { id: { in: fixture.unitIds } } });
-    await tx.user.delete({ where: { id: fixture.userId } });
+    await tx.user.deleteMany({ where: { id: { in: [fixture.userId, fixture.reviewerId] } } });
     await tx.role.delete({ where: { id: fixture.roleId } });
     await tx.organization.delete({ where: { id: fixture.organizationId } });
   });
@@ -310,12 +313,12 @@ test("inventário compara físico sem baixar aplicações e impede ajuste que in
   await action(order.id, id, "APPLY", "30");
   const proposal = await count("70", "67");
   assert.equal(proposal.items[0].expectedAppliedQuantity.toFixed(3), "30.000");
-  await inventories.approveInventoryCount(fixture.actor, proposal.id);
+  await inventories.approveInventoryCount(fixture.reviewer, proposal.id);
   assert.deepEqual(await amounts(), { quantity: "97.000", reserved: "0.000", applied: "30.000", physical: "67.000", available: "67.000" });
   const second = await orderWithRequest("60");
   await action(second.id, second.materials[0].id, "RESERVE", "60");
   const invalid = await count("67", "59");
-  await assert.rejects(inventories.approveInventoryCount(fixture.actor, invalid.id), status(409));
+  await assert.rejects(inventories.approveInventoryCount(fixture.reviewer, invalid.id), status(409));
   assert.equal((await amounts()).quantity, "97.000");
 });
 
@@ -325,7 +328,7 @@ test("alterar reserva invalida snapshot do inventário mesmo com mesmo saldo fí
   const order = await orderWithRequest("10");
   await action(order.id, order.materials[0].id, "RESERVE", "10");
   await action(order.id, order.materials[0].id, "RELEASE", "10");
-  await assert.rejects(inventories.approveInventoryCount(fixture.actor, proposal.id), status(409));
+  await assert.rejects(inventories.approveInventoryCount(fixture.reviewer, proposal.id), status(409));
 });
 
 test("ordens e compras de outra unidade são inacessíveis e identificadores forjados são rejeitados", async () => {

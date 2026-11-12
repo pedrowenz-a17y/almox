@@ -645,6 +645,69 @@ describe("movimentações reais no PostgreSQL", () => {
 });
 
 describe("inventário e aprovação", () => {
+  for (const countedQuantity of ["97", "100"]) {
+    test(`administrador não aprova a própria contagem de ${countedQuantity} e outra pessoa autorizada pode aprovar`, async () => {
+      await enter(100);
+      const inventory = await createInventoryCount(f.admin, {
+        locationId: f.sourceId,
+        items: [{ productId: f.productId, expectedQuantity: "100", countedQuantity }],
+        note: "Conferência com aprovação independente",
+        idempotencyKey: requestKey(),
+      });
+      const snapshot = async () => ({
+        balance: await db.inventoryBalance.findUniqueOrThrow({
+          where: { productId_locationId: { productId: f.productId, locationId: f.sourceId } },
+        }),
+        count: await db.inventoryCount.findUniqueOrThrow({ where: { id: inventory.id } }),
+        movements: await db.stockMovement.count({ where: { unitId: f.unitId } }),
+        audit: await db.auditLog.count({ where: { unitId: f.unitId } }),
+      });
+      const before = await snapshot();
+      await assert.rejects(approveInventoryCount(f.admin, inventory.id), (error: unknown) => {
+        assert.equal((error as { status?: number }).status, 403);
+        assert.equal((error as { code?: string }).code, "INVENTORY_SELF_APPROVAL");
+        return true;
+      });
+      assert.deepEqual(await snapshot(), before, "A tentativa do autor deve preservar saldo, versão, contagem e auditoria.");
+      await assert.rejects(approveInventoryCount(f.operator, inventory.id), statusIs(403));
+      assert.deepEqual(await snapshot(), before, "Ser outra pessoa não substitui a permissão de ajuste.");
+
+      const reviewer = { ...f.operator, permissions: [...f.operator.permissions, "inventory:adjust"] };
+      const approved = await approveInventoryCount(reviewer, inventory.id);
+      assert.equal(approved.userId, f.admin.id);
+      assert.equal(approved.approvedById, reviewer.id);
+      assert.equal(approved.status, "APPROVED");
+      assert.equal(await balance(f.sourceId), `${countedQuantity}.000`);
+      const audit = await db.auditLog.findFirstOrThrow({ where: {
+        entityId: inventory.id, action: "INVENTORY_APPROVED", unitId: f.unitId,
+      } });
+      assert.equal(audit.userId, reviewer.id);
+      const after = await snapshot();
+      await approveInventoryCount(f.admin, inventory.id);
+      assert.deepEqual(await snapshot(), after, "Consultar novamente uma aprovação concluída não refaz o ajuste.");
+    });
+  }
+
+  test("aprovações simultâneas do autor e do revisor nunca atribuem o ajuste ao próprio autor", async () => {
+    await enter(100);
+    const inventory = await count(100, 97);
+    const creator = { ...f.operator, permissions: [...f.operator.permissions, "inventory:adjust"] };
+    const results = await Promise.allSettled([
+      approveInventoryCount(creator, inventory.id),
+      approveInventoryCount(f.admin, inventory.id),
+    ]);
+    assert.equal(results[1].status, "fulfilled");
+    if (results[0].status === "rejected") assert.equal(results[0].reason.code, "INVENTORY_SELF_APPROVAL");
+    else assert.equal(results[0].value.approvedById, f.admin.id);
+    const approved = await db.inventoryCount.findUniqueOrThrow({ where: { id: inventory.id } });
+    assert.equal(approved.approvedById, f.admin.id);
+    assert.equal(await balance(f.sourceId), "97.000");
+    const movements = await db.stockMovement.findMany({ where: { inventoryCountId: inventory.id } });
+    assert.equal(movements.length, 1);
+    assert.equal(movements[0].userId, f.admin.id);
+    assert.equal(await db.auditLog.count({ where: { entityId: inventory.id, action: "INVENTORY_APPROVED" } }), 1);
+  });
+
   test("contagem e aprovação não atravessam o escopo da unidade", async () => {
     await assert.rejects(createInventoryCount(f.operator, {
       locationId: f.otherLocationId,

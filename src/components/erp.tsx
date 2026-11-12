@@ -243,6 +243,8 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   );
   const permissions = user?.permissions || data?.permissions || [];
   const can = (key: string) => permissions.includes(key);
+  const countApprovalBlocked =
+    !user || !countDetails?.userId || countDetails.userId === user.id;
   const refresh = useCallback(async () => {
     refreshController.current?.abort();
     const controller = new AbortController();
@@ -2330,6 +2332,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           }}
         >
           <div className="modal-body">
+            <p className="muted">
+              Contagem registrada por{" "}
+              {countDetails.user?.name || countDetails.createdBy?.name || "responsável não identificado"}.
+            </p>
             <p>{countDetails.note}</p>
             <div className="table-wrap">
               <table>
@@ -2366,6 +2372,13 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                 {error}
               </div>
             )}
+            {countDetails.status === "PENDING" && countApprovalBlocked && (
+              <div className="notice info" id="inventory-approval-help" role="status">
+                {countDetails.userId && user
+                  ? "Você registrou esta contagem. Peça a outra pessoa com permissão de aprovação nesta unidade para conferir e aprovar."
+                  : "Não foi possível identificar o responsável pela contagem. Atualize os dados antes de aprovar."}
+              </div>
+            )}
             {countDetails.status === "PENDING" && can("inventory:adjust") && (
               <>
                 <div className="notice warning">
@@ -2375,7 +2388,8 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                 </div>
                 <button
                   className="button primary full"
-                  disabled={actionBusy}
+                  disabled={actionBusy || countApprovalBlocked}
+                  aria-describedby={countApprovalBlocked ? "inventory-approval-help" : undefined}
                   onClick={() => void approve(countDetails.id)}
                 >
                   <Check size={18} />

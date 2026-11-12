@@ -124,6 +124,7 @@ export interface CountItem {
 }
 export interface InventoryCount {
   id: string;
+  userId: string;
   locationId: string;
   location?: Location;
   status: string;

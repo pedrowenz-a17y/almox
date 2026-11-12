@@ -281,3 +281,7 @@ Nenhum dado real foi migrado somente por existir neste pacote. O uso operacional
 ### Auditoria funcional e modo escuro — 2.7.3
 
 O ERP abre em modo escuro e permite alternar para o claro pelo botão de sol/lua. A preferência fica salva no dispositivo. Veja a [auditoria funcional e as propostas de funções e cargos](docs/AUDITORIA-ERP-2026-11-12.md), com prioridades para o problema da empresa e limites do escopo atual. Os perfis sugeridos ainda não foram criados no banco.
+
+### Evolução por etapas — 2.7.4
+
+A primeira etapa bloqueia a aprovação da própria contagem de estoque, inclusive para administradores. A tela explica a necessidade de outro revisor autorizado na mesma unidade. Veja o [plano por etapas e a regra completa](docs/EVOLUCAO-POR-ETAPAS.md). Não requer migração de banco e preserva aprovações anteriores.

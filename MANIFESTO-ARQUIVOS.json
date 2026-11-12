@@ -1,7 +1,7 @@
 {
-  "version": "2.7.3",
-  "revision": "functional-audit-and-dark-theme",
-  "generatedAt": "2026-11-12T11:50:48.691673+00:00",
+  "version": "2.7.4",
+  "revision": "independent-inventory-approval-stage-1",
+  "generatedAt": "2026-11-12T12:33:36.573831+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 25181,
-      "sha256": "86f6d677e86a764e93915a8d9150b3a273cec843a3e8f93969a3429322da57be"
+      "bytes": 25542,
+      "sha256": "645e2e2dda8ae4625be0643d7d5aabac08cde0594daaedb74b146656f295b2ef"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -477,6 +477,56 @@
       "path": "artifacts/identity-2.3.1/validation.json",
       "bytes": 2395,
       "sha256": "f675e6c0b376e693c15015daf31f4c25ef6a06e18de734d2204f6d4ea6838e50"
+    },
+    {
+      "path": "artifacts/independent-inventory/README.md",
+      "bytes": 2287,
+      "sha256": "9b806929370e88eea4e91ce72cc91e57c2c6aec9b6b0646ff232deb247529cbc"
+    },
+    {
+      "path": "artifacts/independent-inventory/aprovacao-independente-desktop.png",
+      "bytes": 169662,
+      "sha256": "8bf75bd0a449b0eb43126d382ec6ab2d37f98a75a0725189b8c0747ffba7fe3b"
+    },
+    {
+      "path": "artifacts/independent-inventory/autoaprovacao-bloqueada-1440.png",
+      "bytes": 174193,
+      "sha256": "58da812c3526c01d5fb9d6b6061cfe96132f71cda6cecb0213fa139e43c5a9c9"
+    },
+    {
+      "path": "artifacts/independent-inventory/autoaprovacao-bloqueada-390.png",
+      "bytes": 61713,
+      "sha256": "703c88a545a28b24021451ed521ea7571435c199b6cd19243fefc4d08c27a087"
+    },
+    {
+      "path": "artifacts/independent-inventory/browser.log",
+      "bytes": 1537,
+      "sha256": "ef8c4451eb5abe249ce0dc76009f2abce66da85a889b7694881355bed3c4522a"
+    },
+    {
+      "path": "artifacts/independent-inventory/build.log",
+      "bytes": 2531,
+      "sha256": "3fc48cdb4fc60810a7f157006d9c612c706043793043191fbc83e90e2df088e2"
+    },
+    {
+      "path": "artifacts/independent-inventory/checks.json",
+      "bytes": 2562,
+      "sha256": "9fa2133e958c6512b5cbd21f0717e45285297173387f72f404677bdd9377bb77"
+    },
+    {
+      "path": "artifacts/independent-inventory/lint.log",
+      "bytes": 35,
+      "sha256": "41f36bad8a9c48ed270b80e48b212c671b45021451c67bff6e058a417473cf44"
+    },
+    {
+      "path": "artifacts/independent-inventory/tests.log",
+      "bytes": 21293,
+      "sha256": "a0b4b4d5e171ac9f9ccda00c4a950f03e98e4d3ca6e1f56572f3f66ce88cb5da"
+    },
+    {
+      "path": "artifacts/independent-inventory/typecheck.log",
+      "bytes": 44,
+      "sha256": "c467ffd76a15f0b32e80d2cddfe49a2ffc3aec8f187faa42e1c8bb344605fa47"
     },
     {
       "path": "artifacts/install-2.2.1/build.log",
@@ -1540,8 +1590,8 @@
     },
     {
       "path": "docs/AUDITORIA-ERP-2026-11-12.md",
-      "bytes": 13552,
-      "sha256": "b6041cce7cccb62d2e9496d7cb5ea2b6042bdc2c205519d6a52e607f7b5d62c1"
+      "bytes": 13787,
+      "sha256": "efd8d8fafe0b49d1e5ccf531770a4916a862652e20d666a64a6ded906278ab96"
     },
     {
       "path": "docs/AUDIT_2026-10.md",
@@ -1572,6 +1622,11 @@
       "path": "docs/ENTREGA-WINDOWS-2.6.0.md",
       "bytes": 1547,
       "sha256": "c88650678d54bf348f1940d822b4cb6fa85a3e5e537ddb337de5587235b1ee35"
+    },
+    {
+      "path": "docs/EVOLUCAO-POR-ETAPAS.md",
+      "bytes": 5094,
+      "sha256": "a3e9de7410763a3012bd875ef3c0056b8647d82edc48075ee063456fb05c4677"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
@@ -1781,12 +1836,12 @@
     {
       "path": "package-lock.json",
       "bytes": 302110,
-      "sha256": "912a95f442cfc7d5e01e8b33c5426cae39d48b0efb2e5c71c95b0be69ebebfb5"
+      "sha256": "d2579761a6f7d625689a8d648fce3d584fa589a171629d4fb8025a1e50370b1d"
     },
     {
       "path": "package.json",
-      "bytes": 2679,
-      "sha256": "f3e7bb7adff72ee096666c9d33cb662ca028f48f9dd37a11c8ad18ec6a4ba2ce"
+      "bytes": 2766,
+      "sha256": "2b4e2b7299d4f642305aaa9bdab120eeef404a4589499cac6cb8113bbc2330ea"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -1924,6 +1979,11 @@
       "sha256": "78267750afd70145427b58b356e535c8e6c07a994479ff8d7cbe40eb282c5d54"
     },
     {
+      "path": "scripts/fixtures/inventory-approval-checks.mjs",
+      "bytes": 5819,
+      "sha256": "837dc107cd2e99baba24b8e120f246d781c81c91b2493c72d1100b1fbf9f65d8"
+    },
+    {
       "path": "scripts/fixtures/theme-data.mjs",
       "bytes": 2115,
       "sha256": "7b568a9a644434c4cc35ea953e49d3e367839dcad70ae953c4eda2c93f277286"
@@ -2015,8 +2075,8 @@
     },
     {
       "path": "scripts/verify-theme.mjs",
-      "bytes": 17379,
-      "sha256": "8df7d8684ec5b0fd31fda6fb05513249ecd74b0c70d8281a6da16fa970f4ef62"
+      "bytes": 17842,
+      "sha256": "42b0167fef5ce2d14b5357f16a8af20ded7291c3d827f25861473080233d812b"
     },
     {
       "path": "src/app/(workspace)/[[...slug]]/page.tsx",
@@ -2290,8 +2350,8 @@
     },
     {
       "path": "src/app/operational.css",
-      "bytes": 1280,
-      "sha256": "c3c4a2091fe19e481c522f12dce475868a0bf5420ea94c8f910812905946843b"
+      "bytes": 1368,
+      "sha256": "69da308fec488e63f256bf2775f3f79ea6f24dcda1198fbc877c8810e4f52168"
     },
     {
       "path": "src/app/recuperar-senha/page.tsx",
@@ -2345,8 +2405,8 @@
     },
     {
       "path": "src/components/erp.tsx",
-      "bytes": 93518,
-      "sha256": "0cb7bedf4d2806ac8d101f977e2dfce435a346d4d6a9b8413d6c9a422d650cf8"
+      "bytes": 94452,
+      "sha256": "c1397fc139736b7876badc1a548f0ff75ef3e9259d33cff03b1c6eb99d98ae51"
     },
     {
       "path": "src/components/inventory-form.tsx",
@@ -2480,8 +2540,8 @@
     },
     {
       "path": "src/lib/client.ts",
-      "bytes": 9595,
-      "sha256": "aceaed37cb301c10e65919ce291a0af2e5195d1cede8c1d80d910fc8e4177611"
+      "bytes": 9613,
+      "sha256": "68b9f88183d2b044fa802ed6ddb7f2a8bfd9616071604e07c880bf27c6830a2b"
     },
     {
       "path": "src/lib/db.ts",
@@ -2565,8 +2625,8 @@
     },
     {
       "path": "src/services/inventory.ts",
-      "bytes": 15919,
-      "sha256": "8d81f67ea978d59e72f66f6c3d5ad42997ee289b19f65f1d4eabfd0d788ee0aa"
+      "bytes": 16170,
+      "sha256": "35907be0b521cf240a40dfd19bf27f9ec5481ab20682c77a59f3ce2534c5d5ed"
     },
     {
       "path": "src/services/local-assistant-data.ts",
@@ -2675,8 +2735,8 @@
     },
     {
       "path": "tests/domain.integration.test.ts",
-      "bytes": 41968,
-      "sha256": "ca1cc0789853bb18c95d27c75ce79d9fdc6adb5d7eb1b26754cd77c2904b7b62"
+      "bytes": 42374,
+      "sha256": "459f24fe7aa582040928b0309e8fafa05c5e3b1b7299bd86f9f88fe74bee0194"
     },
     {
       "path": "tests/http-database-log.test.ts",
@@ -2685,8 +2745,8 @@
     },
     {
       "path": "tests/inventory-schedules.integration.test.ts",
-      "bytes": 14060,
-      "sha256": "532433a3a8ec47918f0c8ad52fb1e1ca63db780368d5dc04db38ae1a6404b216"
+      "bytes": 15831,
+      "sha256": "3b4310b9750d29facedf7393e98346ee7adc73c1c4496c17b2e2fd306e3f9c78"
     },
     {
       "path": "tests/local-assistant-language.test.ts",
@@ -2735,8 +2795,8 @@
     },
     {
       "path": "tests/stock.integration.test.ts",
-      "bytes": 29996,
-      "sha256": "75083f8a1ffe32b6a6b2f16a52d3adc41e4e2fe07f7511ff34ec227d245f4ef5"
+      "bytes": 33621,
+      "sha256": "418559c7a0bec127ff364da43b00af73e552fd7af533d577beb70e3dfaec5467"
     },
     {
       "path": "tests/user-access.integration.test.ts",
