@@ -1,4 +1,5 @@
 "use client";
+import UserAccessTable, { AccessEmailSettings } from "@/components/user-access";
 import {
   useCallback,
   useEffect,
@@ -1679,47 +1680,8 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             </div>
             {addButton("users")}
           </div>
-          <section className="panel">
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Usuário</th>
-                    <th>E-mail</th>
-                    <th>Perfil</th>
-                    <th>Status</th>
-                    <th aria-label="Ações" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.users?.map((u) => (
-                    <tr key={u.id}>
-                      <td>
-                        <strong>{u.name}</strong>
-                        {u.id === user?.id && <small>Você</small>}
-                      </td>
-                      <td>{u.email}</td>
-                      <td>
-                        <Badge
-                          tone={
-                            u.role?.name === "ADMINISTRADOR" ? "purple" : "info"
-                          }
-                        >
-                          {profileTitle(u.role?.name || "Perfil")}
-                        </Badge>
-                      </td>
-                      <td>
-                        <Badge tone={u.active ? "success" : ""}>
-                          {u.active ? "Ativo" : "Inativo"}
-                        </Badge>
-                      </td>
-                      <td>{actions("users", u)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+          <UserAccessTable users={data.users ?? []} currentId={user!.id} actions={person => actions("users", person)} onChanged={() => void refresh()} />
+          <AccessEmailSettings />
           <AccessProfiles roles={roles} onPrepared={refresh} />
         </>
       ) : (
@@ -2234,7 +2196,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             await complete(
               newProduct
                 ? "Produto cadastrado. O QR Code já está pronto."
-                : "Cadastro salvo.",
+                : editor.entity === "users" && typeof saved.accessNotice === "string" ? saved.accessNotice : "Cadastro salvo.",
             );
             if (newProduct) navigateWorkspace(`/produto/${saved.id}`);
           }}

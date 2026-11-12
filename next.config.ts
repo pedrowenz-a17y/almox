@@ -25,6 +25,10 @@ const config: NextConfig = {
           },
         ],
       },
+      {
+        source: "/auth/:path*",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }, { key: "Cache-Control", value: "no-store" }],
+      },
     ];
   },
 };

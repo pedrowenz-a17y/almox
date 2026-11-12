@@ -90,9 +90,10 @@ export default function Login() {
             </button>
           </div>
         </label>
-        <Link className="text-link auth-recovery-link" href="/esqueci-senha">
-          Esqueci minha senha
-        </Link>
+        <div className="auth-access-links">
+          <Link className="text-link" href="/primeiro-acesso">Primeiro acesso</Link>
+          <Link className="text-link auth-recovery-link" href="/esqueci-senha">Esqueci minha senha</Link>
+        </div>
         {error && (
           <div role="alert" className="notice error">
             {error}

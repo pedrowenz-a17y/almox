@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { requireUser, redactCosts } from "@/lib/auth";
 import { api, json } from "@/lib/http";
+import { accessProgress } from "@/services/access-progress";
 const publicUser = { id: true, name: true, email: true } as const;
 export const GET = api(async () => {
   const actor = await requireUser();
@@ -183,7 +184,11 @@ export const GET = api(async () => {
           companyName: actor.memberships.find((membership) => membership.unitId === actor.unitId)?.unitName ?? "",
           allowNegativeStock: false,
         },
-        users: users?.map((membership) => ({ ...membership.user, identityActive: membership.user.active, active: membership.active, roleId: membership.roleId, role: membership.role })),
+        users: users ? await (async () => {
+          const progress = await accessProgress(users, actor.unitId, tx);
+          return users.map(membership => ({ ...membership.user, identityActive: membership.user.active, active: membership.active,
+            roleId: membership.roleId, role: membership.role, ...progress.get(membership.userId) }));
+        })() : undefined,
         audit,
         roles,
         dashboard: {

@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.9.0
+# Almox ERP · U.C.A. — versão 2.10.0
+
+**Versão 2.10.0:** acompanhamento de convites e primeiro acesso, cadastro preservado quando o e-mail não é confirmado, recuperação em outro aparelho e orientação de endereços/limites de envio. Não exige nova migração SQL. [Usar a etapa 4](docs/PRIMEIRO-ACESSO-2.10.md).
 
 **Versão 2.9.0:** responsável por turno de almoxarifado, passagem com aceite autenticado, responsável/prazo nas pendências e filtros de acompanhamento. Requer aplicar a nova migração no banco; a consulta anterior continua disponível enquanto a preparação estiver pendente. [Ativar e usar a etapa 3](docs/TURNOS-E-PENDENCIAS-2.9.md).
 

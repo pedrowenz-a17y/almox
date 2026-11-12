@@ -1,7 +1,7 @@
 {
-  "version": "2.9.0",
-  "revision": "warehouse-shifts-pending-responsibility-stage-3",
-  "generatedAt": "2026-11-12T16:33:37.954316+00:00",
+  "version": "2.10.0",
+  "revision": "invitations-first-access-recovery-stage-4",
+  "generatedAt": "2026-11-12T17:59:58.409919+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,13 +65,78 @@
     },
     {
       "path": "README.md",
-      "bytes": 26669,
-      "sha256": "16da4bb910ca9a9cbedfc0e9496b160349ebd003dd34c82fedc8d36f01f32132"
+      "bytes": 26952,
+      "sha256": "9e2934a7662f9c5131566e258b28871c9217a7b04f7b703bbc6c28cbb9c60b04"
     },
     {
       "path": "artifacts/HISTORICO.md",
       "bytes": 800,
       "sha256": "38c14f9a6f929022c35dfc3760fbeef8d7daba3a9034d25b638d81c70b4a5e42"
+    },
+    {
+      "path": "artifacts/access-onboarding/README.md",
+      "bytes": 1591,
+      "sha256": "a04ec0febb175fa205f0f543a80567dd169443329d89c330c190735ea7263b7f"
+    },
+    {
+      "path": "artifacts/access-onboarding/acompanhamento-mobile.png",
+      "bytes": 47856,
+      "sha256": "f10dba04a5f888a0fc8472c51c4b0559fcd2d5969dadb2c911a13a7c0ea14011"
+    },
+    {
+      "path": "artifacts/access-onboarding/acompanhar-convite-desktop.png",
+      "bytes": 53661,
+      "sha256": "9f810c765b3e8b148188e765adefa22c7334237ed19dbc8933aa1886c2c7404a"
+    },
+    {
+      "path": "artifacts/access-onboarding/build.log",
+      "bytes": 2946,
+      "sha256": "702b09ff9e597722c62e3343b45c328493bef6afc0b5ceedd0af99d87d3491d6"
+    },
+    {
+      "path": "artifacts/access-onboarding/checks.json",
+      "bytes": 7150,
+      "sha256": "5e4e557a2c0048a50c81585915167b61346532e9f84b299e8da05877ec24da27"
+    },
+    {
+      "path": "artifacts/access-onboarding/interface.log",
+      "bytes": 4506,
+      "sha256": "94319f8825196800683394145d79eb58e640837e05f1782f053faa8457c6a057"
+    },
+    {
+      "path": "artifacts/access-onboarding/lint.log",
+      "bytes": 36,
+      "sha256": "8eeeb674a3af667ce0b20ba9d8e535a3c4e264289bbe376817148afce61e7c0b"
+    },
+    {
+      "path": "artifacts/access-onboarding/primeiro-acesso-desktop.png",
+      "bytes": 610396,
+      "sha256": "dcf7871103b6b039d8b53e67ee370edea28fd7d5ed740bf3cce12368a7603c0d"
+    },
+    {
+      "path": "artifacts/access-onboarding/real-auth.json",
+      "bytes": 2163,
+      "sha256": "0000db17f7c45a17691545c74cac9a098fcda8018006344dd15b8910a5cd6b45"
+    },
+    {
+      "path": "artifacts/access-onboarding/real-auth.log",
+      "bytes": 1281,
+      "sha256": "049c05a4f8fc864fb60d4274893cb324198006931240fe8db55aadcac585ab44"
+    },
+    {
+      "path": "artifacts/access-onboarding/tests.log",
+      "bytes": 27550,
+      "sha256": "0032dfa7ae669fb08282a29f88c35fb6d7c9dc000fba24f834268664cf80cd2d"
+    },
+    {
+      "path": "artifacts/access-onboarding/typecheck.log",
+      "bytes": 45,
+      "sha256": "28164b0ca490effa2f3b9486e6aab50d67505d2477ac5d47d08cf7377cd85bd3"
+    },
+    {
+      "path": "artifacts/access-onboarding/usuarios-acesso-desktop.png",
+      "bytes": 136999,
+      "sha256": "f11287abd2dd0bc4c25bacdf475b4665285e7c47475acc386cfe138f0e004687"
     },
     {
       "path": "artifacts/access-profiles/README.md",
@@ -1700,8 +1765,8 @@
     },
     {
       "path": "docs/AUDITORIA-ERP-2026-11-12.md",
-      "bytes": 14023,
-      "sha256": "93464f7a92b8a16386cd5be3f08d7bf3ec2cac7be73f5a570727058b029de19e"
+      "bytes": 14183,
+      "sha256": "8c3886d7eac3716c04717db88c3adab360fe80c21083cde86e6800fd86beb880"
     },
     {
       "path": "docs/AUDIT_2026-10.md",
@@ -1735,8 +1800,8 @@
     },
     {
       "path": "docs/EVOLUCAO-POR-ETAPAS.md",
-      "bytes": 5926,
-      "sha256": "9cdbfee74887107ad1c0e198e9a226aaf821446b6939cb15597a40230fa56436"
+      "bytes": 6443,
+      "sha256": "1055114e8c0914adbb8f85f986acbe97cdc3ba842f997b6d25fcdc81266a3cc2"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
@@ -1782,6 +1847,11 @@
       "path": "docs/PERFIS-DE-ACESSO-2.8.md",
       "bytes": 8736,
       "sha256": "e15196b7353afa1e1d22513110afeb22b155f531b063fa5593d0d9d0eb282d6d"
+    },
+    {
+      "path": "docs/PRIMEIRO-ACESSO-2.10.md",
+      "bytes": 10791,
+      "sha256": "f5aa539baabb8a703a9be2875e565934ed321aab610dce8fd756f517bac9e809"
     },
     {
       "path": "docs/PUBLICAR-VERCEL.md",
@@ -1950,18 +2020,18 @@
     },
     {
       "path": "next.config.ts",
-      "bytes": 916,
-      "sha256": "562f0bdd965f987bb5be109c483e9bcdea3653bad9bc00088470e0f228dcdd34"
+      "bytes": 1079,
+      "sha256": "a42e8521fab7040ab985237f581dacb82ed6c1a1e67de23f5ba0ce51b79378c5"
     },
     {
       "path": "package-lock.json",
-      "bytes": 302110,
-      "sha256": "cd83ac720a39cf4a9b598b71d5c0115123751d5a26a0c5e8f8de3ae31cc61fc2"
+      "bytes": 302112,
+      "sha256": "08ff1fd3f03cdf33e0f0cabff5d7dbf851050d24344a4671e52fc3798d0198c9"
     },
     {
       "path": "package.json",
-      "bytes": 2940,
-      "sha256": "9cdbb64e1ec810ccea22b500be74815e4ebe7a5ae5339f969135955d43812ba8"
+      "bytes": 3092,
+      "sha256": "6a64efd0953ca50a5bdf1027c3011cc91d20d3605d56fec4e955895254a1c06e"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -2104,6 +2174,11 @@
       "sha256": "78267750afd70145427b58b356e535c8e6c07a994479ff8d7cbe40eb282c5d54"
     },
     {
+      "path": "scripts/fixtures/access-onboarding-checks.mjs",
+      "bytes": 17679,
+      "sha256": "eb96ab6a590d2d8be34b91e18945f8b6d1c4e3cde60594edb5915bfdb5c6930d"
+    },
+    {
       "path": "scripts/fixtures/access-profile-checks.mjs",
       "bytes": 11620,
       "sha256": "647a6c43799e0fd4327139f9ffc07b988881dafc469189ef5d3015ddcb3df652"
@@ -2189,6 +2264,11 @@
       "sha256": "e7c3660507d0870d0b606b9081b84f905008cd9a7b700b972b915537e5af806b"
     },
     {
+      "path": "scripts/verify-onboarding-real.mjs",
+      "bytes": 13141,
+      "sha256": "5543729f1fdf13070afcdfa261d30683c76c28212b6bf949818374eedba7a8ed"
+    },
+    {
       "path": "scripts/verify-operations.mjs",
       "bytes": 12323,
       "sha256": "e4874b94115fb166804a4c2b8137086f793a0062ff3e426d7c492ebeb031e4da"
@@ -2210,8 +2290,8 @@
     },
     {
       "path": "scripts/verify-theme.mjs",
-      "bytes": 18936,
-      "sha256": "c84b33b58ab81bc08889ca03efe3af0eeb562d80c7999de31dcf904bbb408ed3"
+      "bytes": 19284,
+      "sha256": "68d424274be1b22f98f3bb5dc12d5087a51c38a845cca03f1db874f26d60cdf3"
     },
     {
       "path": "src/app/(workspace)/[[...slug]]/page.tsx",
@@ -2224,6 +2304,11 @@
       "sha256": "c5ef1e3ef3c86d42333d2185a26c25da2998ee49ab959e6077184845088af7b0"
     },
     {
+      "path": "src/app/acesso-invalido/page.tsx",
+      "bytes": 1312,
+      "sha256": "9a21c3545d49d14e63ac1fe79d40f8cd6accb84be9676d031c2d76e0658f2e04"
+    },
+    {
       "path": "src/app/api/access-profiles/route.ts",
       "bytes": 409,
       "sha256": "9d722e0d876ed8f00b2beb6f053b23ad2b27436692feab26c6a91aec4b5d6238"
@@ -2234,9 +2319,14 @@
       "sha256": "ab752e5da45d7f016ac537a28da7f0dc45158cffaf651173ca86cfd161851dc6"
     },
     {
+      "path": "src/app/api/auth/complete-link/route.ts",
+      "bytes": 236,
+      "sha256": "33b7aeb4d0aad5ce7040e68b6ddf9f7bd57cd6590b8f21cd3607cefaec6808ba"
+    },
+    {
       "path": "src/app/api/auth/login/route.ts",
-      "bytes": 1765,
-      "sha256": "cd3ff433937943da3c88214d6d7185ea935ad89278a250ac15fdddb3d62d986f"
+      "bytes": 1813,
+      "sha256": "fc458b559a02a6108f75368b7d43519927fdb9068e1e8fa094f1ab23597437c9"
     },
     {
       "path": "src/app/api/auth/logout/route.ts",
@@ -2244,14 +2334,19 @@
       "sha256": "0c0dd561b127deb39bfa21efdc9dd70b367a058f22b15a7afc8881076a1419b8"
     },
     {
+      "path": "src/app/api/auth/password-context/route.ts",
+      "bytes": 169,
+      "sha256": "0b3e45e81ec0e517d1051ed32a8f0c51a6b4cc703f5bc97907ef07b13def3cd0"
+    },
+    {
       "path": "src/app/api/auth/recover/route.ts",
-      "bytes": 1131,
-      "sha256": "13e784a80d8784c1b5efb0c5e0f712f99d2e25fad72de16c24eb24a0d2a7fee3"
+      "bytes": 1174,
+      "sha256": "7408c1f1b0b51794e7588b270bd90e8bb2d464f3a87a4069d2909ec20ede0b52"
     },
     {
       "path": "src/app/api/auth/update-password/route.ts",
-      "bytes": 1973,
-      "sha256": "b048de887e081514863779c611f6327a2fd2e9d7d07756bb85415b5b63e29ab8"
+      "bytes": 356,
+      "sha256": "c415a333842089f8247df73311aa4362378690011f5b77d44154d53413072e0c"
     },
     {
       "path": "src/app/api/catalog/[entity]/[id]/route.ts",
@@ -2265,8 +2360,8 @@
     },
     {
       "path": "src/app/api/data/route.ts",
-      "bytes": 8864,
-      "sha256": "eb2b85ec8dea732668e96f9fe38fc0a6ccb73387fed4704d867b7b6f45a15497"
+      "bytes": 9116,
+      "sha256": "8782460a790e5612af13bea87911c7b01a3dcbfbd7a89d2d0475ae0d4b316cd5"
     },
     {
       "path": "src/app/api/desktop-health/route.ts",
@@ -2449,6 +2544,16 @@
       "sha256": "21b75a0a0b290d081ef0a29e32263c8bc09b1124367c0cf9e156a44d2ccf6819"
     },
     {
+      "path": "src/app/api/user-access/[id]/route.ts",
+      "bytes": 496,
+      "sha256": "68161c05938aed535487521bda809ee9f24c2baa066ffb30b06968abe8f29389"
+    },
+    {
+      "path": "src/app/api/user-access/setup/route.ts",
+      "bytes": 244,
+      "sha256": "ce7b790ad73fce13f311e24915ccfadbb20ec978bbd5e89648e8421ed51e8ac5"
+    },
+    {
       "path": "src/app/api/warehouse-shifts/route.ts",
       "bytes": 439,
       "sha256": "33da617284667cbeff7f71c07b122149e5d65c4e1ae6029b913bd63f50fb856a"
@@ -2460,18 +2565,23 @@
     },
     {
       "path": "src/app/auth/callback/route.ts",
-      "bytes": 945,
-      "sha256": "bb763f50daca217f80ba93add0f848404b396e49f84a0398aad8dfa2c4be6371"
+      "bytes": 1293,
+      "sha256": "882268f26d595224b06091edbb0a457ed3dfc2bec56a645e77028d598050e4ac"
     },
     {
       "path": "src/app/auth/confirm/route.ts",
-      "bytes": 1121,
-      "sha256": "3d144130992437b8d287c1e67ba0b42bf4e2f03cb1a09ac733b744ebf723f0ed"
+      "bytes": 1351,
+      "sha256": "b082206d4a8632137f9a2ac49aa38546065a8577d7e3c553bc28eaee9aeb6609"
+    },
+    {
+      "path": "src/app/auth/retorno/page.tsx",
+      "bytes": 2890,
+      "sha256": "662fee27b406aa1830758c689bb1de632a31dc2ab7b14b8b5ff2e5857c0db048"
     },
     {
       "path": "src/app/esqueci-senha/page.tsx",
-      "bytes": 2048,
-      "sha256": "c90703424829d5b8e5a98bb83640f83e0fbac34bd263aff7c3fa3c0d90bdd4ab"
+      "bytes": 2287,
+      "sha256": "3ac7813ee77ec02917e5e60dd038cd298318c2067b184914446103bb9da5ffee"
     },
     {
       "path": "src/app/globals.css",
@@ -2505,18 +2615,23 @@
     },
     {
       "path": "src/app/login/page.tsx",
-      "bytes": 3226,
-      "sha256": "86943534886b9576ca0617b5a711b8a2d0aad1288e89f8130a38f6a25356e695"
+      "bytes": 3352,
+      "sha256": "cbd132b85241cc6bcdf6c3d549496cde5f5e5904e0fabbf41482dc4c7019f8cb"
     },
     {
       "path": "src/app/operational.css",
-      "bytes": 6976,
-      "sha256": "c6d45fa3e2b851e0851231597fc5357f8cda50acd3c98f5cab1b49005a0062ad"
+      "bytes": 10471,
+      "sha256": "0087c18538dffb83a3caa0ea9d4ae84c60039723dabf4da3e36cad5fb680637a"
+    },
+    {
+      "path": "src/app/primeiro-acesso/page.tsx",
+      "bytes": 137,
+      "sha256": "362d4fc411d1e2b89bbbe04f35ddfbf2c29e6320c0f7c96c4edcd685b8b29bf4"
     },
     {
       "path": "src/app/recuperar-senha/page.tsx",
-      "bytes": 2681,
-      "sha256": "4af2e358d0c4020f892322094c2fdaa604cee635fe5578f4a240e4daa1e3f9bb"
+      "bytes": 128,
+      "sha256": "711be87866ecfa0df46f3c64586e22077730bcce897bc0211d9df5ef8eedc258"
     },
     {
       "path": "src/app/theme.css",
@@ -2554,14 +2669,19 @@
       "sha256": "92713a205b90ff0ca5032aba3fbd0b00a33a591fd0eb958d122234b3465a6a6f"
     },
     {
+      "path": "src/components/auth-cooldown.ts",
+      "bytes": 767,
+      "sha256": "2fe1b407ea8ed03a4bc88d81bdcbcaeb1a9e000691140b8e60e6bcb4e800feba"
+    },
+    {
       "path": "src/components/auth-shell.tsx",
       "bytes": 5204,
       "sha256": "b2b9d07d34299afdf705a101827e7a9c2d3665bbf43d6cc9373f70ff9bd6077d"
     },
     {
       "path": "src/components/catalog-form.tsx",
-      "bytes": 13659,
-      "sha256": "7a9da61a88f6b3888499659f2a488a717580733460c0e67b7cab17dd5e225b16"
+      "bytes": 14539,
+      "sha256": "e636c0ed7a6ca240d5972f82fc7f828c92ac54b785083ab588e3e1b8dbfdf5c5"
     },
     {
       "path": "src/components/dashboard.tsx",
@@ -2570,8 +2690,8 @@
     },
     {
       "path": "src/components/erp.tsx",
-      "bytes": 94733,
-      "sha256": "10e039af09b6bef3cd6e8cf0ea23bba24a33585cef88ff23bbc1a647acffd302"
+      "bytes": 93629,
+      "sha256": "001bdcac3ad4b9142a20ec9fa314fd3e84d9e7139c03db16d1fa643783e9032c"
     },
     {
       "path": "src/components/inventory-form.tsx",
@@ -2612,6 +2732,11 @@
       "path": "src/components/orders.tsx",
       "bytes": 40588,
       "sha256": "90fc56e7ad643726e1608c14adcf31ca3b1915ad828efc27f164f875e26a5cf8"
+    },
+    {
+      "path": "src/components/password-setup.tsx",
+      "bytes": 4906,
+      "sha256": "5c2d230cd2ca763c556b45650a5dbed81a8f8d2115aa68e1a6147926dff41224"
     },
     {
       "path": "src/components/pending-assignment.tsx",
@@ -2669,6 +2794,11 @@
       "sha256": "390e6f39fc6c5aebe264c9dd7ac8db84393a513bc0aef2fdcf96c8d0a314146a"
     },
     {
+      "path": "src/components/user-access.tsx",
+      "bytes": 12379,
+      "sha256": "f6c12f4d197fb82e94a94a7b5dfc857bb27a1e34ca2c91e15abb2d1d9ae610db"
+    },
+    {
       "path": "src/components/warehouse-shifts.tsx",
       "bytes": 8811,
       "sha256": "5207947d3406553ad4708bb8f2f5adfc1871abd3e4100d84cbc1cee38d394f9a"
@@ -2694,6 +2824,16 @@
       "sha256": "13b1c5fcaf1e656298c5d5ac35df8be3c41194e0ff17ee9732610465479f9f73"
     },
     {
+      "path": "src/lib/access-provider.ts",
+      "bytes": 2261,
+      "sha256": "7204521a96d1c8a51c0a420558b7d14488a6617741aa9bfe00292b4493de996f"
+    },
+    {
+      "path": "src/lib/access-status.ts",
+      "bytes": 942,
+      "sha256": "7c6be62ca86818c0909cad8de57a27eac5219e8ff5c2e4bc0ff07a054a79ddc0"
+    },
+    {
       "path": "src/lib/assistant-contract.ts",
       "bytes": 438,
       "sha256": "d2857fe43b2368d0bb38cb1ea2f5f7d470cb80db932623ae9303b9aa02ddf167"
@@ -2704,9 +2844,24 @@
       "sha256": "80e76121b9525d26888756b41cfa25e4efff1b6fbda3c0ca67362b5462724990"
     },
     {
+      "path": "src/lib/auth-cookie-cleanup.ts",
+      "bytes": 751,
+      "sha256": "9b66ffc77d95d1aaace2ffb8c9fde40ba47d8deded30cb75b85ad7ef89f11f4e"
+    },
+    {
+      "path": "src/lib/auth-links.ts",
+      "bytes": 1876,
+      "sha256": "31096e5c51427cc4a988a9be5609a8cedd2c2e92486db2a5ab16ecf7cabb856f"
+    },
+    {
       "path": "src/lib/auth-rate-limit.ts",
-      "bytes": 1157,
-      "sha256": "241ed28cc30ccd67bcae744b08d628c23a0f49ae98771057eea97040391c079b"
+      "bytes": 2199,
+      "sha256": "3e41da6218265e8612087ce4842777e0ec663f25fe81262f6d72f70948944628"
+    },
+    {
+      "path": "src/lib/auth-return.ts",
+      "bytes": 695,
+      "sha256": "baee0024cd823a1b9444043e53b44a83fd9a478721d26126f1d3e6feff7ca208"
     },
     {
       "path": "src/lib/auth.ts",
@@ -2720,8 +2875,8 @@
     },
     {
       "path": "src/lib/client.ts",
-      "bytes": 9637,
-      "sha256": "683fb76e8ff5167bbba112ff4d6b2beec7918ed3bcb07951d9ea60524bc5f336"
+      "bytes": 9884,
+      "sha256": "21480123dfc20170260ac118db517fddc57fa67de53dfe9bb966d2af9c84847e"
     },
     {
       "path": "src/lib/db.ts",
@@ -2730,8 +2885,8 @@
     },
     {
       "path": "src/lib/http.ts",
-      "bytes": 3777,
-      "sha256": "e759e35dcd65a44445e50ff9f39632f0be1bbf75bc00f4d9d2956ce8227d3ad8"
+      "bytes": 3963,
+      "sha256": "5918d1630a09367e0f8f02cecc5ebf687ec3426ff5eeb607fe80c41f9e3e38ea"
     },
     {
       "path": "src/lib/local-assistant-language.ts",
@@ -2794,9 +2949,24 @@
       "sha256": "9914a9c29fa115faaafeea91ed445babee1981eee229161a7f46a23d26f05677"
     },
     {
+      "path": "src/services/access-emails.ts",
+      "bytes": 8015,
+      "sha256": "5aed46dae028848948d387055705f18e640ee18ca09b9cbe6746676eff71503c"
+    },
+    {
+      "path": "src/services/access-management.ts",
+      "bytes": 819,
+      "sha256": "049a8d53c98d8f498cd911f0708c87da2fd62bb47f3d04456d105b9e949515e6"
+    },
+    {
       "path": "src/services/access-profiles.ts",
       "bytes": 2378,
       "sha256": "8d18d7267211d63d29bf7d8c8684fd5248a0dde4df0b1ee0bb26108e7b038d34"
+    },
+    {
+      "path": "src/services/access-progress.ts",
+      "bytes": 2626,
+      "sha256": "444ab5b219cac1941c1aaf77b98f0dd8b9c138ada5950f1bccc5c928b79d001b"
     },
     {
       "path": "src/services/assistant-context.ts",
@@ -2864,6 +3034,11 @@
       "sha256": "a28b36ac1602c5949ed533b1e7082a41c5200d5a8e400c7b5bf8e09827d1535e"
     },
     {
+      "path": "src/services/password-access.ts",
+      "bytes": 6973,
+      "sha256": "ed401585019172e10bdafb93f00b408fdaf87bce8d801c0c449aeba1586277db"
+    },
+    {
       "path": "src/services/pending-assignments.ts",
       "bytes": 3622,
       "sha256": "c00b6f66a60510b6a791c24a0367da7d92956db37c0a763a6093a0b553534143"
@@ -2895,13 +3070,18 @@
     },
     {
       "path": "src/services/user-access.ts",
-      "bytes": 9613,
-      "sha256": "e7fadb31431e1e15e51ef6a7c56051211fd4bd39d7f7869982a8652fd7729e30"
+      "bytes": 11235,
+      "sha256": "a5334614d70c316e03bd326388dab40f51a6dfc45f484ca739ed4ce22282cb15"
     },
     {
       "path": "src/services/warehouse-shifts.ts",
       "bytes": 8028,
       "sha256": "f13a8f3500329d7903186339f6d7b85d1da8c8d076e457a3adddfbd0fcac6b0c"
+    },
+    {
+      "path": "tests/access-onboarding.integration.test.ts",
+      "bytes": 19778,
+      "sha256": "8d84ec85baa2ea5822d3f0d9f1b00ff29a44ab390b00f340b93b3b9228479f9d"
     },
     {
       "path": "tests/access-profiles.integration.test.ts",
@@ -2932,6 +3112,11 @@
       "path": "tests/auth-config.test.ts",
       "bytes": 4870,
       "sha256": "955d1b9cab25e1d16846a00dabcc7e7944bd7d11cf2f89277ea2690e883e3e16"
+    },
+    {
+      "path": "tests/auth-onboarding.test.ts",
+      "bytes": 3205,
+      "sha256": "77f4d45d9cec58033f7040d713bd570c93c7086f000cad4cf81a8a728a356421"
     },
     {
       "path": "tests/catalog.integration.test.ts",

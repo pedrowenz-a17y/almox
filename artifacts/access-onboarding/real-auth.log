@@ -1,0 +1,23 @@
+
+> almox-erp@2.10.0 start
+> node --env-file-if-exists=.env scripts/start.mjs
+
+.env not found. Continuing without it.
+▲ Next.js 16.4.2
+- Local:         http://127.0.0.1:3130
+- Network:       http://127.0.0.1:3130
+✓ Ready in 0ms
+✓ Running next.config took 3ms
+PASS Administrador entra no ERP local com cookies HttpOnly
+PASS Cadastro cria acesso autorizado antes de solicitar convite ao SMTP local
+PASS Estado consultado distingue convite de senha e login ainda não confirmados
+PASS Reenvio imediato retorna espera sem gerar outra mensagem
+PASS Convite padrão abre em outro navegador, limpa tokens da URL e identifica a conta
+PASS Senhas divergentes são recusadas antes de chamar o servidor
+PASS Primeira senha é gravada no Supabase Auth e a sessão local é encerrada
+PASS Login confirmado e definição de senha aparecem no acompanhamento da unidade
+PASS Recuperação pública solicita mensagem sem criar sessão no navegador solicitante
+PASS Recuperação também funciona em um terceiro navegador sem o cookie de quem pediu
+PASS Nova senha substitui a anterior e não muda o perfil da unidade
+PASS Link consumido exibe orientação e não envia e-mail automaticamente
+PASS Origem forjada é recusada antes do envio e a configuração mostra apenas endereços públicos

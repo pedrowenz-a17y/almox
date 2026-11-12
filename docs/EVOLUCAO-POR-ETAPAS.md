@@ -7,8 +7,8 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | 1 | Aprovação independente das contagens de estoque | Implementada na versão 2.7.4; validação desta entrega em `artifacts/independent-inventory` |
 | 2 | Perfis de acesso por responsabilidade | Implementada na versão 2.8.0; modelos disponíveis para preparação pelo administrador na tela de Usuários |
 | 3 | Responsável por turno e responsável/prazo nas pendências | Implementada na versão 2.9.0; ativação depende da aplicação da migração no banco da instalação |
-| 4 | Convites, primeiro acesso e recuperação | Próxima etapa; melhorias na interface devem acompanhar a configuração do domínio e do provedor de e-mail |
-| 5 | Conciliação homologada com o ERP oficial | O CSV já existe; automatizar depende dos dados, do ERP e das regras disponibilizadas pela empresa |
+| 4 | Convites, primeiro acesso e recuperação | Implementada na versão 2.10.0, sem nova migração; domínio e SMTP dependem da configuração do projeto |
+| 5 | Conciliação homologada com o ERP oficial | Próxima etapa: o CSV já existe; automatizar depende dos dados, do ERP e das regras disponibilizadas pela empresa |
 
 ## Etapa 1 — aprovação independente de inventário
 
@@ -49,3 +49,7 @@ A versão 2.8.0 adiciona os modelos Almoxarife, Conferente, Comprador, Analista 
 ## Etapa 3 — responsabilidade no almoxarifado e na fila
 
 A versão 2.9.0 registra turnos por almoxarifado, passagem com aceite do indicado e responsáveis/prazos nas pendências, com verificação no servidor. O SQL foi validado em banco temporário; a ativação na instalação exige a migração. Veja [como ativar, usar e conferir os limites](TURNOS-E-PENDENCIAS-2.9.md).
+
+## Etapa 4 — convites, primeiro acesso e recuperação
+
+A versão 2.10.0 acompanha convites e confirmações por identidade/unidade, preserva o cadastro quando o envio não é confirmado e trata os retornos de convite e recuperação entre dispositivos. Não cria uma senha para outra pessoa nem altera permissões automaticamente. A configuração de Site URL, redirecionamentos e SMTP continua no projeto do provedor. Consulte [uso, configuração, limites e validação](PRIMEIRO-ACESSO-2.10.md).

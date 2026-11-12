@@ -23,7 +23,8 @@ export const POST = api(async request => {
   try {
     const user = await requireUser();
     await prisma.$transaction([
-      prisma.auditLog.create({ data: { userId: user.id, unitId: user.unitId, action: 'LOGIN', entity: 'User', entityId: user.id } }),
+      prisma.auditLog.create({ data: { userId: user.id, unitId: user.unitId, action: 'LOGIN', entity: 'User', entityId: user.id,
+        after: { authUserId: user.authUserId } } }),
       prisma.loginAttempt.deleteMany({ where: { key } }),
     ]);
   } catch (error) {

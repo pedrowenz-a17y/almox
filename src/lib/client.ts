@@ -145,6 +145,12 @@ export interface Audit {
   after?: unknown;
 }
 export interface ManagedUser {
+  authLinked?: boolean;
+  accessState?: import("@/lib/access-status").AccessState;
+  lastLoginAt?: string | null;
+  passwordDefinedAt?: string | null;
+  invitationAt?: string | null;
+  lastMailState?: "ACCEPTED" | "FAILED" | "UNCONFIRMED" | null;
   id: string;
   authUserId?: string | null;
   identityActive?: boolean;

@@ -53,6 +53,7 @@ export default function CatalogForm({
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState(String(record?.roleId || ""));
+  const [userCreationMode, setUserCreationMode] = useState("invite");
   const selectedRole = roles.find(role => role.id === selectedRoleId);
   const [imageUrl, setImageUrl] = useState(String(record?.imageUrl || ""));
   const [warehouseId, setWarehouseId] = useState(
@@ -174,12 +175,13 @@ export default function CatalogForm({
               required: true,
               wide: true,
             },
-            {
+            ...(userCreationMode === "existing" ? [{
               key: "authUserId",
-              label: "ID de identidade existente (opcional)",
+              label: "UUID da identidade confirmada",
+              required: true,
               wide: true,
-              placeholder: "UUID Supabase; deixe vazio para enviar convite",
-            },
+              placeholder: "Supabase → Authentication → Users → UID",
+            }] : []),
           ]
         : []),
       {
@@ -270,9 +272,13 @@ export default function CatalogForm({
           <div className="notice info">
             {record
               ? "O perfil e a situação de acesso valem apenas para a unidade selecionada. Nome e e-mail pertencem à identidade global."
-              : "Uma nova conta recebe um convite por e-mail para definir sua senha. Para uma identidade existente verificada, informe seu UUID."}
+              : userCreationMode === "existing" ? "Vincule uma identidade com e-mail confirmado no Supabase. O identificador deve corresponder ao e-mail; nenhum novo convite será enviado."
+              : "O acesso é cadastrado antes do envio. A pessoa define a própria senha pelo convite; se o e-mail não for confirmado pelo serviço, você poderá acompanhar e reenviar pela tela Acesso."}
           </div>
         )}
+        {entity === "users" && !record && <label className="user-creation-mode">Como esta pessoa vai acessar<select value={userCreationMode} onChange={event => setUserCreationMode(event.target.value)} disabled={busy}>
+          <option value="invite">Preparar acesso e enviar convite</option><option value="existing">Vincular identidade existente</option>
+        </select><small>Se a pessoa já está cadastrada no ERP em outra unidade, o vínculo existente será preservado.</small></label>}
         <div className="form-grid">
           {fields[entity].map((field) => (
             <label key={field.key} className={field.wide ? "span-2" : ""}>

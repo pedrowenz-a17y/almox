@@ -3,8 +3,12 @@ import { z } from 'zod';
 import { prisma } from '@/lib/db';
 import type { SessionUser } from '@/lib/auth';
 import { AppError } from '@/lib/http';
-import { appOrigin, authServiceUnavailable } from '@/lib/auth-config';
-import { supabaseAdmin } from '@/lib/supabase/admin';
+import { AuthConfigurationError, authServiceUnavailable } from '@/lib/auth-config';
+import { accessProvider, type AccessProvider } from '@/lib/access-provider';
+import { accessProgress } from '@/services/access-progress';
+import { assertActiveAccessManager } from '@/services/access-management';
+import { sendAccessEmail } from '@/services/access-emails';
+export { assertActiveAccessManager } from '@/services/access-management';
 
 const createInput = z.object({
   name: z.string().trim().min(2).max(160),
@@ -15,12 +19,11 @@ const updateInput = z.object({ roleId: z.string().uuid().optional(), active: z.b
 const membershipInclude = { user: { select: { id: true, name: true, email: true, active: true, authUserId: true } }, role: { select: { id: true, name: true } } } as const;
 type ManagedMembership = Prisma.UnitMembershipGetPayload<{ include: typeof membershipInclude }>;
 function visible(m: ManagedMembership) { return { id: m.userId, name: m.user.name, email: m.user.email, roleId: m.roleId, role: m.role, active: m.active, identityActive: m.user.active, authLinked: !!m.user.authUserId, unitId: m.unitId }; }
+type SavedAccess = ReturnType<typeof visible> & { accessNotice?: string; notification?: {
+  state: "REQUESTED" | "PENDING"; message: string; kind?: "INVITE" | "RECOVERY"; retryAfter?: number; code?: string;
+} };
 function authorize(actor: SessionUser) {
   if (!actor.unitId || !actor.permissions.includes('users:manage')) throw new AppError('Seu perfil não permite gerenciar usuários nesta unidade.', 403);
-}
-export async function assertActiveAccessManager(tx: Prisma.TransactionClient, actor: SessionUser) {
-  const membership = await tx.unitMembership.findUnique({ where: { userId_unitId: { userId: actor.id, unitId: actor.unitId } }, include: { user: true, unit: { include: { organization: true } }, role: { include: { permissions: { include: { permission: true } } } } } });
-  if (!membership?.active || !membership.user.active || !membership.unit.active || !membership.unit.organization.active || !membership.role.permissions.some(p => p.permission.key === 'users:manage')) throw new AppError('Seu acesso administrativo à unidade foi alterado. Entre novamente.', 403);
 }
 async function transaction<T>(work: (tx: Prisma.TransactionClient) => Promise<T>) {
   for (let i = 0; ; i++) {
@@ -31,16 +34,18 @@ async function transaction<T>(work: (tx: Prisma.TransactionClient) => Promise<T>
 export async function listUserAccess(actor: SessionUser) {
   authorize(actor);
   const records = await prisma.unitMembership.findMany({ where: { unitId: actor.unitId }, include: membershipInclude, orderBy: { user: { name: 'asc' } } });
-  return records.map(visible);
+  const progress = await accessProgress(records, actor.unitId);
+  return records.map(record => ({ ...visible(record), ...progress.get(record.userId) }));
 }
 export async function getUserAccess(actor: SessionUser, id: string) {
   authorize(actor); z.string().uuid().parse(id);
   const record = await prisma.unitMembership.findUnique({ where: { userId_unitId: { userId: id, unitId: actor.unitId } }, include: membershipInclude });
   if (!record) throw new AppError('Usuário não encontrado nesta unidade.', 404);
-  return visible(record);
+  const progress = await accessProgress([record], actor.unitId);
+  return { ...visible(record), ...progress.get(record.userId) };
 }
 
-export async function saveUserAccess(actor: SessionUser, input: unknown, id?: string) {
+export async function saveUserAccess(actor: SessionUser, input: unknown, id?: string, providerFactory: () => AccessProvider = accessProvider): Promise<SavedAccess> {
   authorize(actor);
   if (id) {
     z.string().uuid().parse(id);
@@ -64,52 +69,77 @@ export async function saveUserAccess(actor: SessionUser, input: unknown, id?: st
   }
   const data = createInput.parse(input);
   if (data.active === false && !actor.permissions.includes('records:delete')) throw new AppError('Seu perfil não pode criar acessos desativados.', 403);
+  // Revoked administrators must not create external identities or trigger mail.
+  await assertActiveAccessManager(prisma, actor);
   const [role, existing] = await Promise.all([
-    prisma.role.findUnique({ where: { id: data.roleId } }),
-    prisma.user.findUnique({ where: { email: data.email } }),
+    prisma.role.findUnique({ where: { id: data.roleId } }), prisma.user.findUnique({ where: { email: data.email } }),
   ]);
   if (!role) throw new AppError('Perfil de acesso inexistente.');
   if (existing && !existing.active) throw new AppError('Esta identidade está desativada globalmente. Procure o responsável pelo provisionamento.', 409);
-  const admin = supabaseAdmin();
-  let invitedId: string | undefined;
+  const provider = providerFactory();
+  let createdIdentityId: string | undefined;
   let authUserId = data.authUserId || existing?.authUserId || undefined;
   if (authUserId) {
-    const { data: identity, error } = await admin.auth.admin.getUserById(authUserId);
-    if (error || !identity.user || !identity.user.email_confirmed_at || identity.user.email?.toLowerCase() !== data.email) throw new AppError(authServiceUnavailable(error) ? 'O serviço de autenticação está indisponível.' : 'O identificador Supabase não corresponde ao e-mail informado.', authServiceUnavailable(error) ? 503 : 400);
+    const result = await provider.getIdentity(authUserId);
+    if (result.error || !result.user || result.user.id !== authUserId || result.user.email?.toLowerCase() !== data.email
+      || (data.authUserId && !result.user.email_confirmed_at))
+      throw new AppError(authServiceUnavailable(result.error) ? 'O serviço de autenticação está indisponível.'
+        : 'O identificador Supabase deve pertencer ao e-mail informado e a uma identidade confirmada.', authServiceUnavailable(result.error) ? 503 : 400);
   } else {
-    const { data: invitation, error } = await admin.auth.admin.inviteUserByEmail(data.email, { redirectTo: `${appOrigin()}/auth/callback?next=/recuperar-senha`, data: { name: data.name } });
-    if (error || !invitation.user) throw new AppError(authServiceUnavailable(error) ? 'O serviço de convites está indisponível.' : 'Não foi possível enviar o convite. Se a conta já existe no Supabase, informe seu identificador autorizado.', authServiceUnavailable(error) ? 503 : 409);
-    invitedId = invitation.user.id;
-    authUserId = invitation.user.id;
+    // Save the authorized ERP association before sending any message. A mail limit
+    // leaves a visible pending account instead of losing the registration.
+    const result = await provider.createIdentity(data.email, data.name);
+    if (result.error || !result.user || result.user.email?.toLowerCase() !== data.email) throw new AppError(
+      ['email_exists', 'user_already_exists'].includes(result.error?.code ?? '')
+        ? 'Esta identidade já existe no Supabase. Escolha Vincular identidade existente e informe seu UUID confirmado.'
+        : 'Não foi possível preparar a identidade de login. Confira o serviço de autenticação.',
+      authServiceUnavailable(result.error) ? 503 : 409, 'AUTH_IDENTITY_CREATION_FAILED');
+    createdIdentityId = result.user.id; authUserId = result.user.id;
   }
+  let result;
   try {
-    const result = await transaction(async tx => {
+    result = await transaction(async tx => {
       await assertActiveAccessManager(tx, actor);
       const byEmail = await tx.user.findUnique({ where: { email: data.email } });
       const byIdentity = await tx.user.findUnique({ where: { authUserId } });
-      if ((byEmail?.authUserId && byEmail.authUserId !== authUserId) || (byIdentity && byEmail && byIdentity.id !== byEmail.id) || (byIdentity && byIdentity.email !== data.email)) throw new AppError('A identidade já possui um vínculo diferente. O provisionamento deve ser revisado.', 409);
+      if ((byEmail?.authUserId && byEmail.authUserId !== authUserId) || (byIdentity && byEmail && byIdentity.id !== byEmail.id)
+        || (byIdentity && byIdentity.email !== data.email)) throw new AppError('A identidade já possui um vínculo diferente. O provisionamento deve ser revisado.', 409);
       const current = byIdentity || byEmail;
       if (current && !current.active) throw new AppError('Esta identidade está desativada globalmente.', 409);
-      const user = current ? await tx.user.update({ where: { id: current.id }, data: { authUserId } }) : await tx.user.create({ data: { name: data.name, email: data.email, authUserId, roleId: data.roleId } });
+      const user = current ? await tx.user.update({ where: { id: current.id }, data: { authUserId } })
+        : await tx.user.create({ data: { name: data.name, email: data.email, authUserId, roleId: data.roleId } });
       const membership = await tx.unitMembership.findUnique({ where: { userId_unitId: { userId: user.id, unitId: actor.unitId } }, include: membershipInclude });
       if (membership) {
         if (membership.roleId !== data.roleId || membership.active !== (data.active ?? true)) throw new AppError('O usuário já possui acesso à unidade. Use a edição para alterar o perfil.', 409);
         return visible(membership);
       }
       const created = await tx.unitMembership.create({ data: { userId: user.id, unitId: actor.unitId, roleId: data.roleId, active: data.active ?? true }, include: membershipInclude });
-      await tx.auditLog.create({ data: { unitId: actor.unitId, userId: actor.id, action: 'USER_ACCESS_CREATED', entity: 'UnitMembership', entityId: `${user.id}:${actor.unitId}`, after: { roleId: data.roleId, active: created.active, invitation: !!invitedId } } });
+      await tx.auditLog.create({ data: { unitId: actor.unitId, userId: actor.id, action: 'USER_ACCESS_CREATED', entity: 'UnitMembership',
+        entityId: `${user.id}:${actor.unitId}`, after: { roleId: data.roleId, active: created.active, authUserId: authUserId! } } });
       return visible(created);
     });
-    return result;
   } catch (error) {
-    if (invitedId) {
+    if (createdIdentityId) {
       try {
-        const linked = await prisma.user.findUnique({ where: { authUserId: invitedId }, select: { id: true } });
-        if (!linked) await admin.auth.admin.deleteUser(invitedId);
-      } catch { console.error('New invitation requires administrative reconciliation; no credentials were logged.'); }
+        const linked = await prisma.user.findUnique({ where: { authUserId: createdIdentityId }, select: { id: true } });
+        if (!linked) await provider.deleteIdentity(createdIdentityId);
+      } catch { console.error('AUTH_IDENTITY_RECONCILIATION_REQUIRED'); }
     }
     throw error;
   }
+  if (createdIdentityId && result.active) {
+    try {
+      const mail = await sendAccessEmail(actor, result.id, { authUserId }, () => provider);
+      return { ...result, notification: { state: 'REQUESTED' as const, ...mail }, accessNotice: `Acesso cadastrado. ${mail.message}` };
+    } catch (cause) {
+      const error = cause instanceof AppError || cause instanceof AuthConfigurationError ? cause.message : 'O envio não foi confirmado.';
+      return { ...result, notification: { state: 'PENDING' as const, message: error,
+        ...(cause instanceof AppError ? { code: cause.code, retryAfter: cause.retryAfter } : {}) },
+        accessNotice: `Acesso cadastrado; o envio do convite não foi confirmado. ${error} Acompanhe pelo botão Acesso do usuário.` };
+    }
+  }
+  return { ...result, accessNotice: result.active ? 'Acesso à unidade salvo. A identidade existente foi preservada; nenhum novo e-mail foi solicitado.'
+    : 'Acesso salvo como desativado. Nenhum convite foi solicitado.' };
 }
 
 export async function archiveUserAccess(actor: SessionUser, id: string) {

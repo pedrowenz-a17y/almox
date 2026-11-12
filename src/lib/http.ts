@@ -4,7 +4,7 @@ import { ZodError } from 'zod';
 import { allowedOrigins, AuthConfigurationError } from '@/lib/auth-config';
 
 export class AppError extends Error {
-  constructor(message: string, public status = 400, public code?: string) { super(message); this.name = 'AppError'; }
+  constructor(message: string, public status = 400, public code?: string, public retryAfter?: number) { super(message); this.name = 'AppError'; }
 }
 
 export function assertOrigin(request: Request) {
@@ -16,7 +16,9 @@ export function assertOrigin(request: Request) {
 type RouteContext = { params: Promise<Record<string, string>> };
 type Handler = (request: NextRequest, context: RouteContext) => Promise<Response>;
 function errorResponse(error: unknown): Response {
-  if (error instanceof AppError) return NextResponse.json({ error: error.message, ...(error.code ? { code: error.code } : {}) }, { status: error.status });
+  if (error instanceof AppError) return NextResponse.json({ error: error.message, ...(error.code ? { code: error.code } : {}),
+    ...(error.retryAfter ? { retryAfter: error.retryAfter } : {}) }, { status: error.status,
+    ...(error.retryAfter ? { headers: { 'Retry-After': String(error.retryAfter) } } : {}) });
   if (error instanceof AuthConfigurationError) return NextResponse.json({ error: error.message, code: 'AUTH_CONFIGURATION' }, { status: 503 });
   if (error instanceof ZodError) { const issue = error.issues[0]; return NextResponse.json({ error: `${issue?.path.join('.') || 'Dados'}: ${issue?.message || 'inválidos'}` }, { status: 400 }); }
   if (error instanceof SyntaxError) return NextResponse.json({ error: 'JSON inválido.' }, { status: 400 });

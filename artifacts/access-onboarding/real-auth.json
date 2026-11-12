@@ -1,0 +1,72 @@
+{
+  "scope": "Isolated local PostgreSQL, official Supabase Auth and local SMTP capture; no external recipients or production accounts.",
+  "provider": "supabase/gotrue:v2.185.0",
+  "checks": [
+    {
+      "name": "Administrador entra no ERP local com cookies HttpOnly",
+      "passed": true,
+      "durationMs": 321
+    },
+    {
+      "name": "Cadastro cria acesso autorizado antes de solicitar convite ao SMTP local",
+      "passed": true,
+      "durationMs": 322
+    },
+    {
+      "name": "Estado consultado distingue convite de senha e login ainda não confirmados",
+      "passed": true,
+      "durationMs": 200
+    },
+    {
+      "name": "Reenvio imediato retorna espera sem gerar outra mensagem",
+      "passed": true,
+      "durationMs": 89
+    },
+    {
+      "name": "Convite padrão abre em outro navegador, limpa tokens da URL e identifica a conta",
+      "passed": true,
+      "durationMs": 2189
+    },
+    {
+      "name": "Senhas divergentes são recusadas antes de chamar o servidor",
+      "passed": true,
+      "durationMs": 1007
+    },
+    {
+      "name": "Primeira senha é gravada no Supabase Auth e a sessão local é encerrada",
+      "passed": true,
+      "durationMs": 1036
+    },
+    {
+      "name": "Login confirmado e definição de senha aparecem no acompanhamento da unidade",
+      "passed": true,
+      "durationMs": 159
+    },
+    {
+      "name": "Recuperação pública solicita mensagem sem criar sessão no navegador solicitante",
+      "passed": true,
+      "durationMs": 59
+    },
+    {
+      "name": "Recuperação também funciona em um terceiro navegador sem o cookie de quem pediu",
+      "passed": true,
+      "durationMs": 1903
+    },
+    {
+      "name": "Nova senha substitui a anterior e não muda o perfil da unidade",
+      "passed": true,
+      "durationMs": 2273
+    },
+    {
+      "name": "Link consumido exibe orientação e não envia e-mail automaticamente",
+      "passed": true,
+      "durationMs": 1128
+    },
+    {
+      "name": "Origem forjada é recusada antes do envio e a configuração mostra apenas endereços públicos",
+      "passed": true,
+      "durationMs": 99
+    }
+  ],
+  "result": "passed"
+}
