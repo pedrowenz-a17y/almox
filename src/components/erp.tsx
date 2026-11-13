@@ -1668,7 +1668,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         </>
       );
     if (route === "/relatorios")
-      return canViewReports(permissions) ? <Reports data={data} /> : <Denied />;
+      return canViewReports(permissions) ? <Reports key={user?.unitId} data={data} /> : <Denied />;
     if (route === "/usuarios")
       return can("users:manage") ? (
         <>

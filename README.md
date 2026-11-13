@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.11.0
+# Almox ERP · U.C.A. — versão 2.12.0
+
+**Versão 2.12.0:** indicadores por unidade e período, roteiro de sete etapas com evidências, histórico e relatório imprimível para o TCC. Demonstração e piloto são identificados; não há conclusão automática sobre a eficácia do sistema. Sem novo SQL. [Usar a etapa 6](docs/VALIDACAO-E-INDICADORES-2.12.md).
 
 **Versão 2.11.0:** conferência por CSV com associação de colunas, reconhecimento de exportações repetidas, revisão por outra pessoa e análise das diferenças. Histórico e custos por ordem preservados. Sem novo SQL; a homologação e a conexão automática com o ERP dependem dos dados e critérios da empresa. [Usar a etapa 5](docs/CONCILIACAO-ERP-2.11.md).
 

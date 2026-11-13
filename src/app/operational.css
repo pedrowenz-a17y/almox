@@ -251,3 +251,57 @@
   .recon-analysis, .recon-review-form, .recon-receipt { padding: 14px; }
   .recon-document-actions .button { width: 100%; justify-content: center; }
 }
+
+/* Validation and evidence: period observations and current pending work stay separate. */
+.validation-workspace { display: grid; gap: 20px; min-width: 0; }
+.validation-filter { padding: 18px; display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
+.validation-filter label { display: grid; gap: 7px; font-size: 13px; }
+.validation-caption { display: grid; gap: 6px; font-size: 13px; }
+.validation-caption span, .validation-caption small, .validation-footnote { color: var(--muted); }
+.validation-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.validation-metrics article { padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.validation-metrics h2 { margin: 0; font-size: 13px; font-weight: 500; }
+.validation-metrics article > strong { display: block; font-size: 30px; margin: 14px 0; color: var(--theme-link); font-variant-numeric: tabular-nums; }
+.validation-metrics p, .validation-metrics small, .validation-pending > p { color: var(--muted); font-size: 12px; line-height: 1.7; }
+.validation-pending { padding: 20px; }
+.validation-pending h2 { font-size: 17px; margin: 0 0 8px; }
+.validation-pending dl { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 0; }
+.validation-pending dt { font-size: 12px; color: var(--muted); }
+.validation-pending dd { margin: 6px 0 0; font-size: 23px; font-weight: 600; }
+.validation-definitions { padding: 16px 20px; font-size: 13px; line-height: 1.7; }
+.validation-definitions summary { cursor: pointer; font-weight: 600; }
+.validation-definitions p { color: var(--muted); }
+.validation-footnote { font-size: 12px; line-height: 1.7; padding: 0 20px 18px; margin: 0; }
+.validation-form fieldset { display: grid; gap: 16px; border: 0; min-width: 0; margin: 0; padding: 0; }
+.validation-form label { display: grid; gap: 7px; font-size: 13px; }
+.validation-form textarea { width: 100%; resize: vertical; min-height: 85px; }
+.validation-form p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.validation-document { padding: 20px; display: grid; gap: 20px; min-width: 0; }
+.validation-document > small { color: var(--muted); }
+.validation-document-heading { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.validation-document-heading .text-button { display: inline-flex; gap: 6px; align-items: center; }
+.validation-prose { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; margin: 0; }
+.validation-evidence { padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-muted); font-size: 13px; line-height: 1.7; }
+.validation-evidence summary { cursor: pointer; font-weight: 600; }
+.validation-evidence small { color: var(--muted); }
+.validation-steps { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.validation-steps li { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.validation-steps summary { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.validation-steps p { font-size: 13px; line-height: 1.7; }
+.validation-steps .text-button { margin-top: 12px; }
+.validation-run-table td small { display: block; color: var(--muted); margin-top: 6px; }
+@media(max-width:640px) {
+ .validation-metrics { grid-template-columns: minmax(0,1fr); }
+ .validation-filter > label { flex: 1 1 100%; }
+ .validation-document { padding: 16px; }
+ .validation-run-table { display: block; min-width: 0 !important; width: 100%; }
+ .validation-run-table thead { display:none; }
+ .validation-run-table tbody { display: grid; gap: 12px; }
+ .validation-run-table tr { display:grid; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+ .validation-run-table td { white-space:normal; overflow-wrap:anywhere; border:0; }
+ .validation-run-table td + td { border-top:1px solid var(--border); }
+ .validation-run-table td[data-label]::before { content: attr(data-label); display:block; color:var(--muted); font-size:11px; margin-bottom:6px; }
+ .reports-workspace .segmented { max-width:100%; }
+}
+@media print { .validation-metrics article, .validation-pending { break-inside: avoid; } }
+@media(min-width:641px) { .reports-workspace .segmented { width:auto; } .reports-workspace .segmented > button { white-space:nowrap; } }

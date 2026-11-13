@@ -1,7 +1,7 @@
 {
-  "version": "2.11.0",
-  "revision": "erp-reconciliation-independent-review-stage-5",
-  "generatedAt": "2026-11-13T10:56:44.535684+00:00",
+  "version": "2.12.0",
+  "revision": "validation-and-evidence-stage-6",
+  "generatedAt": "2026-11-13T11:25:57.175763+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 27320,
-      "sha256": "c558f1b8f13225e645486e08e22516b6c0b8d114068fbccb58b97605d5b7ea2a"
+      "bytes": 27641,
+      "sha256": "663c8e467dc67380cb7ccfee2ee3db49ffafd13e8391d7b5996d610a3c9d03fa"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -1614,6 +1614,66 @@
       "sha256": "6cb493c5a0f6c65c57d1a7f5e3989018912e513e4b082e33058e7c5b3bb41976"
     },
     {
+      "path": "artifacts/validation-pilot/README.md",
+      "bytes": 1609,
+      "sha256": "498d319e124946705f003824de687cb15e95093c4782ca3d7537f24ad297ac25"
+    },
+    {
+      "path": "artifacts/validation-pilot/build.log",
+      "bytes": 3106,
+      "sha256": "44030a58000b8e0d9f58f6c84e375b40026e9c126a62516231e18f5bd36b919c"
+    },
+    {
+      "path": "artifacts/validation-pilot/checks.json",
+      "bytes": 10407,
+      "sha256": "d7ced8073ece5246e9786bd603e5045c20f430b317021fa1e1e4307278457319"
+    },
+    {
+      "path": "artifacts/validation-pilot/indicadores-desktop-dark.png",
+      "bytes": 177525,
+      "sha256": "5d198fe7fff9270d30f6792a4e5b5aea774f9394e4ae73e70fece99f28a9ddde"
+    },
+    {
+      "path": "artifacts/validation-pilot/indicadores-desktop-light.png",
+      "bytes": 167538,
+      "sha256": "721b962e2760380fa8239573999337f929e418d257433467f75f2fdff701fe4a"
+    },
+    {
+      "path": "artifacts/validation-pilot/interface.log",
+      "bytes": 6613,
+      "sha256": "84d732a1baa086a2db3bc93c471a80dfb8962f6b5a69ca3bec55c3a20c1897e4"
+    },
+    {
+      "path": "artifacts/validation-pilot/lint.log",
+      "bytes": 36,
+      "sha256": "6fa6746ec5415e648ecf537aa42ae8068d31e3320378a6c14845adb241e1010b"
+    },
+    {
+      "path": "artifacts/validation-pilot/roteiro-dark-320.png",
+      "bytes": 45148,
+      "sha256": "5e896fed19f7c711a8df2a9532b89deeda1592af9cc4db92650d4bf96faeb5c4"
+    },
+    {
+      "path": "artifacts/validation-pilot/roteiro-dark-390.png",
+      "bytes": 49383,
+      "sha256": "f211c6dd4de1e471a1080ee538d7f357b7c907ef8de94b81edd1d91aff0857fa"
+    },
+    {
+      "path": "artifacts/validation-pilot/roteiro-desktop-dark.png",
+      "bytes": 80681,
+      "sha256": "5eadc8d4c9e7e48f4c729bbbc3bc71a2d4751ed97927f4c3b9204ebd9bd6611c"
+    },
+    {
+      "path": "artifacts/validation-pilot/tests.log",
+      "bytes": 30207,
+      "sha256": "ecc7f800ffa7a7cc472b6649fac078d9ab1ff276a149270089f10b21bc1fd025"
+    },
+    {
+      "path": "artifacts/validation-pilot/typecheck.log",
+      "bytes": 45,
+      "sha256": "46aa9d69f77b5a0e57984b0230b06e49038f3e405fc160b71d48944f1591b174"
+    },
+    {
       "path": "artifacts/welcome-2.2.2/abertura.gif",
       "bytes": 20124300,
       "sha256": "411cdd354e4d30f50fbdb55adb92e9edb4543aeb193d2412e344efb0aaed02f5"
@@ -1830,8 +1890,8 @@
     },
     {
       "path": "docs/AUDITORIA-ERP-2026-11-12.md",
-      "bytes": 14362,
-      "sha256": "1b143e7cc9ec7964227a544f62b53900b3d294bf6cd206ecccf3991f130e1ff1"
+      "bytes": 14544,
+      "sha256": "bd05979eeea23b918a0e3db291be6c7de9f873b363795cf145031f9caac816e5"
     },
     {
       "path": "docs/AUDIT_2026-10.md",
@@ -1870,8 +1930,8 @@
     },
     {
       "path": "docs/EVOLUCAO-POR-ETAPAS.md",
-      "bytes": 6996,
-      "sha256": "d22b34085f2f1e758a909f2e303c6a4477157557624592df8e0b1f55b69a96b6"
+      "bytes": 7700,
+      "sha256": "d6cc121ab311150c2fae1d8d891d4e9ff6e4f3733012b549904cbdb065629b17"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
@@ -1942,6 +2002,11 @@
       "path": "docs/TURNOS-E-PENDENCIAS-2.9.md",
       "bytes": 8880,
       "sha256": "6091b0195a45a21d7220365e2be923807f9bd6857f87bc426f9b91568faa1192"
+    },
+    {
+      "path": "docs/VALIDACAO-E-INDICADORES-2.12.md",
+      "bytes": 8684,
+      "sha256": "b67258a5a41c2c20b17a77d657e0b7a3785850c5906d1bc61271a3368536799a"
     },
     {
       "path": "docs/VALIDATION-LEGACY.md",
@@ -2096,12 +2161,12 @@
     {
       "path": "package-lock.json",
       "bytes": 302112,
-      "sha256": "fee5b9d89cdce0de2470a47b4600a2d6f4553df3dc16eedc4ef12591cb263e48"
+      "sha256": "9cc349f16b82192fb89e536b7e98ccd3d82897ff4943126230f6a10cdbbea725"
     },
     {
       "path": "package.json",
-      "bytes": 3175,
-      "sha256": "e395d0ceeae570184ad550aeceeffbca62653e297ab3691a0aa1d843e1a6a7a0"
+      "bytes": 3252,
+      "sha256": "d4bbd94a5063bdd497a7239af9785a0878af4cd2b6eb0dc2664355f4ba04e375"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -2274,6 +2339,11 @@
       "sha256": "7b568a9a644434c4cc35ea953e49d3e367839dcad70ae953c4eda2c93f277286"
     },
     {
+      "path": "scripts/fixtures/validation-pilot-checks.mjs",
+      "bytes": 13925,
+      "sha256": "899930cc70787fce4f178a42697a0e7c1c102f866db7d5fb0a391df9c1785d56"
+    },
+    {
       "path": "scripts/local-db.mjs",
       "bytes": 290,
       "sha256": "f7874075b94de902e0b10bde03c49a58d95e4d508871abc37dbe325620135c40"
@@ -2365,8 +2435,8 @@
     },
     {
       "path": "scripts/verify-theme.mjs",
-      "bytes": 19809,
-      "sha256": "ad06474c1b07b2eea196f95330a4e803bc5ce77e0c7e4b60d041d76b6344ec83"
+      "bytes": 20277,
+      "sha256": "ecc1a781d0e2122ba9e1f68a347aa05ee9ef4d65ca45d650d49092482e36da71"
     },
     {
       "path": "src/app/(workspace)/[[...slug]]/page.tsx",
@@ -2639,6 +2709,21 @@
       "sha256": "ce7b790ad73fce13f311e24915ccfadbb20ec978bbd5e89648e8421ed51e8ac5"
     },
     {
+      "path": "src/app/api/validation/[id]/route.ts",
+      "bytes": 690,
+      "sha256": "82f624122592018a5bdb91e38811eb33c8a9664c971143334d88c70d7f1a36f3"
+    },
+    {
+      "path": "src/app/api/validation/indicators/route.ts",
+      "bytes": 369,
+      "sha256": "94ca9997e97682f2211134448d842d6c0c9d0728513490bd8a0bd191d47996fe"
+    },
+    {
+      "path": "src/app/api/validation/route.ts",
+      "bytes": 615,
+      "sha256": "827b2ca9fbe98441f24d289329ee2b15a6fa145b4e59c84dc8ed3574238e50e6"
+    },
+    {
       "path": "src/app/api/warehouse-shifts/route.ts",
       "bytes": 439,
       "sha256": "33da617284667cbeff7f71c07b122149e5d65c4e1ae6029b913bd63f50fb856a"
@@ -2705,8 +2790,8 @@
     },
     {
       "path": "src/app/operational.css",
-      "bytes": 16922,
-      "sha256": "e5de3eed8fbfc7690662ecfa0582555d5d5723a7c1e24b2f567b988fa3bb4adb"
+      "bytes": 21281,
+      "sha256": "7bd2cd1e6c6104fa984cee3bc38ad7837edc68ebe912d9ca5d4b9e0d20dfe606"
     },
     {
       "path": "src/app/primeiro-acesso/page.tsx",
@@ -2780,8 +2865,8 @@
     },
     {
       "path": "src/components/erp.tsx",
-      "bytes": 93629,
-      "sha256": "001bdcac3ad4b9142a20ec9fa314fd3e84d9e7139c03db16d1fa643783e9032c"
+      "bytes": 93648,
+      "sha256": "5bff9ddb9516ab76755a3abf792337c21a942520073cb1836b0b2489d4dec465"
     },
     {
       "path": "src/components/inventory-form.tsx",
@@ -2870,13 +2955,18 @@
     },
     {
       "path": "src/components/reports.tsx",
-      "bytes": 9967,
-      "sha256": "b2e766a3ba00d5c655e5ad81b8fe717370e0f71cf6ddd9b193f59ea038d022c2"
+      "bytes": 1207,
+      "sha256": "c31ec8069c1071932714c6349e08b10ad3a9aa1e27fa63f2cae1648a1e919f26"
     },
     {
       "path": "src/components/scanner.tsx",
       "bytes": 10402,
       "sha256": "5d3482135aebe6790bdeda8e28b69061393b941d82e2d05445c95a5b21505037"
+    },
+    {
+      "path": "src/components/stock-reports.tsx",
+      "bytes": 9967,
+      "sha256": "b2e766a3ba00d5c655e5ad81b8fe717370e0f71cf6ddd9b193f59ea038d022c2"
     },
     {
       "path": "src/components/theme-preferences.tsx",
@@ -2892,6 +2982,11 @@
       "path": "src/components/user-access.tsx",
       "bytes": 12379,
       "sha256": "f6c12f4d197fb82e94a94a7b5dfc857bb27a1e34ca2c91e15abb2d1d9ae610db"
+    },
+    {
+      "path": "src/components/validation-dashboard.tsx",
+      "bytes": 32249,
+      "sha256": "aada78e08efa79e6bb43188a8fbf0a56f95148d75c962026ebb9f2f3722e69a0"
     },
     {
       "path": "src/components/warehouse-shifts.tsx",
@@ -3044,6 +3139,16 @@
       "sha256": "9084896dd8bc3b6958780747a258f6d486ec441ea29689072824493afde511cb"
     },
     {
+      "path": "src/lib/validation-export.ts",
+      "bytes": 4389,
+      "sha256": "8ef439438f7e9533ee12e781fa12ed0223e50c290d6663ca1f42e776c201ec67"
+    },
+    {
+      "path": "src/lib/validation-plan.ts",
+      "bytes": 3116,
+      "sha256": "01b8ab83f01107b89237271d31fc959d4ed8478df8e60c83e961d01540b9034b"
+    },
+    {
       "path": "src/lib/workspace-navigation.ts",
       "bytes": 1076,
       "sha256": "3ded8902b55eafab353a58b102612142be386cea245c687b30187b9e162b569a"
@@ -3187,6 +3292,11 @@
       "path": "src/services/user-access.ts",
       "bytes": 11235,
       "sha256": "a5334614d70c316e03bd326388dab40f51a6dfc45f484ca739ed4ce22282cb15"
+    },
+    {
+      "path": "src/services/validation-report.ts",
+      "bytes": 17781,
+      "sha256": "7b730b4c90cb9aa565e100cad4f64576bd08236276b72405387c86a0004d8e57"
     },
     {
       "path": "src/services/warehouse-shifts.ts",
@@ -3347,6 +3457,11 @@
       "path": "tests/validation-limits.test.ts",
       "bytes": 1282,
       "sha256": "fd061f9a4d6a89c9f04fd06018a76dc934bf29716debaa01e4c18666db7c8579"
+    },
+    {
+      "path": "tests/validation.integration.test.ts",
+      "bytes": 17945,
+      "sha256": "3561f93cf3ead4a82f28e9b9720ddb9d5a3ad69740735b6a02d37396b7a918c2"
     },
     {
       "path": "tests/workspace-features.test.ts",

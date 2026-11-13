@@ -9,6 +9,7 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | 3 | Responsável por turno e responsável/prazo nas pendências | Implementada na versão 2.9.0; ativação depende da aplicação da migração no banco da instalação |
 | 4 | Convites, primeiro acesso e recuperação | Implementada na versão 2.10.0, sem nova migração; domínio e SMTP dependem da configuração do projeto |
 | 5 | Conciliação com revisão e preparação para homologação com o ERP oficial | Fluxo implementado na versão 2.11.0, sem novo SQL; homologação pela empresa e conexão automática dependem de dados, sistema e critérios reais |
+| 6 | Validação do processo e indicadores | Implementada na versão 2.12.0, sem novo SQL; a execução e a avaliação com a empresa dependem de observações e evidências reais |
 
 ## Etapa 1 — aprovação independente de inventário
 
@@ -57,3 +58,7 @@ A versão 2.10.0 acompanha convites e confirmações por identidade/unidade, pre
 ## Etapa 5 — conferência com o ERP
 
 A versão 2.11.0 associa colunas de exportações, reconhece arquivos repetidos, registra análises por diferença e exige outra pessoa autorizada para concluir a revisão. Consultas posteriores preservam os documentos anteriores. O fluxo está pronto para testes com a empresa; a homologação e a integração automática ainda exigem dados e critérios reais. Consulte [como conferir, revisar e validar os limites](CONCILIACAO-ERP-2.11.md).
+
+## Etapa 6 — validar e documentar o processo
+
+A versão 2.12.0 mede os registros por unidade e período, preserva o retrato de abertura de cada roteiro e registra resultados e evidências nas sete etapas do fluxo. Há distinção entre demonstração e piloto, histórico de alterações e relatório imprimível. A conclusão é relatada por pessoas; a homologação com a empresa e a comprovação de melhoria ainda exigem coleta real comparável. Consulte [uso, roteiro e limites](VALIDACAO-E-INDICADORES-2.12.md).
