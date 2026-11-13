@@ -1,0 +1,111 @@
+
+> almox-erp@2.14.0 build
+> prisma generate && next build
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 715ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 24ms
+- Experiments (use with caution):
+  ⨯ useTypeScriptCli
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1601ms
+  Running TypeScript ...
+  Finished TypeScript in 15.6s ...
+  Collecting page data using 4 workers ...
+  Generating static pages using 4 workers (0/50) ...
+  Generating static pages using 4 workers (12/50)
+  Generating static pages using 4 workers (24/50)
+  Generating static pages using 4 workers (37/50)
+✓ Generating static pages using 4 workers (50/50) in 466ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /_not-found
+├ ƒ /[[...slug]]
+├ ƒ /acesso-invalido
+├ ƒ /api/access-profiles
+├ ƒ /api/alerts
+├ ƒ /api/alerts/history
+├ ƒ /api/alerts/read
+├ ƒ /api/assistant
+├ ƒ /api/auth/complete-link
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/password-context
+├ ƒ /api/auth/recover
+├ ƒ /api/auth/update-password
+├ ƒ /api/catalog/[entity]
+├ ƒ /api/catalog/[entity]/[id]
+├ ƒ /api/data
+├ ƒ /api/delivery-receipts
+├ ƒ /api/delivery-receipts/[id]
+├ ƒ /api/delivery-receipts/candidates
+├ ƒ /api/desktop-health
+├ ƒ /api/files/[id]
+├ ƒ /api/health
+├ ƒ /api/inventory
+├ ƒ /api/inventory-schedules
+├ ƒ /api/inventory-schedules/[id]
+├ ƒ /api/inventory/[id]
+├ ƒ /api/inventory/[id]/approve
+├ ƒ /api/inventory/[id]/reject
+├ ƒ /api/me
+├ ƒ /api/movements
+├ ƒ /api/operational-pending
+├ ƒ /api/operational-pending/assignment
+├ ƒ /api/operational-pending/people
+├ ƒ /api/operations-setup
+├ ƒ /api/order-costs
+├ ƒ /api/orders
+├ ƒ /api/orders/[id]
+├ ƒ /api/orders/[id]/actions
+├ ƒ /api/products/[id]/qr
+├ ƒ /api/purchases
+├ ƒ /api/purchases/[id]
+├ ƒ /api/purchases/[id]/cancel
+├ ƒ /api/purchases/[id]/receive
+├ ƒ /api/qr/[id]
+├ ƒ /api/reconciliation
+├ ƒ /api/reconciliation/[id]
+├ ƒ /api/reconciliation/[id]/recheck
+├ ƒ /api/reconciliation/[id]/review
+├ ƒ /api/reconciliation/preview
+├ ƒ /api/reconciliation/setup
+├ ƒ /api/replenishment
+├ ƒ /api/reports
+├ ƒ /api/resolve
+├ ƒ /api/search
+├ ƒ /api/settings
+├ ƒ /api/unit
+├ ƒ /api/upload
+├ ƒ /api/user-access/[id]
+├ ƒ /api/user-access/setup
+├ ƒ /api/validation
+├ ƒ /api/validation/[id]
+├ ƒ /api/validation/indicators
+├ ƒ /api/warehouse-shifts
+├ ƒ /auth/callback
+├ ƒ /auth/confirm
+├ ○ /auth/retorno
+├ ○ /esqueci-senha
+├ ○ /instalar
+├ ○ /login
+├ ○ /primeiro-acesso
+└ ○ /recuperar-senha
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

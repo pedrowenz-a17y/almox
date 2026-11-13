@@ -2,6 +2,7 @@
 import { canActOnOrder } from "@/lib/access-profiles";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Plus, RefreshCw } from "lucide-react";
+import Link from "@/components/workspace-link";
 import { api, DataSet, dateTime, locationPath, qty } from "@/lib/client";
 import { Badge, Empty, Loading, Modal } from "@/components/ui";
 
@@ -52,6 +53,7 @@ interface Order {
     user?: { name: string };
     metadata?: {
       handoff?: {
+        receivedByUserId?: string;
         deliveredByName?: string;
         receivedByName: string;
         receivedByIdentifier: string;
@@ -88,6 +90,11 @@ const stateLabels = {
   CANCELLED: "Cancelada",
 };
 const eventLabels: Record<string, string> = {
+  DELIVERY_CONFIRMED: "Recebimento confirmado pelo destinatário",
+  DELIVERY_DISPUTED: "Divergência informada pelo destinatário",
+  DELIVERY_TREATMENT_PROPOSED: "Tratamento da divergência proposto",
+  DELIVERY_TREATMENT_ACCEPTED: "Tratamento aceito pelo destinatário",
+  DELIVERY_TREATMENT_REJECTED: "Tratamento devolvido para revisão",
   CREATED: "Ordem criada",
   REQUESTED: "Material requisitado",
   RESERVED: "Material reservado",
@@ -525,6 +532,17 @@ export default function Orders({
                             } · {event.metadata.handoff.receivedByIdentifier}
                             <br />
                             Identificação declarada pelo operador
+                            <br />
+                            {event.metadata.handoff.receivedByUserId
+                              ? "Conta vinculada para resposta independente."
+                              : "Sem conta vinculada para confirmação."}
+                            <br />
+                            <Link
+                              href={`/recebimentos?entrega=${encodeURIComponent(event.id)}`}
+                              className="text-button"
+                            >
+                              Acompanhar recebimento
+                            </Link>
                           </small>
                         )}
                         {event.metadata?.returnReceipt && (
@@ -854,6 +872,30 @@ function ActionForm({
   > | null>(null);
   const [draft, setDraft] = useState<Record<string, FormDataEntryValue>>({});
   const [productId, setProductId] = useState("");
+  const [recipientMode, setRecipientMode] = useState("ACCOUNT");
+  const [recipients, setRecipients] = useState<{
+    people: { id: string; name: string }[];
+    truncated: boolean;
+  } | null>(null);
+  const [recipientError, setRecipientError] = useState("");
+  useEffect(() => {
+    if (action.type !== "APPLY") return;
+    const controller = new AbortController();
+    void api<{ people: { id: string; name: string }[]; truncated: boolean }>(
+      "/api/delivery-receipts/candidates",
+      { signal: controller.signal },
+    )
+      .then((result) => {
+        if (!controller.signal.aborted) setRecipients(result);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setRecipientError(
+            "Não foi possível consultar as contas desta unidade. Reabra a entrega para tentar novamente.",
+          );
+      });
+    return () => controller.abort();
+  }, [action.type]);
   const product = data.products.find((product) => product.id === productId);
   const quantityAction = !["INVOICE", "CANCEL"].includes(action.type);
   const limit = action.material
@@ -914,6 +956,16 @@ function ActionForm({
           const values = Object.fromEntries(
             new FormData(event.currentTarget).entries(),
           );
+          if (
+            action.type === "APPLY" &&
+            recipientMode === "ACCOUNT" &&
+            !values.recipientUserId
+          ) {
+            setError(
+              "Selecione a conta do destinatário antes de conferir a entrega.",
+            );
+            return;
+          }
           setDraft(values);
           setReview(values);
         }}
@@ -952,6 +1004,19 @@ function ActionForm({
                 <p>
                   Retirou: <strong>{String(review.receivedByName)}</strong> ·{" "}
                   {String(review.receivedByIdentifier)}
+                </p>
+              )}
+              {review.recipientUserId && (
+                <p>
+                  Destinatário:{" "}
+                  <strong>
+                    {
+                      recipients?.people.find(
+                        (person) => person.id === review.recipientUserId,
+                      )?.name
+                    }
+                  </strong>
+                  . A confirmação será feita depois, na conta indicada.
                 </p>
               )}
               {review.returnedByName && (
@@ -1095,7 +1160,74 @@ function ActionForm({
                 entrega no momento da retirada.
               </div>
             )}
-            {["APPLY", "RETURN"].includes(action.type) && (
+            {action.type === "APPLY" && (
+              <>
+                <label>
+                  Identificação do destinatário
+                  <select
+                    aria-label="Identificação do destinatário"
+                    value={recipientMode}
+                    onChange={(event) => setRecipientMode(event.target.value)}
+                  >
+                    <option value="ACCOUNT">
+                      Conta do ERP — confirmação pelo destinatário
+                    </option>
+                    <option value="DECLARED">
+                      Pessoa sem conta — identificação declarada
+                    </option>
+                  </select>
+                </label>
+                {recipientMode === "ACCOUNT" && (
+                  <>
+                    <label>
+                      Conta de quem recebeu
+                      <select
+                        name="recipientUserId"
+                        aria-label="Conta de quem recebeu"
+                        required
+                        defaultValue={String(draft.recipientUserId ?? "")}
+                        disabled={!recipients}
+                      >
+                        <option value="">
+                          {recipients
+                            ? "Selecione a pessoa"
+                            : "Consultando contas…"}
+                        </option>
+                        {recipients?.people.map((person) => (
+                          <option key={person.id} value={person.id}>
+                            {person.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    {recipientError && (
+                      <div className="notice warning">{recipientError}</div>
+                    )}
+                    {recipients && !recipients.people.length && (
+                      <p className="workflow-help">
+                        Nenhuma outra conta ativa com login vinculada nesta
+                        unidade. Confira os acessos em Usuários ou registre a
+                        identificação declarada, quando a pessoa não tiver
+                        conta.
+                      </p>
+                    )}
+                    {recipients?.truncated && (
+                      <p className="workflow-help">
+                        Exibindo as primeiras mil contas. Consulte o
+                        administrador se a pessoa não aparecer.
+                      </p>
+                    )}
+                    <p className="workflow-help">
+                      Você registra a entrega; a pessoa indicada confirma na
+                      própria conta, em Recebimentos. Selecionar uma conta ainda
+                      não confirma o recebimento.
+                    </p>
+                  </>
+                )}
+              </>
+            )}
+            {(action.type === "RETURN" ||
+              (action.type === "APPLY" && recipientMode === "DECLARED")) && (
               <>
                 <label>
                   {action.type === "APPLY"

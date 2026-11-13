@@ -11,6 +11,7 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | 5 | Conciliação com revisão e preparação para homologação com o ERP oficial | Fluxo implementado na versão 2.11.0, sem novo SQL; homologação pela empresa e conexão automática dependem de dados, sistema e critérios reais |
 | 6 | Validação do processo e indicadores | Implementada na versão 2.12.0, sem novo SQL; a execução e a avaliação com a empresa dependem de observações e evidências reais |
 | 7 | Central de alertas operacionais | Implementada na versão 2.13.0, com leitura individual e consulta da origem; avisos dentro do app, sem novo SQL |
+| 8 | Confirmação independente de recebimento | Implementada na versão 2.14.0, com destinatário autenticado, divergência e aceite do tratamento; sem novo SQL ou baixa duplicada |
 
 ## Etapa 1 — aprovação independente de inventário
 
@@ -67,3 +68,7 @@ A versão 2.12.0 mede os registros por unidade e período, preserva o retrato de
 ## Etapa 7 — acompanhar avisos e regularização
 
 A versão 2.13.0 reúne a fila operacional em uma central por unidade, com responsáveis, prazos, filtros e leitura individual. A situação acompanha o registro de origem; leitura e regularização são distintas. Consulte [uso e limites](ALERTAS-OPERACIONAIS-2.13.md).
+
+## Etapa 8 — confirmar recebimento e tratar diferenças
+
+A versão 2.14.0 vincula novas entregas à conta indicada, permite confirmação ou relato de diferença e preserva as propostas de tratamento e respostas do destinatário. O acompanhamento é separado das operações de estoque. Consulte [uso, acesso e limites](RECEBIMENTOS-2.14.md).

@@ -4,6 +4,7 @@ const views = new Set([
   "/dashboard",
   "/pendencias",
   "/alertas",
+  "/recebimentos",
   "/conferencias",
   "/conciliacao",
   "/produtos",

@@ -140,6 +140,7 @@ async function materialAction(order, action, quantity) {
   await row.getByRole("button", { name: names[action], exact: true }).click();
   const dialog = page.getByRole("dialog");
   await dialog.locator("input[name=quantity]").fill(quantity);
+  if (action === "APPLY") await dialog.getByLabel("Identificação do destinatário", { exact: true }).selectOption("DECLARED");
   if (["APPLY", "RETURN"].includes(action)) {
     const prefix = action === "APPLY" ? "receivedBy" : "returnedBy";
     await dialog.locator(`input[name=${prefix}Name]`).fill(participant.name);

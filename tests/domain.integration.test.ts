@@ -475,6 +475,7 @@ test("aplicação exige recebedor identificado e distingue declaração do opera
   assert.deepEqual((event.metadata as Record<string, unknown>).handoff, {
     deliveredById: fixture.userId, deliveredByName: "Responsável de teste",
     receivedByName: "Funcionário de teste", receivedByIdentifier: "MAT-1", confirmation: "DECLARED_BY_OPERATOR",
+    itemSnapshot: { productCode: "ITEM-TEST", productName: "Material exclusivo de teste", unit: "UN", locationCode: "LOC-TEST" },
   });
   await assert.rejects(action(order.id, materialId, "APPLY", "10", {
     idempotencyKey: input.idempotencyKey, receivedByName: "Outra pessoa", receivedByIdentifier: "MAT-2",

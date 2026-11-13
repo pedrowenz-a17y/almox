@@ -25,6 +25,7 @@ import {
   ArrowUpRight,
   Bell,
   Inbox,
+  PackageCheck,
   Boxes,
   Building2,
   ChartNoAxesCombined,
@@ -126,6 +127,10 @@ const OperationalAlerts = dynamic(
   () => import("@/components/operational-alerts"),
   { loading: () => <Loading /> },
 );
+const DeliveryReceipts = dynamic(
+  () => import("@/components/delivery-receipts"),
+  { loading: () => <Loading /> },
+);
 
 const OperationalPending = dynamic(
   () => import("@/components/operational-pending"),
@@ -143,6 +148,7 @@ const navigation = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/pendencias", label: "Pendências", icon: Bell },
   { path: "/alertas", label: "Central de alertas", icon: Inbox },
+  { path: "/recebimentos", label: "Recebimentos", icon: PackageCheck },
   { path: "/produtos", label: "Produtos", icon: Package },
   { path: "/estoque", label: "Estoque", icon: Boxes },
   { path: "/consulta", label: "Consulta rápida", icon: Search },
@@ -539,6 +545,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   const descriptions: Record<string, string> = {
     "/dashboard": "Saldos, movimentações e pendências da unidade.",
     "/alertas": "Avisos por responsável, prazo e situação da operação.",
+    "/recebimentos": "Confirmações e diferenças nas entregas de materiais.",
     "/pendencias":
       "Retiradas, devoluções e conferências que precisam de atenção.",
     "/conferencias":
@@ -754,6 +761,19 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
       );
     const required = navigation.find((item) => item.path === route)?.permission;
     if (required && !canNavigate(required)) return <Denied />;
+    if (route === "/recebimentos")
+      return (
+        <DeliveryReceipts
+          key={user?.unitId}
+          permissions={permissions}
+          initialDeliveryId={searchParams.get("entrega") ?? undefined}
+          onOpenOrder={(id, kind) =>
+            navigateWorkspace(
+              `/${kind === "SERVICE" ? "ordens-servico" : "ordens-producao"}?ordem=${encodeURIComponent(id)}`,
+            )
+          }
+        />
+      );
     if (route === "/pendencias")
       return (
         <OperationalPending

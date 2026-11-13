@@ -1,7 +1,7 @@
 {
-  "version": "2.13.0",
-  "revision": "operational-alerts-stage-7",
-  "generatedAt": "2026-11-13T12:06:00.873814+00:00",
+  "version": "2.14.0",
+  "revision": "independent-delivery-receipts-stage-8",
+  "generatedAt": "2026-11-13T12:46:05.023748+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 27968,
-      "sha256": "4a50efc8e12e35443caca5348ba1b745e71422603c7a61b599bc99b981d55434"
+      "bytes": 28259,
+      "sha256": "9a8a3f4d1de158c232712d805bddf878f290ad111684f7ca6b7068fd1128f5d8"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -357,6 +357,66 @@
       "path": "artifacts/dashboard-2.3.2/validation.json",
       "bytes": 1242,
       "sha256": "e1ffade203ac2912516587fb263fff94015b5f8bad956326f72181203aa88109"
+    },
+    {
+      "path": "artifacts/delivery-receipts/README.md",
+      "bytes": 1951,
+      "sha256": "f377edb117b87963417e2177a815a61ca9a275809d2af767ce9c13432d9e7afd"
+    },
+    {
+      "path": "artifacts/delivery-receipts/build.log",
+      "bytes": 3238,
+      "sha256": "56957d9450db72fe8c8eb435ed625c63956392408b27d097634289efeda4d61b"
+    },
+    {
+      "path": "artifacts/delivery-receipts/checks.json",
+      "bytes": 13251,
+      "sha256": "f2965e9b16d9c2bdb7449c987d0355787430b7d7a54d26c28d0928f780f4fddc"
+    },
+    {
+      "path": "artifacts/delivery-receipts/divergencia-desktop-dark.png",
+      "bytes": 148572,
+      "sha256": "19e6b37e2f9fe9d565adf6e77096d0e2a8ff676bbc93974b4fc927326723c125"
+    },
+    {
+      "path": "artifacts/delivery-receipts/interface.log",
+      "bytes": 8444,
+      "sha256": "832720c29114990795e12999a00b51d9bbd1dc1460e5bd0e5a4a26fa95f61388"
+    },
+    {
+      "path": "artifacts/delivery-receipts/lint.log",
+      "bytes": 36,
+      "sha256": "2f267667984f9b4df3a533609ee1454a503696d6bb769ac7029f002b02d82d17"
+    },
+    {
+      "path": "artifacts/delivery-receipts/recebimentos-dark-320.png",
+      "bytes": 141913,
+      "sha256": "976f923a2358cf323c1fb0b68f0f403357be4809bfdc2595df076a4eacdea789"
+    },
+    {
+      "path": "artifacts/delivery-receipts/recebimentos-dark-390.png",
+      "bytes": 143895,
+      "sha256": "150997a36fb87d872a7d7cb4f4b5d300bc06a5351a59c2c22ddab5e108138b20"
+    },
+    {
+      "path": "artifacts/delivery-receipts/recebimentos-desktop-dark.png",
+      "bytes": 189765,
+      "sha256": "0b3324893cb88e05348b19a060d90fc82c7b17b6091bcc4783de4d5e003e7df5"
+    },
+    {
+      "path": "artifacts/delivery-receipts/tests.log",
+      "bytes": 32547,
+      "sha256": "de276e2b35fb7f892823cea47e6eb44a8a35a6cbcf453081efbb07e66c31e865"
+    },
+    {
+      "path": "artifacts/delivery-receipts/tratamento-mobile-light.png",
+      "bytes": 143826,
+      "sha256": "dd32a9b8f9f5ceccfdce1b2c0b542d21b8c8b1fa782c460620701cc6709f8da3"
+    },
+    {
+      "path": "artifacts/delivery-receipts/typecheck.log",
+      "bytes": 45,
+      "sha256": "80223cb0dda7ebc527ccaf0a918a495f3aa55151e5b9516d806931dbd4029f4a"
     },
     {
       "path": "artifacts/desktop-2.6.0/README.md",
@@ -1995,8 +2055,8 @@
     },
     {
       "path": "docs/EVOLUCAO-POR-ETAPAS.md",
-      "bytes": 8178,
-      "sha256": "9279a1918f0ea01b80f95f9eeefb149e12fb30439086add29d954044e944d4cb"
+      "bytes": 8708,
+      "sha256": "a1fa71a1d5221d4a0026c166f38b1b920a1274ed4f6971157333c68909804836"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
@@ -2054,6 +2114,11 @@
       "sha256": "3854857f10fb44836eda23d1db03310a297727e47de622de1de4ec15821b9eb9"
     },
     {
+      "path": "docs/RECEBIMENTOS-2.14.md",
+      "bytes": 6985,
+      "sha256": "0c7b55ed891655d69b24456cfa461c4abeeb052d1b0d3205a9ce18caa1a38447"
+    },
+    {
       "path": "docs/REVISAO-2.1.md",
       "bytes": 8707,
       "sha256": "adb7459693f684bf5d7159b51f69e2aec167758e01fe8183155ff8d66a4e17c3"
@@ -2080,8 +2145,8 @@
     },
     {
       "path": "docs/VALIDATION.md",
-      "bytes": 15762,
-      "sha256": "4e564b02416152862618f98113bd834a50bebc091d7645c738c079ce9c3c2995"
+      "bytes": 16299,
+      "sha256": "9e061389696bfdeb798923cf54f66df740227d0c2ccd486ae48c391f7c7f93cd"
     },
     {
       "path": "eslint.config.mjs",
@@ -2226,12 +2291,12 @@
     {
       "path": "package-lock.json",
       "bytes": 302112,
-      "sha256": "1ddc7ca0f9d2015acd1b42780fe4b1cc562c79ab255c5b2c251ef10b21b3d0da"
+      "sha256": "8915ba8d763743c40f7a9b20617e718a0b07fcf2ff6e046e5eed49b26bc59581"
     },
     {
       "path": "package.json",
-      "bytes": 3327,
-      "sha256": "9bac867e3f4033d703976280542400a4117f6fc338b0f3be0cef3177828b0691"
+      "bytes": 3403,
+      "sha256": "9325aab17a760fffaefd3bc64275ec3b471f4cc71ee4ea2704c6ee4750867db8"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -2384,6 +2449,11 @@
       "sha256": "573718929b934f4354f984ed2b9646e0b8f8d506e1a37f91952c46e870e80ef3"
     },
     {
+      "path": "scripts/fixtures/delivery-receipts-checks.mjs",
+      "bytes": 20922,
+      "sha256": "6e9f74e41decb2e38a3e4cd1b726c206a8fd894b6ffe965bd95273663fe04266"
+    },
+    {
       "path": "scripts/fixtures/erp-reconciliation-checks.mjs",
       "bytes": 30359,
       "sha256": "f9521c7086ae3fda08a276a6b938d92abf94337e3dacbad878367c9b8af1639f"
@@ -2490,8 +2560,8 @@
     },
     {
       "path": "scripts/verify-orders-ui.mjs",
-      "bytes": 20925,
-      "sha256": "1ab639ca58ceefe7c14fdfe5813da99bfa493aa3440930da739562821a2f2c47"
+      "bytes": 21054,
+      "sha256": "5611cdefada599088b5795d38fdd86769f031a77e9b11be0d3255fbb25004dd5"
     },
     {
       "path": "scripts/verify-public.mjs",
@@ -2505,8 +2575,8 @@
     },
     {
       "path": "scripts/verify-theme.mjs",
-      "bytes": 20764,
-      "sha256": "4e8e9b2f6fd9359a5c2db6320c1152cdf348c770ba46aa723b3ecf9c35fe7d15"
+      "bytes": 21268,
+      "sha256": "3afbe68a1be247a87065ac1619f03b3edf8f9d1ccdd2eabc89bc645209c84387"
     },
     {
       "path": "src/app/(workspace)/[[...slug]]/page.tsx",
@@ -2592,6 +2662,21 @@
       "path": "src/app/api/data/route.ts",
       "bytes": 9191,
       "sha256": "097484999137f6b9a45fd5a7f38360566b2d6f863fd53bd144196e93a68e7752"
+    },
+    {
+      "path": "src/app/api/delivery-receipts/[id]/route.ts",
+      "bytes": 596,
+      "sha256": "07b127f37d5b4c715903fd1069ba2e63e032e633dced4a8594820c5fd154cf83"
+    },
+    {
+      "path": "src/app/api/delivery-receipts/candidates/route.ts",
+      "bytes": 240,
+      "sha256": "a5a33ff05463d1746ad5ee3c3bdc62b933678fb30b80360c0da5845be49b0326"
+    },
+    {
+      "path": "src/app/api/delivery-receipts/route.ts",
+      "bytes": 331,
+      "sha256": "76c1585d8e81b1d88d4f39ecf832fefe1b6088bb321683634f6d4157120760e6"
     },
     {
       "path": "src/app/api/desktop-health/route.ts",
@@ -2875,8 +2960,8 @@
     },
     {
       "path": "src/app/operational.css",
-      "bytes": 23983,
-      "sha256": "2ec3c6c70b77741e5958c4c27159c951fe396639afd5e70c0ea8cc9f900a4dd1"
+      "bytes": 27547,
+      "sha256": "670d45ff6f1f1396ec70da9dc5d15a4609518f1e8f912f06d5fd9df0e8a9decb"
     },
     {
       "path": "src/app/primeiro-acesso/page.tsx",
@@ -2944,14 +3029,19 @@
       "sha256": "9ddb9171c67ff3b02db19f0550c37436908982a308ccf31fd3b9ec0265c603bc"
     },
     {
+      "path": "src/components/delivery-receipts.tsx",
+      "bytes": 24640,
+      "sha256": "68a8b59ac327872e5d25e12d08b2879abca585891e54ecb4f4b132828ef0fb35"
+    },
+    {
       "path": "src/components/erp-reconciliation.tsx",
       "bytes": 50008,
       "sha256": "f75c4fcde77fe1958fc0eb37579767cf5de11bacdebb2e0e840e591c8169bf12"
     },
     {
       "path": "src/components/erp.tsx",
-      "bytes": 94824,
-      "sha256": "416bb96e1e075a931c2e80092986878c1b98ab4226377aed925b3e656fd00a15"
+      "bytes": 95550,
+      "sha256": "8a5025ba0ca700bba757a8b1fe7f0c910267e0dff94cb70109b1911a585b8e1d"
     },
     {
       "path": "src/components/inventory-form.tsx",
@@ -3000,8 +3090,8 @@
     },
     {
       "path": "src/components/orders.tsx",
-      "bytes": 40588,
-      "sha256": "90fc56e7ad643726e1608c14adcf31ca3b1915ad828efc27f164f875e26a5cf8"
+      "bytes": 46242,
+      "sha256": "c843fa6d3e75748f307eb104e3aa98cfc9ca392b0b6873a761179eb7c426d002"
     },
     {
       "path": "src/components/password-setup.tsx",
@@ -3169,6 +3259,11 @@
       "sha256": "45b15a753fdf591bf83bc7c501e16e94b2dee0ffbd2073fc28317923a9aebe26"
     },
     {
+      "path": "src/lib/delivery-receipts.ts",
+      "bytes": 1838,
+      "sha256": "2300641510a467469a7b1dfd7b4d317a3a1fa5875653f5483bb0b0a46071d9ae"
+    },
+    {
       "path": "src/lib/http.ts",
       "bytes": 3963,
       "sha256": "5918d1630a09367e0f8f02cecc5ebf687ec3426ff5eeb607fe80c41f9e3e38ea"
@@ -3245,8 +3340,8 @@
     },
     {
       "path": "src/lib/workspace-navigation.ts",
-      "bytes": 1090,
-      "sha256": "b51b3bf1f29bd3b824a1a368de3dfbd3cf4127a297f888eaba4f5f5644a2fdbe"
+      "bytes": 1109,
+      "sha256": "d5e3240ebf28cff047fbcb3d4d404b71e8d98950d438f61a36e4cf62fbf34ef2"
     },
     {
       "path": "src/proxy.ts",
@@ -3292,6 +3387,11 @@
       "path": "src/services/catalog.ts",
       "bytes": 18429,
       "sha256": "8091ead8c2304807ce46da84ff0eabead974d7ac91ae18c0d9ef326d87c41a0a"
+    },
+    {
+      "path": "src/services/delivery-receipts.ts",
+      "bytes": 15030,
+      "sha256": "e9cf26a23cf30f67c7e23ebab53f8e09c8e599ec52cfa42208fcac8e103b47d8"
     },
     {
       "path": "src/services/inventory-schedules.ts",
@@ -3340,8 +3440,8 @@
     },
     {
       "path": "src/services/orders.ts",
-      "bytes": 20169,
-      "sha256": "a28b36ac1602c5949ed533b1e7082a41c5200d5a8e400c7b5bf8e09827d1535e"
+      "bytes": 21738,
+      "sha256": "6a244d193ba49cb3f0171bd400a5b652d85fd1037d93b723fab35262fe8972b3"
     },
     {
       "path": "src/services/password-access.ts",
@@ -3464,14 +3564,24 @@
       "sha256": "0d7f16a485fe59d9b713c3a790e43a482251e1d00c305ac3bdfe7a008fe45add"
     },
     {
+      "path": "tests/delivery-receipts.integration.test.ts",
+      "bytes": 22428,
+      "sha256": "625964b356077fa57205a2f5efed581edfa8bc3bd05cbd43b443280d1950584a"
+    },
+    {
+      "path": "tests/delivery-receipts.test.ts",
+      "bytes": 738,
+      "sha256": "0a6a2421aee5b13807c34fa6c31e863375d696e94ebcfffb727240c1863c46bf"
+    },
+    {
       "path": "tests/desktop-health.test.ts",
       "bytes": 2438,
       "sha256": "1611da2ab95a995092389811f6f2912f6d7e60a3ec867cc71ed27c55dc5440fc"
     },
     {
       "path": "tests/domain.integration.test.ts",
-      "bytes": 42374,
-      "sha256": "459f24fe7aa582040928b0309e8fafa05c5e3b1b7299bd86f9f88fe74bee0194"
+      "bytes": 42504,
+      "sha256": "e748a00f29627fc39b31223bdd07353a982dbca85ce782321bf513a40abd64c9"
     },
     {
       "path": "tests/http-database-log.test.ts",

@@ -4,6 +4,7 @@ import { newlyOpenedPending } from "@/lib/pending-occurrences";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
+import { activeMember } from "@/services/operational-coordination";
 import {
   assertActiveLocation, assertActiveProduct, assertQuantityRange, availability,
   documentMovement, findIdempotentResource, idempotencyKeySchema, payloadHash,
@@ -44,7 +45,12 @@ export const orderActionSchema = z.discriminatedUnion("action", [
   z.object({ ...materialAction, action: z.literal("RESERVE") }).strict(),
   z.object({ ...materialAction, action: z.literal("RELEASE") }).strict(),
   z.object({ ...materialAction, action: z.literal("APPLY"),
-    receivedByName: personName, receivedByIdentifier: personIdentifier }).strict(),
+    recipientUserId: z.string().uuid().optional(),
+    receivedByName: personName.optional(), receivedByIdentifier: personIdentifier.optional() }).strict()
+    .superRefine((input, context) => {
+      if (!input.recipientUserId && (!input.receivedByName || !input.receivedByIdentifier))
+        context.addIssue({ code: "custom", path: ["receivedByName"], message: "Selecione a conta do destinatário ou identifique quem retirou o material." });
+    }),
   z.object({ ...materialAction, action: z.literal("REQUEST_RETURN"), note: reason }).strict(),
   z.object({ ...materialAction, action: z.literal("CANCEL_RETURN"), note: reason }).strict(),
   z.object({ ...materialAction, action: z.literal("REDUCE_REQUEST"), note: reason }).strict(),
@@ -247,8 +253,19 @@ export async function actOnOrder(actor: StockActor, rawId: string, rawInput: unk
         data.reservedQuantity = { decrement: quantity };
         data.appliedQuantity = { increment: quantity }; type = "APPLIED";
         const recorder = await tx.user.findUniqueOrThrow({ where: { id: actor.id }, select: { name: true } });
+        let recipient: { id: string; name: string } | null = null;
+        if (input.recipientUserId) {
+          const member = await activeMember(tx, actor);
+          if (!canActOnOrder(member.permissions, "APPLY")) throw new AppError("Seu acesso para entregar materiais foi alterado.", 403);
+          if (input.recipientUserId === actor.id) throw new AppError("Escolha outra conta para a confirmação independente. Uma entrega para si mesmo só pode ter identificação declarada.", 400);
+          recipient = await activeMember(tx, actor, input.recipientUserId);
+          const identity = await tx.user.findUniqueOrThrow({ where: { id: recipient.id }, select: { authUserId: true } });
+          if (!identity.authUserId) throw new AppError("O destinatário precisa ter uma identidade de login vinculada ao ERP.", 400);
+        }
         handoff.handoff = { deliveredById: actor.id, deliveredByName: recorder.name,
-          receivedByName: input.receivedByName, receivedByIdentifier: input.receivedByIdentifier,
+          receivedByName: recipient?.name ?? input.receivedByName!, receivedByIdentifier: recipient ? "Conta do ERP" : input.receivedByIdentifier!,
+          ...(recipient ? { receivedByUserId: recipient.id } : {}),
+          itemSnapshot: { productCode: material.product.internalCode, productName: material.product.name, unit: material.product.unit, locationCode: material.location.code },
           confirmation: "DECLARED_BY_OPERATOR" };
       } else if (input.action === "REQUEST_RETURN") {
         const returnable = order.status === "OPEN" ? material.appliedQuantity

@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.13.0
+# Almox ERP · U.C.A. — versão 2.14.0
+
+**Versão 2.14.0:** confirmação de recebimento pela conta indicada na entrega, relato de diferenças e tratamento com aceite do destinatário. Acompanhamento por unidade e histórico preservado, sem movimentar estoque novamente. Sem novo SQL. [Usar a etapa 8](docs/RECEBIMENTOS-2.14.md).
 
 **Versão 2.13.0:** central de alertas por unidade, responsável e prazo, com filtros, leitura individual e acompanhamento da situação na origem. Disponível pelo menu e pelo sino; marcar leitura mantém a operação pendente. Temas claro/escuro e celular. Sem novo SQL. [Usar a etapa 7](docs/ALERTAS-OPERACIONAIS-2.13.md).
 
