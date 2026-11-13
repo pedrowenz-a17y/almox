@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.12.0
+# Almox ERP · U.C.A. — versão 2.13.0
+
+**Versão 2.13.0:** central de alertas por unidade, responsável e prazo, com filtros, leitura individual e acompanhamento da situação na origem. Disponível pelo menu e pelo sino; marcar leitura mantém a operação pendente. Temas claro/escuro e celular. Sem novo SQL. [Usar a etapa 7](docs/ALERTAS-OPERACIONAIS-2.13.md).
 
 **Versão 2.12.0:** indicadores por unidade e período, roteiro de sete etapas com evidências, histórico e relatório imprimível para o TCC. Demonstração e piloto são identificados; não há conclusão automática sobre a eficácia do sistema. Sem novo SQL. [Usar a etapa 6](docs/VALIDACAO-E-INDICADORES-2.12.md).
 

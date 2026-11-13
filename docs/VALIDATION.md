@@ -1,5 +1,7 @@
 # Validação da versão U.C.A. / Supabase
 
+**Etapa 7 — versão 2.13.0:** a central de alertas foi verificada com 320 testes de regressão em PostgreSQL isolado e 90 verificações de interface, incluindo as etapas anteriores. Sem falhas ou testes ignorados. Compilação de produção, TypeScript e ESLint concluídos. As evidências estão em [operational-alerts](../artifacts/operational-alerts); os testes não autenticaram contas nem alteraram dados da empresa. Veja [uso e limites](ALERTAS-OPERACIONAIS-2.13.md).
+
 Este registro cobre a revisão atual do projeto fornecido. Os resultados da autenticação própria e da demonstração anterior estão preservados em [VALIDATION-LEGACY.md](VALIDATION-LEGACY.md); eles **não comprovam** o funcionamento da autenticação Supabase, das unidades ou dos novos fluxos de compras e ordens.
 
 ## Resultados e alcance

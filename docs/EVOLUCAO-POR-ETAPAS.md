@@ -10,6 +10,7 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | 4 | Convites, primeiro acesso e recuperação | Implementada na versão 2.10.0, sem nova migração; domínio e SMTP dependem da configuração do projeto |
 | 5 | Conciliação com revisão e preparação para homologação com o ERP oficial | Fluxo implementado na versão 2.11.0, sem novo SQL; homologação pela empresa e conexão automática dependem de dados, sistema e critérios reais |
 | 6 | Validação do processo e indicadores | Implementada na versão 2.12.0, sem novo SQL; a execução e a avaliação com a empresa dependem de observações e evidências reais |
+| 7 | Central de alertas operacionais | Implementada na versão 2.13.0, com leitura individual e consulta da origem; avisos dentro do app, sem novo SQL |
 
 ## Etapa 1 — aprovação independente de inventário
 
@@ -62,3 +63,7 @@ A versão 2.11.0 associa colunas de exportações, reconhece arquivos repetidos,
 ## Etapa 6 — validar e documentar o processo
 
 A versão 2.12.0 mede os registros por unidade e período, preserva o retrato de abertura de cada roteiro e registra resultados e evidências nas sete etapas do fluxo. Há distinção entre demonstração e piloto, histórico de alterações e relatório imprimível. A conclusão é relatada por pessoas; a homologação com a empresa e a comprovação de melhoria ainda exigem coleta real comparável. Consulte [uso, roteiro e limites](VALIDACAO-E-INDICADORES-2.12.md).
+
+## Etapa 7 — acompanhar avisos e regularização
+
+A versão 2.13.0 reúne a fila operacional em uma central por unidade, com responsáveis, prazos, filtros e leitura individual. A situação acompanha o registro de origem; leitura e regularização são distintas. Consulte [uso e limites](ALERTAS-OPERACIONAIS-2.13.md).

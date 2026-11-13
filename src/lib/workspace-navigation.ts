@@ -3,6 +3,7 @@ const views = new Set([
   "/",
   "/dashboard",
   "/pendencias",
+  "/alertas",
   "/conferencias",
   "/conciliacao",
   "/produtos",

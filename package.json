@@ -1,6 +1,6 @@
 {
   "name": "almox-erp",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
@@ -39,7 +39,8 @@
     "verify:onboarding": "node scripts/verify-theme.mjs --access-onboarding",
     "verify:onboarding-real": "node scripts/verify-onboarding-real.mjs",
     "verify:reconciliation": "node scripts/verify-theme.mjs --erp-reconciliation",
-    "verify:validation": "node scripts/verify-theme.mjs --validation-pilot"
+    "verify:validation": "node scripts/verify-theme.mjs --validation-pilot",
+    "verify:alerts": "node scripts/verify-theme.mjs --operational-alerts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.1",

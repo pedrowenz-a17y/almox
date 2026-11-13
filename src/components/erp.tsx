@@ -24,6 +24,7 @@ import {
   ArrowRightLeft,
   ArrowUpRight,
   Bell,
+  Inbox,
   Boxes,
   Building2,
   ChartNoAxesCombined,
@@ -121,6 +122,11 @@ const Purchases = dynamic(() => import("@/components/purchases"), {
 });
 import { brand } from "@/lib/brand";
 
+const OperationalAlerts = dynamic(
+  () => import("@/components/operational-alerts"),
+  { loading: () => <Loading /> },
+);
+
 const OperationalPending = dynamic(
   () => import("@/components/operational-pending"),
   { loading: () => <Loading /> },
@@ -136,6 +142,7 @@ const Reconciliation = dynamic(() => import("@/components/reconciliation"), {
 const navigation = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/pendencias", label: "Pendências", icon: Bell },
+  { path: "/alertas", label: "Central de alertas", icon: Inbox },
   { path: "/produtos", label: "Produtos", icon: Package },
   { path: "/estoque", label: "Estoque", icon: Boxes },
   { path: "/consulta", label: "Consulta rápida", icon: Search },
@@ -531,6 +538,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                   "Página não encontrada";
   const descriptions: Record<string, string> = {
     "/dashboard": "Saldos, movimentações e pendências da unidade.",
+    "/alertas": "Avisos por responsável, prazo e situação da operação.",
     "/pendencias":
       "Retiradas, devoluções e conferências que precisam de atenção.",
     "/conferencias":
@@ -762,6 +770,19 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           onSchedules={() => navigateWorkspace("/conferencias")}
         />
       );
+    if (route === "/alertas")
+      return can("orders:read") || canViewInventory(permissions) ? (
+        <OperationalAlerts
+          key={user?.unitId}
+          onOpenOrder={(id, kind) =>
+            navigateWorkspace(
+              `/${kind === "SERVICE" ? "ordens-servico" : "ordens-producao"}?ordem=${encodeURIComponent(id)}`,
+            )
+          }
+          onInventory={(id) => void openInventoryCount(id)}
+          onSchedules={() => navigateWorkspace("/conferencias")}
+        />
+      ) : <Denied />;
     if (route === "/conferencias")
       return (
         <InventorySchedules
@@ -1897,7 +1918,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             .filter(
               (n) =>
                 (!n.permission || canNavigate(n.permission)) &&
-                (n.path !== "/pendencias" ||
+                (!["/pendencias", "/alertas"].includes(n.path) ||
                   can("orders:read") ||
                   canViewInventory(permissions)) &&
                 (n.path !== "/conciliacao" ||
@@ -2082,11 +2103,20 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             </button>
             <Link
               className="notification-button icon-button"
-              href={can("purchases:read") ? "/reposicao" : "/estoque"}
-              aria-label={`${low.length} alertas de estoque`}
+              href={
+                can("orders:read") || canViewInventory(permissions)
+                  ? "/alertas"
+                  : can("purchases:read") ? "/reposicao" : "/estoque"
+              }
+              aria-label={
+                can("orders:read") || canViewInventory(permissions)
+                  ? "Abrir central de alertas"
+                  : `${low.length} alertas de estoque`
+              }
             >
               <Bell size={20} />
-              {low.length > 0 && <i />}
+              {low.length > 0 &&
+                !(can("orders:read") || canViewInventory(permissions)) && <i />}
             </Link>
             <span className="topbar-divider" />
             <span className="avatar small">

@@ -1,50 +1,168 @@
 import { canViewInventory } from "@/lib/access-profiles";
-import { canManageResponsibilities, canOwnPending } from "@/lib/operational-responsibility";
+import {
+  canManageResponsibilities,
+  canOwnPending,
+} from "@/lib/operational-responsibility";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
 import type { StockActor } from "@/services/stock";
-import { coordinationReady, responsibilityCandidates, type CoordinationDB } from "@/services/operational-coordination";
+import {
+  coordinationReady,
+  responsibilityCandidates,
+  type CoordinationDB,
+} from "@/services/operational-coordination";
 
-export const pendingTypes = ["UNAPPLIED", "RESERVED", "AWAITING_INVOICE", "RETURN", "COUNT", "SCHEDULE"] as const;
+export const pendingTypes = [
+  "UNAPPLIED",
+  "RESERVED",
+  "AWAITING_INVOICE",
+  "RETURN",
+  "COUNT",
+  "SCHEDULE",
+] as const;
 export type PendingType = (typeof pendingTypes)[number];
 export interface PendingItem {
-  id: string; type: PendingType; orderId: string | null; orderKind: "SERVICE" | "PRODUCTION" | null;
-  code: string; title: string; productCode: string | null; productName: string | null; unit: string | null;
-  warehouseId: string; locationCode: string; quantity: string | null; createdAt: string; openedAt: string | null;
-  dueAt: string | null; missingHandoff: boolean; creatorId: string | null; creatorName: string | null;
-  occurrenceKey: string; assigneeName: string | null; assigneeId: string | null; assignmentVersion: number;
-  assignmentNote: string | null; overdue: boolean; assigneeEligible: boolean;
+  alertKey?: string;
+  readAt?: string | null;
+  id: string;
+  type: PendingType;
+  orderId: string | null;
+  orderKind: "SERVICE" | "PRODUCTION" | null;
+  code: string;
+  title: string;
+  productCode: string | null;
+  productName: string | null;
+  unit: string | null;
+  warehouseId: string;
+  locationCode: string;
+  quantity: string | null;
+  createdAt: string;
+  openedAt: string | null;
+  dueAt: string | null;
+  missingHandoff: boolean;
+  creatorId: string | null;
+  creatorName: string | null;
+  occurrenceKey: string;
+  assigneeName: string | null;
+  assigneeId: string | null;
+  assignmentVersion: number;
+  assignmentNote: string | null;
+  overdue: boolean;
+  assigneeEligible: boolean;
 }
 export interface PendingPage {
-  items: PendingItem[]; totals: Record<PendingType, number>; total: number; page: number; pageSize: number; serverTime: string;
-  coordinationReady: boolean; canManage: boolean; overdueTotal: number; unassignedTotal: number; mineTotal: number;
+  items: PendingItem[];
+  totals: Record<PendingType, number>;
+  total: number;
+  page: number;
+  pageSize: number;
+  serverTime: string;
+  alertSummary?: {
+    unread: number;
+    read: number;
+    dueToday: number;
+    ineligible: number;
+  };
+  coordinationReady: boolean;
+  canManage: boolean;
+  overdueTotal: number;
+  unassignedTotal: number;
+  mineTotal: number;
 }
-export interface PendingPeople { people: { id: string; name: string; types: PendingType[] }[]; truncated: boolean }
-const querySchema = z.object({
-  type: z.enum(["ALL", ...pendingTypes]).default("ALL"),
-  focus: z.enum(["ALL", "MINE", "UNASSIGNED", "OVERDUE"]).default("ALL"),
-  page: z.coerce.number().int().min(1).max(1000000).default(1),
-  pageSize: z.coerce.number().int().min(1).max(100).default(25),
-}).strict();
+export interface PendingPeople {
+  people: { id: string; name: string; types: PendingType[] }[];
+  truncated: boolean;
+}
+const querySchema = z
+  .object({
+    type: z.enum(["ALL", ...pendingTypes]).default("ALL"),
+    focus: z
+      .enum(["ALL", "MINE", "UNASSIGNED", "OVERDUE", "TODAY"])
+      .default("ALL"),
+    page: z.coerce.number().int().min(1).max(1000000).default(1),
+    pageSize: z.coerce.number().int().min(1).max(100).default(25),
+  })
+  .strict();
 
 /** The page, responsibility filters and indicators share one database snapshot. */
-export async function pendingSnapshot(actor: StockActor, rawQuery: Record<string, unknown> = {}, db: CoordinationDB = prisma,
-  selection?: { id?: string; warehouseId?: string }): Promise<PendingPage> {
-  const orders = actor.permissions.includes("orders:read"), inventory = canViewInventory(actor.permissions);
-  if (!actor.unitId || (!orders && !inventory)) throw new AppError("Seu perfil não permite consultar pendências operacionais.", 403);
+export async function pendingSnapshot(
+  actor: StockActor,
+  rawQuery: Record<string, unknown> = {},
+  db: CoordinationDB = prisma,
+  selection?: {
+    id?: string;
+    ids?: string[];
+    now?: Date;
+    warehouseId?: string;
+    alerts?: { read: "ALL" | "UNREAD" | "READ" };
+  },
+): Promise<PendingPage> {
+  const orders = actor.permissions.includes("orders:read"),
+    inventory = canViewInventory(actor.permissions);
+  if (!actor.unitId || (!orders && !inventory))
+    throw new AppError(
+      "Seu perfil não permite consultar pendências operacionais.",
+      403,
+    );
   const { type, focus, page, pageSize } = querySchema.parse(rawQuery);
-  const unitId = actor.unitId, now = new Date(), ready = await coordinationReady(db);
-  const assignmentJoin = ready ? Prisma.sql`LEFT JOIN "PendingAssignment" a ON a."unitId" = ${unitId}::uuid AND a."itemKey" = p.id AND a."occurrenceKey" = p."occurrenceKey"
-    LEFT JOIN "User" assigned ON assigned.id = a."assigneeId"` : Prisma.empty;
-  const assignmentFields = ready ? Prisma.sql`COALESCE(a."assigneeId"::text, p."scheduleAssigneeId") AS "assigneeId",
+  const unitId = actor.unitId,
+    now = selection?.now ?? new Date(),
+    ready = await coordinationReady(db);
+  const today = now.toLocaleDateString("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  });
+  const dayStart = new Date(today + "T00:00:00-03:00"),
+    dayEnd = new Date(dayStart.getTime() + 86400000);
+  const alertMode = selection?.alerts;
+  const notices = alertMode
+    ? Prisma.sql`notices AS (
+    SELECT p.*, identity."alertKey", seen."readAt" FROM enriched p
+    CROSS JOIN LATERAL (SELECT encode(sha256(convert_to(jsonb_build_array(${unitId}::text,p.id,p."occurrenceKey",p."assigneeId",p."dueAt",p."assignmentVersion",p.quantity,p."assigneeEligible",p."missingHandoff",
+      CASE WHEN p.overdue THEN 'OVERDUE' WHEN p."dueAt">=${dayStart} AND p."dueAt"<${dayEnd} THEN 'TODAY' WHEN p."dueAt" IS NULL THEN 'NONE' ELSE 'FUTURE' END)::text,'UTF8')),'hex') AS "alertKey") identity
+    LEFT JOIN LATERAL (SELECT max(a."createdAt") AS "readAt" FROM "AuditLog" a WHERE a."unitId"=${unitId}::uuid AND a."userId"=${actor.id}::uuid
+      AND a.entity='OperationalAlert' AND a.action='OPERATIONAL_ALERT_READ' AND a."entityId"=identity."alertKey") seen ON true
+  )`
+    : Prisma.sql`notices AS (SELECT * FROM enriched)`;
+  const alertFilter =
+    !alertMode || alertMode.read === "ALL"
+      ? Prisma.sql`true`
+      : alertMode.read === "UNREAD"
+        ? Prisma.sql`"readAt" IS NULL`
+        : Prisma.sql`"readAt" IS NOT NULL`;
+  const alertSummary = alertMode
+    ? Prisma.sql`,
+    (SELECT count(*)::integer FROM notices WHERE "readAt" IS NULL) AS "unreadTotal",
+    (SELECT count(*)::integer FROM notices WHERE "readAt" IS NOT NULL) AS "readTotal",
+    (SELECT count(*)::integer FROM notices WHERE "dueAt">=${dayStart} AND "dueAt"<${dayEnd}) AS "dueTodayTotal",
+    (SELECT count(*)::integer FROM notices WHERE "assigneeId" IS NOT NULL AND NOT "assigneeEligible") AS "ineligibleTotal"`
+    : Prisma.empty;
+  const assignmentJoin = ready
+    ? Prisma.sql`LEFT JOIN "PendingAssignment" a ON a."unitId" = ${unitId}::uuid AND a."itemKey" = p.id AND a."occurrenceKey" = p."occurrenceKey"
+    LEFT JOIN "User" assigned ON assigned.id = a."assigneeId"`
+    : Prisma.empty;
+  const assignmentFields = ready
+    ? Prisma.sql`COALESCE(a."assigneeId"::text, p."scheduleAssigneeId") AS "assigneeId",
     COALESCE(assigned.name, p."scheduleAssigneeName") AS "assigneeName", COALESCE(a."dueAt", p."scheduleDueAt") AS "dueAt",
-    COALESCE(a.version, 0) AS "assignmentVersion", a.note AS "assignmentNote"` : Prisma.sql`
+    COALESCE(a.version, 0) AS "assignmentVersion", a.note AS "assignmentNote"`
+    : Prisma.sql`
     p."scheduleAssigneeId" AS "assigneeId", p."scheduleAssigneeName" AS "assigneeName", p."scheduleDueAt" AS "dueAt",
     0 AS "assignmentVersion", NULL::text AS "assignmentNote"`;
-  const [result] = await db.$queryRaw<Array<{ items: PendingItem[] | null; totals: Partial<Record<PendingType, number>> | null;
-    total: number; overdueTotal: number; unassignedTotal: number; mineTotal: number }>>(Prisma.sql`
+  const [result] = await db.$queryRaw<
+    Array<{
+      items: PendingItem[] | null;
+      totals: Partial<Record<PendingType, number>> | null;
+      total: number;
+      overdueTotal: number;
+      unassignedTotal: number;
+      mineTotal: number;
+      unreadTotal?: number;
+      readTotal?: number;
+      dueTodayTotal?: number;
+      ineligibleTotal?: number;
+    }>
+  >(Prisma.sql`
     WITH pending AS (
       SELECT m.id::text || ':' || signal.type AS id, signal.type,
         o.id::text AS "orderId", o.kind::text AS "orderKind", o.code, o.title,
@@ -91,6 +209,7 @@ export async function pendingSnapshot(actor: StockActor, rawQuery: Record<string
       WHERE s."unitId" = ${unitId}::uuid AND ${inventory} AND s.active AND s."nextDueAt" <= ${now}
     ), assigned AS (SELECT p.*, ${assignmentFields} FROM pending p ${assignmentJoin}
       WHERE ${selection?.id ? Prisma.sql`p.id = ${selection.id}` : Prisma.sql`true`}
+        AND ${selection?.ids?.length ? Prisma.sql`p.id IN (${Prisma.join(selection.ids)})` : Prisma.sql`true`}
         AND ${selection?.warehouseId ? Prisma.sql`p."warehouseId" = ${selection.warehouseId}` : Prisma.sql`true`}),
     enriched AS (SELECT p.*, (p."dueAt" IS NOT NULL AND p."dueAt" < ${now}) AS overdue,
       EXISTS (SELECT 1 FROM "UnitMembership" member
@@ -105,9 +224,10 @@ export async function pendingSnapshot(actor: StockActor, rawQuery: Record<string
             WHEN 'RETURN' THEN perm.key IN ('orders:apply', 'orders:return')
             ELSE perm.key IN ('orders:apply', 'orders:deliver') END) AS "assigneeEligible"
       FROM assigned p),
-    filtered AS (SELECT * FROM enriched WHERE (${type} = 'ALL' OR type = ${type})
+    ${notices},
+    filtered AS (SELECT * FROM notices WHERE (${type} = 'ALL' OR type = ${type})
       AND (${focus} = 'ALL' OR (${focus} = 'MINE' AND "assigneeId" = ${actor.id})
-        OR (${focus} = 'UNASSIGNED' AND "assigneeId" IS NULL) OR (${focus} = 'OVERDUE' AND overdue))),
+        OR (${focus} = 'UNASSIGNED' AND "assigneeId" IS NULL) OR (${focus} = 'OVERDUE' AND overdue) OR (${focus} = 'TODAY' AND "dueAt">=${dayStart} AND "dueAt"<${dayEnd})) AND ${alertFilter}),
     selected AS (SELECT * FROM filtered
       ORDER BY overdue DESC, CASE type WHEN 'RETURN' THEN 0 WHEN 'SCHEDULE' THEN 1 WHEN 'COUNT' THEN 2 ELSE 3 END,
         COALESCE("dueAt", "openedAt", "createdAt") ASC, id ASC
@@ -118,23 +238,60 @@ export async function pendingSnapshot(actor: StockActor, rawQuery: Record<string
       (SELECT count(*)::integer FROM filtered) AS total,
       (SELECT count(*)::integer FROM enriched WHERE overdue) AS "overdueTotal",
       (SELECT count(*)::integer FROM enriched WHERE "assigneeId" IS NULL) AS "unassignedTotal",
-      (SELECT count(*)::integer FROM enriched WHERE "assigneeId" = ${actor.id}) AS "mineTotal"
+      (SELECT count(*)::integer FROM enriched WHERE "assigneeId" = ${actor.id}) AS "mineTotal" ${alertSummary}
   `);
-  const utc = (value: string) => new Date(/[zZ]|[+-]\d{2}:?\d{2}$/.test(value) ? value : `${value}Z`).toISOString();
+  const utc = (value: string) =>
+    new Date(
+      /[zZ]|[+-]\d{2}:?\d{2}$/.test(value) ? value : `${value}Z`,
+    ).toISOString();
   return {
-    items: (result?.items ?? []).map(item => ({ ...item, createdAt: utc(item.createdAt),
-      openedAt: item.openedAt ? utc(item.openedAt) : null, dueAt: item.dueAt ? utc(item.dueAt) : null })),
-    totals: Object.fromEntries(pendingTypes.map(key => [key, result?.totals?.[key] ?? 0])) as Record<PendingType, number>,
-    total: result?.total ?? 0, page, pageSize, serverTime: now.toISOString(), coordinationReady: ready,
-    canManage: ready && canManageResponsibilities(actor.permissions), overdueTotal: result?.overdueTotal ?? 0,
-    unassignedTotal: result?.unassignedTotal ?? 0, mineTotal: result?.mineTotal ?? 0,
+    items: (result?.items ?? []).map((item) => ({
+      ...item,
+      createdAt: utc(item.createdAt),
+      ...(alertMode ? { readAt: item.readAt ? utc(item.readAt) : null } : {}),
+      openedAt: item.openedAt ? utc(item.openedAt) : null,
+      dueAt: item.dueAt ? utc(item.dueAt) : null,
+    })),
+    totals: Object.fromEntries(
+      pendingTypes.map((key) => [key, result?.totals?.[key] ?? 0]),
+    ) as Record<PendingType, number>,
+    ...(alertMode
+      ? {
+          alertSummary: {
+            unread: result?.unreadTotal ?? 0,
+            read: result?.readTotal ?? 0,
+            dueToday: result?.dueTodayTotal ?? 0,
+            ineligible: result?.ineligibleTotal ?? 0,
+          },
+        }
+      : {}),
+    total: result?.total ?? 0,
+    page,
+    pageSize,
+    serverTime: now.toISOString(),
+    coordinationReady: ready,
+    canManage: ready && canManageResponsibilities(actor.permissions),
+    overdueTotal: result?.overdueTotal ?? 0,
+    unassignedTotal: result?.unassignedTotal ?? 0,
+    mineTotal: result?.mineTotal ?? 0,
   };
 }
 export const listOperationalPending = pendingSnapshot;
 
-export async function listPendingPeople(actor: StockActor): Promise<PendingPeople> {
-  if (!canManageResponsibilities(actor.permissions)) throw new AppError("Seu perfil não permite atribuir pendências.", 403);
+export async function listPendingPeople(
+  actor: StockActor,
+): Promise<PendingPeople> {
+  if (!canManageResponsibilities(actor.permissions))
+    throw new AppError("Seu perfil não permite atribuir pendências.", 403);
   const result = await responsibilityCandidates(actor);
-  return { people: result.people.map(person => ({ id: person.id, name: person.name,
-    types: pendingTypes.filter(type => canOwnPending(person.permissions, type, person.id, null)) })), truncated: result.truncated };
+  return {
+    people: result.people.map((person) => ({
+      id: person.id,
+      name: person.name,
+      types: pendingTypes.filter((type) =>
+        canOwnPending(person.permissions, type, person.id, null),
+      ),
+    })),
+    truncated: result.truncated,
+  };
 }

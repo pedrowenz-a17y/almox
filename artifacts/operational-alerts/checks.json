@@ -1,0 +1,367 @@
+{
+  "scope": "Local production public pages and real workspace components with synthetic API responses; no live authentication or database writes.",
+  "checks": [
+    {
+      "name": "Tema escuro padrão no login, contraste e ajuste em desktop e celular",
+      "passed": true
+    },
+    {
+      "name": "Preferência clara persiste ao recarregar e navegar para instalação",
+      "passed": true
+    },
+    {
+      "name": "Preferência sincronizada entre abas",
+      "passed": true
+    },
+    {
+      "name": "Recuperação de acesso permite trocar tema sem enviar e-mail",
+      "passed": true
+    },
+    {
+      "name": "Tema claro aplicado antes da hidratação",
+      "passed": true
+    },
+    {
+      "name": "Armazenamento indisponível permite alternar o tema na sessão",
+      "passed": true
+    },
+    {
+      "name": "Painel real com dados fictícios: contraste, fotografia preservada e temas",
+      "passed": true
+    },
+    {
+      "name": "Tabela de estoque, etiquetas de estado e formulário legíveis no tema escuro",
+      "passed": true
+    },
+    {
+      "name": "Assistente e aviso de falha permanecem legíveis",
+      "passed": true
+    },
+    {
+      "name": "Etiquetas adaptadas ao tema preservam o fundo branco do QR",
+      "passed": true
+    },
+    {
+      "name": "Leitor de QR e campo manual legíveis sem acesso a câmera real",
+      "passed": true
+    },
+    {
+      "name": "Autor com permissão de ajuste vê motivo do bloqueio e não envia aprovação",
+      "passed": true
+    },
+    {
+      "name": "Contagem sem autoria identificada não habilita a aprovação na interface",
+      "passed": true
+    },
+    {
+      "name": "Contagens históricas aprovadas continuam consultáveis sem nova ação de aprovação",
+      "passed": true
+    },
+    {
+      "name": "Outra pessoa autorizada pode confirmar aprovação e a interface atualiza o estado",
+      "passed": true
+    },
+    {
+      "name": "Recusa do servidor mantém o diálogo e explica o erro sem confirmar o ajuste",
+      "passed": true
+    },
+    {
+      "name": "Ser outra pessoa não libera o botão para um perfil sem permissão de ajuste",
+      "passed": true
+    },
+    {
+      "name": "Administrador disponibiliza modelos pela tela sem associar usuários",
+      "passed": true
+    },
+    {
+      "name": "Seleção do perfil mostra permissões reais sem salvar acesso nem enviar convite",
+      "passed": true
+    },
+    {
+      "name": "Auditor consulta conferências sem iniciar contagem ou preparar perfis",
+      "passed": true
+    },
+    {
+      "name": "Auditor visualiza prévia de conciliação sem opção de salvar documento",
+      "passed": true
+    },
+    {
+      "name": "Analista de custos pode salvar a conciliação sem ações de estoque",
+      "passed": true
+    },
+    {
+      "name": "Comprador edita fornecedor sem botão de produto ou recebimento físico",
+      "passed": true
+    },
+    {
+      "name": "Almoxarife usa permissões específicas para estoque, reserva e entrega sem faturar",
+      "passed": true
+    },
+    {
+      "name": "Perfil personalizado é sinalizado e mantém suas permissões no formulário",
+      "passed": true
+    },
+    {
+      "name": "Falha de autorização na preparação não libera os perfis na interface",
+      "passed": true
+    },
+    {
+      "name": "Migração ausente preserva a lista e oferece SQL somente ao administrador",
+      "passed": true
+    },
+    {
+      "name": "Assumir turno mostra pessoa autenticada e horário, sem criar responsabilidade automática nas pendências",
+      "passed": true
+    },
+    {
+      "name": "Passagem mantém titular atual e exibe orientações enquanto aguarda aceite",
+      "passed": true
+    },
+    {
+      "name": "Pessoa indicada aceita com seu acesso e o histórico identifica os dois turnos",
+      "passed": true
+    },
+    {
+      "name": "Atribuição pede prazo escolhido pela equipe e atualiza a linha somente após confirmação",
+      "passed": true
+    },
+    {
+      "name": "Conflito de versão preserva o erro na tela e não indica sucesso",
+      "passed": true
+    },
+    {
+      "name": "Aprovação da contagem exclui o autor da lista de responsáveis",
+      "passed": true
+    },
+    {
+      "name": "Filtros de responsabilidade mostram atrasadas, minhas e sem responsável",
+      "passed": true
+    },
+    {
+      "name": "Auditor consulta turnos e prazos sem controles de alteração, nos temas claro e escuro",
+      "passed": true
+    },
+    {
+      "name": "Turno, filtros e formulário cabem em celulares de 390 e 320 pixels",
+      "passed": true
+    },
+    {
+      "name": "Usuários distinguem habilitação da unidade, convite e primeiro login sem enviar mensagens",
+      "passed": true
+    },
+    {
+      "name": "Busca e filtro localizam convites pendentes sem consultar outra unidade",
+      "passed": true
+    },
+    {
+      "name": "Cadastro com falha no e-mail permanece salvo e orienta acompanhar o envio",
+      "passed": true
+    },
+    {
+      "name": "Vínculo de identidade existente é uma escolha explícita e não dispara convite ao selecionar",
+      "passed": true
+    },
+    {
+      "name": "Acompanhamento consulta o estado e explica o primeiro acesso antes de qualquer envio",
+      "passed": true
+    },
+    {
+      "name": "Limite do provedor permanece visível e bloqueia reenvio repetido, inclusive após reabrir",
+      "passed": true
+    },
+    {
+      "name": "Envio confirmado pelo provedor não inventa senha definida ou primeiro login",
+      "passed": true
+    },
+    {
+      "name": "Identidade ausente impede reenvio e orienta revisão do vínculo",
+      "passed": true
+    },
+    {
+      "name": "Configuração mostra endereços esperados e distingue painel externo de verificação efetiva",
+      "passed": true
+    },
+    {
+      "name": "Lista de pessoas e acompanhamento cabem em 390 e 320 pixels sem rolagem lateral",
+      "passed": true
+    },
+    {
+      "name": "Primeiro acesso sem link válido orienta convite e não habilita cadastro de senha",
+      "passed": true
+    },
+    {
+      "name": "Link com fragmento limpa a URL antes de validar e não persiste tokens no navegador",
+      "passed": true
+    },
+    {
+      "name": "Falha temporária mantém o link em memória para nova validação sem solicitar outro e-mail",
+      "passed": true
+    },
+    {
+      "name": "Primeira senha mostra identidade, rejeita divergência e confirma o próximo login",
+      "passed": true
+    },
+    {
+      "name": "Recuperação trata limite com espera e mantém resposta genérica quando o envio é aceito",
+      "passed": true
+    },
+    {
+      "name": "Link expirado apresenta saída clara sem solicitar e-mail automaticamente",
+      "passed": true
+    },
+    {
+      "name": "Conciliação mostra situação e revisões sem carregar custos desnecessariamente",
+      "passed": true
+    },
+    {
+      "name": "Busca e situação localizam conferências antigas e pendentes",
+      "passed": true
+    },
+    {
+      "name": "Importação exige origem, corte e confirmação do critério e associa colunas explicitamente",
+      "passed": true
+    },
+    {
+      "name": "Prévia separa diferenças e linhas que conferem antes de salvar",
+      "passed": true
+    },
+    {
+      "name": "Arquivo repetido abre documento existente e não apresenta novo registro como criado",
+      "passed": true
+    },
+    {
+      "name": "Autor recebe orientação para revisão independente e não vê aprovação própria",
+      "passed": true
+    },
+    {
+      "name": "Revisor analisa cada diferença com causa e documento antes de concluir com ressalvas",
+      "passed": true
+    },
+    {
+      "name": "Exportação inclui parecer e referências e protege células interpretadas como fórmulas",
+      "passed": true
+    },
+    {
+      "name": "Mudança no Almox interrompe revisão e oferece nova consulta sem sobrescrever documento",
+      "passed": true
+    },
+    {
+      "name": "Custo histórico ausente bloqueia conclusão e permite devolver para análise",
+      "passed": true
+    },
+    {
+      "name": "Registro anterior permanece consultável e revisão seguinte tem navegação explícita",
+      "passed": true
+    },
+    {
+      "name": "Arquivo grande ou CSV malformado é recusado antes da consulta",
+      "passed": true
+    },
+    {
+      "name": "Associação inválida enviada ao servidor mantém arquivo e mostra correção necessária",
+      "passed": true
+    },
+    {
+      "name": "Documentos e importação cabem em 390 e 320 pixels no modo escuro",
+      "passed": true
+    },
+    {
+      "name": "Modo claro mantém contraste e a mesma hierarquia da conferência",
+      "passed": true
+    },
+    {
+      "name": "Custos continuam consultáveis por ordem com detalhes históricos dos materiais",
+      "passed": true
+    },
+    {
+      "name": "Auditor visualiza conferência sem botão de revisão e sem aba de custos",
+      "passed": true
+    },
+    {
+      "name": "Relatórios preservam consulta de estoque e abrem indicadores somente ao selecionar a nova área",
+      "passed": true
+    },
+    {
+      "name": "Exportação identifica a janela anterior sem inventar percentuais",
+      "passed": true
+    },
+    {
+      "name": "Demonstração exige objetivo e origem e não executa operações de estoque",
+      "passed": true
+    },
+    {
+      "name": "Cada etapa registra resultado, responsável e referência antes do encerramento",
+      "passed": true
+    },
+    {
+      "name": "Conflito de atualização é visível e não confirma conclusão",
+      "passed": true
+    },
+    {
+      "name": "Relatório do TCC preserva retrato, origem e evidências e contém instrução para PDF",
+      "passed": true
+    },
+    {
+      "name": "Indicadores e roteiro cabem em 390 e 320 pixels com contraste no tema escuro",
+      "passed": true
+    },
+    {
+      "name": "Tema claro mantém indicadores legíveis e auditor consulta sem criar validação",
+      "passed": true
+    },
+    {
+      "name": "Sino abre a central sem leituras automáticas e mostra resumo da unidade",
+      "passed": true
+    },
+    {
+      "name": "Leitura pessoal preserva a pendência e separa lidos e não lidos",
+      "passed": true
+    },
+    {
+      "name": "Filtros de responsável, etapa e vencimento mantêm resumo geral separado",
+      "passed": true
+    },
+    {
+      "name": "Conflito mantém leitura sem confirmação e a atualização recebe a nova quantidade",
+      "passed": true
+    },
+    {
+      "name": "Histórico distingue operação pendente, atualização, regularização e encerramento",
+      "passed": true
+    },
+    {
+      "name": "Aviso da agenda abre a programação existente sem marcar como lido",
+      "passed": true
+    },
+    {
+      "name": "Celular em 390 e 320 pixels mantém cartões e ações legíveis nos dois temas",
+      "passed": true
+    },
+    {
+      "name": "Falha de consulta remove os números antigos e permite tentar novamente",
+      "passed": true
+    },
+    {
+      "name": "Preparação pendente da etapa 3 mantém avisos e orienta responsáveis e prazos",
+      "passed": true
+    },
+    {
+      "name": "Perfil de conferência consulta sua área; perfil sem escopo não carrega alertas",
+      "passed": true
+    },
+    {
+      "name": "Barra de ações e navegação cabem em 390 e 320 pixels",
+      "passed": true
+    },
+    {
+      "name": "Impressão usa fundo claro e oculta a troca de tema",
+      "passed": true
+    },
+    {
+      "name": "Sem erros JavaScript ou chamadas inesperadas; aprovações usam APIs fictícias",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "unexpected": []
+}

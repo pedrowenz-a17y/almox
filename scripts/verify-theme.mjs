@@ -11,21 +11,24 @@ import { user, data } from './fixtures/theme-data.mjs';
 import { verifyInventoryApproval } from './fixtures/inventory-approval-checks.mjs';
 import { verifyAccessProfiles } from './fixtures/access-profile-checks.mjs';
 import { verifyOperationalResponsibility } from './fixtures/operational-responsibility-checks.mjs';
+import { verifyOperationalAlerts } from './fixtures/operational-alerts-checks.mjs';
 import { verifyValidationPilot } from './fixtures/validation-pilot-checks.mjs';
 import { verifyErpReconciliation } from './fixtures/erp-reconciliation-checks.mjs';
 import { verifyAccessOnboarding } from './fixtures/access-onboarding-checks.mjs';
 
 const { baseURL } = qaConfig();
 const root = process.cwd();
+const alertsOnly = process.argv.includes('--operational-alerts-only');
+const operationalAlerts = alertsOnly || process.argv.includes('--operational-alerts');
 const validationOnly = process.argv.includes('--validation-pilot-only');
-const validationPilot = validationOnly || process.argv.includes('--validation-pilot');
-const reconciliationOnly = validationOnly || process.argv.includes('--erp-reconciliation-only');
+const validationPilot = operationalAlerts || validationOnly || process.argv.includes('--validation-pilot');
+const reconciliationOnly = alertsOnly || validationOnly || process.argv.includes('--erp-reconciliation-only');
 const erpReconciliation = validationPilot || reconciliationOnly || process.argv.includes('--erp-reconciliation');
 const accessOnboarding = erpReconciliation || process.argv.includes('--access-onboarding');
 const operationalResponsibility = accessOnboarding || process.argv.includes('--operational-responsibility');
 const accessProfiles = operationalResponsibility || process.argv.includes('--access-profiles');
 const independentApproval = accessProfiles || process.argv.includes('--inventory-approval');
-const output = path.join(root, validationPilot ? 'artifacts/validation-pilot' : erpReconciliation ? 'artifacts/erp-reconciliation' : accessOnboarding ? 'artifacts/access-onboarding' : operationalResponsibility ? 'artifacts/operational-responsibility' : accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
+const output = path.join(root, operationalAlerts ? 'artifacts/operational-alerts' : validationPilot ? 'artifacts/validation-pilot' : erpReconciliation ? 'artifacts/erp-reconciliation' : accessOnboarding ? 'artifacts/access-onboarding' : operationalResponsibility ? 'artifacts/operational-responsibility' : accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'almox-theme-'));
 const require = createRequire(import.meta.url);
 const { build } = createRequire(require.resolve('tsx/package.json'))('esbuild');
@@ -212,8 +215,9 @@ try {
   if (operationalResponsibility) await verifyOperationalResponsibility({ page, fixtureURL, data, user, check, output, noOverflow });
   if (accessOnboarding) await verifyAccessOnboarding({ page, fixtureURL, baseURL, data, user, check, output, noOverflow });
   }
-  if (erpReconciliation && !validationOnly) await verifyErpReconciliation({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
-  if (validationPilot) await verifyValidationPilot({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
+  if (erpReconciliation && !validationOnly && !alertsOnly) await verifyErpReconciliation({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
+  if (validationPilot && !alertsOnly) await verifyValidationPilot({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
+  if (operationalAlerts) await verifyOperationalAlerts({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
   if (!reconciliationOnly) {
   await check('Barra de ações e navegação cabem em 390 e 320 pixels', async () => {
     for (const width of [390, 320]) {
