@@ -1,7 +1,7 @@
 {
-  "version": "2.10.0",
-  "revision": "invitations-first-access-recovery-stage-4",
-  "generatedAt": "2026-11-12T17:59:58.409919+00:00",
+  "version": "2.11.0",
+  "revision": "erp-reconciliation-independent-review-stage-5",
+  "generatedAt": "2026-11-13T10:56:44.535684+00:00",
   "files": [
     {
       "path": ".dockerignore",
@@ -65,8 +65,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 26952,
-      "sha256": "9e2934a7662f9c5131566e258b28871c9217a7b04f7b703bbc6c28cbb9c60b04"
+      "bytes": 27320,
+      "sha256": "c558f1b8f13225e645486e08e22516b6c0b8d114068fbccb58b97605d5b7ea2a"
     },
     {
       "path": "artifacts/HISTORICO.md",
@@ -512,6 +512,71 @@
       "path": "artifacts/download-installation/official-downloads.json",
       "bytes": 640,
       "sha256": "6548ec338ec33599e0c648902cd3290a56a9c25cf9e738a919686b99b8161f9a"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/README.md",
+      "bytes": 1683,
+      "sha256": "799f0971e23c8e0420539dc2fc8361daf2f31db4c2d62bcfa444f36628f087a9"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/build.log",
+      "bytes": 3020,
+      "sha256": "f1bcc319f5afc2e4db510849af4c84128a29572c7c631faa46008bf18a5e2958"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/checks.json",
+      "bytes": 9366,
+      "sha256": "bc5684824a890e689b8ab9b55d3967e8399be2bfa501ca74fe1b3c0d433acf1c"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/conferencias-desktop-dark.png",
+      "bytes": 146442,
+      "sha256": "a60f9f4bee961ca4fea2be57da579f13bfe8d8912112a9455f9f31f58f2bc6ed"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/documento-dark-320.png",
+      "bytes": 33054,
+      "sha256": "75a8d30e3cf73caf3ae14293b8aae976256c8f2f1a860c6005ce0b3918c5034d"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/documento-dark-390.png",
+      "bytes": 33789,
+      "sha256": "1bb9dcc0a87fe780a9de1e319e21918d6f522b6a33710f25f80f71722b83d33d"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/documento-desktop-light.png",
+      "bytes": 50625,
+      "sha256": "647252401a7122c59366dc77c3596ff3dc9799d2b62bae9ce030456d865ed704"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/importacao-desktop-dark.png",
+      "bytes": 226609,
+      "sha256": "aef48809a7e17fe5739396e62ee025f459ed859bcb5f54f09a46348f5e940427"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/interface.log",
+      "bytes": 5946,
+      "sha256": "f98bc73ad044b5bd048a2d93033eb22f3a33651c0015dfdd889c42f82301e7fd"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/lint.log",
+      "bytes": 36,
+      "sha256": "92a8ef503acb1f1133b33dc4fb993671b25050da7440be44d57acb3bd7136bbf"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/revisao-desktop-dark.png",
+      "bytes": 59046,
+      "sha256": "0e7cccfb223082d0ab575fa45e50fe5b33da72875988083c9d1abdd5a37e8443"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/tests.log",
+      "bytes": 29148,
+      "sha256": "c2252db9f8e729140d8313e1343569f1b44698131c1a749925d6ab7d2b318fc3"
+    },
+    {
+      "path": "artifacts/erp-reconciliation/typecheck.log",
+      "bytes": 45,
+      "sha256": "abe92fd53b2ae6be8e1a2f55f9d8ebbedebdea2d2aaaaf89743091e3c7e86f7c"
     },
     {
       "path": "artifacts/identity-2.3.1/assistant-regression/assistente-desktop.png",
@@ -1765,8 +1830,8 @@
     },
     {
       "path": "docs/AUDITORIA-ERP-2026-11-12.md",
-      "bytes": 14183,
-      "sha256": "8c3886d7eac3716c04717db88c3adab360fe80c21083cde86e6800fd86beb880"
+      "bytes": 14362,
+      "sha256": "1b143e7cc9ec7964227a544f62b53900b3d294bf6cd206ecccf3991f130e1ff1"
     },
     {
       "path": "docs/AUDIT_2026-10.md",
@@ -1777,6 +1842,11 @@
       "path": "docs/BRAND_ASSETS.md",
       "bytes": 943,
       "sha256": "808758fd7cf8f05f4d1e9fe125e6cedfbdd27221a34c8b1bb43409274e9dc167"
+    },
+    {
+      "path": "docs/CONCILIACAO-ERP-2.11.md",
+      "bytes": 8379,
+      "sha256": "20e00350b65f7c7cd02e76c6c2a7a4d114aaed2987579008ce50a067aa808db5"
     },
     {
       "path": "docs/CONTROLE-OPERACIONAL-2.4.md",
@@ -1800,8 +1870,8 @@
     },
     {
       "path": "docs/EVOLUCAO-POR-ETAPAS.md",
-      "bytes": 6443,
-      "sha256": "1055114e8c0914adbb8f85f986acbe97cdc3ba842f997b6d25fcdc81266a3cc2"
+      "bytes": 6996,
+      "sha256": "d22b34085f2f1e758a909f2e303c6a4477157557624592df8e0b1f55b69a96b6"
     },
     {
       "path": "docs/IDENTIDADE-UCA.md",
@@ -2026,12 +2096,12 @@
     {
       "path": "package-lock.json",
       "bytes": 302112,
-      "sha256": "08ff1fd3f03cdf33e0f0cabff5d7dbf851050d24344a4671e52fc3798d0198c9"
+      "sha256": "fee5b9d89cdce0de2470a47b4600a2d6f4553df3dc16eedc4ef12591cb263e48"
     },
     {
       "path": "package.json",
-      "bytes": 3092,
-      "sha256": "6a64efd0953ca50a5bdf1027c3011cc91d20d3605d56fec4e955895254a1c06e"
+      "bytes": 3175,
+      "sha256": "e395d0ceeae570184ad550aeceeffbca62653e297ab3691a0aa1d843e1a6a7a0"
     },
     {
       "path": "prisma/migrations/20261016170617_initial/migration.sql",
@@ -2180,8 +2250,13 @@
     },
     {
       "path": "scripts/fixtures/access-profile-checks.mjs",
-      "bytes": 11620,
-      "sha256": "647a6c43799e0fd4327139f9ffc07b988881dafc469189ef5d3015ddcb3df652"
+      "bytes": 12030,
+      "sha256": "573718929b934f4354f984ed2b9646e0b8f8d506e1a37f91952c46e870e80ef3"
+    },
+    {
+      "path": "scripts/fixtures/erp-reconciliation-checks.mjs",
+      "bytes": 30359,
+      "sha256": "f9521c7086ae3fda08a276a6b938d92abf94337e3dacbad878367c9b8af1639f"
     },
     {
       "path": "scripts/fixtures/inventory-approval-checks.mjs",
@@ -2290,8 +2365,8 @@
     },
     {
       "path": "scripts/verify-theme.mjs",
-      "bytes": 19284,
-      "sha256": "68d424274be1b22f98f3bb5dc12d5087a51c38a845cca03f1db874f26d60cdf3"
+      "bytes": 19809,
+      "sha256": "ad06474c1b07b2eea196f95330a4e803bc5ce77e0c7e4b60d041d76b6344ec83"
     },
     {
       "path": "src/app/(workspace)/[[...slug]]/page.tsx",
@@ -2360,8 +2435,8 @@
     },
     {
       "path": "src/app/api/data/route.ts",
-      "bytes": 9116,
-      "sha256": "8782460a790e5612af13bea87911c7b01a3dcbfbd7a89d2d0475ae0d4b316cd5"
+      "bytes": 9191,
+      "sha256": "097484999137f6b9a45fd5a7f38360566b2d6f863fd53bd144196e93a68e7752"
     },
     {
       "path": "src/app/api/desktop-health/route.ts",
@@ -2487,6 +2562,16 @@
       "path": "src/app/api/qr/[id]/route.ts",
       "bytes": 1538,
       "sha256": "d31db5d704ffa750c954a62363af129d92c48f33c222046e08f3e719439edc7b"
+    },
+    {
+      "path": "src/app/api/reconciliation/[id]/recheck/route.ts",
+      "bytes": 382,
+      "sha256": "ecbcea2a1a5a2a0a22338841eced7756455dca1e7ed2bce261b7f2a49fcc417c"
+    },
+    {
+      "path": "src/app/api/reconciliation/[id]/review/route.ts",
+      "bytes": 515,
+      "sha256": "c79dc1e7388d865d4023a46e3a4f6e5845418cc870614636624ac5468024a2f5"
     },
     {
       "path": "src/app/api/reconciliation/[id]/route.ts",
@@ -2620,8 +2705,8 @@
     },
     {
       "path": "src/app/operational.css",
-      "bytes": 10471,
-      "sha256": "0087c18538dffb83a3caa0ea9d4ae84c60039723dabf4da3e36cad5fb680637a"
+      "bytes": 16922,
+      "sha256": "e5de3eed8fbfc7690662ecfa0582555d5d5723a7c1e24b2f567b988fa3bb4adb"
     },
     {
       "path": "src/app/primeiro-acesso/page.tsx",
@@ -2689,6 +2774,11 @@
       "sha256": "9ddb9171c67ff3b02db19f0550c37436908982a308ccf31fd3b9ec0265c603bc"
     },
     {
+      "path": "src/components/erp-reconciliation.tsx",
+      "bytes": 50008,
+      "sha256": "f75c4fcde77fe1958fc0eb37579767cf5de11bacdebb2e0e840e591c8169bf12"
+    },
+    {
       "path": "src/components/erp.tsx",
       "bytes": 93629,
       "sha256": "001bdcac3ad4b9142a20ec9fa314fd3e84d9e7139c03db16d1fa643783e9032c"
@@ -2729,6 +2819,11 @@
       "sha256": "7c137791056ff793147115bba09fbd1751e07258a1b9379b1acf67fc3a8f247c"
     },
     {
+      "path": "src/components/order-cost-report.tsx",
+      "bytes": 8865,
+      "sha256": "a73059625e080756cf190030888723e1c6abaf8484d4875d39a65bdf7822408b"
+    },
+    {
       "path": "src/components/orders.tsx",
       "bytes": 40588,
       "sha256": "90fc56e7ad643726e1608c14adcf31ca3b1915ad828efc27f164f875e26a5cf8"
@@ -2765,8 +2860,8 @@
     },
     {
       "path": "src/components/reconciliation.tsx",
-      "bytes": 29370,
-      "sha256": "d8e860b620c8470b9774305b972e84aab7a5eeff1d96e1d60132e4286d9479eb"
+      "bytes": 1923,
+      "sha256": "a3f7052cc9035a92c8de9314733c27e9b97d1a93933e76c0469681db67816858"
     },
     {
       "path": "src/components/replenishment.tsx",
@@ -2790,8 +2885,8 @@
     },
     {
       "path": "src/components/ui.tsx",
-      "bytes": 3412,
-      "sha256": "390e6f39fc6c5aebe264c9dd7ac8db84393a513bc0aef2fdcf96c8d0a314146a"
+      "bytes": 3548,
+      "sha256": "cf2ad4b0c540ccc12638b6b3ff74abbeb5b23b91e73bd939d3a76181648a8104"
     },
     {
       "path": "src/components/user-access.tsx",
@@ -2820,8 +2915,8 @@
     },
     {
       "path": "src/lib/access-profiles.ts",
-      "bytes": 6963,
-      "sha256": "13b1c5fcaf1e656298c5d5ac35df8be3c41194e0ff17ee9732610465479f9f73"
+      "bytes": 6978,
+      "sha256": "bde535fa628d0589726749fb7d2d6b0adc30f93242e2f064f43ed2b5fd075e8e"
     },
     {
       "path": "src/lib/access-provider.ts",
@@ -2837,6 +2932,11 @@
       "path": "src/lib/assistant-contract.ts",
       "bytes": 438,
       "sha256": "d2857fe43b2368d0bb38cb1ea2f5f7d470cb80db932623ae9303b9aa02ddf167"
+    },
+    {
+      "path": "src/lib/audit-scope.ts",
+      "bytes": 486,
+      "sha256": "ef6459f3894a5601c6b1a7cbfa392edf46911b5c96137c8cfa0efe88283e68eb"
     },
     {
       "path": "src/lib/auth-config.ts",
@@ -2920,8 +3020,13 @@
     },
     {
       "path": "src/lib/reconciliation-csv.ts",
-      "bytes": 2093,
-      "sha256": "33e1bbc07b5e7f9e733bf7b8064137805e44a7c313396364e559bac5dc614150"
+      "bytes": 2128,
+      "sha256": "ac5bcbe876cff566d60f6429732ebab9fc5b4a84701ea8189e10dce58fec6774"
+    },
+    {
+      "path": "src/lib/reconciliation-format.ts",
+      "bytes": 4342,
+      "sha256": "8c7a0d593717ab6d9419c76c18a2d2e24ef984ebfd6018605b64094178dd77f9"
     },
     {
       "path": "src/lib/replenishment.ts",
@@ -3054,9 +3159,19 @@
       "sha256": "f791e8d87b46887e5734362e7ea259c09e7acb4566750a10f6bc8ee51df9f5c4"
     },
     {
+      "path": "src/services/reconciliation-comparison.ts",
+      "bytes": 9924,
+      "sha256": "9d3b351686de0dc1a05ad53e2dbcbebf2e1dd88977424cec6c1dd29aa1316955"
+    },
+    {
+      "path": "src/services/reconciliation-review.ts",
+      "bytes": 11425,
+      "sha256": "bc52a619b2a0f24aae5d388bc0a2acb527d9e7306120206b7f484a11dadec25a"
+    },
+    {
       "path": "src/services/reconciliation.ts",
-      "bytes": 13237,
-      "sha256": "2612772b6cd6386395777bd48972dab4eac0f0e0988051c6e3dff3f1c0af8916"
+      "bytes": 8842,
+      "sha256": "afd010a7f2b9090e6b727df3a935a100081164f113387342e48f608adcdb11dd"
     },
     {
       "path": "src/services/replenishment.ts",
@@ -3200,13 +3315,13 @@
     },
     {
       "path": "tests/reconciliation-csv.test.ts",
-      "bytes": 1478,
-      "sha256": "48d8ea19499406b0ff7a75b93bb9470f01455e4b0d3ea560cbad4f8f77f6f0ab"
+      "bytes": 2647,
+      "sha256": "4d6e14a9bffcdf15f520839a5f76f12a9e5f03fa96d8ffe8ee93727e56d8b2d3"
     },
     {
       "path": "tests/reconciliation.integration.test.ts",
-      "bytes": 14327,
-      "sha256": "428de3e6eb67dc53ef4f7d5776f65218c241afa65a56138e676231693d3d18b9"
+      "bytes": 32223,
+      "sha256": "a2e0e8d211faa9a72f9094328600fa43ee9567af1387641f257f5b5c39a3b525"
     },
     {
       "path": "tests/security.test.ts",

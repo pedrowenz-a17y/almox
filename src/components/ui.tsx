@@ -9,12 +9,14 @@ export function Modal({
   children,
   onClose,
   wide = false,
+  closeDisabled = false,
 }: {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
   onClose: () => void;
   wide?: boolean;
+  closeDisabled?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const target = useSyncExternalStore(
@@ -73,6 +75,7 @@ export function Modal({
         className={`modal ${wide ? "wide" : ""}`}
         role="dialog"
         aria-modal="true"
+        aria-busy={closeDisabled || undefined}
         aria-labelledby="modal-title"
       >
         <div className="modal-heading">
@@ -85,6 +88,7 @@ export function Modal({
             className="icon-button"
             onClick={onClose}
             aria-label="Fechar"
+            disabled={closeDisabled}
           >
             <X size={21} />
           </button>

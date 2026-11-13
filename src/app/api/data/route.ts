@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { requireUser, redactCosts } from "@/lib/auth";
 import { api, json } from "@/lib/http";
+import { unitAuditScope } from "@/lib/audit-scope";
 import { accessProgress } from "@/services/access-progress";
 const publicUser = { id: true, name: true, email: true } as const;
 export const GET = api(async () => {
@@ -85,7 +86,7 @@ export const GET = api(async () => {
           : Promise.resolve(undefined),
         canViewReports(actor.permissions)
           ? tx.auditLog.findMany({
-              where: { unitId: actor.unitId },
+              where: unitAuditScope(actor.unitId, actor.permissions),
               take: 1000,
               orderBy: { createdAt: "desc" },
               include: { user: { select: publicUser } },

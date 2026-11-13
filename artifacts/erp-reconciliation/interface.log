@@ -1,0 +1,76 @@
+
+> almox-erp@2.11.0 verify:reconciliation
+> node scripts/verify-theme.mjs --erp-reconciliation
+
+PASS Tema escuro padrão no login, contraste e ajuste em desktop e celular
+PASS Preferência clara persiste ao recarregar e navegar para instalação
+PASS Preferência sincronizada entre abas
+PASS Recuperação de acesso permite trocar tema sem enviar e-mail
+PASS Tema claro aplicado antes da hidratação
+PASS Armazenamento indisponível permite alternar o tema na sessão
+PASS Painel real com dados fictícios: contraste, fotografia preservada e temas
+PASS Tabela de estoque, etiquetas de estado e formulário legíveis no tema escuro
+PASS Assistente e aviso de falha permanecem legíveis
+PASS Etiquetas adaptadas ao tema preservam o fundo branco do QR
+PASS Leitor de QR e campo manual legíveis sem acesso a câmera real
+PASS Autor com permissão de ajuste vê motivo do bloqueio e não envia aprovação
+PASS Contagem sem autoria identificada não habilita a aprovação na interface
+PASS Contagens históricas aprovadas continuam consultáveis sem nova ação de aprovação
+PASS Outra pessoa autorizada pode confirmar aprovação e a interface atualiza o estado
+PASS Recusa do servidor mantém o diálogo e explica o erro sem confirmar o ajuste
+PASS Ser outra pessoa não libera o botão para um perfil sem permissão de ajuste
+PASS Administrador disponibiliza modelos pela tela sem associar usuários
+PASS Seleção do perfil mostra permissões reais sem salvar acesso nem enviar convite
+PASS Auditor consulta conferências sem iniciar contagem ou preparar perfis
+PASS Auditor visualiza prévia de conciliação sem opção de salvar documento
+PASS Analista de custos pode salvar a conciliação sem ações de estoque
+PASS Comprador edita fornecedor sem botão de produto ou recebimento físico
+PASS Almoxarife usa permissões específicas para estoque, reserva e entrega sem faturar
+PASS Perfil personalizado é sinalizado e mantém suas permissões no formulário
+PASS Falha de autorização na preparação não libera os perfis na interface
+PASS Migração ausente preserva a lista e oferece SQL somente ao administrador
+PASS Assumir turno mostra pessoa autenticada e horário, sem criar responsabilidade automática nas pendências
+PASS Passagem mantém titular atual e exibe orientações enquanto aguarda aceite
+PASS Pessoa indicada aceita com seu acesso e o histórico identifica os dois turnos
+PASS Atribuição pede prazo escolhido pela equipe e atualiza a linha somente após confirmação
+PASS Conflito de versão preserva o erro na tela e não indica sucesso
+PASS Aprovação da contagem exclui o autor da lista de responsáveis
+PASS Filtros de responsabilidade mostram atrasadas, minhas e sem responsável
+PASS Auditor consulta turnos e prazos sem controles de alteração, nos temas claro e escuro
+PASS Turno, filtros e formulário cabem em celulares de 390 e 320 pixels
+PASS Usuários distinguem habilitação da unidade, convite e primeiro login sem enviar mensagens
+PASS Busca e filtro localizam convites pendentes sem consultar outra unidade
+PASS Cadastro com falha no e-mail permanece salvo e orienta acompanhar o envio
+PASS Vínculo de identidade existente é uma escolha explícita e não dispara convite ao selecionar
+PASS Acompanhamento consulta o estado e explica o primeiro acesso antes de qualquer envio
+PASS Limite do provedor permanece visível e bloqueia reenvio repetido, inclusive após reabrir
+PASS Envio confirmado pelo provedor não inventa senha definida ou primeiro login
+PASS Identidade ausente impede reenvio e orienta revisão do vínculo
+PASS Configuração mostra endereços esperados e distingue painel externo de verificação efetiva
+PASS Lista de pessoas e acompanhamento cabem em 390 e 320 pixels sem rolagem lateral
+PASS Primeiro acesso sem link válido orienta convite e não habilita cadastro de senha
+PASS Link com fragmento limpa a URL antes de validar e não persiste tokens no navegador
+PASS Falha temporária mantém o link em memória para nova validação sem solicitar outro e-mail
+PASS Primeira senha mostra identidade, rejeita divergência e confirma o próximo login
+PASS Recuperação trata limite com espera e mantém resposta genérica quando o envio é aceito
+PASS Link expirado apresenta saída clara sem solicitar e-mail automaticamente
+PASS Conciliação mostra situação e revisões sem carregar custos desnecessariamente
+PASS Busca e situação localizam conferências antigas e pendentes
+PASS Importação exige origem, corte e confirmação do critério e associa colunas explicitamente
+PASS Prévia separa diferenças e linhas que conferem antes de salvar
+PASS Arquivo repetido abre documento existente e não apresenta novo registro como criado
+PASS Autor recebe orientação para revisão independente e não vê aprovação própria
+PASS Revisor analisa cada diferença com causa e documento antes de concluir com ressalvas
+PASS Exportação inclui parecer e referências e protege células interpretadas como fórmulas
+PASS Mudança no Almox interrompe revisão e oferece nova consulta sem sobrescrever documento
+PASS Custo histórico ausente bloqueia conclusão e permite devolver para análise
+PASS Registro anterior permanece consultável e revisão seguinte tem navegação explícita
+PASS Arquivo grande ou CSV malformado é recusado antes da consulta
+PASS Associação inválida enviada ao servidor mantém arquivo e mostra correção necessária
+PASS Documentos e importação cabem em 390 e 320 pixels no modo escuro
+PASS Modo claro mantém contraste e a mesma hierarquia da conferência
+PASS Custos continuam consultáveis por ordem com detalhes históricos dos materiais
+PASS Auditor visualiza conferência sem botão de revisão e sem aba de custos
+PASS Barra de ações e navegação cabem em 390 e 320 pixels
+PASS Impressão usa fundo claro e oculta a troca de tema
+PASS Sem erros JavaScript ou chamadas inesperadas; aprovações usam APIs fictícias

@@ -1,5 +1,9 @@
 /** Strict CSV reader: escaped quotes and quoted line breaks, no guessed delimiter. */
-export function readReconciliationCsv(csv: string, delimiter: ";" | ",") {
+export function readReconciliationCsv(
+  csv: string,
+  delimiter: ";" | ",",
+  maxColumns = 8,
+) {
   const rows: string[][] = [];
   let row: string[] = [];
   let field = "";
@@ -44,7 +48,7 @@ export function readReconciliationCsv(csv: string, delimiter: ";" | ",") {
       if (char !== " " && char !== "\t")
         throw new Error("Há conteúdo depois do fechamento de aspas no CSV.");
     } else field += char;
-    if (row.length > 8 || field.length > 4000)
+    if (row.length >= maxColumns || field.length > 4000)
       throw new Error(
         "Campo ou quantidade de colunas acima do limite do modelo CSV.",
       );

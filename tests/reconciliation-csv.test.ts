@@ -47,3 +47,46 @@ test("exportação para revisão escapa fórmulas e aspas de planilhas", () => {
   assert.equal(safeCsvCell("  +1"), '"\'  +1"');
   assert.equal(safeCsvCell("PROD-1"), '"PROD-1"');
 });
+
+test("associação permite até 32 colunas e rejeita cabeçalhos ambíguos", async () => {
+  const { mappedReconciliationCsv } = await import(
+    "../src/lib/reconciliation-format"
+  );
+  const input = {
+    kind: "STOCK" as const,
+    sourceName: "Teste",
+    referenceAt: new Date().toISOString(),
+    delimiter: ";" as const,
+    decimalFormat: "BR" as const,
+    csv: "Filial;Item;Local;Saldo;Nome\nUCA;P-1;L-1;2,5;Peça",
+    mapping: {
+      unit: "Filial",
+      code: "Item",
+      location: "Local",
+      value: "Saldo",
+    },
+  };
+  assert.deepEqual(mappedReconciliationCsv(input), [
+    ["unidade", "produto", "local", "quantidade"],
+    ["UCA", "P-1", "L-1", "2,5"],
+  ]);
+  assert.throws(() =>
+    mappedReconciliationCsv({
+      ...input,
+      csv: "Filial;Item;Item;Saldo\nUCA;P-1;L-1;2,5",
+    }),
+  );
+  assert.throws(() =>
+    mappedReconciliationCsv({
+      ...input,
+      csv: "Filial;Item;Local;Saldo;Nome\nUCA;P-1;L-1;2,5",
+    }),
+  );
+  assert.equal(
+    readReconciliationCsv(Array(32).fill("x").join(";"), ";", 32)[0].length,
+    32,
+  );
+  assert.throws(() =>
+    readReconciliationCsv(Array(33).fill("x").join(";"), ";", 32),
+  );
+});

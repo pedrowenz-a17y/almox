@@ -43,21 +43,21 @@ export const ACCESS_PROFILES = [
   { name: "ALMOXARIFE", title: "Almoxarife", description: "Recebe, transfere e entrega materiais; reserva e aplica nas ordens, registra devoluções e faz contagens. Sem aprovar ajustes, faturar ordens ou consultar custos.", permissions: ["stock:entry", "stock:exit", "stock:transfer", "orders:read", "orders:reserve", "orders:deliver", "orders:return", "inventory:count", "purchases:read", "purchases:receive"] },
   { name: "CONFERENTE", title: "Conferente de estoque", description: "Consulta o estoque e registra contagens para revisão independente. Sem movimentar materiais, aprovar ajustes ou consultar custos.", permissions: ["inventory:count"] },
   { name: "COMPRADOR", title: "Comprador", description: "Cadastra e edita fornecedores, prepara compras e consulta seus preços. Sem receber fisicamente, movimentar estoque ou consultar custos de produção.", permissions: ["suppliers:write", "purchases:read", "purchases:write", "purchases:prices"] },
-  { name: "ANALISTA_CUSTOS", title: "Analista de custos", description: "Consulta custos, ordens, compras, inventários e relatórios; salva documentos de conciliação. Sem ajustar estoque, faturar ordens ou gerenciar usuários.", permissions: ["reports:view", "costs:read", "orders:read", "purchases:read", "inventory:read", "reconciliation:write"] },
+  { name: "ANALISTA_CUSTOS", title: "Analista de custos", description: "Consulta custos, ordens, compras, inventários e relatórios; registra e revisa conferências de conciliação. Sem ajustar estoque, faturar ordens ou gerenciar usuários.", permissions: ["reports:view", "costs:read", "orders:read", "purchases:read", "inventory:read", "reconciliation:write"] },
   { name: "AUDITOR", title: "Auditor", description: "Consulta relatórios, histórico, inventários, ordens e compras. Sem valores financeiros e sem alterar cadastros, estoque, ordens ou documentos de conciliação.", permissions: ["reports:view", "inventory:read", "orders:read", "purchases:read"] },
 ] as const;
 
 export const PERMISSION_LABELS: Record<string, string> = {
   "catalog:write": "Cadastrar e editar catálogo", "stock:move": "Entradas, saídas e transferências",
   "inventory:count": "Registrar contagens", "inventory:adjust": "Aprovar ajustes e gerenciar conferências",
-  "reports:read": "Relatórios e registro de conciliações", "costs:read": "Consultar custos e valores financeiros",
+  "reports:read": "Relatórios e revisão de conciliações", "costs:read": "Consultar custos e valores financeiros",
   "users:manage": "Gerenciar acessos da unidade", "settings:manage": "Alterar configurações", "records:delete": "Arquivar cadastros",
   "orders:read": "Consultar ordens", "orders:write": "Criar ordens, requisições e reservas", "orders:apply": "Entregar e devolver materiais nas ordens", "orders:invoice": "Confirmar faturamento de ordens",
   "purchases:read": "Consultar compras", "purchases:write": "Criar e cancelar compras", "purchases:receive": "Registrar recebimentos de compras",
   "stock:entry": "Registrar entradas", "stock:exit": "Registrar saídas não produtivas justificadas", "stock:transfer": "Transferir materiais",
   "suppliers:write": "Cadastrar e editar fornecedores", "orders:reserve": "Reservar e liberar materiais", "orders:deliver": "Entregar e aplicar materiais",
   "orders:return": "Solicitar e receber devoluções", "purchases:prices": "Consultar e informar preços das compras", "inventory:read": "Consultar inventários e conferências",
-  "reports:view": "Consultar relatórios e histórico", "reconciliation:write": "Salvar documentos de conciliação",
+  "reports:view": "Consultar relatórios e histórico", "reconciliation:write": "Registrar e revisar conciliações",
 };
 const legacyTitles = new Map([["ADMINISTRADOR", "Administrador"], ["SUPERVISOR", "Supervisor"], ["OPERADOR", "Operador"]]);
 export const profileTitle = (name: string) => ACCESS_PROFILES.find(p => p.name === name)?.title ?? legacyTitles.get(name) ?? name;

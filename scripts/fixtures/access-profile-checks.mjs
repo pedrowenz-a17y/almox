@@ -24,7 +24,7 @@ export async function verifyAccessProfiles({ page, fixtureURL, data, user, model
     } else if (url.pathname === '/api/inventory-schedules') value = { items: [{ id: id(220), title: 'Conferência fictícia', locationId: data.locations[0].id, location: data.locations[0], active: true, intervalDays: 7, nextDueAt: '2026-01-01T12:00:00Z', lastCount: null, pendingCount: null }], assignees: [], total: 1, truncated: false, serverTime: new Date().toISOString() };
     else if (url.pathname === '/api/reconciliation/setup') value = { unitCode: 'UCA', unitName: 'U.C.A. — demonstração' };
     else if (url.pathname === '/api/reconciliation/preview' && request.method() === 'POST') value = comparison;
-    else if (url.pathname === '/api/reconciliation' && request.method() === 'POST') { saves++; value = { id: id(240), ...request.postDataJSON(), createdAt: new Date().toISOString(), result: comparison }; }
+    else if (url.pathname === '/api/reconciliation' && request.method() === 'POST') { saves++; value = { id: id(240), ...request.postDataJSON(), createdAt: new Date().toISOString(), result: comparison, review: { status: 'LEGACY', canReview: false } }; }
     else if (url.pathname === '/api/reconciliation') value = [];
     else if (url.pathname === '/api/order-costs') value = { orders: [], total: 0, page: 1, pageSize: 25, criterion: 'Estimativa fictícia.', totals: { completeCost: '0.00', incompleteOrders: 0 } };
     else if (url.pathname === '/api/orders/' + order.id) value = order;
@@ -41,10 +41,14 @@ export async function verifyAccessProfiles({ page, fixtureURL, data, user, model
     await expect(page.locator('.sidebar-user small')).toHaveText(models.find(profile => profile.name === name).title.toLocaleLowerCase('pt-BR'));
   };
   const preview = async () => {
-    await page.getByLabel('Origem do arquivo', { exact: true }).fill('Arquivo fictício');
-    await page.getByLabel(/Arquivo CSV/).setInputFiles({ name: 'estoque.csv', mimeType: 'text/csv', buffer: Buffer.from('unidade;produto;local;quantidade\nUCA;ROL-6204;A-P02;24') });
-    await page.getByRole('button', { name: 'Conferir e visualizar', exact: true }).click();
-    await page.getByRole('heading', { name: 'Prévia da conciliação', exact: true }).waitFor();
+    await page.getByRole('button', { name: 'Importar arquivo', exact: true }).click();
+    await page.getByLabel('ERP de origem', { exact: true }).fill('ERP fictício');
+    await page.getByLabel('Nome do relatório', { exact: true }).fill('Arquivo fictício');
+    await page.getByLabel('Corte e observações', { exact: true }).fill('Lançamentos encerrados para esta conferência fictícia.');
+    await page.getByLabel('Arquivo CSV', { exact: true }).setInputFiles({ name: 'estoque.csv', mimeType: 'text/csv', buffer: Buffer.from('unidade;produto;local;quantidade\nUCA;ROL-6204;A-P02;24') });
+    await page.getByRole('checkbox', { name: /O relatório contém o saldo contábil/ }).check();
+    await page.getByRole('button', { name: 'Visualizar conferência', exact: true }).click();
+    await page.getByRole('dialog').waitFor();
   };
   try {
     await check('Administrador disponibiliza modelos pela tela sem associar usuários', async () => {
@@ -77,13 +81,13 @@ export async function verifyAccessProfiles({ page, fixtureURL, data, user, model
     });
     await check('Auditor visualiza prévia de conciliação sem opção de salvar documento', async () => {
       await asProfile('AUDITOR', '/conciliacao'); await preview();
-      await expect(page.getByRole('button', { name: 'Salvar documento de conferência', exact: true })).toHaveCount(0);
+      await expect(page.getByRole('button', { name: 'Registrar conferência', exact: true })).toHaveCount(0);
       assert.equal(saves, 0); await page.screenshot({ animations: 'disabled', path: path.join(output, 'auditor-consulta-desktop.png'), fullPage: true });
     });
     await check('Analista de custos pode salvar a conciliação sem ações de estoque', async () => {
       await asProfile('ANALISTA_CUSTOS', '/conciliacao'); await preview();
-      await page.getByRole('button', { name: 'Salvar documento de conferência', exact: true }).click();
-      await page.getByRole('heading', { name: 'Documento registrado', exact: true }).waitFor(); assert.equal(saves, 1);
+      await page.getByRole('button', { name: 'Registrar conferência', exact: true }).click();
+      await expect(page.getByRole('dialog').getByRole('status')).toContainText('Conferência registrada'); assert.equal(saves, 1);
       await page.goto(fixtureURL + '/dashboard'); await page.locator('.stats-grid').waitFor();
       await expect(page.getByRole('button', { name: /^Registrar entrada/ })).toHaveCount(0);
       await expect(page.getByRole('button', { name: /^Registrar saída/ })).toHaveCount(0);

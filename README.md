@@ -1,4 +1,6 @@
-# Almox ERP · U.C.A. — versão 2.10.0
+# Almox ERP · U.C.A. — versão 2.11.0
+
+**Versão 2.11.0:** conferência por CSV com associação de colunas, reconhecimento de exportações repetidas, revisão por outra pessoa e análise das diferenças. Histórico e custos por ordem preservados. Sem novo SQL; a homologação e a conexão automática com o ERP dependem dos dados e critérios da empresa. [Usar a etapa 5](docs/CONCILIACAO-ERP-2.11.md).
 
 **Versão 2.10.0:** acompanhamento de convites e primeiro acesso, cadastro preservado quando o e-mail não é confirmado, recuperação em outro aparelho e orientação de endereços/limites de envio. Não exige nova migração SQL. [Usar a etapa 4](docs/PRIMEIRO-ACESSO-2.10.md).
 

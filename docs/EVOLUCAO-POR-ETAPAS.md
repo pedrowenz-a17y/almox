@@ -8,7 +8,7 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | 2 | Perfis de acesso por responsabilidade | Implementada na versão 2.8.0; modelos disponíveis para preparação pelo administrador na tela de Usuários |
 | 3 | Responsável por turno e responsável/prazo nas pendências | Implementada na versão 2.9.0; ativação depende da aplicação da migração no banco da instalação |
 | 4 | Convites, primeiro acesso e recuperação | Implementada na versão 2.10.0, sem nova migração; domínio e SMTP dependem da configuração do projeto |
-| 5 | Conciliação homologada com o ERP oficial | Próxima etapa: o CSV já existe; automatizar depende dos dados, do ERP e das regras disponibilizadas pela empresa |
+| 5 | Conciliação com revisão e preparação para homologação com o ERP oficial | Fluxo implementado na versão 2.11.0, sem novo SQL; homologação pela empresa e conexão automática dependem de dados, sistema e critérios reais |
 
 ## Etapa 1 — aprovação independente de inventário
 
@@ -53,3 +53,7 @@ A versão 2.9.0 registra turnos por almoxarifado, passagem com aceite do indicad
 ## Etapa 4 — convites, primeiro acesso e recuperação
 
 A versão 2.10.0 acompanha convites e confirmações por identidade/unidade, preserva o cadastro quando o envio não é confirmado e trata os retornos de convite e recuperação entre dispositivos. Não cria uma senha para outra pessoa nem altera permissões automaticamente. A configuração de Site URL, redirecionamentos e SMTP continua no projeto do provedor. Consulte [uso, configuração, limites e validação](PRIMEIRO-ACESSO-2.10.md).
+
+## Etapa 5 — conferência com o ERP
+
+A versão 2.11.0 associa colunas de exportações, reconhece arquivos repetidos, registra análises por diferença e exige outra pessoa autorizada para concluir a revisão. Consultas posteriores preservam os documentos anteriores. O fluxo está pronto para testes com a empresa; a homologação e a integração automática ainda exigem dados e critérios reais. Consulte [como conferir, revisar e validar os limites](CONCILIACAO-ERP-2.11.md).

@@ -2,7 +2,7 @@
 
 Revisão de 12/11/2026, sobre a versão 2.7.2 e a alteração visual 2.7.3.
 
-Atualizações posteriores: a versão 2.7.4 implementa a aprovação independente de contagens; a versão 2.8.0 entrega os [modelos de acesso por responsabilidade](PERFIS-DE-ACESSO-2.8.md). A versão 2.9.0 acrescenta [turnos, responsáveis e prazos](TURNOS-E-PENDENCIAS-2.9.md), cuja ativação exige a nova migração no banco. A versão 2.10.0 entrega [convites, primeiro acesso e recuperação](PRIMEIRO-ACESSO-2.10.md), com configuração externa de domínio/e-mail ainda necessária. O achado abaixo descreve a situação na data da auditoria; consulte a [etapa 1 concluída e o plano de evolução](EVOLUCAO-POR-ETAPAS.md).
+Atualizações posteriores: a versão 2.7.4 implementa a aprovação independente de contagens; a versão 2.8.0 entrega os [modelos de acesso por responsabilidade](PERFIS-DE-ACESSO-2.8.md). A versão 2.9.0 acrescenta [turnos, responsáveis e prazos](TURNOS-E-PENDENCIAS-2.9.md), cuja ativação exige a nova migração no banco. A versão 2.10.0 entrega [convites, primeiro acesso e recuperação](PRIMEIRO-ACESSO-2.10.md), com configuração externa de domínio/e-mail ainda necessária. A versão 2.11.0 acrescenta [conferência por arquivo, revisão independente e análise das diferenças](CONCILIACAO-ERP-2.11.md); a homologação pela empresa continua pendente. O achado abaixo descreve a situação na data da auditoria; consulte a [etapa 1 concluída e o plano de evolução](EVOLUCAO-POR-ETAPAS.md).
 
 ## Conclusão para o TCC
 
