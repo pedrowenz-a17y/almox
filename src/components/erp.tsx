@@ -13,6 +13,7 @@ import dynamic from "next/dynamic";
 import { navigateWorkspace } from "@/lib/workspace-navigation";
 import type { PurchaseDraft } from "@/lib/purchase-draft";
 import { canMoveAnyStock, canMoveStock, canWriteCatalog, canViewReports, canViewInventory, profileTitle } from "@/lib/access-profiles";
+import { canViewManagement } from "@/lib/management";
 import Assistant from "@/components/assistant";
 import { MotionToggle } from "@/components/motion-preferences";
 import { ThemeToggle } from "@/components/theme-preferences";
@@ -131,6 +132,10 @@ const DeliveryReceipts = dynamic(
   () => import("@/components/delivery-receipts"),
   { loading: () => <Loading /> },
 );
+const ManagementDashboard = dynamic(
+  () => import("@/components/management-dashboard"),
+  { loading: () => <Loading /> },
+);
 
 const OperationalPending = dynamic(
   () => import("@/components/operational-pending"),
@@ -146,6 +151,7 @@ const Reconciliation = dynamic(() => import("@/components/reconciliation"), {
 
 const navigation = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/gestao", label: "Gerencial", icon: ChartNoAxesCombined },
   { path: "/pendencias", label: "Pendências", icon: Bell },
   { path: "/alertas", label: "Central de alertas", icon: Inbox },
   { path: "/recebimentos", label: "Recebimentos", icon: PackageCheck },
@@ -544,6 +550,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                   "Página não encontrada";
   const descriptions: Record<string, string> = {
     "/dashboard": "Saldos, movimentações e pendências da unidade.",
+    "/gestao": "Pendências, espera e posições registradas por unidade.",
     "/alertas": "Avisos por responsável, prazo e situação da operação.",
     "/recebimentos": "Confirmações e diferenças nas entregas de materiais.",
     "/pendencias":
@@ -761,6 +768,15 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
       );
     const required = navigation.find((item) => item.path === route)?.permission;
     if (required && !canNavigate(required)) return <Denied />;
+    if (route === "/gestao")
+      return canViewManagement(permissions) ? (
+        <ManagementDashboard
+          key={user?.unitId}
+          unitId={user!.unitId}
+          permissions={permissions}
+          onOpen={navigateWorkspace}
+        />
+      ) : <Denied />;
     if (route === "/recebimentos")
       return (
         <DeliveryReceipts
@@ -1938,6 +1954,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             .filter(
               (n) =>
                 (!n.permission || canNavigate(n.permission)) &&
+                (n.path !== "/gestao" || canViewManagement(permissions)) &&
                 (!["/pendencias", "/alertas"].includes(n.path) ||
                   can("orders:read") ||
                   canViewInventory(permissions)) &&

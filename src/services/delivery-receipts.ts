@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
 import { canActOnOrder } from "@/lib/access-profiles";
+import type { QueueAge } from "@/lib/management";
 import {
   RECEIPT_EVENT_TYPES,
   RECEIPT_LABELS,
@@ -98,7 +99,12 @@ export async function receiptCandidates(actor: StockActor) {
   };
 }
 
-async function snapshot(actor: StockActor, raw: unknown, db: StockTransaction) {
+export async function deliveryReceiptSnapshot(
+  actor: StockActor,
+  raw: unknown,
+  db: StockTransaction,
+  management?: { now: Date },
+) {
   const input = listSchema.parse(raw);
   if (input.scope === "UNIT" && !actor.permissions.includes("orders:read"))
     throw new AppError(
@@ -110,6 +116,7 @@ async function snapshot(actor: StockActor, raw: unknown, db: StockTransaction) {
       items: DeliveryReceipt[] | null;
       total: number;
       summary: Record<ReceiptStatus, number> | null;
+      management?: Partial<Record<ReceiptStatus, QueueAge>>;
     }>
   >(Prisma.sql`
   WITH deliveries AS (
@@ -125,6 +132,7 @@ async function snapshot(actor: StockActor, raw: unknown, db: StockTransaction) {
       COALESCE(r.metadata->>'status', CASE WHEN e.metadata #>> '{handoff,receivedByUserId}' IS NULL THEN 'UNLINKED' ELSE 'PENDING' END) AS status,
       COALESCE((r.metadata->>'version')::integer,0) AS version, r.metadata->>'receivedQuantity' AS "receivedQuantity",
       (r.metadata->>'materialMatches')::boolean AS "materialMatches", r.note, r.reference, r."createdAt" AS "respondedAt"
+      ${management ? Prisma.sql`, CASE WHEN COALESCE(r.metadata->>'status','PENDING') IN ('DISPUTED','PROPOSED') THEN r."createdAt" ELSE e."createdAt" END AS "waitingSince"` : Prisma.empty}
     FROM "OrderEvent" e JOIN "WorkOrder" o ON o.id=e."orderId" AND o."unitId"=e."unitId"
     JOIN "OrderMaterial" m ON m.id=e."materialId" AND m."unitId"=e."unitId"
     JOIN "Product" p ON p.id=m."productId" AND p."unitId"=e."unitId"
@@ -145,12 +153,40 @@ async function snapshot(actor: StockActor, raw: unknown, db: StockTransaction) {
   totals AS (SELECT status,count(*)::integer AS count FROM deliveries GROUP BY status)
   SELECT (SELECT jsonb_agg(page ORDER BY "deliveredAt" DESC,id DESC) FROM page) AS items,
     (SELECT count(*)::integer FROM filtered) AS total, (SELECT jsonb_object_agg(status,count) FROM totals) AS summary
+    ${
+      management
+        ? Prisma.sql`, (SELECT jsonb_object_agg(status,jsonb_build_object('count',total,'dated',dated,'undated',total-dated,'oldestAt',oldest)) FROM (
+      SELECT status,count(*)::integer AS total,count(*) FILTER(WHERE "waitingSince"<=${management.now})::integer AS dated,
+        min("waitingSince") FILTER(WHERE "waitingSince"<=${management.now}) AS oldest FROM deliveries GROUP BY status) ages) AS management`
+        : Prisma.empty
+    }
   `);
   const utc = (value: string) =>
     new Date(
       /[zZ]|[+-]\d{2}:?\d{2}$/.test(value) ? value : value + "Z",
     ).toISOString();
   return {
+    ...(management
+      ? {
+          management: Object.fromEntries(
+            Object.keys(RECEIPT_LABELS).map((key) => {
+              const metric = result?.management?.[key as ReceiptStatus] ?? {
+                count: 0,
+                dated: 0,
+                undated: 0,
+                oldestAt: null,
+              };
+              return [
+                key,
+                {
+                  ...metric,
+                  oldestAt: metric.oldestAt ? utc(metric.oldestAt) : null,
+                },
+              ];
+            }),
+          ) as Record<ReceiptStatus, QueueAge>,
+        }
+      : {}),
     items: (result?.items ?? []).map((item) => ({
       ...item,
       deliveredAt: utc(item.deliveredAt),
@@ -186,7 +222,11 @@ export async function listDeliveryReceipts(
   return prisma.$transaction(
     async (tx) => {
       const member = await activeMember(tx, actor);
-      return snapshot({ ...actor, permissions: member.permissions }, raw, tx);
+      return deliveryReceiptSnapshot(
+        { ...actor, permissions: member.permissions },
+        raw,
+        tx,
+      );
     },
     {
       isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
@@ -199,7 +239,7 @@ async function scopedDelivery(
   actor: StockActor,
   id: string,
 ) {
-  const result = await snapshot(
+  const result = await deliveryReceiptSnapshot(
     actor,
     {
       scope: actor.permissions.includes("orders:read") ? "UNIT" : "MINE",

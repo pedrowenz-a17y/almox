@@ -1,0 +1,6 @@
+{
+  "applicationVersion": "2.15.0",
+  "dependencyEntriesPreserved": true,
+  "checkedAgainstParentCommit": "036b65d27560336da409d4dfd3408e98a86428ce",
+  "method": "JSON comparison allowing changes only to the two root application version fields; installed eslint-module-utils remains 2.14.0."
+}

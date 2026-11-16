@@ -8,6 +8,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { AppError } from "@/lib/http";
 import type { StockActor } from "@/services/stock";
+import type { QueueAge } from "@/lib/management";
 import {
   coordinationReady,
   responsibilityCandidates,
@@ -53,6 +54,7 @@ export interface PendingItem {
   assigneeEligible: boolean;
 }
 export interface PendingPage {
+  management?: Record<PendingType, QueueAge>;
   items: PendingItem[];
   totals: Record<PendingType, number>;
   total: number;
@@ -97,6 +99,7 @@ export async function pendingSnapshot(
     now?: Date;
     warehouseId?: string;
     alerts?: { read: "ALL" | "UNREAD" | "READ" };
+    management?: boolean;
   },
 ): Promise<PendingPage> {
   const orders = actor.permissions.includes("orders:read"),
@@ -116,6 +119,14 @@ export async function pendingSnapshot(
   const dayStart = new Date(today + "T00:00:00-03:00"),
     dayEnd = new Date(dayStart.getTime() + 86400000);
   const alertMode = selection?.alerts;
+  const managementSummary = selection?.management
+    ? Prisma.sql`,
+    (SELECT jsonb_object_agg(type, jsonb_build_object('count', total, 'dated', dated, 'undated', total-dated, 'oldestAt', oldest)) FROM (
+      SELECT type, count(*)::integer AS total, count(since)::integer AS dated, min(since) AS oldest
+      FROM (SELECT type, CASE WHEN COALESCE(CASE WHEN type='SCHEDULE' THEN "dueAt" ELSE "openedAt" END, 'infinity'::timestamp)<=${now}
+        THEN CASE WHEN type='SCHEDULE' THEN "dueAt" ELSE "openedAt" END END AS since FROM enriched) ages GROUP BY type
+    ) stats) AS management`
+    : Prisma.empty;
   const notices = alertMode
     ? Prisma.sql`notices AS (
     SELECT p.*, identity."alertKey", seen."readAt" FROM enriched p
@@ -161,6 +172,7 @@ export async function pendingSnapshot(
       readTotal?: number;
       dueTodayTotal?: number;
       ineligibleTotal?: number;
+      management?: Partial<Record<PendingType, QueueAge>>;
     }>
   >(Prisma.sql`
     WITH pending AS (
@@ -238,13 +250,34 @@ export async function pendingSnapshot(
       (SELECT count(*)::integer FROM filtered) AS total,
       (SELECT count(*)::integer FROM enriched WHERE overdue) AS "overdueTotal",
       (SELECT count(*)::integer FROM enriched WHERE "assigneeId" IS NULL) AS "unassignedTotal",
-      (SELECT count(*)::integer FROM enriched WHERE "assigneeId" = ${actor.id}) AS "mineTotal" ${alertSummary}
+      (SELECT count(*)::integer FROM enriched WHERE "assigneeId" = ${actor.id}) AS "mineTotal" ${alertSummary} ${managementSummary}
   `);
   const utc = (value: string) =>
     new Date(
       /[zZ]|[+-]\d{2}:?\d{2}$/.test(value) ? value : `${value}Z`,
     ).toISOString();
   return {
+    ...(selection?.management
+      ? {
+          management: Object.fromEntries(
+            pendingTypes.map((key) => {
+              const metric = result?.management?.[key] ?? {
+                count: 0,
+                dated: 0,
+                undated: 0,
+                oldestAt: null,
+              };
+              return [
+                key,
+                {
+                  ...metric,
+                  oldestAt: metric.oldestAt ? utc(metric.oldestAt) : null,
+                },
+              ];
+            }),
+          ) as Record<PendingType, QueueAge>,
+        }
+      : {}),
     items: (result?.items ?? []).map((item) => ({
       ...item,
       createdAt: utc(item.createdAt),

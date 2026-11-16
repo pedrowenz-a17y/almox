@@ -7,7 +7,7 @@ export function unitAuditScope(
 ): Prisma.AuditLogWhereInput {
   return {
     unitId,
-    AND: [{ NOT: { entity: "OperationalAlert" } }],
+    AND: [{ NOT: { entity: { in: ["OperationalAlert", "ManagementPosition"] } } }],
     ...(permissions.includes("costs:read")
       ? {}
       : {

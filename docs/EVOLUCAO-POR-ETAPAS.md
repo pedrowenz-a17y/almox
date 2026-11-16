@@ -12,6 +12,7 @@ A partir da auditoria de 12/11/2026, as melhorias serão entregues em versões s
 | 6 | Validação do processo e indicadores | Implementada na versão 2.12.0, sem novo SQL; a execução e a avaliação com a empresa dependem de observações e evidências reais |
 | 7 | Central de alertas operacionais | Implementada na versão 2.13.0, com leitura individual e consulta da origem; avisos dentro do app, sem novo SQL |
 | 8 | Confirmação independente de recebimento | Implementada na versão 2.14.0, com destinatário autenticado, divergência e aceite do tratamento; sem novo SQL ou baixa duplicada |
+| 9 | Visão gerencial por unidade | Implementada na versão 2.15.0, com comparação autorizada, espera conhecida e posições diárias registradas; sem novo SQL |
 
 ## Etapa 1 — aprovação independente de inventário
 
@@ -72,3 +73,7 @@ A versão 2.13.0 reúne a fila operacional em uma central por unidade, com respo
 ## Etapa 8 — confirmar recebimento e tratar diferenças
 
 A versão 2.14.0 vincula novas entregas à conta indicada, permite confirmação ou relato de diferença e preserva as propostas de tratamento e respostas do destinatário. O acompanhamento é separado das operações de estoque. Consulte [uso, acesso e limites](RECEBIMENTOS-2.14.md).
+
+## Etapa 9 — acompanhar a operação por unidade
+
+A versão 2.15.0 reúne as filas atuais e a espera conhecida em uma comparação por unidade. O histórico usa posições registradas pelo responsável, sem preencher dias ausentes com zero ou reconstruir resultados anteriores. Consulte [uso, acesso e limites](GERENCIAL-2.15.md).

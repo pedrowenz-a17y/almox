@@ -1,5 +1,7 @@
 # Validação da versão U.C.A. / Supabase
 
+**Etapa 9 — versão 2.15.0:** visão gerencial, comparação autorizada, espera conhecida e posições diárias verificadas com 346 testes de regressão em PostgreSQL isolado e 114 verificações de interface, incluindo as etapas anteriores. Sem falhas ou testes ignorados. Compilação de produção, TypeScript e ESLint concluídos. Evidências em [management](../artifacts/management) e [procedimento e limites](GERENCIAL-2.15.md). Os testes não autenticaram contas nem alteraram dados da empresa.
+
 **Etapa 8 — versão 2.14.0:** recebimentos por conta indicada, divergências e aceite do tratamento verificados com 333 testes de regressão em PostgreSQL isolado e 102 verificações de interface, incluindo as etapas anteriores. Sem falhas ou testes ignorados. Compilação de produção, TypeScript e ESLint concluídos. Evidências em [delivery-receipts](../artifacts/delivery-receipts) e [procedimento e limites](RECEBIMENTOS-2.14.md). Nenhuma conta de produção foi autenticada e nenhum dado da empresa foi alterado nos testes.
 
 **Etapa 7 — versão 2.13.0:** a central de alertas foi verificada com 320 testes de regressão em PostgreSQL isolado e 90 verificações de interface, incluindo as etapas anteriores. Sem falhas ou testes ignorados. Compilação de produção, TypeScript e ESLint concluídos. As evidências estão em [operational-alerts](../artifacts/operational-alerts); os testes não autenticaram contas nem alteraram dados da empresa. Veja [uso e limites](ALERTAS-OPERACIONAIS-2.13.md).

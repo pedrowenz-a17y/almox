@@ -376,3 +376,64 @@
 .receipt-response-form .receipt-check { display:flex; align-items:flex-start; gap:10px; font-size:13px; line-height:1.7; }
 .receipt-check input { width:18px; height:18px; margin-top:3px; flex-shrink:0; accent-color:var(--theme-link); }
 @media(max-width:640px) { .receipt-summary { grid-template-columns:repeat(2,minmax(0,1fr)); } .receipt-cards, .receipt-detail { padding:14px; } .receipt-cards > li { padding:14px; } .receipt-actions > .button, .receipt-cards > li > .button { width:100%; justify-content:center; } .receipts-workspace .segmented { max-width:100%; } .receipts-workspace .segmented > button { white-space:normal; } }
+
+/* Operational overview: comparison and recorded positions. */
+.management-workspace { display:grid; gap:24px; min-width:0; }
+.management-context { border-left:3px solid var(--theme-link); background:linear-gradient(110deg,var(--surface),var(--surface-muted)); padding:20px 22px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.management-context span { font-size:10px; font-weight:700; letter-spacing:.1em; color:var(--theme-link); }
+.management-context h2 { font-size:20px; margin:8px 0; }
+.management-context p, .management-context small { font-size:12px; color:var(--muted); line-height:1.7; margin:0; }
+.management-context > div:last-child { display:grid; gap:8px; justify-items:end; }
+.management-highlights { display:flex; flex-wrap:wrap; gap:20px; padding:2px 0 8px; }
+.management-highlights > div { flex:1 1 180px; display:grid; gap:8px; padding:0 20px; border-left:1px solid var(--border); }
+.management-highlights > div:first-child { padding-left:0; border-left:0; }
+.management-highlights strong { font-size:32px; line-height:1.1; font-variant-numeric:tabular-nums; }
+.management-highlights span { font-size:12px; color:var(--muted); line-height:1.6; }
+.management-workspace .panel-heading h2 { font-size:16px; }
+.management-workspace .panel-heading p { font-size:12px; color:var(--muted); margin:6px 0 0; line-height:1.6; }
+.management-units { border:0; border-bottom:1px solid var(--border); padding:8px 20px 18px; margin:0; display:flex; flex-wrap:wrap; gap:10px; }
+.management-units legend { font-size:11px; color:var(--muted); margin-bottom:10px; }
+.management-units label { display:flex; gap:8px; align-items:center; border:1px solid var(--border); border-radius:7px; padding:8px 12px; font-size:12px; cursor:pointer; }
+.management-units input { width:16px; height:16px; accent-color:var(--theme-link); margin:0; }
+.management-units label:has(input:checked) { background:var(--surface-muted); }
+.management-units small { color:var(--muted); font-size:10px; margin-left:7px; }
+.management-matrix { table-layout:fixed; width:100%; min-width:0 !important; }
+.management-matrix th:first-child { width:36%; }
+.management-matrix th, .management-matrix td { white-space:normal; vertical-align:middle; overflow-wrap:anywhere; border-bottom-color:var(--border); padding:14px 20px; }
+.management-matrix tbody th { font-size:13px; font-weight:500; color:var(--text); background:transparent; text-transform:none; letter-spacing:normal; }
+.management-matrix small { display:block; margin-top:5px; font-size:11px; font-weight:400; color:var(--muted); line-height:1.6; }
+.management-value { font-size:18px; font-variant-numeric:tabular-nums; }
+.management-missing { color:var(--muted); font-size:12px; }
+.management-source-actions { display:flex; gap:18px; padding:18px 20px 4px; flex-wrap:wrap; }
+.management-source-actions .text-button { display:inline-flex; align-items:center; gap:6px; }
+.management-caption { color:var(--muted); font-size:12px; line-height:1.7; padding:14px 20px 18px; margin:0; }
+.management-period { display:flex; flex-wrap:wrap; align-items:end; gap:14px; padding:0 20px 18px; }
+.management-period label { display:grid; gap:7px; font-size:12px; flex:1 1 140px; }
+.management-period .management-metric { flex:2 1 260px; }
+.management-window { margin:0; padding:0 20px 14px; font-size:12px; color:var(--muted); line-height:1.7; }
+.management-criteria { border-top:1px solid var(--border); padding-top:18px; font-size:12px; line-height:1.8; color:var(--muted); }
+.management-criteria summary { cursor:pointer; font-weight:600; color:var(--text); }
+.management-capture > p, .management-capture > small { font-size:13px; line-height:1.7; }
+.management-capture dl { display:grid; margin:0; border-block:1px solid var(--border); }
+.management-capture dl > div { display:flex; justify-content:space-between; gap:16px; padding:10px 0; font-size:13px; }
+.management-capture dd { margin:0; font-weight:600; font-variant-numeric:tabular-nums; }
+@media(max-width:640px) {
+ .management-context { display:grid; padding:18px; }
+ .management-context > div:last-child { justify-items:start; }
+ .management-context h2 { font-size:18px; }
+ .management-highlights { gap:18px; }
+ .management-highlights > div { flex:1 1 100px; padding:0; border:0; }
+ .management-highlights strong { font-size:28px; }
+ .management-matrix { display:block; }
+ .management-matrix thead { display:none; }
+ .management-matrix tbody { display:grid; }
+ .management-matrix tr { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-bottom:1px solid var(--border); }
+ .management-matrix tbody th { width:auto; grid-column:1/-1; background:var(--surface-muted); padding:12px 16px; border:0; }
+ .management-matrix td { padding:12px 16px; border:0; }
+ .management-matrix td::before { content:attr(data-label); display:block; color:var(--muted); font-size:11px; margin-bottom:8px; }
+ .management-matrix th:first-child { width:auto; }
+ .management-period { padding-inline:16px; }
+ .management-period .management-metric { flex-basis:100%; }
+ .management-history-table small { font-size:10px; }
+ .management-workspace .table-wrap { overflow:visible; }
+}
