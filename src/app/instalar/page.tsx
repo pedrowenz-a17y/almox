@@ -48,7 +48,7 @@ export default function Installation() {
         <article className={styles.card} id="windows">
           <Monitor size={27} aria-hidden="true" />
           <h2>No Windows</h2>
-          <p className={styles.fileInfo}>EXE · versão 2.6.1 · 175 MB<br />Windows 10/11 · 64 bits</p>
+          <p className={styles.fileInfo}>EXE · versão 2.6.1 · 176 MB<br />Windows 10/11 · 64 bits</p>
           <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.1/Almox-ERP-2.6.1-Windows-x64-Setup.exe" download="Almox-ERP-2.6.1-Windows-x64-Setup.exe">
             <Download size={19} aria-hidden="true" /> Baixar para Windows
           </a>
