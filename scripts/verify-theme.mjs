@@ -34,7 +34,7 @@ const accessOnboarding = erpReconciliation || process.argv.includes('--access-on
 const operationalResponsibility = accessOnboarding || process.argv.includes('--operational-responsibility');
 const accessProfiles = operationalResponsibility || process.argv.includes('--access-profiles');
 const independentApproval = accessProfiles || process.argv.includes('--inventory-approval');
-const output = path.join(root, management ? 'artifacts/management' : deliveryReceipts ? 'artifacts/delivery-receipts' : operationalAlerts ? 'artifacts/operational-alerts' : validationPilot ? 'artifacts/validation-pilot' : erpReconciliation ? 'artifacts/erp-reconciliation' : accessOnboarding ? 'artifacts/access-onboarding' : operationalResponsibility ? 'artifacts/operational-responsibility' : accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
+const output = process.env.QA_ARTIFACT_DIR ? path.resolve(process.env.QA_ARTIFACT_DIR) : path.join(root, management ? 'artifacts/management' : deliveryReceipts ? 'artifacts/delivery-receipts' : operationalAlerts ? 'artifacts/operational-alerts' : validationPilot ? 'artifacts/validation-pilot' : erpReconciliation ? 'artifacts/erp-reconciliation' : accessOnboarding ? 'artifacts/access-onboarding' : operationalResponsibility ? 'artifacts/operational-responsibility' : accessProfiles ? 'artifacts/access-profiles' : independentApproval ? 'artifacts/independent-inventory' : 'artifacts/theme-audit');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'almox-theme-'));
 const require = createRequire(import.meta.url);
 const { build } = createRequire(require.resolve('tsx/package.json'))('esbuild');
@@ -129,6 +129,7 @@ try {
   if (!reconciliationOnly) {
   await check('Tema escuro padrão no login, contraste e ajuste em desktop e celular', async () => {
     await page.goto(baseURL + '/login'); await theme(page, 'dark');
+    await expect(page.getByRole('heading', { name: 'Seu almoxarifado começa aqui.' })).toBeVisible();
     await page.getByRole('button', { name: 'Ativar modo claro', exact: true }).waitFor();
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: width > 900 ? 768 : 844 });
@@ -137,6 +138,30 @@ try {
       if (width === 1440) assert.ok(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1));
       await page.screenshot({ animations: 'disabled', path: path.join(output, `login-dark-${width}.png`), fullPage: true });
     }
+  });
+  await check('Oferta flutuante de instalação respeita telas pequenas', async () => {
+    await page.evaluate(() => {
+      const event = new Event('beforeinstallprompt', { cancelable: true });
+      window.dispatchEvent(event);
+    });
+    const offer = page.locator('.pwa-install');
+    await expect(offer).toHaveCount(1);
+    await expect(offer).toBeHidden();
+    await page.setViewportSize({ width: 1440, height: 768 });
+    await expect(offer).toBeVisible();
+  });
+  await check('Login em janela curta mantém ajuda, aviso e envio acessíveis', async () => {
+    await page.setViewportSize({ width: 680, height: 420 });
+    await page.goto(baseURL + '/login?error=1');
+    await expect(page.locator('.notice[role="alert"]')).toContainText('O link de acesso expirou');
+    const links = page.locator('.auth-access-links');
+    assert.equal(await links.evaluate(element => getComputedStyle(element).gridColumnEnd), '-1');
+    const submit = page.getByRole('button', { name: 'Entrar no almoxarifado' });
+    await submit.scrollIntoViewIfNeeded();
+    await expect(submit).toBeInViewport();
+    await noOverflow(page);
+    await page.setViewportSize({ width: 320, height: 844 });
+    await page.goto(baseURL + '/login');
   });
   await check('Preferência clara persiste ao recarregar e navegar para instalação', async () => {
     const button = page.getByRole('button', { name: 'Ativar modo claro', exact: true });
@@ -175,6 +200,8 @@ try {
     await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(fixtureURL + '/dashboard');
     await page.locator('.stats-grid').waitFor(); await theme(page, 'dark');
     for (const selector of ['.stat-value', '.stat-top > span', '.today-chip', '.page-heading p']) await contrast(page, selector);
+    await expect(page.locator('.stat-card').filter({ hasText: 'Produtos com saldo' }).locator('.stat-value')).toHaveText('3');
+    await expect(page.locator('.stat-card').filter({ hasText: 'Abaixo do estoque mínimo' }).locator('.stat-value')).toHaveText('1');
     assert.match(await page.locator('.scan-banner').evaluate(el => getComputedStyle(el, '::before').backgroundImage), /implemento-uca/);
     await noOverflow(page); await page.screenshot({ animations: 'disabled', path: path.join(output, 'dashboard-dark-desktop.png'), fullPage: true });
     await page.getByRole('button', { name: 'Ativar modo claro', exact: true }).click(); await theme(page, 'light');
@@ -234,6 +261,10 @@ try {
       const button = page.getByRole('button', { name: 'Ativar modo claro', exact: true }); await expect(button).toBeInViewport();
       const menu = page.getByRole('button', { name: 'Abrir menu', exact: true }); await expect(menu).toBeInViewport();
       const b = await button.boundingBox(), m = await menu.boundingBox(); assert.ok(b.x > m.x + m.width);
+      const search = page.getByRole('textbox', { name: 'Busca global' });
+      await expect(search).toBeInViewport();
+      const s = await search.boundingBox(); assert.ok(s.width >= width / 2 && s.y >= b.y + b.height);
+      await expect(page.getByRole('button', { name: 'Escanear', exact: true })).toBeInViewport();
       await page.screenshot({ animations: 'disabled', path: path.join(output, `dashboard-dark-${width}.png`), fullPage: true });
     }
   });

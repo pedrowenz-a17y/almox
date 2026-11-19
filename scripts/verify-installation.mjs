@@ -34,8 +34,8 @@ try {
     assert.equal((await page.goto(baseURL + '/instalar')).status(), 200);
     await page.getByRole('heading', { name: /O trabalho continua/ }).waitFor();
     await page.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
-    assert.equal(await page.getByRole('link', { name: 'Baixar para Android' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-v1.0.0/android-distribution/Almox-ERP-Android-1.0.0.apk');
-    assert.equal(await page.getByRole('link', { name: 'Baixar para Windows' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/Almox-ERP-2.6.0-Windows-x64-Setup.exe');
+    assert.equal(await page.getByRole('link', { name: 'Baixar para Android' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/releases/download/android-v1.0.1/Almox-ERP-Android-1.0.1.apk');
+    assert.equal(await page.getByRole('link', { name: 'Baixar para Windows' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.1/Almox-ERP-2.6.1-Windows-x64-Setup.exe');
     await page.waitForFunction(() => document.querySelector('input[aria-label="Endereço do ERP"]')?.value === location.origin);
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 1050 });
@@ -44,10 +44,10 @@ try {
     }
   });
   await check('Botões iniciam download dos arquivos, sem executar o instalador', async () => {
-    for (const [name, filename] of [['Baixar para Android', 'Almox-ERP-Android-1.0.0.apk'], ['Baixar para Windows', 'Almox-ERP-2.6.0-Windows-x64-Setup.exe']]) {
+    for (const [name, filename] of [['Baixar para Android', 'Almox-ERP-Android-1.0.1.apk'], ['Baixar para Windows', 'Almox-ERP-2.6.1-Windows-x64-Setup.exe']]) {
       const link = page.getByRole('link', { name });
       const href = await link.getAttribute('href');
-      await page.route(href, route => route.fulfill({ status: 200, contentType: 'application/octet-stream', headers: filename.endsWith('.exe') ? { 'Content-Disposition': `attachment; filename="${filename}"` } : {}, body: 'Fixture de download; nao e um instalador.' }));
+      await page.route(href, route => route.fulfill({ status: 200, contentType: 'application/octet-stream', headers: { 'Content-Disposition': `attachment; filename="${filename}"` }, body: 'Fixture de download; nao e um instalador.' }));
       const received = page.waitForEvent('download');
       await link.click();
       const download = await received;

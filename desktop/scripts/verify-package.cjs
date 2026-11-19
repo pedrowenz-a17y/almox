@@ -46,7 +46,8 @@ async function verify() {
   const report = { version, platform: process.platform, architecture: process.arch, installer: path.basename(installer), bytes: data.length, sha256: hash(data), serverFilesVerified: entries.length,
     privateEnvFiles: 0, checks: ['PE Windows x64 do aplicativo', 'NSIS completo com desinstalador', 'Prisma e bibliotecas nativas Windows', 'todos os recursos do servidor preservados por hash', 'ASAR corresponde ao código validado', 'sem .env ou harness de teste'],
     limitation: process.platform === 'win32' ? 'Compilação em Windows. A homologação operacional no computador de destino continua necessária.' : 'Compilação cruzada em Linux. A instalação e a proteção DPAPI ainda precisam de homologação em Windows físico.' };
-  const output = path.join(desktop, '../artifacts/desktop-2.6.0/package-checks.json');
+  const output = path.join(desktop, `../artifacts/desktop-${version}/package-checks.json`);
+  await fs.mkdir(path.dirname(output), { recursive: true });
   await fs.writeFile(output, JSON.stringify(report, null, 2) + '\n');
   await fs.writeFile(path.join(desktop, 'dist/SHA256SUMS.txt'), `${report.sha256}  ${report.installer}\n`);
   console.log(JSON.stringify(report));

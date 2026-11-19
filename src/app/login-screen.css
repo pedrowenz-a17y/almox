@@ -271,7 +271,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 16px;
   }
-  .login-screen .login-form form > .auth-recovery-link,
+  .login-screen .login-form form > .auth-access-links,
   .login-screen .login-form form > .notice,
   .login-screen .login-form form > .login-submit {
     grid-column: 1 / -1;

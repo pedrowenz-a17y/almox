@@ -41,7 +41,7 @@ jobs:
           path: |
             desktop/dist/*Setup.exe
             desktop/dist/SHA256SUMS.txt
-            artifacts/desktop-2.6.0/
+            artifacts/desktop-${{ steps.version.outputs.value }}/
           if-no-files-found: error
   publicar:
     needs: desktop
@@ -77,7 +77,7 @@ jobs:
           gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber \
             "release/desktop/dist/Almox-ERP-$VERSION-Windows-x64-Setup.exe" \
             release/desktop/dist/SHA256SUMS.txt \
-            release/artifacts/desktop-2.6.0/package-checks.json \
-            release/artifacts/desktop-2.6.0/electron-checks.json \
-            release/artifacts/desktop-2.6.0/installed-checks.json
+            "release/artifacts/desktop-$VERSION/package-checks.json" \
+            "release/artifacts/desktop-$VERSION/electron-checks.json" \
+            "release/artifacts/desktop-$VERSION/installed-checks.json"
           gh release edit "$tag" --repo "$GITHUB_REPOSITORY" --draft=false

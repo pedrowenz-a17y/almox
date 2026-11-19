@@ -1,5 +1,6 @@
 /* global almoxSetup */
 const statusNode = document.getElementById('status');
+const address = document.getElementById('origin');
 const buttons = [...document.querySelectorAll('button')];
 let busy = false;
 async function perform(action) {
@@ -15,10 +16,13 @@ async function perform(action) {
 }
 document.getElementById('remote-form').addEventListener('submit', event => {
   event.preventDefault();
-  void perform(() => almoxSetup.connect(document.getElementById('origin').value));
+  void perform(() => almoxSetup.connect(address.value));
 });
 document.getElementById('import-local').addEventListener('click', () => { void perform(() => almoxSetup.importLocal()); });
 almoxSetup.status().then(state => {
   document.getElementById('version').textContent = `Almox ERP ${state.version}`;
-  statusNode.textContent = state.error || '';
+  if (!busy) {
+    if (state.origin && !address.value) address.value = state.origin;
+    statusNode.textContent = state.error || state.message || '';
+  }
 }).catch(() => { statusNode.textContent = 'Reabra o aplicativo para configurar a conexão.'; });

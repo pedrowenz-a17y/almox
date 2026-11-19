@@ -113,6 +113,9 @@ export function Pwa({ inline = false }: { inline?: boolean }) {
           color: white;
           font-size: 15px;
         }
+        @media (max-width: 760px), (max-height: 650px) {
+          .pwa-install:not(.pwa-install-inline) { display: none; }
+        }
         @media print {
           .pwa-offline,
           .pwa-install {

@@ -14,6 +14,7 @@ import android.print.PrintManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progress;
     private WebView browser;
     private String origin;
-    private TextView status;
     private PermissionRequest cameraRequest;
     private ValueCallback<Uri[]> fileCallback;
     private NativeFiles nativeFiles;
@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(root);
         ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
-            view.setPadding(bars.left, bars.top, bars.right, bars.bottom); return insets;
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
         });
         LinearLayout toolbar = new LinearLayout(this); toolbar.setGravity(Gravity.CENTER_VERTICAL); toolbar.setPadding(dp(16), 0, dp(4), 0);
         ImageView mark = new ImageView(this); mark.setImageResource(R.drawable.uca_icon); mark.setContentDescription("U.C.A.");
@@ -130,15 +131,27 @@ public class MainActivity extends AppCompatActivity {
         TextView description = text("Conecte à sua unidade para consultar peças, ler etiquetas e registrar as operações.", 14, Color.rgb(112, 116, 131), false);
         description.setPadding(0, dp(14), 0, dp(28)); box.addView(description);
         TextView label = text("Endereço do ERP", 13, INK, true); box.addView(label);
+        label.setLabelFor(R.id.origin_input);
         EditText input = new EditText(this); input.setId(R.id.origin_input); input.setSingleLine(true); input.setTextSize(13);
         input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_URI);
+        input.setImeOptions(EditorInfo.IME_ACTION_GO);
         input.setPadding(dp(14), dp(10), dp(14), dp(10)); input.setBackground(surface(Color.rgb(249, 249, 253), Color.rgb(221, 224, 234)));
         input.setHint("https://seu-erp.vercel.app"); input.setText(preferences.getString("origin", BuildConfig.ERP_ORIGIN));
-        LinearLayout.LayoutParams field = new LinearLayout.LayoutParams(-1, dp(56)); field.topMargin = dp(8); box.addView(input, field);
+        input.setMinHeight(dp(56));
+        LinearLayout.LayoutParams field = new LinearLayout.LayoutParams(-1, -2); field.topMargin = dp(8); box.addView(input, field);
         Button connect = button("Conectar à minha unidade", R.id.connect_button);
-        LinearLayout.LayoutParams action = new LinearLayout.LayoutParams(-1, dp(54)); action.topMargin = dp(18); box.addView(connect, action);
-        status = text(error, 12, RED, false); status.setId(R.id.status_text); status.setPadding(0, dp(15), 0, dp(12)); box.addView(status);
+        connect.setMinHeight(dp(54));
+        LinearLayout.LayoutParams action = new LinearLayout.LayoutParams(-1, -2); action.topMargin = dp(18); box.addView(connect, action);
+        TextView status = text(error, 12, RED, false);
+        status.setId(R.id.status_text);
+        status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        status.setPadding(0, dp(15), 0, dp(12)); box.addView(status);
         TextView note = text("O PC pode ficar desligado quando o servidor está na nuvem. Use sua conta autorizada; o aplicativo não precisa do arquivo .env.", 12, Color.rgb(125, 129, 143), false); box.addView(note);
+        input.setOnEditorActionListener((view, actionId, event) -> {
+            if (actionId != EditorInfo.IME_ACTION_GO || !connect.isEnabled()) return false;
+            connect.performClick();
+            return true;
+        });
         connect.setOnClickListener(view -> {
             final String candidate;
             try { candidate = ConnectionPolicy.origin(input.getText().toString()); }
@@ -147,10 +160,14 @@ public class MainActivity extends AppCompatActivity {
             worker.execute(() -> {
                 String result = checkServer(candidate);
                 runOnUiThread(() -> {
-                    if (isFinishing() || isDestroyed()) return;
-                    connect.setEnabled(true);
-                    if (result != null) { status.setText(result); return; }
+                    if (isFinishing() || isDestroyed() || !box.isAttachedToWindow()) return;
+                    if (result != null) { connect.setEnabled(true); status.setText(result); return; }
+                    if (candidate.equals(origin)) {
+                        openErp();
+                        return;
+                    }
                     CookieManager.getInstance().removeAllCookies(ignored -> {
+                        if (isFinishing() || isDestroyed() || !box.isAttachedToWindow()) return;
                         WebStorage.getInstance().deleteAllData();
                         origin = candidate; preferences.edit().putString("origin", origin).apply(); openErp();
                     });
@@ -184,7 +201,10 @@ public class MainActivity extends AppCompatActivity {
         WebSettings settings = view.getSettings(); settings.setJavaScriptEnabled(true); settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false); settings.setAllowContentAccess(true); settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setJavaScriptCanOpenWindowsAutomatically(false); settings.setSupportMultipleWindows(true);
-        settings.setMediaPlaybackRequiresUserGesture(true); settings.setBuiltInZoomControls(false);
+        settings.setMediaPlaybackRequiresUserGesture(true);
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(false);
         CookieManager.getInstance().setAcceptCookie(true); CookieManager.getInstance().setAcceptThirdPartyCookies(view, false);
         nativeFiles.attach(view, origin, child);
         view.setWebViewClient(new WebViewClient() {

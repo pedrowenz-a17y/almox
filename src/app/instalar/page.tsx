@@ -35,26 +35,26 @@ export default function Installation() {
         <article className={styles.card} id="android">
           <Smartphone size={27} aria-hidden="true" />
           <h2>No Android</h2>
-          <p className={styles.fileInfo}>APK · versão 1.0.0 · 2,7 MB<br />Android 8 ou superior</p>
-          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-v1.0.0/android-distribution/Almox-ERP-Android-1.0.0.apk" download="Almox-ERP-Android-1.0.0.apk">
+          <p className={styles.fileInfo}>APK · versão 1.0.1 · 2,7 MB<br />Android 8 ou superior</p>
+          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/android-v1.0.1/Almox-ERP-Android-1.0.1.apk" download="Almox-ERP-Android-1.0.1.apk">
             <Download size={19} aria-hidden="true" /> Baixar para Android
           </a>
           <ol>
             <li>Toque em <strong>Baixar para Android</strong> e aguarde terminar.</li>
-            <li>Abra o arquivo <strong>Almox-ERP-Android-1.0.0.apk</strong> na pasta Downloads. O Android apresenta a confirmação de instalação.</li>
-            <li>Abra o <strong>Almox ERP</strong> e substitua o endereço preenchido pelo endereço abaixo. Toque em <strong>Conectar à minha unidade</strong>.</li>
+            <li>Abra o arquivo <strong>Almox-ERP-Android-1.0.1.apk</strong> na pasta Downloads. O Android apresenta a confirmação de instalação.</li>
+            <li>Abra o <strong>Almox ERP</strong> e confira se o endereço preenchido é o mesmo exibido abaixo. Toque em <strong>Conectar à minha unidade</strong>.</li>
           </ol>
         </article>
         <article className={styles.card} id="windows">
           <Monitor size={27} aria-hidden="true" />
           <h2>No Windows</h2>
-          <p className={styles.fileInfo}>EXE · versão 2.6.0 · 182 MB<br />Windows 10/11 · 64 bits</p>
-          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/Almox-ERP-2.6.0-Windows-x64-Setup.exe" download="Almox-ERP-2.6.0-Windows-x64-Setup.exe">
+          <p className={styles.fileInfo}>EXE · versão 2.6.1 · 175 MB<br />Windows 10/11 · 64 bits</p>
+          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.1/Almox-ERP-2.6.1-Windows-x64-Setup.exe" download="Almox-ERP-2.6.1-Windows-x64-Setup.exe">
             <Download size={19} aria-hidden="true" /> Baixar para Windows
           </a>
           <ol>
             <li>Clique em <strong>Baixar para Windows</strong> e aguarde terminar.</li>
-            <li>Abra o arquivo <strong>Almox-ERP-2.6.0-Windows-x64-Setup.exe</strong> e siga as etapas do instalador.</li>
+            <li>Abra o arquivo <strong>Almox-ERP-2.6.1-Windows-x64-Setup.exe</strong> e siga as etapas do instalador.</li>
             <li>Abra o atalho <strong>Almox ERP</strong>. Em <strong>Endereço do ERP</strong>, use o endereço abaixo e clique em <strong>Conectar ao ERP</strong>.</li>
           </ol>
         </article>

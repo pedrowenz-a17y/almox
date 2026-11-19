@@ -1,9 +1,10 @@
-const { app, BrowserWindow, Menu, dialog, ipcMain, safeStorage, shell } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain, safeStorage, screen, shell } = require('electron');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { serverOrigin, importEnvironment, saveConfiguration, loadConfiguration, startLocalServer, isWithinOrigin, cameraAllowed, isSetupFile } = require('./runtime.cjs');
 
-let window, setupWindow, localServer, activeOrigin, changing = false, shuttingDown = false, setupError = '';
+let window, setupWindow, localServer, activeOrigin, changing = false, shuttingDown = false;
+let setupError = '', setupMessage = '', setupOrigin = '';
 const setupFile = path.join(__dirname, 'setup', 'index.html');
 const configFile = () => path.join(app.getPath('userData'), 'connection.json');
 const icon = path.join(__dirname, 'assets', 'icon.png');
@@ -41,7 +42,7 @@ async function initialize() {
   menu();
   ipcMain.handle('almox:status', event => {
     assertSetup(event);
-    return { version: app.getVersion(), error: setupError, configured: Boolean(activeOrigin) };
+    return { version: app.getVersion(), error: setupError, message: setupMessage, origin: setupOrigin, configured: Boolean(activeOrigin) };
   });
   ipcMain.handle('almox:connect', async (event, origin) => {
     assertSetup(event);
@@ -59,11 +60,14 @@ async function initialize() {
     });
   });
   try {
+    changing = true;
     const config = await loadConfiguration(configFile(), safeStorage);
     if (!config) return openSetup();
-    openSetup('Iniciando seu almoxarifado…');
+    setupOrigin = config.mode === 'remote' ? config.origin : '';
+    openSetup('Abrindo o Almox…');
     await launch(config);
   } catch (error) { setupError = safeMessage(error); openSetup(); }
+  finally { changing = false; }
 }
 
 function assertSetup(event) {
@@ -76,19 +80,26 @@ function assertSetup(event) {
 function safeMessage(error) {
   // All operational messages are fixed strings from our own runtime. Never return driver/provider values.
   const message = error instanceof Error ? error.message : '';
-  const allowed = ['Informe o endereço', 'Confira ', 'Configure uma chave', 'ASSISTANT_PROVIDER deve', 'O arquivo de configuração', 'Escolha um arquivo', 'A proteção de credenciais', 'O servidor local não iniciou', 'Não foi possível ler a configuração', 'A configuração tem', 'Escolha novamente', 'Não foi possível abrir as credenciais'];
+  const allowed = ['Informe o endereço', 'Confira ', 'Configure uma chave', 'ASSISTANT_PROVIDER deve', 'O arquivo de configuração', 'Escolha um arquivo', 'A proteção de credenciais', 'O servidor local não iniciou', 'Não foi possível ler a configuração', 'A configuração tem', 'Escolha novamente', 'Não foi possível abrir as credenciais', 'Não foi possível acessar o ERP'];
   return allowed.some(prefix => message.startsWith(prefix)) ? message : 'Não foi possível abrir a conexão. Confira a configuração e tente novamente.';
 }
 
+function windowSize(preferredWidth, preferredHeight, minWidth, minHeight) {
+  const area = screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workAreaSize;
+  const width = Math.max(1, Math.min(preferredWidth, area.width - 24));
+  const height = Math.max(1, Math.min(preferredHeight, area.height - 24));
+  return { width, height, minWidth: Math.min(minWidth, width), minHeight: Math.min(minHeight, height) };
+}
+
 function openSetup(message = '') {
+  setupMessage = message;
   if (setupWindow && !setupWindow.isDestroyed()) { setupWindow.webContents.reload(); setupWindow.focus(); return; }
-  setupWindow = new BrowserWindow({ width: 920, height: 700, minWidth: 700, minHeight: 610, title: 'Configurar Almox ERP', icon, backgroundColor: '#f6f7fa',
+  setupWindow = new BrowserWindow({ ...windowSize(920, 700, 640, 440), title: 'Configurar Almox ERP', icon, backgroundColor: '#f6f7fa',
     webPreferences: { preload: path.join(__dirname, 'preload.cjs'), nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true } });
   setupWindow.setMenuBarVisibility(false);
   setupWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   setupWindow.webContents.on('will-navigate', event => event.preventDefault());
   setupWindow.on('closed', () => { setupWindow = null; });
-  if (message) setupError = message;
   void setupWindow.loadFile(setupFile);
 }
 
@@ -98,31 +109,41 @@ async function configure(create) {
   try {
     const config = await create();
     if (!config) return { ok: false, canceled: true };
-    await saveConfiguration(configFile(), config, safeStorage);
-    await launch(config);
+    await launch(config, true);
     return { ok: true };
   } catch (error) { return { ok: false, error: safeMessage(error) }; }
-  finally { changing = false; }
+  finally {
+    changing = false;
+    if (!window && !setupWindow && !shuttingDown) app.quit();
+  }
 }
 
-async function launch(config) {
-  let nextServer;
-  if (config.mode === 'local') {
-    const serverDirectory = app.isPackaged ? path.join(process.resourcesPath, 'server') : path.join(__dirname, 'server');
-    nextServer = await startLocalServer({ executable: process.execPath, serverDirectory, env: config.env });
+async function launch(config, persist = false) {
+  let nextServer, nextWindow, nextOrigin;
+  try {
+    if (config.mode === 'local') {
+      const serverDirectory = app.isPackaged ? path.join(process.resourcesPath, 'server') : path.join(__dirname, 'server');
+      nextServer = await startLocalServer({ executable: process.execPath, serverDirectory, env: config.env });
+    }
+    nextOrigin = nextServer?.origin || config.origin;
+    nextWindow = new BrowserWindow({ ...windowSize(1440, 960, 640, 420), title: 'Almox ERP', icon, show: false, backgroundColor: '#1e1f24',
+      webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, partition: `persist:almox-${config.mode}` } });
+    secureContents(nextWindow, nextOrigin);
+    await loadLogin(nextWindow, nextOrigin);
+    if (persist) await saveConfiguration(configFile(), config, safeStorage);
+  } catch (error) {
+    if (nextWindow && !nextWindow.isDestroyed()) nextWindow.destroy();
+    nextServer?.stop();
+    throw error;
   }
-  const nextOrigin = nextServer?.origin || config.origin;
   const previous = window, previousServer = localServer;
-  const nextWindow = new BrowserWindow({ width: 1440, height: 960, minWidth: 960, minHeight: 640, title: 'Almox ERP', icon, show: false, backgroundColor: '#1e1f24',
-    webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, partition: `persist:almox-${config.mode}` } });
   window = nextWindow;
   activeOrigin = nextOrigin;
   localServer = nextServer;
-  secureContents(nextWindow, nextOrigin);
-  nextWindow.once('ready-to-show', () => nextWindow.show());
+  setupOrigin = config.mode === 'remote' ? nextOrigin : '';
   nextWindow.on('closed', () => { if (window === nextWindow) { window = null; localServer?.stop(); localServer = null; } });
   nextWindow.webContents.on('did-fail-load', (_event, code, _description, _url, isMainFrame) => {
-    if (!isMainFrame || code === -3 || shuttingDown) return;
+    if (!isMainFrame || code === -3 || shuttingDown || window !== nextWindow) return;
     setupError = 'Não foi possível acessar o ERP. Confira se o servidor está disponível e use Configurar conexão para tentar novamente.';
     openSetup();
   });
@@ -132,11 +153,29 @@ async function launch(config) {
       openSetup();
     }
   });
-  // Create the replacement before closing old windows so switching never quits the app.
+  nextWindow.show();
   if (previous && !previous.isDestroyed()) previous.close();
   previousServer?.stop();
   if (setupWindow) setupWindow.close();
-  await nextWindow.loadURL(`${nextOrigin}/login`).catch(() => {});
+}
+
+async function loadLogin(target, origin) {
+  const contents = target.webContents;
+  let status, timer;
+  const checkStatus = (_event, _url, httpStatus) => { status = httpStatus; };
+  contents.on('did-navigate', checkStatus);
+  try {
+    const timeout = new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Tempo limite da conexão.')), 20000);
+    });
+    await Promise.race([target.loadURL(`${origin}/login`), timeout]);
+    if (status >= 400) throw new Error('Página indisponível.');
+  } catch {
+    throw new Error('Não foi possível acessar o ERP. Confira o endereço e tente novamente.');
+  } finally {
+    clearTimeout(timer);
+    contents.removeListener('did-navigate', checkStatus);
+  }
 }
 
 function secureContents(target, origin) {

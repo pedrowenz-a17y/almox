@@ -50,22 +50,21 @@ export default function Dashboard({
   const [now] = useState(() => Date.now());
   const today = localDay(new Date(now));
   const active = data.products.filter((p) => p.active);
-  const low = active.filter(
-    (p) => availableFor(data, p.id) < number(p.minStock),
+  const balances = active.map((product) => ({
+    product,
+    available: availableFor(data, product.id),
+  }));
+  const alerts = balances.filter(
+    ({ product, available }) => available <= 0 || available < number(product.minStock),
   );
   const summary = data.dashboard;
   const totalProducts = summary?.totalProducts ?? active.length;
-  const lowCount = summary?.lowStock ?? low.length;
+  const lowCount = summary?.lowStock ?? alerts.filter(({ available }) => available > 0).length;
   const zeroCount =
     summary?.outOfStock ??
-    active.filter((p) => availableFor(data, p.id) <= 0).length;
-  const total =
-    summary?.totalPhysical ??
-    data.balances.reduce(
-      (sum, balance) =>
-        sum + number(balance.physicalQuantity ?? balance.quantity),
-      0,
-    );
+    balances.filter(({ available }) => available <= 0).length;
+  const availableCount = totalProducts - zeroCount;
+  const alertCount = lowCount + zeroCount;
   const todayCount = (type: string) =>
     summary?.today[type] ??
     data.movements.filter(
@@ -148,9 +147,9 @@ export default function Dashboard({
           tone="teal"
         />
         <Stat
-          label="Saldo físico"
-          value={qty(total)}
-          caption="Materiais nas localizações; aplicação descontada"
+          label="Produtos com saldo"
+          value={qty(availableCount)}
+          caption="Com saldo disponível para retirada"
           icon={<Boxes size={22} />}
           tone="blue"
         />
@@ -216,8 +215,8 @@ export default function Dashboard({
             <TriangleAlert size={20} />
             <span>
               <strong>
-                {low.length}{" "}
-                {low.length === 1
+                {alertCount}{" "}
+                {alertCount === 1
                   ? "material para conferir"
                   : "materiais para conferir"}
               </strong>
@@ -323,17 +322,16 @@ export default function Dashboard({
             <div>
               <h2>
                 Precisam de atenção{" "}
-                <span className="count-pill">{low.length}</span>
+                <span className="count-pill">{alertCount}</span>
               </h2>
-              <p>Produtos abaixo do estoque mínimo</p>
+              <p>Produtos sem saldo ou abaixo do mínimo</p>
             </div>
             <span className="alert-heading-icon">
               <TriangleAlert size={20} />
             </span>
           </div>
           <div className="alert-list">
-            {low.slice(0, 4).map((p) => {
-              const total = availableFor(data, p.id);
+            {alerts.slice(0, 4).map(({ product: p, available: total }) => {
               return (
                 <button
                   className="alert-row"
@@ -356,7 +354,7 @@ export default function Dashboard({
                 </button>
               );
             })}
-            {!low.length && (
+            {!alerts.length && (
               <div className="all-good">
                 <ShieldCheck size={32} />
                 <strong>

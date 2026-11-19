@@ -10,8 +10,8 @@ const { promisify } = require('node:util');
 const { _electron: electron, expect } = require('../../node_modules/@playwright/test');
 const execute = promisify(execFile);
 const root = path.resolve(__dirname, '../..');
-const evidence = path.join(root, 'artifacts/desktop-2.6.0');
 const version = require('../package.json').version;
+const evidence = path.join(root, `artifacts/desktop-${version}`);
 const checks = [];
 let temporary, installed, profile, application, fixture;
 function record(message) { checks.push(message); console.log('PASS', message); }

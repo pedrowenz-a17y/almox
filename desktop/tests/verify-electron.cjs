@@ -8,7 +8,8 @@ const { once } = require('node:events');
 const { _electron: electron, expect } = require('../../node_modules/@playwright/test');
 
 const root = path.resolve(__dirname, '../..'), desktop = path.join(root, 'desktop');
-const evidence = path.join(root, 'artifacts/desktop-2.6.0');
+const version = require('../package.json').version;
+const evidence = path.join(root, `artifacts/desktop-${version}`);
 const checks = [];
 let application, origin, temporary, fixture, authenticationCalls = 0;
 function record(text) { checks.push(text); console.log('PASS', text); }
@@ -48,6 +49,9 @@ async function verify() {
     if (req.url.startsWith('/auth/v1/')) {
       authenticationCalls++; res.writeHead(400, { 'content-type': 'application/json' }); res.end(JSON.stringify({ error: 'invalid_grant', error_description: 'Fictional authentication fixture' })); return;
     }
+    if (req.url === '/login' && req.headers.host === `localhost:${fixture.address().port}`) {
+      res.writeHead(503, { 'content-type': 'text/plain' }); res.end('ERP indisponível'); return;
+    }
     res.writeHead(200, { 'content-type': 'text/html' });
     res.end('<!doctype html><title>Fictional ERP</title><h1>Painel de teste</h1><button onclick="const w=window.open(\'\',\'_blank\');w.document.write(\'<h1>Etiqueta de teste</h1>\');w.document.close()">Imprimir etiqueta</button>');
   });
@@ -69,6 +73,12 @@ async function verify() {
   await setup.getByRole('button', { name: 'Conectar ao ERP' }).click();
   await expect(setup.getByRole('status')).toContainText('HTTPS');
   record('configuração recusa HTTP externo');
+  await setup.getByLabel('Endereço do ERP').fill(origin.replace('127.0.0.1', 'localhost'));
+  await setup.getByRole('button', { name: 'Conectar ao ERP' }).click();
+  await expect(setup.getByRole('status')).toContainText('Não foi possível acessar o ERP');
+  await assert.rejects(fs.access(path.join(temporary, 'profile/connection.json')), { code: 'ENOENT' });
+  await expect(setup.getByRole('button', { name: 'Conectar ao ERP' })).toBeEnabled();
+  record('falha na abertura preserva a configuração e permite corrigir o endereço');
   await setup.getByLabel('Endereço do ERP').fill(origin);
   await setup.getByRole('button', { name: 'Conectar ao ERP' }).click();
   let workspace = await windowsFor(application, page => page.url().startsWith(origin));
@@ -108,6 +118,17 @@ async function verify() {
   await expect(login.getByRole('button', { name: 'Entrar no almoxarifado' })).toBeVisible();
   const localOrigin = new URL(login.url()).origin;
   await login.screenshot({ path: path.join(evidence, 'login-desktop.png') });
+  await application.evaluate(({ BrowserWindow }) => {
+    const target = BrowserWindow.getAllWindows().find(win => win.webContents.getURL().includes('/login'));
+    target.setContentSize(760, 490);
+    target.webContents.setZoomFactor(1.25);
+  });
+  await expect(login.getByRole('button', { name: 'Entrar no almoxarifado' })).toBeVisible();
+  assert.ok(await login.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+  await login.getByRole('button', { name: 'Entrar no almoxarifado' }).scrollIntoViewIfNeeded();
+  await expect(login.getByRole('button', { name: 'Entrar no almoxarifado' })).toBeInViewport();
+  await login.screenshot({ path: path.join(evidence, 'login-janela-compacta.png') });
+  record('janela compacta com zoom de 125% mantém acesso aos controles');
   record('importação inicia o servidor real automaticamente em porta livre e abre o login UCA');
   const stored = await fs.readFile(path.join(temporary, 'profile/connection.json'), 'utf8');
   assert.ok(!stored.includes('postgresql:') && !stored.includes('sb_publishable_'));

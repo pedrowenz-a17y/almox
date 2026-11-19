@@ -156,6 +156,43 @@
 .user-creation-mode { display: grid; gap: 8px; margin: 18px 0; }
 .auth-access-links { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 10px; }
 .auth-access-links .auth-recovery-link { margin: 0; }
+
+.modal-heading .icon-button { flex: none; }
+.modal-actions { flex-wrap: wrap; }
+
+@media screen and (max-width: 760px) {
+  .app-shell .sidebar:not(.open) { visibility: hidden; }
+  .app-main { padding-bottom: calc(77px + env(safe-area-inset-bottom)); }
+  .app-shell .toast { bottom: calc(85px + env(safe-area-inset-bottom)); }
+  .mobile-bottom-nav > :is(a, button) { padding-inline: 2px; }
+  .mobile-bottom-nav > button.bottom-scan { padding-top: 24px; }
+  .bottom-scan > span { top: -18px; }
+  .modal .form-grid > * { min-width: 0; }
+}
+
+@media screen and (max-width: 480px) {
+  .app-shell .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    height: auto;
+    gap: 6px 8px;
+    padding-block: 6px 9px;
+  }
+
+  .topbar-breadcrumb { min-width: 0; }
+  .topbar-breadcrumb > strong { min-width: 0; max-width: none; }
+  .app-shell .topbar-actions { grid-area: 1 / 2; }
+  .app-shell .topbar-actions :is(.avatar, .topbar-divider) { display: none; }
+
+  .app-shell .global-search {
+    grid-area: 2 / 1 / auto / -1;
+    width: 100%;
+    max-width: none;
+  }
+
+  .app-shell .global-search > input { min-width: 0; font-size: 16px; }
+  .app-shell .search-results { max-height: 45dvh; overflow: auto; }
+}
 .auth-form-help { margin: 14px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
 .password-identity { display: grid; gap: 6px; margin-bottom: 22px; overflow-wrap: anywhere; }
 .password-identity span { font-size: 12px; }
