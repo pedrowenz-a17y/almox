@@ -34,7 +34,7 @@ try {
     assert.equal((await page.goto(baseURL + '/instalar')).status(), 200);
     await page.getByRole('heading', { name: /O trabalho continua/ }).waitFor();
     await page.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
-    assert.equal(await page.getByRole('link', { name: 'Baixar para Android' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/releases/download/android-v1.0.1/Almox-ERP-Android-1.0.1.apk');
+    assert.equal(await page.getByRole('link', { name: 'Baixar para Android' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-apk-v1.0.1/android-distribution/Almox-ERP-Android-1.0.1.apk');
     assert.equal(await page.getByRole('link', { name: 'Baixar para Windows' }).getAttribute('href'), 'https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.1/Almox-ERP-2.6.1-Windows-x64-Setup.exe');
     await page.waitForFunction(() => document.querySelector('input[aria-label="Endereço do ERP"]')?.value === location.origin);
     for (const width of [1440, 390, 320]) {

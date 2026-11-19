@@ -36,7 +36,7 @@ export default function Installation() {
           <Smartphone size={27} aria-hidden="true" />
           <h2>No Android</h2>
           <p className={styles.fileInfo}>APK · versão 1.0.1 · 2,7 MB<br />Android 8 ou superior</p>
-          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/android-v1.0.1/Almox-ERP-Android-1.0.1.apk" download="Almox-ERP-Android-1.0.1.apk">
+          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-apk-v1.0.1/android-distribution/Almox-ERP-Android-1.0.1.apk" download="Almox-ERP-Android-1.0.1.apk">
             <Download size={19} aria-hidden="true" /> Baixar para Android
           </a>
           <ol>
