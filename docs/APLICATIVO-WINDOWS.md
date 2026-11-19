@@ -1,17 +1,17 @@
-# Almox ERP para Windows — 2.6.0
+# Almox ERP para Windows — 2.6.2
 
-Baixe o instalador pelo botão **Baixar para Windows** em [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). A página também mostra o endereço para conectar o aplicativo ao ERP hospedado. Para a versão pelo navegador, abra **Outra opção: instalar pelo navegador** nessa mesma página. O instalador EXE 2.6.0 descrito abaixo continua sem certificado Authenticode. [Assinaturas, avisos e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
+Baixe o instalador pelo botão **Baixar para Windows** em [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). A página também mostra o endereço para conectar o aplicativo ao ERP hospedado. Para a versão pelo navegador, abra **Outra opção: instalar pelo navegador** nessa mesma página. O instalador EXE 2.6.2 descrito abaixo continua sem certificado Authenticode. [Assinaturas, avisos e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
 
 O aplicativo tem instalador `.exe`, ícone U.C.A., atalhos na área de trabalho/menu Iniciar e janela própria. O computador que recebe o instalador não precisa instalar Node.js ou abrir CMD. O aplicativo inclui seu runtime e o servidor do ERP. Requer Windows 10/11 atualizado, arquitetura x64.
 
 ## Instalar e abrir
 
-1. Baixe [Almox-ERP-2.6.0-Windows-x64-Setup.exe](https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/Almox-ERP-2.6.0-Windows-x64-Setup.exe). O ZIP do código-fonte do GitHub não é o instalador.
+1. Baixe [Almox-ERP-2.6.2-Windows-x64-Setup.exe](https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.2/Almox-ERP-2.6.2-Windows-x64-Setup.exe). O ZIP do código-fonte do GitHub não é o instalador.
 2. Execute o instalador e escolha a pasta. A instalação é feita para a conta Windows atual.
 3. Abra **Almox ERP** pelo atalho.
 4. Na primeira abertura, escolha uma das conexões abaixo.
 
-O instalador ainda não tem certificado de assinatura digital. A identidade do editor não é certificada pelo Windows. O SHA-256 está em [SHA256SUMS.txt](https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.0/SHA256SUMS.txt). Esta entrega foi compilada, instalada, aberta, reaberta e desinstalada em um runner Windows. A configuração cifrada foi recuperada por DPAPI real, e os componentes nativos do Prisma/Sharp foram carregados. A homologação operacional no computador de destino continua necessária antes da distribuição empresarial.
+O instalador ainda não tem certificado de assinatura digital. A identidade do editor não é certificada pelo Windows. O SHA-256 está em [SHA256SUMS.txt](https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.2/SHA256SUMS.txt). Esta entrega foi compilada, instalada, aberta, reaberta e desinstalada em um runner Windows. A configuração cifrada foi recuperada por DPAPI real, e os componentes nativos do Prisma/Sharp foram carregados. A homologação operacional no computador de destino continua necessária antes da distribuição empresarial.
 
 ## Usar neste computador, sem CMD
 
@@ -71,6 +71,6 @@ A compilação tem acesso de leitura ao repositório. Apenas o job final pode cr
 
 ## Evidências desta entrega
 
-Veja [artifacts/desktop-2.6.0/windows](../artifacts/desktop-2.6.0/windows): dez cenários da janela, seis verificações do aplicativo instalado e comparação por hash de 2.236 arquivos do servidor. A [execução Windows](https://github.com/pedrowenz-a17y/almox/actions/runs/42442820123) concluiu os testes e a publicação. A pasta acima mantém também a regressão inicial do ERP em PostgreSQL isolado e as evidências da compilação Linux. Nenhuma credencial enviada no chat ou banco empresarial foi utilizado na validação.
+Consulte os relatórios de instalação na [release Windows 2.6.2](https://github.com/pedrowenz-a17y/almox/releases/tag/v2.6.2). Para o histórico da versão 2.6.0, veja [artifacts/desktop-2.6.0/windows](../artifacts/desktop-2.6.0/windows): dez cenários da janela, seis verificações do aplicativo instalado e comparação por hash de 2.236 arquivos do servidor. A [execução Windows](https://github.com/pedrowenz-a17y/almox/actions/runs/42442820123) concluiu os testes e a publicação. A pasta acima mantém também a regressão inicial do ERP em PostgreSQL isolado e as evidências da compilação Linux. Nenhuma credencial enviada no chat ou banco empresarial foi utilizado na validação.
 
 ![Primeira configuração do aplicativo](../artifacts/desktop-2.6.0/configuracao-desktop.png)

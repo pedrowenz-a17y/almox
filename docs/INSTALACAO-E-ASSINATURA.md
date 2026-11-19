@@ -1,12 +1,10 @@
-# Instalação e assinatura · Almox ERP 2.7.2
+# Instalação e assinatura · Almox ERP
 
 ## Baixar os arquivos Android e Windows
 
-Compartilhe **https://almox-blush.vercel.app/instalar**. A página mantém a identidade U.C.A. e apresenta **Baixar para Android** (APK 1.0.0) e **Baixar para Windows** (EXE 2.6.0), com versões, tamanhos aproximados e requisitos. Os links apontam para os arquivos oficiais já publicados no GitHub; não passam os binários grandes pelo servidor Vercel.
+Compartilhe [a página de instalação](https://almox-blush.vercel.app/instalar). Nela estão os arquivos do Android 1.0.1 e do Windows 2.6.2, com requisitos e instruções. Os downloads são hospedados no GitHub.
 
-O clique inicia o download. A pessoa abre o arquivo recebido e confirma a instalação no sistema operacional. Não há instalação silenciosa, permissão automática ou remoção dos avisos de origem. A página mostra o endereço da própria instalação do ERP e permite copiá-lo para o campo **Endereço do ERP** dos aplicativos. O APK publicado anteriormente vem com um domínio antigo; é necessário substituí-lo pelo endereço atual indicado na página.
-
-Os arquivos nativos não foram recompilados nem receberam nova assinatura nessa revisão. O que mudou foi a página de distribuição. As evidências da navegação e dos links estão em [download-installation](../artifacts/download-installation/README.md).
+Abra o arquivo baixado e confirme a instalação pelo sistema operacional. A página também permite copiar o endereço da hospedagem para preencher **Endereço do ERP** nos aplicativos. No Android 1.0.1, o endereço do Almox na Vercel já vem sugerido.
 
 ## Instalar a versão hospedada
 
@@ -21,9 +19,9 @@ Cada pessoa entra com a própria conta e suas permissões. Os dados continuam no
 
 ## O que foi conferido nos arquivos existentes
 
-O APK Android 1.0.0 mantém assinatura v2/v3 válida, com o certificado público esperado. Sua integridade coincide com a entrega previamente testada. Certificado próprio identifica as atualizações da mesma aplicação, mas não estabelece reputação perante a loja ou o Play Protect. Um aviso de download potencialmente nocivo ou de origem desconhecida pode continuar aparecendo fora da loja.
+O APK Android 1.0.1 usa assinatura v2/v3 com o mesmo certificado público da versão anterior. O Android pode exibir um aviso de origem para downloads fora da loja. [Versão Android 1.0.1](https://github.com/pedrowenz-a17y/almox/releases/tag/android-v1.0.1)
 
-O EXE Windows 2.6.0 publicado não possui tabela de certificados Authenticode no cabeçalho PE. Assim, a identidade do editor não é certificada pelo Windows. Os testes anteriores de instalação e os checksums não substituem uma assinatura de editor.
+O EXE Windows 2.6.2 está sem assinatura de editor. O Windows pode exibir o SmartScreen. A release inclui o SHA-256 e os resultados dos testes de instalação em Windows. [Versão Windows 2.6.2](https://github.com/pedrowenz-a17y/almox/releases/tag/v2.6.2)
 
 Essas verificações não são uma análise antivírus e não demonstram ausência de código malicioso. Se houver detecção com nome de ameaça, interrompa a distribuição daquele arquivo e investigue o alerta específico; não o trate automaticamente como falso positivo.
 
@@ -43,4 +41,4 @@ Essas etapas exigem conta/verificação do titular e, conforme o serviço, contr
 - Service worker com atualização sem cache do script e política de execução/conexão restrita à própria origem. O cache armazena somente assets públicos; não guarda páginas autenticadas ou respostas da API. Offline, a aplicação não confirma movimentações.
 - Instalação pelo navegador depende de consentimento. Cancelamento/recusa são tratados sem exceção JavaScript. A interface não afirma instalação concluída apenas porque o usuário abriu o diálogo.
 
-Veja [evidências e limites dos testes](../artifacts/security-installation/README.md). Os APK e EXE anteriores não foram substituídos nem receberam uma nova assinatura nesta revisão.
+Veja [evidências e limites dos testes da versão 2.7.1](../artifacts/security-installation/README.md).

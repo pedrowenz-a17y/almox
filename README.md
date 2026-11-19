@@ -1,5 +1,7 @@
 # Almox ERP · U.C.A. — versão 2.15.0
 
+**Meu perfil** abre pelos avatares da barra superior e do menu. A foto fica na conta e as preferências de tema, animações, tela após entrar e tabelas compactas ficam no dispositivo. [Instalar o Almox](https://almox-blush.vercel.app/instalar) · [Novidades no Windows 2.6.2](docs/ENTREGA-WINDOWS-2.6.2.md).
+
 **Versão 2.15.0:** visão gerencial com comparação entre unidades autorizadas, filas atuais, espera mais antiga conhecida e posições diárias registradas. Histórico preservado, lacunas sem zeros inventados e exportação em CSV. Sem novo SQL. [Usar a etapa 9](docs/GERENCIAL-2.15.md).
 
 **Versão 2.14.0:** confirmação de recebimento pela conta indicada na entrega, relato de diferenças e tratamento com aceite do destinatário. Acompanhamento por unidade e histórico preservado, sem movimentar estoque novamente. Sem novo SQL. [Usar a etapa 8](docs/RECEBIMENTOS-2.14.md).

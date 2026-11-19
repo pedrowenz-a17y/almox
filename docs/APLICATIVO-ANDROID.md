@@ -1,19 +1,18 @@
-# Almox ERP para Android · 1.0.0
+# Almox ERP para Android · 1.0.1
 
-Baixe o APK pelo botão **Baixar para Android** em [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). Na primeira abertura, substitua o endereço antigo preenchido pelo endereço atual mostrado na página e conecte. Para a versão hospedada pelo Chrome, abra **Outra opção: instalar pelo navegador** nessa mesma página. O APK 1.0.0 descrito abaixo continua assinado com o certificado próprio do projeto e pode receber avisos ao ser baixado fora da loja. [Assinaturas e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
+Baixe o APK pelo botão **Baixar para Android** em [almox-blush.vercel.app/instalar](https://almox-blush.vercel.app/instalar). Na primeira abertura, confira o endereço do ERP e conecte. Para a versão hospedada pelo Chrome, abra **Outra opção: instalar pelo navegador** nessa mesma página. O APK 1.0.1 está assinado com o certificado próprio do projeto e pode receber avisos ao ser baixado fora da loja. [Assinaturas e opções de distribuição](INSTALACAO-E-ASSINATURA.md).
 
-Aplicativo instalável para Android 8.0 ou superior, com Android System WebView atualizado. O servidor ERP é a versão 2.7.0; a versão do instalador Android é independente.
+Aplicativo instalável para Android 8.0 ou superior, com Android System WebView atualizado. A versão do instalador Android é independente da versão do servidor.
 
 ## Instalar e conectar
 
-1. Baixe [Almox ERP Android 1.0.0](https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-v1.0.0/android-distribution/Almox-ERP-Android-1.0.0.apk) no celular. Esse arquivo é o instalador, não um ZIP de código-fonte.
+1. Baixe [Almox ERP Android 1.0.1](https://github.com/pedrowenz-a17y/almox/raw/refs/tags/android-apk-v1.0.1/android-distribution/Almox-ERP-Android-1.0.1.apk) no celular. Esse arquivo é o instalador, não um ZIP de código-fonte.
 2. Abra o APK e autorize a instalação desse arquivo pelo navegador ou gerenciador de arquivos, se o Android solicitar. Não é necessário desativar o Play Protect.
 3. Abra **Almox ERP**. O campo já vem preenchido com o endereço informado pelo autor do projeto. Toque em **Conectar à minha unidade**.
 4. Entre com sua conta autorizada do ERP. A conexão é lembrada nas próximas aberturas. A câmera só é solicitada ao utilizar a leitura de QR.
 
 O menu **⋮ → Conexão** permite trocar o endereço depois, sem reinstalar. Ele precisa ser uma origem HTTPS completa, sem `/login` no final. A primeira conexão verifica se existe uma página de login do Almox naquele endereço antes de salvar.
 
-**Situação do endereço fornecido em 9/11/2026:** a página inicial responde com “Sem conexão”, e `/login` retorna 404. O aplicativo identifica essa situação e pede a publicação do servidor. Instalar o APK sozinho não corrige o servidor. Siga [Publicar na Vercel](PUBLICAR-VERCEL.md).
 
 ## Como funciona
 
@@ -35,17 +34,17 @@ O APK não contém chaves de banco, chave administrativa Supabase ou chave OpenA
 
 ## Conferência do instalador e testes
 
-O pacote de distribuição acompanha `SHA256SUMS.txt`, o certificado público e `VALIDACAO.json`. No Windows:
+No Windows, calcule o SHA-256 do arquivo baixado:
 
 ```bat
-certutil -hashfile Almox-ERP-Android-1.0.0.apk SHA256
+certutil -hashfile Almox-ERP-Android-1.0.1.apk SHA256
 ```
 
-Compare o resultado com `SHA256SUMS.txt`. A assinatura própria do projeto usa APK Signature Scheme v2/v3; ela permite atualizar a instalação com a mesma chave. Não representa publicação ou verificação pela Google Play.
+O SHA-256 do APK 1.0.1 é `782e0a6441b4a8492f9c9e6e589028da33cd80b2f109ae7b6538d59e4f4a9505`. A assinatura própria do projeto usa APK Signature Scheme v2/v3; ela permite atualizar a instalação com a mesma chave. Não representa publicação ou verificação pela Google Play.
 
 Os testes automatizados de Android usam um emulador e páginas fictícias isoladas para verificar configuração, proteção da integração nativa e abertura/encerramento da câmera. Não tentam login na conta real nem movimentam o estoque da empresa. As evidências e os limites estão em [artifacts/android-1.0.0](../artifacts/android-1.0.0/README.md).
 
-O APK assinado desta entrega também foi instalado e reaberto com sucesso no emulador Android 15, com a tela de conexão verificada. Isso não comprova disponibilidade do servidor nem substitui o teste no seu aparelho.
+O APK assinado da versão 1.0.0 foi instalado e reaberto com sucesso no emulador Android 15, com a tela de conexão verificada. Isso não comprova disponibilidade do servidor nem substitui o teste no seu aparelho.
 
 ## Compilar uma nova versão
 
