@@ -1,17 +1,19 @@
 import { randomUUID } from "node:crypto";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import type { SessionUser } from "@/lib/auth";
 import { tokenHash } from "@/lib/auth";
 import { AppError } from "@/lib/http";
-import { appOrigin } from "@/lib/auth-config";
-import { authEmailError, authEmailRedirect } from "@/lib/auth-links";
+import { appOrigin, authServiceUnavailable } from "@/lib/auth-config";
+import { authEmailError, authEmailRedirect, type AuthProviderError } from "@/lib/auth-links";
 import { authRateLimit, claimAuthEmail } from "@/lib/auth-rate-limit";
 import { accessProvider, type AccessProvider } from "@/lib/access-provider";
 import { assertActiveAccessManager } from "@/services/access-management";
 import { accessProgress } from "@/services/access-progress";
 
 const include = { user: { select: { id: true, name: true, email: true, active: true, authUserId: true } }, role: { select: { id: true, name: true } } } as const;
+const missingIdentity = (error: AuthProviderError) => error?.status === 404 || error?.code === "user_not_found";
 async function scopedAccess(actor: SessionUser, id: string) {
   if (!actor.unitId || !actor.permissions.includes("users:manage")) throw new AppError("Seu perfil não permite gerenciar acessos.", 403);
   z.string().uuid().parse(id);
@@ -39,7 +41,7 @@ export async function accessDetails(actor: SessionUser, id: string, providerFact
     if (!providerFactory && !process.env.SUPABASE_SERVICE_ROLE_KEY) providerState = "CONFIGURATION";
     else {
       const result = await (providerFactory ?? accessProvider)().getIdentity(member.user.authUserId);
-      if (result.error?.status === 404 || result.error?.code === "user_not_found") providerState = "MISSING";
+      if (missingIdentity(result.error)) providerState = "MISSING";
       else if (result.error || !result.user) providerState = result.error?.status === 401 || result.error?.status === 403 ? "CONFIGURATION" : "UNAVAILABLE";
       else if (result.user.id !== member.user.authUserId || result.user.email?.toLowerCase() !== member.user.email.toLowerCase()) providerState = "MISMATCH";
       else { providerState = "READY"; identity = { emailConfirmed: !!result.user.email_confirmed_at, invitedAt: result.user.invited_at ?? null,
@@ -52,6 +54,40 @@ export async function accessDetails(actor: SessionUser, id: string, providerFact
     nextAttemptAt: bucket?.blockedUntil && bucket.blockedUntil > new Date() ? bucket.blockedUntil.toISOString() : null };
 }
 export type AccessDetails = Awaited<ReturnType<typeof accessDetails>>;
+
+const confirmedAccountInput = z.object({ previousAuthUserId: z.string().uuid().nullable(), authUserId: z.string().trim().uuid() }).strict();
+
+/** An existing login can only be repaired when the old identity is absent and the new one proves the same email. */
+export async function linkConfirmedAccount(actor: SessionUser, id: string, rawInput: unknown, providerFactory: () => AccessProvider = accessProvider) {
+  const { previousAuthUserId, authUserId } = confirmedAccountInput.parse(rawInput);
+  const member = await scopedAccess(actor, id);
+  if (!member.active || !member.user.active) throw new AppError("Reative o acesso antes de vincular a conta.", 403, "ACCESS_DISABLED");
+  if (member.user.authUserId !== previousAuthUserId) throw new AppError("O vínculo mudou. Atualize o estado antes de tentar novamente.", 409, "AUTH_IDENTITY_CHANGED");
+
+  const provider = providerFactory();
+  if (previousAuthUserId) {
+    const previous = await provider.getIdentity(previousAuthUserId);
+    if (previous.user) throw new AppError("Já existe uma conta de login vinculada a este cadastro.", 409, "AUTH_IDENTITY_EXISTS");
+    if (!missingIdentity(previous.error)) throw new AppError("Não foi possível conferir o vínculo atual no Supabase. Tente novamente mais tarde.", 503, "AUTH_IDENTITY_UNAVAILABLE");
+  }
+
+  const { user, error } = await provider.getIdentity(authUserId);
+  if (authServiceUnavailable(error) || error?.status === 429) throw new AppError("O serviço de login está temporariamente indisponível.", 503, "AUTH_UNAVAILABLE");
+  if (error || user?.id !== authUserId || user.email?.toLowerCase() !== member.user.email.toLowerCase() || !user.email_confirmed_at)
+    throw new AppError("Use o ID de uma conta com este mesmo e-mail confirmado no Supabase.", 400, "AUTH_IDENTITY_NOT_CONFIRMED");
+  if (user.banned_until && new Date(user.banned_until) > new Date()) throw new AppError("A conta está bloqueada no serviço de login.", 403, "ACCESS_DISABLED");
+
+  await prisma.$transaction(async tx => {
+    await assertActiveAccessManager(tx, actor);
+    const updated = await tx.user.updateMany({ where: { id, email: member.user.email, authUserId: previousAuthUserId, active: true,
+      memberships: { some: { unitId: actor.unitId, active: true } } }, data: { authUserId } });
+    if (!updated.count) throw new AppError("O cadastro mudou. Atualize o estado antes de tentar novamente.", 409, "AUTH_IDENTITY_CHANGED");
+    await tx.auditLog.create({ data: { userId: actor.id, unitId: actor.unitId, action: "USER_AUTH_LINKED", entity: "User", entityId: id,
+      before: { authUserId: previousAuthUserId }, after: { authUserId } } });
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+  return { message: "Conta vinculada. A pessoa pode entrar com a senha cadastrada ou solicitar a recuperação." };
+}
+
 export interface AccessMailResult { message: string; kind: "INVITE" | "RECOVERY"; retryAfter: number }
 const sendInput = z.object({ authUserId: z.string().uuid() }).strict();
 

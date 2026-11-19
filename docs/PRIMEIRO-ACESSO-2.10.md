@@ -4,7 +4,7 @@ A versão 2.10.0 melhora o acompanhamento das contas e os links de definição d
 
 ## Onde usar
 
-Entre como administrador e abra **Usuários** na unidade desejada. Cada pessoa tem um botão **Acesso**. A consulta mostra o e-mail, a habilitação na unidade, a confirmação no serviço de login, as definições de senha registradas pelo ERP e a última entrada nessa unidade. Consultar a tela não envia mensagens.
+Entre como administrador e abra **Usuários** na unidade desejada. Use **Ver acesso** ao lado da pessoa para consultar a confirmação do e-mail, as definições de senha registradas pelo ERP e a última entrada nessa unidade. A consulta só verifica o estado da conta.
 
 | Estado | Significado |
 | --- | --- |
@@ -16,14 +16,14 @@ Entre como administrador e abra **Usuários** na unidade desejada. Cada pessoa t
 
 **Habilitado na unidade** indica uma autorização configurada. O acompanhamento do primeiro acesso é um fato separado e não redefine permissões. Uma conta antiga pode aparecer sem confirmação até entrar novamente. Os registros novos identificam o UUID Supabase: recriar uma identidade não faz o novo UUID herdar a confirmação de login do anterior. A definição de senha pertence à identidade compartilhada; a entrada registrada é apresentada por unidade.
 
-A consulta ao serviço de login ocorre ao abrir o acompanhamento de uma pessoa. Identidade ausente, e-mail incompatível, bloqueio no provedor ou configuração indisponível são explicados nessa tela. Esses casos não são corrigidos automaticamente pela troca de UUID, nem por reenvio indiscriminado de mensagens.
+A consulta ao serviço de login ocorre ao abrir o acompanhamento de uma pessoa. Se o vínculo estiver ausente ou a conta anterior tiver sido removida no Supabase, use **Vincular conta confirmada** e informe o UID em **Authentication → Users**. O ERP compara o e-mail e a confirmação no Supabase antes de gravar o vínculo. A pessoa conserva os acessos das unidades e pode usar a senha cadastrada no Supabase.
 
 ## Cadastrar e acompanhar
 
 Em **Novo usuário**, escolha uma das opções:
 
-- **Preparar acesso e enviar convite:** cria uma identidade sem senha e sem confirmar o e-mail, salva a associação autorizada no ERP e só então solicita o convite. A pessoa define a própria senha. Se o serviço de e-mail não confirmar o envio, o cadastro permanece salvo e a tela orienta acompanhar pelo botão **Acesso**. A resposta distingue cadastro salvo de envio aceito.
-- **Vincular identidade existente:** informa-se o UUID de uma identidade com e-mail confirmado. O servidor confere que o identificador pertence ao e-mail informado. Não solicita um novo e-mail. Se a pessoa já existe no ERP em outra unidade, seu ID, histórico e demais vínculos são preservados.
+- **Enviar convite por e-mail** salva o acesso e solicita o convite. O acompanhamento abre ao salvar e mostra se o serviço aceitou o envio. Se o envio falhar, o acesso fica cadastrado e o administrador pode tentar novamente nessa tela. A pessoa define a própria senha pelo link recebido.
+- **Vincular conta confirmada** aproveita uma conta do Supabase com o mesmo e-mail. Informe o UID da conta. O ERP preserva o histórico e os vínculos já existentes com outras unidades.
 
 A preparação de identidades e a consulta administrativa precisam da chave de servidor do Supabase configurada na hospedagem. A chave nunca aparece na interface. Se a identidade não puder ser preparada, o cadastro não é apresentado como concluído. Se uma identidade nova foi criada, mas o vínculo não concluiu, o serviço tenta remover somente essa identidade recém-criada, nunca uma conta preexistente.
 
@@ -48,7 +48,7 @@ Em **Usuários → Endereços dos convites e recuperação**, o ERP mostra os va
 Na implantação oficial atual, o procedimento esperado é:
 
 1. Na Vercel, conferir `APP_URL=https://almox-blush.vercel.app` para Production e publicar novamente se esse valor tiver sido alterado. Usar somente a origem completa, sem `/login` ou outro caminho.
-2. No Supabase do mesmo projeto, em **Authentication → URL Configuration**, conferir **Site URL** e adicionar os **Redirect URLs** exibidos pelo ERP. O retorno usado nos e-mails é `https://almox-blush.vercel.app/auth/callback?next=/recuperar-senha`; o retorno para modelos com `TokenHash` é `/auth/confirm` na mesma origem.
+2. No Supabase do mesmo projeto, em **Authentication → URL Configuration**, confira **Site URL** e adicione os **Redirect URLs** exibidos pelo ERP. O retorno usado nos e-mails é `https://almox-blush.vercel.app/auth/callback`. Modelos com `TokenHash` usam `/auth/confirm` na mesma origem.
 3. Conferir o modelo de e-mail utilizado. Um domínio antigo escrito diretamente no HTML precisa ser revisado no próprio provedor. Para o fluxo padrão, manter o modelo com `ConfirmationURL`.
 4. Em caso de limite de envio ou destinatário não autorizado, o responsável configura o serviço SMTP do projeto em **Authentication → Emails/SMTP** conforme o provedor escolhido. Chaves e senhas permanecem nos painéis protegidos, sem serem colocadas no aplicativo ou no chat.
 

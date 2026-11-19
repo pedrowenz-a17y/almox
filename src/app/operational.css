@@ -173,6 +173,8 @@
 .access-facts dd { margin: 0; overflow-wrap: anywhere; }
 .access-help ol { margin: 10px 0 0; padding-left: 20px; line-height: 1.85; }
 .access-help-actions { justify-content: flex-end; }
+.access-link-form { display: grid; gap: 12px; }
+.access-link-form .button { justify-self: start; }
 .access-email-settings { margin-top: 20px; padding: 22px; }
 .access-email-settings summary { font-size: 15px; font-weight: 600; cursor: pointer; }
 .access-email-settings details[open] { display: grid; gap: 16px; }

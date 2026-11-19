@@ -3,7 +3,7 @@ import { roleLabel } from "@/lib/access-profiles";
 import { RolePermissions } from "@/components/access-profiles";
 import { useState } from "react";
 import { Save, Upload } from "lucide-react";
-import { api, DataSet, Role, locationPath } from "@/lib/client";
+import { api, ApiError, DataSet, Role, locationPath } from "@/lib/client";
 import { Modal } from "@/components/ui";
 export type CatalogEntity =
   | "products"
@@ -177,7 +177,7 @@ export default function CatalogForm({
             },
             ...(userCreationMode === "existing" ? [{
               key: "authUserId",
-              label: "UUID da identidade confirmada",
+              label: "ID do usuário no Supabase",
               required: true,
               wide: true,
               placeholder: "Supabase → Authentication → Users → UID",
@@ -247,6 +247,7 @@ export default function CatalogForm({
       );
       await onDone(saved);
     } catch (e) {
+      if (entity === "users" && !record && e instanceof ApiError && e.code === "AUTH_IDENTITY_EXISTS") setUserCreationMode("existing");
       setError(e instanceof Error ? e.message : "Falha ao salvar cadastro.");
     } finally {
       setBusy(false);
@@ -261,7 +262,7 @@ export default function CatalogForm({
           ? "Ao salvar, o QR Code do produto fica pronto para imprimir. O saldo muda por movimentações."
           : entity === "locations"
             ? "A localização recebe um QR Code único automaticamente."
-            : "Mantenha os dados do seu almoxarifado atualizados."
+            : entity === "users" ? undefined : "Mantenha os dados do seu almoxarifado atualizados."
       }
       onClose={() => {
         if (!busy && !uploading) onClose();
@@ -272,12 +273,12 @@ export default function CatalogForm({
           <div className="notice info">
             {record
               ? "O perfil e a situação de acesso valem apenas para a unidade selecionada. Nome e e-mail pertencem à identidade global."
-              : userCreationMode === "existing" ? "Vincule uma identidade com e-mail confirmado no Supabase. O identificador deve corresponder ao e-mail; nenhum novo convite será enviado."
-              : "O acesso é cadastrado antes do envio. A pessoa define a própria senha pelo convite; se o e-mail não for confirmado pelo serviço, você poderá acompanhar e reenviar pela tela Acesso."}
+              : userCreationMode === "existing" ? "Informe o ID de uma conta com o mesmo e-mail confirmado no Supabase. A pessoa pode usar a senha que já cadastrou."
+              : "A pessoa cria a própria senha pelo convite. Após salvar, acompanhe o envio e o primeiro acesso."}
           </div>
         )}
         {entity === "users" && !record && <label className="user-creation-mode">Como esta pessoa vai acessar<select value={userCreationMode} onChange={event => setUserCreationMode(event.target.value)} disabled={busy}>
-          <option value="invite">Preparar acesso e enviar convite</option><option value="existing">Vincular identidade existente</option>
+          <option value="invite">Enviar convite por e-mail</option><option value="existing">Vincular conta confirmada</option>
         </select><small>Se a pessoa já está cadastrada no ERP em outra unidade, o vínculo existente será preservado.</small></label>}
         <div className="form-grid">
           {fields[entity].map((field) => (
@@ -412,7 +413,7 @@ export default function CatalogForm({
             disabled={busy || uploading}
           >
             <Save size={17} />
-            {busy ? "Salvando…" : "Salvar cadastro"}
+            {busy ? "Salvando…" : entity === "users" && !record && userCreationMode === "invite" ? "Salvar e enviar convite" : "Salvar cadastro"}
           </button>
         </div>
       </form>

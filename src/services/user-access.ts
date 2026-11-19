@@ -89,10 +89,10 @@ export async function saveUserAccess(actor: SessionUser, input: unknown, id?: st
     // Save the authorized ERP association before sending any message. A mail limit
     // leaves a visible pending account instead of losing the registration.
     const result = await provider.createIdentity(data.email, data.name);
+    if (['email_exists', 'user_already_exists'].includes(result.error?.code ?? '')) throw new AppError(
+      'Esta conta já existe no Supabase. Informe o ID do usuário para vincular o acesso.', 409, 'AUTH_IDENTITY_EXISTS');
     if (result.error || !result.user || result.user.email?.toLowerCase() !== data.email) throw new AppError(
-      ['email_exists', 'user_already_exists'].includes(result.error?.code ?? '')
-        ? 'Esta identidade já existe no Supabase. Escolha Vincular identidade existente e informe seu UUID confirmado.'
-        : 'Não foi possível preparar a identidade de login. Confira o serviço de autenticação.',
+      'Não foi possível preparar a identidade de login. Confira o serviço de autenticação.',
       authServiceUnavailable(result.error) ? 503 : 409, 'AUTH_IDENTITY_CREATION_FAILED');
     createdIdentityId = result.user.id; authUserId = result.user.id;
   }
@@ -135,7 +135,7 @@ export async function saveUserAccess(actor: SessionUser, input: unknown, id?: st
       const error = cause instanceof AppError || cause instanceof AuthConfigurationError ? cause.message : 'O envio não foi confirmado.';
       return { ...result, notification: { state: 'PENDING' as const, message: error,
         ...(cause instanceof AppError ? { code: cause.code, retryAfter: cause.retryAfter } : {}) },
-        accessNotice: `Acesso cadastrado; o envio do convite não foi confirmado. ${error} Acompanhe pelo botão Acesso do usuário.` };
+        accessNotice: `Acesso cadastrado. O envio do convite não foi confirmado. ${error}` };
     }
   }
   return { ...result, accessNotice: result.active ? 'Acesso à unidade salvo. A identidade existente foi preservada; nenhum novo e-mail foi solicitado.'

@@ -12,12 +12,13 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
   ].map(person => ({ ...person, roleId: user.roleId, role: user.role, active: true, identityActive: true }));
   data.users = people;
   const privatePattern = fixtureURL + '/api/**', publicPattern = baseURL + '/api/**';
-  let sends = 0, creates = 0, passwordUpdates = 0, recoveries = 0, completions = 0, transientLink = false, missing = false, validContext = false;
+  let sends = 0, creates = 0, linkedAccounts = 0, passwordUpdates = 0, recoveries = 0, completions = 0, transientLink = false, missing = false, validContext = false;
+  let lastValidatedToken;
   const mailWait = new Map(), unexpected = [];
   const privateHandler = async route => {
     const req = route.request(), url = new URL(req.url()); let result;
     if (url.pathname === '/api/user-access/setup') result = { origin: 'https://almox.example.invalid', administrativeKeyPresent: true,
-      redirectUrls: ['https://almox.example.invalid/auth/callback?next=/recuperar-senha', 'https://almox.example.invalid/auth/confirm'] };
+      redirectUrls: ['https://almox.example.invalid/auth/callback', 'https://almox.example.invalid/auth/confirm'] };
     else if (url.pathname.startsWith('/api/user-access/')) {
       const person = people.find(person => person.id === url.pathname.split('/').at(-1)); assert.ok(person);
       if (req.method() === 'POST') {
@@ -25,13 +26,22 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
         mailWait.set(person.id, new Date(Date.now() + 60000).toISOString());
         if (person.id === people[0].id) { person.lastMailState = 'FAILED'; return route.fulfill({ status: 429, json: { error: 'O serviço de e-mail atingiu o limite de envio. Aguarde e, se continuar, procure o administrador.', code: 'AUTH_EMAIL_LIMIT', retryAfter: 60 } }); }
         person.lastMailState = 'ACCEPTED'; result = { kind: 'RECOVERY', retryAfter: 60, message: 'Link de recuperação solicitado ao serviço de e-mail. Confira a caixa de entrada e o spam.' };
-      } else result = { ...person, providerState: missing && person.id === people[2].id ? 'MISSING' : 'READY',
-        identity: { emailConfirmed: person.id !== people[0].id, invitedAt: person.invitationAt, lastSignInAt: person.lastLoginAt, blocked: false },
-        canSend: !(missing && person.id === people[2].id), nextAttemptAt: mailWait.get(person.id) ?? null };
+      } else if (req.method() === 'PATCH') {
+        assert.ok(missing && person.id === people[2].id);
+        assert.deepEqual(req.postDataJSON(), { previousAuthUserId: person.authUserId, authUserId: id(508) });
+        linkedAccounts++; missing = false; person.authUserId = id(508); person.accessState = 'PENDING'; person.lastLoginAt = null;
+        result = { message: 'Conta vinculada. A pessoa pode entrar com a senha cadastrada ou solicitar a recuperação.' };
+      } else {
+        const unavailable = missing && person.id === people[2].id;
+        result = { ...person, providerState: unavailable ? 'MISSING' : 'READY',
+          identity: unavailable ? null : { emailConfirmed: person.id !== people[0].id, invitedAt: person.invitationAt, lastSignInAt: person.lastLoginAt, blocked: false },
+          canSend: !unavailable, nextAttemptAt: mailWait.get(person.id) ?? null };
+      }
     } else if (url.pathname === '/api/catalog/users' && req.method() === 'POST') {
       creates++; const body = req.postDataJSON(); assert.equal(body.authUserId, undefined);
+      if (body.email === 'ja-cadastrado@example.invalid') return route.fulfill({ status: 409, json: { error: 'Esta conta já existe no Supabase. Informe o ID do usuário para vincular o acesso.', code: 'AUTH_IDENTITY_EXISTS' } });
       const person = { ...people[1], id: id(506), authUserId: id(507), name: body.name, email: body.email };
-      people.push(person); result = { ...person, accessNotice: 'Acesso cadastrado; o envio do convite não foi confirmado. O serviço de e-mail atingiu o limite. Acompanhe pelo botão Acesso do usuário.', notification: { state: 'PENDING' } };
+      people.push(person); result = { ...person, accessNotice: 'Acesso cadastrado. O envio do convite não foi confirmado. O serviço de e-mail atingiu o limite.', notification: { state: 'PENDING' } };
       return route.fulfill({ status: 201, json: { data: result } });
     } else return route.fallback();
     return route.fulfill({ json: { data: result } });
@@ -45,7 +55,7 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
     else if (url.pathname === '/api/auth/recover' && req.method() === 'POST') {
       recoveries++; if (recoveries === 1) return route.fulfill({ status: 429, json: { error: 'O serviço de e-mail atingiu o limite de envio. Aguarde e, se continuar, procure o administrador.', code: 'AUTH_EMAIL_LIMIT', retryAfter: 2 } });
       result = { message: 'Se houver uma conta habilitada, você receberá instruções.', retryAfter: 60 };
-    } else if (url.pathname === '/api/auth/complete-link' && req.method() === 'POST') { completions++; assert.equal(req.postDataJSON().type, 'invite'); if (transientLink === 'offline') return route.abort(); if (transientLink) return route.fulfill({ status: 503, json: { error: 'O serviço de login está temporariamente indisponível. Aguarde e tente validar este link novamente.', code: 'AUTH_UNAVAILABLE' } }); result = { next: '/primeiro-acesso' }; }
+    } else if (url.pathname === '/api/auth/complete-link' && req.method() === 'POST') { completions++; const body = req.postDataJSON(); assert.equal(body.type, 'invite'); lastValidatedToken = body.accessToken; if (transientLink === 'offline') return route.abort(); if (transientLink) return route.fulfill({ status: 503, json: { error: 'O serviço de login está temporariamente indisponível. Aguarde e tente validar este link novamente.', code: 'AUTH_UNAVAILABLE' } }); result = { next: '/primeiro-acesso' }; }
     else { unexpected.push(req.method() + ' ' + url.pathname); return route.abort(); }
     return route.fulfill({ json: { data: result } });
   };
@@ -65,15 +75,22 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
     });
     await check('Cadastro com falha no e-mail permanece salvo e orienta acompanhar o envio', async () => {
       await page.getByRole('button', { name: 'Novo usuário', exact: true }).click(); const dialog = page.getByRole('dialog');
-      await expect(dialog.getByLabel('UUID da identidade confirmada', { exact: false })).toHaveCount(0);
+      await expect(dialog.getByLabel('ID do usuário no Supabase', { exact: false })).toHaveCount(0);
       await dialog.getByLabel('Nome completo', { exact: false }).fill('Nova pessoa fictícia'); await dialog.getByLabel('E-mail de acesso', { exact: false }).fill('nova@example.invalid');
-      await dialog.getByLabel('Perfil nesta unidade', { exact: false }).selectOption(user.roleId); await dialog.getByRole('button', { name: 'Salvar cadastro', exact: true }).click();
-      await expect(row('Nova pessoa fictícia').getByText('Pendente', { exact: true })).toBeVisible(); await expect(page.locator('.toast')).toContainText('envio do convite não foi confirmado'); assert.equal(creates, 1);
+      await dialog.getByLabel('Perfil nesta unidade', { exact: false }).selectOption(user.roleId); await dialog.getByRole('button', { name: 'Salvar e enviar convite', exact: true }).click();
+      await expect(page.getByRole('dialog', { name: 'Acompanhar acesso' }).getByRole('alert')).toContainText('envio do convite não foi confirmado');
+      await expect(page.getByRole('dialog')).toContainText('nova@example.invalid');
+      await page.keyboard.press('Escape'); await expect(row('Nova pessoa fictícia').getByText('Pendente', { exact: true })).toBeVisible(); assert.equal(creates, 1);
     });
-    await check('Vínculo de identidade existente é uma escolha explícita e não dispara convite ao selecionar', async () => {
+    await check('Conta já cadastrada abre o vínculo confirmado sem perder os campos preenchidos', async () => {
       await page.getByRole('button', { name: 'Novo usuário', exact: true }).click(); const dialog = page.getByRole('dialog');
-      await dialog.getByLabel('Como esta pessoa vai acessar', { exact: false }).selectOption('existing');
-      await expect(dialog.getByLabel('UUID da identidade confirmada', { exact: false })).toBeVisible(); await expect(dialog).toContainText('nenhum novo convite será enviado'); assert.equal(sends, 0); await page.keyboard.press('Escape');
+      await dialog.getByLabel('Nome completo', { exact: false }).fill('Pessoa com conta'); await dialog.getByLabel('E-mail de acesso', { exact: false }).fill('ja-cadastrado@example.invalid');
+      await dialog.getByLabel('Perfil nesta unidade', { exact: false }).selectOption(user.roleId); await dialog.getByRole('button', { name: 'Salvar e enviar convite', exact: true }).click();
+      await expect(dialog.getByLabel('Como esta pessoa vai acessar', { exact: false })).toHaveValue('existing');
+      await expect(dialog.getByLabel('ID do usuário no Supabase', { exact: false })).toBeVisible();
+      await expect(dialog.getByLabel('E-mail de acesso', { exact: false })).toHaveValue('ja-cadastrado@example.invalid');
+      await expect(dialog.getByLabel('Perfil nesta unidade', { exact: false })).toHaveValue(user.roleId);
+      assert.equal(sends, 0); await page.keyboard.press('Escape');
     });
     await check('Acompanhamento consulta o estado e explica o primeiro acesso antes de qualquer envio', async () => {
       await open('Marina Souza'); const dialog = page.getByRole('dialog'); await expect(dialog).toContainText('marina@example.invalid'); await expect(dialog).toContainText('Ainda sem confirmação registrada');
@@ -89,11 +106,18 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
       await open('Renato Lima'); let dialog = page.getByRole('dialog'); await dialog.getByRole('button', { name: 'Enviar link para definir senha', exact: true }).click();
       await expect(page.getByRole('dialog').getByRole('status')).toContainText('Link de recuperação solicitado'); dialog = page.getByRole('dialog'); await expect(dialog).toContainText('Primeiro acesso pendente'); await expect(dialog).toContainText('Ainda sem confirmação registrada'); await page.keyboard.press('Escape');
     });
-    await check('Identidade ausente impede reenvio e orienta revisão do vínculo', async () => {
-      missing = true; await open('Ana da Montagem'); const dialog = page.getByRole('dialog'); await expect(dialog).toContainText('identidade vinculada não foi encontrada'); await expect(dialog.getByRole('button', { name: 'Enviar link para definir senha', exact: true })).toBeDisabled(); await page.keyboard.press('Escape'); missing = false;
+    await check('Identidade ausente permite vincular conta confirmada sem disparar e-mail', async () => {
+      await page.setViewportSize({ width: 320, height: 844 });
+      missing = true; await open('Ana da Montagem'); const dialog = page.getByRole('dialog'); await expect(dialog).toContainText('identidade vinculada não foi encontrada');
+      await expect(dialog.getByRole('button', { name: 'Enviar link para definir senha', exact: true })).toHaveCount(0); await noOverflow(page);
+      await dialog.getByLabel('ID do usuário no Supabase', { exact: false }).fill(id(508)); await dialog.getByRole('button', { name: 'Vincular conta confirmada', exact: true }).click();
+      await expect(dialog.getByRole('status').filter({ hasText: 'Conta vinculada' })).toBeVisible();
+      await expect(dialog.getByRole('button', { name: 'Enviar link para definir senha', exact: true })).toBeEnabled();
+      assert.equal(linkedAccounts, 1); assert.equal(sends, 2); await page.keyboard.press('Escape'); await page.setViewportSize({ width: 1440, height: 1000 });
     });
     await check('Configuração mostra endereços esperados e distingue painel externo de verificação efetiva', async () => {
       await page.locator('.access-email-settings summary').click(); await expect(page.getByLabel('Site URL', { exact: true })).toHaveValue('https://almox.example.invalid');
+      await expect(page.getByLabel('Redirect URL 1', { exact: true })).toHaveValue('https://almox.example.invalid/auth/callback');
       await expect(page.locator('.access-email-settings')).toContainText('não confirma as configurações do painel externo'); await expect(page.locator('.access-email-settings')).toContainText('Confira APP_URL');
     });
     await check('Lista de pessoas e acompanhamento cabem em 390 e 320 pixels sem rolagem lateral', async () => {
@@ -107,11 +131,18 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
     await check('Primeiro acesso sem link válido orienta convite e não habilita cadastro de senha', async () => {
       await page.goto(baseURL + '/primeiro-acesso'); await expect(page.locator('.notice[role="alert"]')).toContainText('abra o convite recebido por e-mail'); await expect(page.getByRole('button', { name: 'Criar minha senha', exact: true })).toHaveCount(0);
     });
-    await check('Link com fragmento limpa a URL antes de validar e não persiste tokens no navegador', async () => {
-      validContext = true; await page.goto(baseURL + '/auth/retorno#access_token=fixture.access.token-for-ui&refresh_token=fixture.refresh.token-for-ui&type=invite');
-      await page.getByRole('button', { name: 'Validar link e continuar', exact: true }).waitFor(); assert.equal(new URL(page.url()).hash, ''); assert.equal(completions, 0);
+    await check('Link de convite que cai no login retoma a validação sem enviar outro e-mail', async () => {
+      await page.goto(baseURL + '/login#access_token=fixture.access.token-for-ui&refresh_token=fixture.refresh.token-for-ui&type=invite');
+      await page.waitForURL(url => url.pathname === '/auth/retorno');
+      await page.getByRole('button', { name: 'Validar link e continuar', exact: true }).waitFor();
+      assert.equal(new URL(page.url()).hash, ''); assert.equal(completions, 0); assert.equal(recoveries, 0);
+    });
+    await check('Um novo convite na mesma tela substitui o link anterior e limpa os tokens da URL', async () => {
+      const newAccessToken = 'fixture.second.access.token-for-ui';
+      validContext = true; await page.goto(baseURL + `/auth/retorno#access_token=${newAccessToken}&refresh_token=fixture.second.refresh.token-for-ui&type=invite`);
+      await page.getByRole('button', { name: 'Validar link e continuar', exact: true }).waitFor(); await expect.poll(() => new URL(page.url()).hash).toBe(''); assert.equal(completions, 0);
       await page.getByRole('button', { name: 'Validar link e continuar', exact: true }).click(); await page.waitForURL(baseURL + '/primeiro-acesso'); await expect(page.locator('.password-identity')).toContainText('marina@example.invalid');
-      assert.equal(await page.evaluate(() => Object.keys(localStorage).some(key => key.startsWith('sb-'))), false); assert.equal(completions, 1);
+      assert.equal(lastValidatedToken, newAccessToken); assert.equal(await page.evaluate(() => Object.keys(localStorage).some(key => key.startsWith('sb-'))), false); assert.equal(completions, 1);
     });
     await check('Falha temporária mantém o link em memória para nova validação sem solicitar outro e-mail', async () => {
       transientLink = true; await page.goto(baseURL + '/auth/retorno#access_token=fixture.access.token-for-ui&refresh_token=fixture.refresh.token-for-ui&type=invite');

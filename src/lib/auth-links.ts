@@ -6,7 +6,7 @@ export function authEmailRedirect() {
   const origin = appOrigin(), url = new URL(origin);
   if (url.protocol !== "https:" && !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname))
     throw new AuthConfigurationError("Configure APP_URL com o endereço HTTPS oficial antes de enviar links de acesso.");
-  return `${origin}/auth/callback?next=/recuperar-senha`;
+  return `${origin}/auth/callback`;
 }
 /** Never forward provider messages: they may contain URLs or personal information. */
 export function authEmailError(error: AuthProviderError): AppError {

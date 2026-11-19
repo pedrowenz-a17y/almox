@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { api } from "@/lib/client";
+import { readAuthFragment } from "@/lib/auth-return";
 import { preferredStartPage } from "@/lib/workspace-preferences";
 import AuthShell from "@/components/auth-shell";
 
@@ -13,6 +14,12 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
   const [show, setShow] = useState(false);
   useEffect(() => {
+    const fragment = window.location.hash;
+    if (readAuthFragment(fragment)) {
+      // Supabase can return to the Site URL when a redirect is missing from its allowlist.
+      window.location.replace(`/auth/retorno${fragment}`);
+      return;
+    }
     if (new URLSearchParams(window.location.search).get("error"))
       queueMicrotask(() =>
         setError(

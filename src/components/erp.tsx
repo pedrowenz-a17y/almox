@@ -1,5 +1,5 @@
 "use client";
-import UserAccessTable, { AccessEmailSettings } from "@/components/user-access";
+import UserAccessTable, { AccessEmailSettings, AccessHelp, type AccessNotice } from "@/components/user-access";
 import { AccountAvatar, AccountProfile, useAccountPhoto } from "@/components/account-profile";
 import { useWorkspacePreferences } from "@/lib/workspace-preferences";
 import {
@@ -253,6 +253,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   const [period, setPeriod] = useState("30");
   const [tab, setTab] = useState("main");
   const [editor, setEditor] = useState<Editor | null>(null);
+  const [userAccess, setUserAccess] = useState<{ id: string; unitId: string; notice?: AccessNotice } | null>(null);
   const [deleting, setDeleting] = useState<Editor | null>(null);
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [movement, setMovement] = useState<MoveOptions | null>(null);
@@ -324,6 +325,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     setSearchResult(null);
     setSearchError("");
     setEditor(null);
+    setUserAccess(null);
     setDeleting(null);
     setMovement(null);
     setScan(false);
@@ -1740,7 +1742,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             </div>
             {addButton("users")}
           </div>
-          <UserAccessTable users={data.users ?? []} currentId={user!.id} actions={person => actions("users", person)} onChanged={() => void refresh()} />
+          <UserAccessTable users={data.users ?? []} currentId={user!.id} actions={person => actions("users", person)}
+            onAccess={id => setUserAccess({ id, unitId: user!.unitId })} />
+          {userAccess && userAccess.unitId === user?.unitId && <AccessHelp key={userAccess.id} id={userAccess.id} initialNotice={userAccess.notice}
+            onClose={() => setUserAccess(null)} onChanged={() => void refresh()} />}
           <AccessEmailSettings />
           <AccessProfiles roles={roles} onPrepared={refresh} />
         </>
@@ -2261,6 +2266,17 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
           canArchive={can("records:delete")}
           onClose={() => setEditor(null)}
           onDone={async (saved) => {
+            if (editor.entity === "users" && !editor.record && user && typeof saved.id === "string") {
+              const notification = saved.notification;
+              const pending = notification && typeof notification === "object" && "state" in notification && notification.state === "PENDING";
+              const notice = typeof saved.accessNotice === "string"
+                ? { message: saved.accessNotice, tone: pending ? "warning" as const : "success" as const }
+                : undefined;
+              setEditor(null);
+              setUserAccess({ id: saved.id, unitId: user.unitId, notice });
+              await refresh();
+              return;
+            }
             const newProduct =
               editor.entity === "products" && !editor.record && saved?.id;
             await complete(

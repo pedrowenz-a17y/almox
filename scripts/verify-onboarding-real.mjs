@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
 import { chromium, expect } from '@playwright/test';
@@ -16,6 +17,7 @@ assert.equal(new URL(base).port, '3130'); assert.equal(databaseUrl.port, '55450'
 assert.ok(process.env.QA_ADMIN_EMAIL?.endsWith('@example.invalid') && process.env.QA_ADMIN_PASSWORD && process.env.SUPABASE_SERVICE_ROLE_KEY);
 const db = new PrismaClient(), admin = createClient(providerUrl.origin, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
 const email = `onboarding-${randomUUID()}@example.invalid`, password = 'Fixture!' + randomBytes(20).toString('hex'), nextPassword = 'Updated!' + randomBytes(20).toString('hex');
+const output = process.env.QA_ARTIFACT_DIR ?? 'artifacts/access-onboarding';
 const evidence = { scope: 'Isolated local PostgreSQL, official Supabase Auth and local SMTP capture; no external recipients or production accounts.', provider: 'supabase/gotrue:v2.185.0', checks: [], result: 'running' };
 const jar = new Map(); let browser, memberId, identityId;
 async function request(path, { method = 'GET', body, cookies = jar, origin = base } = {}) {
@@ -65,7 +67,7 @@ try {
     memberId = data.id; assert.equal(data.notification.state, 'REQUESTED');
     const user = await db.user.findUniqueOrThrow({ where: { id: memberId } }); identityId = user.authUserId;
     assert.ok(await db.unitMembership.findUnique({ where: { userId_unitId: { userId: memberId, unitId } } }));
-    assert.ok((await latestLink('invite')).startsWith(providerUrl.origin));
+    assert.equal(new URL(await latestLink('invite')).searchParams.get('redirect_to'), base + '/auth/callback');
   });
   await check('Estado consultado distingue convite de senha e login ainda não confirmados', async () => {
     const detail = unwrap(await request('/api/user-access/' + memberId)); assert.equal(detail.accessState, 'INVITED'); assert.equal(detail.identity.emailConfirmed, false);
@@ -102,7 +104,7 @@ try {
   await db.loginAttempt.updateMany({ where: { key }, data: { blockedUntil: new Date(Date.now() - 1000) } });
   await check('Recuperação pública solicita mensagem sem criar sessão no navegador solicitante', async () => {
     const requester = new Map(); unwrap(await request('/api/auth/recover', { method: 'POST', body: { email }, cookies: requester })); assert.equal(requester.size, 0);
-    assert.ok(await latestLink('recovery'));
+    assert.equal(new URL(await latestLink('recovery')).searchParams.get('redirect_to'), base + '/auth/callback');
   });
   let recovery;
   await check('Recuperação também funciona em um terceiro navegador sem o cookie de quem pediu', async () => { recovery = await openLink(await latestLink('recovery'), '/recuperar-senha'); });
@@ -125,6 +127,21 @@ try {
     const setup = unwrap(await request('/api/user-access/setup')); assert.equal(setup.origin, base); assert.ok(setup.redirectUrls.every(url => url.startsWith(base + '/auth/')));
     assert.equal(JSON.stringify(setup).includes(process.env.SUPABASE_SERVICE_ROLE_KEY), false);
   });
+  await check('Conta confirmada recriada no Supabase recupera o login pelo vínculo no ERP sem novo e-mail', async () => {
+    const before = (await messages()).length;
+    const previousAuthUserId = identityId;
+    assert.equal((await admin.auth.admin.deleteUser(previousAuthUserId)).error, null);
+    const replacement = await admin.auth.admin.createUser({ email, password: nextPassword, email_confirm: true });
+    assert.ok(replacement.data.user && !replacement.error);
+    identityId = replacement.data.user.id;
+    const credentials = { email, password: nextPassword };
+    assert.equal((await request('/api/auth/login', { method: 'POST', body: credentials, cookies: new Map() })).status, 403);
+    const detail = unwrap(await request('/api/user-access/' + memberId));
+    assert.equal(detail.providerState, 'MISSING');
+    unwrap(await request('/api/user-access/' + memberId, { method: 'PATCH', body: { previousAuthUserId, authUserId: identityId } }));
+    unwrap(await request('/api/auth/login', { method: 'POST', body: credentials, cookies: new Map() }));
+    assert.equal((await messages()).length, before);
+  });
   evidence.result = 'passed';
 } catch { evidence.result = 'failed'; process.exitCode = 1; console.error('A homologação não concluiu a etapa indicada; nenhum token ou senha foi registrado.'); }
 finally {
@@ -135,6 +152,6 @@ finally {
     const keys = ['login', 'recovery', 'auth-mail'].map(action => createHash('sha256').update(`${action}:${email}`).digest('hex'));
     await db.loginAttempt.deleteMany({ where: { key: { in: keys } } });
   } catch { evidence.cleanupFailed = true; process.exitCode = 1; }
-  await db.$disconnect(); await mkdir('artifacts/access-onboarding', { recursive: true });
-  await writeFile('artifacts/access-onboarding/real-auth.json', JSON.stringify(evidence, null, 2) + '\n');
+  await db.$disconnect(); await mkdir(output, { recursive: true });
+  await writeFile(join(output, 'real-auth.json'), JSON.stringify(evidence, null, 2) + '\n');
 }

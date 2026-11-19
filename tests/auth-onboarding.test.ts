@@ -16,7 +16,7 @@ test("convite e recuperação aceitam somente os dois tipos de fragmento previst
 });
 test("origem dos e-mails vem da configuração exata e exige HTTPS fora do loopback", () => {
   process.env.APP_URL = "https://almox.example.invalid";
-  assert.equal(authEmailRedirect(), "https://almox.example.invalid/auth/callback?next=/recuperar-senha");
+  assert.equal(authEmailRedirect(), "https://almox.example.invalid/auth/callback");
   process.env.APP_URL = "http://127.0.0.1:3130"; assert.ok(authEmailRedirect().startsWith("http://127.0.0.1:3130/"));
   process.env.APP_URL = "http://almox.example.invalid"; assert.throws(authEmailRedirect, AuthConfigurationError);
   process.env.APP_URL = "https://almox.example.invalid/login"; assert.throws(authEmailRedirect, AuthConfigurationError);

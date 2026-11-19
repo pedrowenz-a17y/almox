@@ -14,13 +14,12 @@ const firstAccessLabels: Record<AccessState, string> = {
   DISABLED: "Desativado", UNLINKED: "Sem conta vinculada", INVITED: "Convite solicitado",
   PENDING: "Pendente", ACTIVE: "Confirmado",
 };
-export default function UserAccessTable({ users, currentId, actions, onChanged }: {
-  users: ManagedUser[]; currentId: string; actions: (user: ManagedUser) => React.ReactNode; onChanged: () => void;
+export default function UserAccessTable({ users, currentId, actions, onAccess }: {
+  users: ManagedUser[]; currentId: string; actions: (user: ManagedUser) => React.ReactNode; onAccess: (id: string) => void;
 }) {
-  const [selected, setSelected] = useState<string | null>(null), [query, setQuery] = useState(""), [state, setState] = useState("ALL");
+  const [query, setQuery] = useState(""), [state, setState] = useState("ALL");
   const filtered = users.filter(user => (state === "ALL" || stateOf(user) === state) && `${user.name} ${user.email}`.toLocaleLowerCase("pt-BR").includes(query.trim().toLocaleLowerCase("pt-BR")));
-  return <>
-    <section className="panel user-access-panel">
+  return <section className="panel user-access-panel">
       <div className="toolbar"><label>Buscar pessoa<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Nome ou e-mail" /></label>
         <label>Primeiro acesso<select aria-label="Filtrar primeiro acesso" value={state} onChange={event => setState(event.target.value)}><option value="ALL">Todos</option>
           {(Object.keys(firstAccessLabels) as AccessState[]).map(key => <option key={key} value={key}>{firstAccessLabels[key]}</option>)}
@@ -33,25 +32,26 @@ export default function UserAccessTable({ users, currentId, actions, onChanged }
           <td data-label="Primeiro acesso">{status === "DISABLED" ? <span aria-label="Não se aplica">—</span> : <span className={status === "PENDING" || status === "UNLINKED" ? "access-attention" : undefined}>{firstAccessLabels[status]}</span>}
             {user.lastMailState === "FAILED" && <small>O último envio não foi confirmado.</small>}{user.lastMailState === "UNCONFIRMED" && <small>Envio aguardando confirmação.</small>}
             {user.lastLoginAt && <small>Última entrada: {dateTime(user.lastLoginAt)}</small>}</td>
-          <td data-label="Ações"><div className="user-access-actions"><button className="text-button" aria-label={`Acompanhar acesso de ${user.name}`} onClick={() => setSelected(user.id)}>Ver acesso</button>{actions(user)}</div></td>
+          <td data-label="Ações"><div className="user-access-actions"><button className="text-button" aria-label={`Acompanhar acesso de ${user.name}`} onClick={() => onAccess(user.id)}>Ver acesso</button>{actions(user)}</div></td>
         </tr>; })}</tbody></table></div> : <Empty title="Nenhuma pessoa neste filtro" description="Confira o nome, o e-mail ou o estado selecionado." />}
       <p className="user-access-footnote">Para definir a primeira senha, a pessoa precisa abrir o link do convite.</p>
-    </section>
-    {selected && <AccessHelp id={selected} onClose={() => setSelected(null)} onChanged={onChanged} />}
-  </>;
+  </section>;
 }
 const providerGuidance: Record<AccessDetails["providerState"], string> = {
-  READY: "O vínculo corresponde ao e-mail cadastrado. Enviar um link não muda o perfil nem a senha automaticamente.",
-  MISSING: "A identidade vinculada não foi encontrada. O administrador precisa revisar o vínculo no Supabase; reenviar e-mail não corrige um identificador antigo.",
+  READY: "O vínculo corresponde ao e-mail cadastrado.",
+  MISSING: "A identidade vinculada não foi encontrada no Supabase. Se a pessoa já tem uma conta confirmada com este e-mail, informe o ID atual abaixo.",
   MISMATCH: "O identificador de login não corresponde ao e-mail cadastrado. Revise o vínculo antes de enviar qualquer link.",
   UNAVAILABLE: "Não foi possível consultar o serviço de login. Tente atualizar mais tarde.",
   CONFIGURATION: "A administração de convites precisa ser conferida na configuração do servidor. O acesso comum pode continuar disponível.",
-  UNLINKED: "Este cadastro não tem identidade de login vinculada. Revise o provisionamento antes de solicitar o primeiro acesso.",
+  UNLINKED: "Vincule a conta confirmada no Supabase para liberar o login deste cadastro.",
 };
-function AccessHelp({ id, onClose, onChanged }: { id: string; onClose: () => void; onChanged: () => void }) {
+export type AccessNotice = { message: string; tone: "success" | "warning" };
+
+export function AccessHelp({ id, initialNotice, onClose, onChanged }: { id: string; initialNotice?: AccessNotice; onClose: () => void; onChanged: () => void }) {
   const [result, setResult] = useState<AccessDetails | null>(null), [loading, setLoading] = useState(true), [error, setError] = useState("");
-  const [notice, setNotice] = useState(""), [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState<AccessNotice | null>(initialNotice ?? null), [busy, setBusy] = useState(false);
   const cooldown = useAuthCooldown();
+  const canLink = result?.active && result.identityActive && (result.providerState === "MISSING" || result.providerState === "UNLINKED");
   async function load(signal?: AbortSignal) {
     setLoading(true); setError("");
     try { const next = await api<AccessDetails>(`/api/user-access/${id}`, { signal });
@@ -68,18 +68,38 @@ function AccessHelp({ id, onClose, onChanged }: { id: string; onClose: () => voi
   }, [id]);
   async function send() {
     if (!result?.canSend || !result.authUserId || busy || cooldown.remaining) return;
-    setBusy(true); setError(""); setNotice("");
+    setBusy(true); setError(""); setNotice(null);
     try {
       const sent = await api<AccessMailResult>(`/api/user-access/${id}`, { method: "POST", body: JSON.stringify({ authUserId: result.authUserId }) });
-      setNotice(sent.message); cooldown.wait(sent.retryAfter); await load(); onChanged();
+      setNotice({ message: sent.message, tone: "success" }); cooldown.wait(sent.retryAfter); await load(); onChanged();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Não foi possível solicitar o envio.");
       if (cause instanceof ApiError && cause.status === 429) cooldown.wait(cause.retryAfter ?? 60); }
     finally { setBusy(false); }
   }
+  async function linkAccount(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!result || !canLink || busy) return;
+    const authUserId = String(new FormData(event.currentTarget).get("authUserId") ?? "").trim();
+    setBusy(true); setError(""); setNotice(null);
+    try {
+      const linked = await api<{ message: string }>(`/api/user-access/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ previousAuthUserId: result.authUserId, authUserId }),
+      });
+      setNotice({ message: linked.message, tone: "success" });
+      await load();
+      onChanged();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Não foi possível vincular a conta.");
+    } finally {
+      setBusy(false);
+    }
+  }
   const sendLabel = result?.identity?.emailConfirmed ? "Enviar link para definir senha" : result?.invitationAt || result?.identity?.invitedAt ? "Reenviar convite" : "Enviar convite";
-  return <Modal title="Acompanhar acesso" subtitle={result?.name} onClose={() => { if (!busy) onClose(); }}>
+  return <Modal title="Acompanhar acesso" subtitle={result?.name} onClose={onClose} closeDisabled={busy}>
     <div className="modal-body access-help">
-      {notice && <div className="notice success" role="status">{notice}</div>}{error && <div className="notice error" role="alert">{error}</div>}
+      {notice && <div className={`notice ${notice.tone}`} role={notice.tone === "warning" ? "alert" : "status"}>{notice.message}</div>}
+      {error && <div className="notice error" role="alert">{error}</div>}
       {loading ? <Loading /> : result && <>
         <div className="access-help-identity"><strong>{result.email}</strong><Badge tone={result.accessState === "ACTIVE" ? "success" : "warning"}>{accessStateLabels[result.accessState]}</Badge></div>
         <p className="muted">{providerGuidance[result.providerState]}</p>
@@ -89,12 +109,17 @@ function AccessHelp({ id, onClose, onChanged }: { id: string; onClose: () => voi
           <div><dt>Última entrada nesta unidade</dt><dd>{result.lastLoginAt ? dateTime(result.lastLoginAt) : "Ainda sem confirmação registrada"}</dd></div>
           {result.invitationAt && <div><dt>Último convite solicitado</dt><dd>{dateTime(result.invitationAt)}</dd></div>}
         </dl>
-        <details className="access-first-steps"><summary>Como a pessoa começa</summary><ol><li>Abra a mensagem mais recente de convite ou recuperação.</li><li>Valide o link, confira seu e-mail e defina uma senha pessoal.</li><li>Entre no aplicativo com esse e-mail e a nova senha.</li></ol></details>
+        {canLink && <form className="access-link-form" onSubmit={linkAccount}>
+          <label>ID do usuário no Supabase<input name="authUserId" required autoComplete="off" spellCheck={false} disabled={busy} />
+            <small>Copie o UID em Authentication → Users. O e-mail deve ser o mesmo deste cadastro.</small>
+          </label>
+          <button className="button primary" disabled={busy}>Vincular conta confirmada</button>
+        </form>}
+        {result.canSend && <details className="access-first-steps"><summary>Como a pessoa começa</summary><ol><li>Abra a mensagem mais recente de convite ou recuperação.</li><li>Valide o link, confira seu e-mail e defina uma senha pessoal.</li><li>Entre no aplicativo com esse e-mail e a nova senha.</li></ol></details>}
         {result.identity?.blocked && <div className="notice error">A identidade está bloqueada no serviço de login.</div>}
         {!result.active && <p className="muted">O acesso precisa ser reativado por uma pessoa autorizada antes do envio.</p>}
-        <p className="muted">Sem registro não significa sem senha. Contas antigas serão confirmadas no próximo login.</p>
         <div className="access-help-actions"><button className="button secondary" disabled={busy} onClick={() => void load()}><RefreshCw size={16} /> Atualizar estado</button>
-          <button className="button primary" disabled={busy || !result.canSend || cooldown.remaining > 0} onClick={() => void send()}><Mail size={16} />{busy ? "Solicitando…" : cooldown.remaining ? `Nova tentativa em ${cooldown.label}` : sendLabel}</button></div>
+          {!canLink && <button className="button primary" disabled={busy || !result.canSend || cooldown.remaining > 0} onClick={() => void send()}><Mail size={16} />{busy ? "Solicitando…" : cooldown.remaining ? `Nova tentativa em ${cooldown.label}` : sendLabel}</button>}</div>
       </>}
       {!loading && !result && <button className="button secondary" onClick={() => void load()}>Tentar consultar novamente</button>}
     </div>

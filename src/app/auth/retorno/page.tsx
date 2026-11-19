@@ -7,31 +7,53 @@ import { api, ApiError } from "@/lib/client";
 import { readAuthFragment, type ImplicitAuthLink } from "@/lib/auth-return";
 export default function AcceptAccessLink() {
   const router = useRouter(), captured = useRef(false), link = useRef<ImplicitAuthLink | null>(null);
+  const pending = useRef<AbortController | null>(null);
   const [state, setState] = useState<"LOADING" | "READY" | "ERROR" | "BLOCKED">("LOADING");
   const [error, setError] = useState(""), [busy, setBusy] = useState(false);
   useEffect(() => {
-    if (captured.current) return;
-    captured.current = true;
-    const value = readAuthFragment(window.location.hash);
-    // Remove secrets before any API request; never copy them into storage or React state.
-    window.history.replaceState(null, "", "/auth/retorno");
-    link.current = value;
-    queueMicrotask(() => {
-      if (!value) { setState("ERROR"); setError("O link está incompleto, expirou ou já foi utilizado. Solicite um novo link."); }
-      else setState("READY");
-    });
+    function captureLink() {
+      const value = readAuthFragment(window.location.hash);
+      // Remove secrets before any API request; never copy them into storage or React state.
+      window.history.replaceState(null, "", "/auth/retorno");
+      pending.current?.abort();
+      pending.current = null;
+      link.current = value;
+      queueMicrotask(() => {
+        setBusy(false);
+        setState(value ? "READY" : "ERROR");
+        setError(value ? "" : "O link está incompleto, expirou ou já foi utilizado. Solicite um novo link.");
+      });
+    }
+    if (!captured.current) {
+      captured.current = true;
+      captureLink();
+    }
+    window.addEventListener("hashchange", captureLink);
+    return () => {
+      window.removeEventListener("hashchange", captureLink);
+      pending.current?.abort();
+      pending.current = null;
+    };
   }, []);
   async function accept() {
-    if (busy || !link.current) return;
+    if (pending.current || !link.current) return;
+    const controller = new AbortController();
+    pending.current = controller;
     setBusy(true); setError("");
     try {
-      const result = await api<{ next: string }>("/api/auth/complete-link", { method: "POST", body: JSON.stringify(link.current) });
+      const result = await api<{ next: string }>("/api/auth/complete-link", {
+        method: "POST", body: JSON.stringify(link.current), signal: controller.signal,
+      });
+      if (controller.signal.aborted) return;
       link.current = null;
       router.replace(result.next === "/primeiro-acesso" ? "/primeiro-acesso" : "/recuperar-senha"); router.refresh();
     } catch (cause) {
+      if (controller.signal.aborted) return;
       setError(cause instanceof Error ? cause.message : "Não foi possível validar o link."); setBusy(false);
       if (cause instanceof ApiError && (cause.status === 0 || cause.status >= 500 || cause.status === 429)) setState("READY");
       else { setState(cause instanceof ApiError && ["ACCOUNT_DISABLED", "AUTH_IDENTITY_CHANGED"].includes(cause.code ?? "") ? "BLOCKED" : "ERROR"); link.current = null; }
+    } finally {
+      if (pending.current === controller) pending.current = null;
     }
   }
   return <AuthShell title="Vamos preparar seu acesso" description="Confirme o link recebido por e-mail para continuar e definir sua senha.">

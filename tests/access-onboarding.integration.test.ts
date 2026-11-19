@@ -96,6 +96,63 @@ test("identidade existente confirmada pode ser vinculada sem mensagem e sem alte
   assert.equal(result.id, f.external.id); assert.equal(f.calls.includes("invite"), false); assert.equal(f.calls.includes("recover"), false);
   assert.deepEqual(await db.unitMembership.findMany({ where: { unitId: f.units[1] } }), before);
 });
+test("conta já cadastrada no provedor orienta o vínculo e preserva dados de autenticação", async () => {
+  f.provider.createIdentity = async () => ({ user: null, error: { status: 422, code: "email_exists" } });
+  const data = input();
+  await assert.rejects(users.saveUserAccess(f.actor, data, undefined, () => f.provider), code("AUTH_IDENTITY_EXISTS"));
+  assert.equal(await db.user.count({ where: { email: data.email } }), 0);
+  assert.equal(f.calls.length, 0);
+});
+
+test("vínculo ausente usa a conta confirmada com o mesmo e-mail e mantém os acessos das unidades", async () => {
+  const previousAuthUserId = f.target.authUserId;
+  const authUserId = id();
+  f.identities.delete(previousAuthUserId);
+  f.identities.set(authUserId, { id: authUserId, email: f.target.email, email_confirmed_at: new Date().toISOString() });
+  await db.unitMembership.create({ data: { userId: f.target.id, unitId: f.units[1], roleId: f.roles[1], active: false } });
+  const where = { userId: f.target.id };
+  const memberships = await db.unitMembership.findMany({ where, orderBy: { unitId: "asc" } });
+  const link = { previousAuthUserId, authUserId };
+  await emails.linkConfirmedAccount(f.actor, f.target.id, link, () => f.provider);
+  assert.equal((await db.user.findUniqueOrThrow({ where: { id: f.target.id } })).authUserId, authUserId);
+  assert.deepEqual(await db.unitMembership.findMany({ where, orderBy: { unitId: "asc" } }), memberships);
+  assert.equal((await emails.accessDetails(f.actor, f.target.id, () => f.provider)).identity?.emailConfirmed, true);
+  const audit = await db.auditLog.findFirstOrThrow({ where: { action: "USER_AUTH_LINKED", entityId: f.target.id, unitId: f.actor.unitId } });
+  assert.deepEqual(audit.before, { authUserId: previousAuthUserId });
+  assert.deepEqual(audit.after, { authUserId });
+  assert.ok(f.calls.every(call => call === "get"));
+  await assert.rejects(emails.linkConfirmedAccount(f.actor, f.target.id, link, () => f.provider), code("AUTH_IDENTITY_CHANGED"));
+});
+
+test("vínculo exige o mesmo e-mail confirmado e preserva uma identidade ainda existente", async () => {
+  const previousAuthUserId = f.target.authUserId;
+  const link = (authUserId: string) => emails.linkConfirmedAccount(f.actor, f.target.id, { previousAuthUserId, authUserId }, () => f.provider);
+  await assert.rejects(link(f.external.authUserId), code("AUTH_IDENTITY_EXISTS"));
+  f.identities.delete(previousAuthUserId);
+  await assert.rejects(link(f.external.authUserId), code("AUTH_IDENTITY_NOT_CONFIRMED"));
+  const authUserId = id();
+  f.identities.set(authUserId, { id: authUserId, email: f.target.email });
+  await assert.rejects(link(authUserId), code("AUTH_IDENTITY_NOT_CONFIRMED"));
+  f.identities.get(authUserId)!.email_confirmed_at = new Date().toISOString();
+  const getIdentity = f.provider.getIdentity;
+  f.provider.getIdentity = authId => authId === previousAuthUserId ? Promise.resolve({ user: null, error: { status: 503 } }) : getIdentity(authId);
+  await assert.rejects(link(authUserId), code("AUTH_IDENTITY_UNAVAILABLE"));
+  assert.equal((await db.user.findUniqueOrThrow({ where: { id: f.target.id } })).authUserId, previousAuthUserId);
+  assert.equal(await db.auditLog.count({ where: { action: "USER_AUTH_LINKED", entityId: f.target.id } }), 0);
+});
+
+test("conta confirmada só pode ser vinculada por um administrador da unidade em um acesso ativo", async () => {
+  await db.user.update({ where: { id: f.target.id }, data: { authUserId: null } });
+  const link = { previousAuthUserId: null, authUserId: f.target.authUserId };
+  await assert.rejects(emails.linkConfirmedAccount(f.external, f.target.id, link, () => f.provider), status(403));
+  await assert.rejects(emails.linkConfirmedAccount(f.actor, f.external.id, link, () => f.provider), status(404));
+  await db.unitMembership.update({ where: { userId_unitId: { userId: f.target.id, unitId: f.units[0] } }, data: { active: false } });
+  await assert.rejects(emails.linkConfirmedAccount(f.actor, f.target.id, link, () => f.provider), code("ACCESS_DISABLED"));
+  assert.equal(f.calls.length, 0);
+  await db.unitMembership.update({ where: { userId_unitId: { userId: f.target.id, unitId: f.units[0] } }, data: { active: true } });
+  await emails.linkConfirmedAccount(f.actor, f.target.id, link, () => f.provider);
+  assert.equal((await db.user.findUniqueOrThrow({ where: { id: f.target.id } })).authUserId, link.authUserId);
+});
 test("UUID de outro e-mail e identidade não confirmada são recusados no vínculo explícito", async () => {
   await assert.rejects(users.saveUserAccess(f.actor, { ...input(), authUserId: f.target.authUserId }, undefined, () => f.provider), status(400));
   await unconfirmed(); await assert.rejects(users.saveUserAccess(f.actor, { name: f.target.name, email: f.target.email, roleId: f.roles[1], authUserId: f.target.authUserId }, undefined, () => f.provider), status(400));
