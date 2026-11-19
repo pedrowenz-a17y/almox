@@ -97,6 +97,7 @@ await context.route(fixtureURL + '/api/**', async route => {
   if (url.pathname.startsWith('/api/qr/')) return route.fulfill({ contentType: 'image/svg+xml', body: await QRCode.toString(fixtureURL + '/localizacao/' + data.locations[0].id, { type: 'svg', margin: 4 }) });
   let value;
   if (url.pathname === '/api/data') value = data;
+  else if (url.pathname === '/api/me/avatar') value = { photo: null };
   else if (url.pathname === '/api/assistant') value = { mode: 'local', configured: true, includeUnit: true, description: 'Ajuda para consultar materiais e entender a rotina do almoxarifado.' };
   else if (url.pathname === '/api/search') value = { products: data.products.slice(0, 1), locations: [] };
   else if (url.pathname === '/api/operational-pending') value = { items: [], totals: {}, total: 0, page: 1, pageSize: 25, serverTime: new Date().toISOString() };
@@ -254,6 +255,66 @@ try {
   if (deliveryReceipts && !managementOnly) await verifyDeliveryReceipts({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
   if (management) await verifyManagement({ page, fixtureURL, data, user, check, output, noOverflow, contrast });
   if (!reconciliationOnly) {
+  await check('Perfil pessoal abre nos dois avatares e atualiza ou remove a foto', async () => {
+    const endpoint = fixtureURL + '/api/me/avatar';
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a9XcAAAAASUVORK5CYII=', 'base64');
+    const demoPhoto = 'data:image/png;base64,' + png.toString('base64');
+    let photo = null;
+    await page.route(endpoint, async route => {
+      if (route.request().method() === 'PUT') {
+        assert.match(route.request().headers()['content-type'], /^multipart\/form-data; boundary=/);
+        photo = demoPhoto;
+      } else if (route.request().method() === 'DELETE') photo = null;
+      return route.fulfill({ json: { data: { photo } } });
+    });
+    try {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto(fixtureURL + '/dashboard');
+      const sidebar = page.locator('.sidebar-user').getByRole('button', { name: 'Abrir meu perfil' });
+      const topbar = page.locator('.topbar').getByRole('button', { name: 'Abrir meu perfil' });
+      await sidebar.click();
+      const profile = page.getByRole('dialog', { name: 'Meu perfil' });
+      await expect(profile.getByText(user.email, { exact: true })).toBeVisible();
+      const startPage = profile.getByLabel('Tela após entrar');
+      const compact = profile.getByLabel('Tabelas compactas no PC');
+      await startPage.selectOption('/estoque');
+      await compact.check();
+      await expect(page.locator('.app-shell')).toHaveAttribute('data-table-density', 'compact');
+      await profile.screenshot({ animations: 'disabled', path: path.join(output, 'meu-perfil-desktop.png') });
+      const file = profile.getByLabel('Foto de perfil');
+      await expect(file).toBeEnabled();
+      await file.setInputFiles({ name: 'perfil-ficticio.png', mimeType: 'image/png', buffer: png });
+      await profile.getByRole('button', { name: 'Salvar foto' }).click();
+      await expect(profile.getByRole('status')).toHaveText('Foto atualizada.');
+      await page.keyboard.press('Escape');
+      await expect(sidebar.locator('img')).toHaveAttribute('src', demoPhoto);
+      await expect(topbar.locator('img')).toHaveAttribute('src', demoPhoto);
+      await page.reload();
+      await expect(topbar.locator('img')).toHaveAttribute('src', demoPhoto);
+      await expect(page.locator('.app-shell')).toHaveAttribute('data-table-density', 'compact');
+      await page.setViewportSize({ width: 320, height: 640 });
+      await topbar.click();
+      await noOverflow(page);
+      await expect(startPage).toHaveValue('/estoque');
+      await expect(compact).toBeChecked();
+      await profile.getByRole('button', { name: 'Restaurar opções da área de trabalho' }).click();
+      await expect(startPage).toHaveValue('/dashboard');
+      await expect(compact).not.toBeChecked();
+      await profile.getByRole('button', { name: 'Ativar modo claro', exact: true }).click();
+      await theme(page, 'light');
+      await profile.getByRole('button', { name: 'Ativar modo escuro', exact: true }).click();
+      await profile.getByRole('button', { name: 'Pausar animações', exact: true }).click();
+      await expect(page.locator('html')).toHaveAttribute('data-motion', 'quiet');
+      await profile.getByRole('button', { name: 'Ativar animações', exact: true }).click();
+      await profile.getByRole('button', { name: 'Remover foto' }).click();
+      await expect(profile.getByRole('status')).toHaveText('Foto removida.');
+      await expect(topbar.locator('img')).toHaveCount(0);
+      await profile.screenshot({ animations: 'disabled', path: path.join(output, 'meu-perfil-mobile.png') });
+      await page.keyboard.press('Escape');
+    } finally {
+      await page.unroute(endpoint);
+    }
+  });
   await check('Barra de ações e navegação cabem em 390 e 320 pixels', async () => {
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 }); await page.goto(fixtureURL + '/dashboard'); await page.locator('.stats-grid').waitFor();

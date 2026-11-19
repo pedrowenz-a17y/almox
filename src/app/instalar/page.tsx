@@ -48,13 +48,13 @@ export default function Installation() {
         <article className={styles.card} id="windows">
           <Monitor size={27} aria-hidden="true" />
           <h2>No Windows</h2>
-          <p className={styles.fileInfo}>EXE · versão 2.6.1 · 176 MB<br />Windows 10/11 · 64 bits</p>
-          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.1/Almox-ERP-2.6.1-Windows-x64-Setup.exe" download="Almox-ERP-2.6.1-Windows-x64-Setup.exe">
+          <p className={styles.fileInfo}>EXE · versão 2.6.2 · 176 MB<br />Windows 10/11 · 64 bits</p>
+          <a className={styles.download} href="https://github.com/pedrowenz-a17y/almox/releases/download/v2.6.2/Almox-ERP-2.6.2-Windows-x64-Setup.exe" download="Almox-ERP-2.6.2-Windows-x64-Setup.exe">
             <Download size={19} aria-hidden="true" /> Baixar para Windows
           </a>
           <ol>
             <li>Clique em <strong>Baixar para Windows</strong> e aguarde terminar.</li>
-            <li>Abra o arquivo <strong>Almox-ERP-2.6.1-Windows-x64-Setup.exe</strong> e siga as etapas do instalador.</li>
+            <li>Abra o arquivo <strong>Almox-ERP-2.6.2-Windows-x64-Setup.exe</strong> e siga as etapas do instalador.</li>
             <li>Abra o atalho <strong>Almox ERP</strong>. Em <strong>Endereço do ERP</strong>, use o endereço abaixo e clique em <strong>Conectar ao ERP</strong>.</li>
           </ol>
         </article>

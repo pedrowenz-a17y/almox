@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import { api } from "@/lib/client";
+import { preferredStartPage } from "@/lib/workspace-preferences";
 import AuthShell from "@/components/auth-shell";
 
 export default function Login() {
@@ -40,7 +41,7 @@ export default function Login() {
           !next.includes("\\") &&
           !next.startsWith("/login")
           ? next
-          : "/dashboard",
+          : preferredStartPage(),
       );
       router.refresh();
     } catch (cause) {

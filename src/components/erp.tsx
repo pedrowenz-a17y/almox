@@ -1,5 +1,7 @@
 "use client";
 import UserAccessTable, { AccessEmailSettings } from "@/components/user-access";
+import { AccountAvatar, AccountProfile, useAccountPhoto } from "@/components/account-profile";
+import { useWorkspacePreferences } from "@/lib/workspace-preferences";
 import {
   useCallback,
   useEffect,
@@ -220,6 +222,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
   const route = pathname === "/" ? "/dashboard" : pathname;
   const [data, setData] = useState<DataSet | null>(null);
   const [user, setUser] = useState<SessionUser | null>(initialUser);
+  const [profileUserId, setProfileUserId] = useState<string | null>(null);
+  const accountPhoto = useAccountPhoto(user?.id);
+  const { compactTables } = useWorkspacePreferences();
+  const openProfile = () => setProfileUserId(user?.id ?? null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
@@ -1823,6 +1829,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
       return can("settings:manage") ? (
         <Settings
           data={data}
+          onOpenProfile={openProfile}
           onDone={() => complete("Configurações atualizadas e auditadas.")}
         />
       ) : (
@@ -1898,7 +1905,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     );
   }
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-table-density={compactTables ? "compact" : undefined}>
       {menu && (
         <button
           className="sidebar-scrim"
@@ -2011,13 +2018,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             <ArrowUpRight size={17} />
           </Link>
           <div className="sidebar-user">
-            <span className="avatar">
-              {user?.name
-                .split(" ")
-                .map((n) => n[0])
-                .slice(0, 2)
-                .join("") || "…"}
-            </span>
+            <button type="button" className="avatar account-avatar" aria-label="Abrir meu perfil" aria-haspopup="dialog"
+              title="Meu perfil" disabled={!user} onClick={openProfile}>
+              <AccountAvatar name={user?.name} photo={accountPhoto.photo} />
+            </button>
             <span>
               <strong>{user?.name || "Carregando…"}</strong>
               <small>
@@ -2153,13 +2157,10 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
                 !(can("orders:read") || canViewInventory(permissions)) && <i />}
             </Link>
             <span className="topbar-divider" />
-            <span className="avatar small">
-              {user?.name
-                .split(" ")
-                .map((n) => n[0])
-                .slice(0, 2)
-                .join("") || "…"}
-            </span>
+            <button type="button" className="avatar small account-avatar" aria-label="Abrir meu perfil" aria-haspopup="dialog"
+              title="Meu perfil" disabled={!user} onClick={openProfile}>
+              <AccountAvatar name={user?.name} photo={accountPhoto.photo} />
+            </button>
           </div>
         </header>
         <Pwa />
@@ -2244,6 +2245,11 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
             <X size={16} />
           </button>
         </div>
+      )}
+      {user && profileUserId === user.id && (
+        <AccountProfile key={user.id} user={user}
+          photo={accountPhoto.photo} loading={accountPhoto.loading} error={accountPhoto.error}
+          onChange={accountPhoto.setPhoto} onClose={() => setProfileUserId(null)} />
       )}
       {editor && data && (
         <CatalogForm
@@ -2623,9 +2629,11 @@ function Denied() {
 function Settings({
   data,
   onDone,
+  onOpenProfile,
 }: {
   data: DataSet;
   onDone: () => Promise<void>;
+  onOpenProfile: () => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -2657,6 +2665,7 @@ function Settings({
           <h1>Configurações</h1>
           <p>Preferências e regras de funcionamento do almoxarifado.</p>
         </div>
+        <button type="button" className="button secondary" onClick={onOpenProfile}>Preferências pessoais</button>
       </div>
       <form className="panel settings-panel" onSubmit={submit}>
         <div className="settings-section">

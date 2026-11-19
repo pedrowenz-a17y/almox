@@ -1,7 +1,7 @@
 {
   "name": "almox-desktop",
   "productName": "Almox ERP",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Almox ERP U.C.A. para Windows",
   "author": "Projeto Almox ERP",
   "repository": { "type": "git", "url": "https://github.com/pedrowenz-a17y/almox.git" },
