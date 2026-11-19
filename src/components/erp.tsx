@@ -570,7 +570,6 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
     "/inventario":
       "Compare o estoque físico com o sistema e resolva divergências.",
     "/relatorios": "Consulte e exporte os registros da unidade.",
-    "/usuarios": "Gerencie acessos e responsabilidades da sua equipe.",
     "/auditoria": "Um registro íntegro das ações realizadas no sistema.",
     "/configuracoes": "Preferências e regras de funcionamento do almoxarifado.",
     "/operacao": "Sua rotina de estoque, a poucos toques de distância.",
@@ -1731,9 +1730,7 @@ export default function ERP({ initialUser }: { initialUser: SessionUser }) {
         <>
           <div className="page-heading">
             <div>
-              <span className="eyebrow">EQUIPE E ACESSOS</span>
               <h1>Usuários</h1>
-              <p>{descriptions[route]}</p>
             </div>
             {addButton("users")}
           </div>

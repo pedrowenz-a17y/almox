@@ -55,9 +55,9 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
   try {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await check('Usuários distinguem habilitação da unidade, convite e primeiro login sem enviar mensagens', async () => {
-      await page.goto(fixtureURL + '/usuarios'); await expect(row('Marina Souza')).toContainText('Convite solicitado'); await expect(row('Renato Lima')).toContainText('Primeiro acesso pendente');
-      await expect(row('Ana da Montagem')).toContainText('Acesso confirmado'); await expect(row('Marina Souza')).toContainText('Habilitado na unidade'); assert.equal(sends, 0); await noOverflow(page);
-      await page.screenshot({ animations: 'disabled', path: path.join(output, 'usuarios-acesso-desktop.png'), fullPage: true });
+      await page.goto(fixtureURL + '/usuarios'); await expect(row('Marina Souza')).toContainText('Convite solicitado'); await expect(row('Renato Lima').getByText('Pendente', { exact: true })).toBeVisible();
+      await expect(row('Ana da Montagem').getByText('Confirmado', { exact: true })).toBeVisible(); await expect(row('Marina Souza').getByText('Ativo', { exact: true })).toBeVisible(); assert.equal(sends, 0); await noOverflow(page);
+      await page.locator('.user-access-panel').screenshot({ animations: 'disabled', path: path.join(output, 'usuarios-acesso-desktop.png') });
     });
     await check('Busca e filtro localizam convites pendentes sem consultar outra unidade', async () => {
       await page.getByLabel('Filtrar primeiro acesso', { exact: true }).selectOption('INVITED'); await expect(page.locator('tbody tr')).toHaveCount(1);
@@ -68,7 +68,7 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
       await expect(dialog.getByLabel('UUID da identidade confirmada', { exact: false })).toHaveCount(0);
       await dialog.getByLabel('Nome completo', { exact: false }).fill('Nova pessoa fictícia'); await dialog.getByLabel('E-mail de acesso', { exact: false }).fill('nova@example.invalid');
       await dialog.getByLabel('Perfil nesta unidade', { exact: false }).selectOption(user.roleId); await dialog.getByRole('button', { name: 'Salvar cadastro', exact: true }).click();
-      await expect(row('Nova pessoa fictícia')).toContainText('Primeiro acesso pendente'); await expect(page.locator('.toast')).toContainText('envio do convite não foi confirmado'); assert.equal(creates, 1);
+      await expect(row('Nova pessoa fictícia').getByText('Pendente', { exact: true })).toBeVisible(); await expect(page.locator('.toast')).toContainText('envio do convite não foi confirmado'); assert.equal(creates, 1);
     });
     await check('Vínculo de identidade existente é uma escolha explícita e não dispara convite ao selecionar', async () => {
       await page.getByRole('button', { name: 'Novo usuário', exact: true }).click(); const dialog = page.getByRole('dialog');
@@ -100,6 +100,7 @@ export async function verifyAccessOnboarding({ page, fixtureURL, baseURL, data, 
       for (const width of [390, 320]) {
         await page.setViewportSize({ width, height: 844 }); await page.goto(fixtureURL + '/usuarios'); await row('Marina Souza').waitFor(); await noOverflow(page);
         assert.ok(await page.locator('.users-access-table').evaluate(element => element.parentElement.scrollWidth <= element.parentElement.clientWidth + 1));
+        if (width === 390) await page.locator('.user-access-panel').screenshot({ animations: 'disabled', path: path.join(output, 'usuarios-mobile.png') });
         await open('Renato Lima'); await noOverflow(page); if (width === 390) await page.getByRole('dialog').screenshot({ animations: 'disabled', path: path.join(output, 'acompanhamento-mobile.png') }); await page.keyboard.press('Escape');
       }
     });

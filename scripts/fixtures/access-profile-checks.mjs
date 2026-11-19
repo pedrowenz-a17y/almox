@@ -54,13 +54,19 @@ export async function verifyAccessProfiles({ page, fixtureURL, data, user, model
     await check('Administrador disponibiliza modelos pela tela sem associar usuários', async () => {
       data.user = original.user; data.permissions = original.permissions;
       await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(fixtureURL + '/usuarios');
-      await page.getByRole('heading', { name: 'Perfis por responsabilidade', exact: true }).waitFor();
+      await page.getByRole('heading', { name: 'Perfis de acesso', exact: true }).waitFor();
       await expect(page.getByText('Modelo para adicionar', { exact: true })).toHaveCount(5);
       await page.getByRole('button', { name: 'Disponibilizar perfis padrão', exact: true }).click();
       await expect(page.getByRole('button', { name: 'Disponibilizar perfis padrão', exact: true })).toHaveCount(0);
-      await expect(page.getByText('Disponível', { exact: true })).toHaveCount(6);
+      const profiles = page.locator('.access-profiles-list > details');
+      await expect(profiles).toHaveCount(6);
+      const auditor = profiles.filter({ has: page.locator('summary strong', { hasText: /^Auditor$/ }) });
+      await expect(auditor).not.toHaveAttribute('open');
+      await auditor.locator('summary').click();
+      await expect(auditor.getByText('Consultar relatórios e histórico', { exact: true })).toBeVisible();
+      await auditor.locator('summary').click();
       assert.equal(preparations, 1); assert.equal(data.users?.length || 0, 0);
-      await noOverflow(page); await page.screenshot({ animations: 'disabled', path: path.join(output, 'perfis-disponiveis-desktop.png'), fullPage: true });
+      await noOverflow(page); await page.locator('.access-profiles-list').screenshot({ animations: 'disabled', path: path.join(output, 'perfis-disponiveis-desktop.png') });
     });
     await check('Seleção do perfil mostra permissões reais sem salvar acesso nem enviar convite', async () => {
       await page.getByRole('button', { name: 'Novo usuário', exact: true }).click();
@@ -112,7 +118,7 @@ export async function verifyAccessProfiles({ page, fixtureURL, data, user, model
       data.user = original.user; data.permissions = original.permissions;
       data.roles = data.roles.map(role => role.name === 'AUDITOR' ? { ...role, permissions: [{ permission: { key: 'stock:move' } }] } : role);
       await page.goto(fixtureURL + '/usuarios');
-      await expect(page.getByText('Personalizado — preservado', { exact: true })).toHaveCount(1);
+      await expect(page.locator('.access-profiles-list').getByText('Personalizado', { exact: true })).toHaveCount(1);
       await page.getByRole('button', { name: 'Novo usuário', exact: true }).click();
       const dialog = page.getByRole('dialog');
       await expect(dialog.getByRole('option', { name: 'Auditor (personalizado)', exact: true })).toHaveCount(1);

@@ -10,6 +10,10 @@ import type { AccessDetails, AccessMailResult } from "@/services/access-emails";
 
 const stateOf = (user: ManagedUser) => user.accessState ?? accessState({ active: user.active, identityActive: user.identityActive,
   authLinked: !!user.authUserId || user.authLinked === true, lastLoginAt: user.lastLoginAt, invitationAt: user.invitationAt });
+const firstAccessLabels: Record<AccessState, string> = {
+  DISABLED: "Desativado", UNLINKED: "Sem conta vinculada", INVITED: "Convite solicitado",
+  PENDING: "Pendente", ACTIVE: "Confirmado",
+};
 export default function UserAccessTable({ users, currentId, actions, onChanged }: {
   users: ManagedUser[]; currentId: string; actions: (user: ManagedUser) => React.ReactNode; onChanged: () => void;
 }) {
@@ -18,20 +22,20 @@ export default function UserAccessTable({ users, currentId, actions, onChanged }
   return <>
     <section className="panel user-access-panel">
       <div className="toolbar"><label>Buscar pessoa<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Nome ou e-mail" /></label>
-        <label>Primeiro acesso<select aria-label="Filtrar primeiro acesso" value={state} onChange={event => setState(event.target.value)}><option value="ALL">Todos os estados</option>
-          {(Object.keys(accessStateLabels) as AccessState[]).map(key => <option key={key} value={key}>{accessStateLabels[key]}</option>)}
+        <label>Primeiro acesso<select aria-label="Filtrar primeiro acesso" value={state} onChange={event => setState(event.target.value)}><option value="ALL">Todos</option>
+          {(Object.keys(firstAccessLabels) as AccessState[]).map(key => <option key={key} value={key}>{firstAccessLabels[key]}</option>)}
         </select></label><span className="muted">{filtered.length} de {users.length} pessoas</span></div>
       {filtered.length ? <div className="table-wrap"><table className="users-access-table"><thead><tr><th>Pessoa</th><th>Perfil na unidade</th><th>Acesso</th><th>Primeiro acesso</th><th>Ações</th></tr></thead>
         <tbody>{filtered.map(user => { const status = stateOf(user); return <tr key={user.id}>
           <td data-label="Pessoa"><strong>{user.name}</strong><small>{user.email}</small>{user.id === currentId && <small>Você</small>}</td>
-          <td data-label="Perfil na unidade"><Badge tone={user.role?.name === "ADMINISTRADOR" ? "purple" : "info"}>{profileTitle(user.role?.name ?? "Perfil")}</Badge></td>
-          <td data-label="Acesso"><Badge tone={user.active !== false && user.identityActive !== false ? "success" : ""}>{user.identityActive === false ? "Identidade desativada" : user.active === false ? "Desativado nesta unidade" : "Habilitado na unidade"}</Badge></td>
-          <td data-label="Primeiro acesso"><Badge tone={status === "ACTIVE" ? "success" : status === "DISABLED" ? "" : "warning"}>{accessStateLabels[status]}</Badge>
+          <td data-label="Perfil na unidade">{profileTitle(user.role?.name ?? "Perfil")}</td>
+          <td data-label="Acesso">{user.identityActive === false ? "Conta desativada" : user.active === false ? "Desativado na unidade" : "Ativo"}</td>
+          <td data-label="Primeiro acesso">{status === "DISABLED" ? <span aria-label="Não se aplica">—</span> : <span className={status === "PENDING" || status === "UNLINKED" ? "access-attention" : undefined}>{firstAccessLabels[status]}</span>}
             {user.lastMailState === "FAILED" && <small>O último envio não foi confirmado.</small>}{user.lastMailState === "UNCONFIRMED" && <small>Envio aguardando confirmação.</small>}
             {user.lastLoginAt && <small>Última entrada: {dateTime(user.lastLoginAt)}</small>}</td>
-          <td data-label="Ações"><div className="user-access-actions"><button className="button secondary" aria-label={`Acompanhar acesso de ${user.name}`} onClick={() => setSelected(user.id)}><Mail size={15} /> Acesso</button>{actions(user)}</div></td>
+          <td data-label="Ações"><div className="user-access-actions"><button className="text-button" aria-label={`Acompanhar acesso de ${user.name}`} onClick={() => setSelected(user.id)}>Ver acesso</button>{actions(user)}</div></td>
         </tr>; })}</tbody></table></div> : <Empty title="Nenhuma pessoa neste filtro" description="Confira o nome, o e-mail ou o estado selecionado." />}
-      <p className="user-access-footnote">Habilitar o acesso à unidade não define a senha. A pessoa precisa concluir o convite ou usar uma identidade de login já confirmada.</p>
+      <p className="user-access-footnote">Para definir a primeira senha, a pessoa precisa abrir o link do convite.</p>
     </section>
     {selected && <AccessHelp id={selected} onClose={() => setSelected(null)} onChanged={onChanged} />}
   </>;

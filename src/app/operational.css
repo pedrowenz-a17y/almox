@@ -1,11 +1,18 @@
 /* Operational forms share the U.C.A. palette and leave room for readable labels. */
-.access-profiles { display: grid; gap: 18px; margin-top: 24px; }
-.access-profiles-heading { padding: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
-.access-profiles-heading > div { flex: 1 1 320px; }
-.access-profiles-heading p { color: var(--muted); margin-top: 7px; max-width: 76ch; }
-.access-profiles-heading > small { flex-basis: 100%; color: var(--muted); }
-.access-profiles .role-cards > .panel { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.access-profiles .role-cards .badge { align-self: flex-start; white-space: normal; }
+.access-profiles { margin-top: 24px; }
+.access-profiles-heading { padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.access-profiles-list > .notice { margin: 0 20px 12px; }
+.access-profiles-list > details { border-top: 1px solid var(--border); }
+.access-profiles-list > details > summary { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 10px 20px; list-style: none; }
+.access-profiles-list > details > summary::-webkit-details-marker { display: none; }
+.access-profiles-list > details > summary::before { content: ""; width: 7px; height: 7px; flex: none; border: solid currentColor; border-width: 0 1px 1px 0; transform: rotate(-45deg); }
+.access-profiles-list > details[open] > summary::before { transform: rotate(45deg); }
+.access-profiles-list > details > summary:focus-visible { outline-offset: -3px; }
+.profile-summary { display: flex; flex: 1; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; }
+.profile-summary small { font-weight: 400; color: var(--theme-subtle); }
+.access-profiles-list > details > :is(ul, p) { margin: 0 20px 12px 39px; }
+.access-profiles-list > details > ul { columns: 2 230px; }
+.access-profiles-list > details li { break-inside: avoid; }
 .role-permissions { color: var(--muted); font-size: 13px; }
 .role-permissions summary { cursor: pointer; font-weight: 600; padding-block: 8px; color: var(--text); }
 .role-permissions summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
@@ -135,8 +142,10 @@
 .user-access-footnote { color: var(--muted); font-size: 12px; padding: 0 20px 18px; line-height: 1.7; }
 .user-access-panel .toolbar > label { display: grid; gap: 7px; min-width: 220px; }
 .user-access-panel .toolbar > label:first-child { flex: 1; }
-.users-access-table td { vertical-align: top; }
+.users-access-table td { vertical-align: middle; border-color: var(--border); }
 .users-access-table small { overflow-wrap: anywhere; }
+.users-access-table .text-button { min-height: 36px; white-space: nowrap; }
+.users-access-table .access-attention::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-inline-end: 6px; border-radius: 50%; background: #c78b37; vertical-align: 0.12em; }
 .access-help { display: grid; gap: 18px; }
 .access-help > p, .access-email-settings p { margin: 0; font-size: 13px; line-height: 1.75; }
 .access-help-identity { display: grid; gap: 10px; overflow-wrap: anywhere; }
@@ -201,10 +210,11 @@
   .table-wrap .users-access-table, .users-access-table tbody { display: block; min-width: 0; width: 100%; }
   .users-access-table thead { display: none; }
   .users-access-table tbody { display: grid; gap: 16px; padding: 0 16px 16px; }
-  .users-access-table tr { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .users-access-table td { display: block; min-width: 0; max-width: none; white-space: normal; padding: 12px 16px; border: 0; overflow-wrap: anywhere; }
-  .users-access-table td + td { border-top: 1px solid var(--border); }
-  .users-access-table td::before { content: attr(data-label); display: block; color: var(--muted); font-size: 11px; margin-bottom: 7px; }
+  .users-access-table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .users-access-table td { display: block; min-width: 0; max-width: none; white-space: normal; padding: 8px 12px; border: 0; overflow-wrap: anywhere; }
+  .users-access-table td:is(:first-child, :nth-child(2), :last-child) { grid-column: 1 / -1; }
+  .users-access-table td:last-child { border-top: 1px solid var(--border); }
+  .users-access-table td:not(:first-child, :last-child)::before { content: attr(data-label); display: block; color: var(--theme-subtle); font-size: 11px; margin-bottom: 3px; }
   .access-facts > div { grid-template-columns: 1fr; gap: 6px; }
   .access-help-actions > .button { width: 100%; }
   .access-email-settings { padding: 18px; }
