@@ -1,0 +1,29 @@
+{
+  "name": "almox-erp-film",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts --no-open --port=3000",
+    "typecheck": "tsc --noEmit",
+    "preview": "remotion render src/index.ts AlmoxERP-Launch out/previews/Almox-ERP-Launch-Preview.mp4 --scale=0.5",
+    "render:full": "remotion render src/index.ts AlmoxERP-Full out/final/Almox-ERP-Full.mp4 --codec=h264 --audio-codec=aac --crf=17",
+    "render:launch": "remotion render src/index.ts AlmoxERP-Launch out/final/Almox-ERP-Launch.mp4 --codec=h264 --audio-codec=aac --crf=17",
+    "render:all": "npm run render:full && npm run render:launch",
+    "validate": "npm run typecheck && node scripts/validate.mjs",
+    "thumbnail": "remotion still src/index.ts AlmoxERP-Thumbnail out/final/Almox-ERP-Thumbnail.png"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.547",
+    "@remotion/media": "4.0.547",
+    "lucide-react": "^0.468.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.547"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "qrcode": "^1.5.4",
+    "typescript": "5.9.3"
+  }
+}
